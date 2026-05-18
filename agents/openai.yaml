@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill Hook Authoring"
+  short_description: "Create shared Claude/Codex skills and hooks without drift."
+  default_prompt: "Create or update a repo-owned skill/hook package and install it with symlinks for Claude and Codex."
