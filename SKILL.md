@@ -12,8 +12,8 @@ Create shared skills and hooks from one repo-owned source of truth.
 - Pick one canonical repo path first. Installed copies under `~/.claude` and `~/.codex` must be symlinks or generated config entries.
 - Do not edit home-directory installed copies directly.
 - Do not keep separate Claude and Codex versions unless a difference is explicitly documented and tested.
-- Keep `SKILL.md` concise. Put deterministic behavior in scripts and reference details only when needed.
-- Keep frontmatter `description` under 220 characters; use it only for trigger routing, not procedure.
+- Keep `SKILL.md` body under 500 lines (official limit for reliable loading). Put deterministic behavior in scripts; move scenario-specific detail into `reference/*.md` linked **one level deep** from `SKILL.md` (progressive disclosure).
+- `name`: max 64 chars, lowercase/numbers/hyphens only, no reserved words (`anthropic`, `claude`); prefer gerund form (`processing-pdfs`). `description`: max 1024 chars, third person, stating both *what* the skill does and *when* to use it (trigger terms) — not the procedure.
 - Hooks are guardrails, not silent fallback paths. They should block clearly, explain why, and require an explicit operator decision for dangerous actions.
 
 ## Recommended Layout
@@ -46,23 +46,27 @@ Claude Code and Codex CLI use the **same input schema** for `PreToolUse` / `Post
 
 ```json
 {
+  "session_id": "abc123",
+  "transcript_path": "~/.claude/projects/.../transcript.jsonl",
+  "cwd": "/Users/me/project",
+  "permission_mode": "default",
+  "hook_event_name": "PreToolUse",
   "tool_name": "Bash",
+  "tool_use_id": "toolu_...",
   "tool_input": {
     "command": "npm install foo",
     "description": "Install foo",
     "timeout": 120000
-  },
-  "cwd": "/Users/me/project",
-  "permission_mode": "default",
-  "hook_event_name": "PreToolUse"
+  }
 }
 ```
 
 Notes:
 
 - `tool_input.command` — the shell command. Use this single field; do not read from `.input.command`, `.arguments.command`, or other variants.
-- `cwd` — **top-level**, not under `tool_input`. Reading `tool_input.cwd` returns nothing.
-- Codex additionally provides `turn_id`, `session_id`, `model`.
+- `cwd`, `session_id`, `transcript_path`, `permission_mode`, `hook_event_name`, `tool_name`, `tool_use_id` are all **top-level**, not under `tool_input`. Reading `tool_input.cwd` returns nothing.
+- `permission_mode` is one of `default`, `plan`, `acceptEdits`, `auto`, `dontAsk`, `bypassPermissions`.
+- Both engines share this schema. Codex additionally provides `turn_id` and `model`.
 
 ## Hook Decision Output
 
@@ -86,7 +90,7 @@ Legacy (still supported by both engines):
 {"decision": "block", "reason": "safedeps: install not approved ..."}
 ```
 
-`permissionDecision` accepts `"allow" | "deny" | "ask"` (Codex also supports `"defer"`). For **allow**, exit 0 with no output is sufficient; or emit `permissionDecision: "allow"` explicitly.
+`permissionDecision` accepts `"allow" | "deny" | "ask" | "defer"` on both engines. `hookSpecificOutput` may also carry `updatedInput` (replace the tool input before it runs) and `additionalContext` (inject context for the model). For **allow**, exit 0 with no output is sufficient; or emit `permissionDecision: "allow"` explicitly.
 
 **Do not use `{"continue": false, "stopReason": "..."}` for PreToolUse** — that is the schema for the `Stop` hook (final-exit block), not for PreToolUse. Same applies to `{"continue": true}` as an allow signal. Mixing them up silently fails closed or open depending on the engine version.
 
