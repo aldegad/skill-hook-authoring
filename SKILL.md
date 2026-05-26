@@ -14,6 +14,7 @@ Create shared skills, hooks, commands, extensions, and plugin packages from one 
 - Do not keep separate Claude and Codex versions unless a difference is explicitly documented and tested.
 - Keep `SKILL.md` body under 500 lines (official limit for reliable loading). Put deterministic behavior in scripts; move scenario-specific detail into `reference/*.md` linked **one level deep** from `SKILL.md` (progressive disclosure).
 - `name`: max 64 chars, lowercase/numbers/hyphens only, no reserved words (`anthropic`, `claude`); prefer gerund form (`processing-pdfs`). `description`: max 1024 chars, third person, stating both *what* the skill does and *when* to use it (trigger terms) — not the procedure.
+- **Quote the `description` if it contains a colon-space (`: `), or the skill silently fails to load.** A `: ` in an unquoted YAML scalar is parsed as a nested mapping → `mapping values are not allowed in this context`. Common trap: `description: ... Korean triggers: 원샷, ...`. Wrap the whole value in single quotes (`description: '...'`); double inner single-quotes, double-quotes are fine inside. Validate frontmatter parses before shipping. (Trial-and-error 2026-05-26: an unquoted description with `Korean triggers:` broke skill loading.)
 - Hooks are guardrails, not silent fallback paths. They should block clearly, explain why, and require an explicit operator decision for dangerous actions.
 - Cross-agent guidance must be based on official vendor docs. If a platform does not document a feature, record it as `not documented` or `unknown`; do not infer parity from another agent.
 - **Make hook scripts executable (`chmod +x`) and give them a shebang.** Claude registers hooks as `command: "<abs-path> --args"` and runs them through `/bin/sh`, so a missing exec bit fails with `Permission denied` on *every* matching event (PreToolUse/Stop) in *every* session — one forgotten `chmod +x` silently breaks all agents at once. Codex registers as `node <path>` so it tolerates a missing bit, but always `chmod +x` for parity and **commit the mode** (git stores `100755`). (Trial-and-error 2026-05-26: a new guard hook shipped `644` → `Permission denied` spam across all live sessions until chmod'd.)
@@ -147,6 +148,7 @@ Codex tool coverage (verified 2026-05-26 against <https://developers.openai.com/
 
 ## Validation Checklist
 
+- The frontmatter YAML parses (quote any `description` containing `: `) — load it and confirm no parse error.
 - The skill triggers from its frontmatter description.
 - The hook allows normal commands and blocks the intended risky command.
 - The hook script is executable (`chmod +x`, committed as `100755`) and runs directly without a `node` prefix — no `Permission denied`.
