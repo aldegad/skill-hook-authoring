@@ -42,7 +42,7 @@ Use these repo documents before changing compatibility claims:
 - `docs/compatibility-matrix.md` — current cross-agent support matrix.
 - `docs/plugin-packaging.md` — plugin/extension packaging boundaries.
 - `docs/kuma-studio-patterns.md` — public Kuma Studio operating patterns that can be reused by other agents.
-- `docs/codex-cloud-automation.md` — daily Codex Cloud/App/GitHub Actions automation setup.
+- `docs/cloud-automation.md` — daily cloud automation setup (Claude Routines, with a Codex App alternative).
 
 Daily refresh automation must read the source manifest, fetch only official URLs, update docs only when evidence changed, and leave a PR rather than pushing to `main`.
 

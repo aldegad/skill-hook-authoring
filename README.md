@@ -9,19 +9,19 @@ Shared methodology for authoring agent skills, hooks, commands, extensions, plug
 - `docs/compatibility-matrix.md` records what each agent officially supports.
 - `docs/plugin-packaging.md` explains how plugin or extension packaging differs by platform.
 - `docs/kuma-studio-patterns.md` captures public Kuma Studio operating patterns.
-- `docs/codex-cloud-automation.md` explains the daily update automation.
+- `docs/cloud-automation.md` explains the daily update automation.
 
 ## Daily Official-Docs Update
 
-The preferred cloud path is GitHub Actions plus `openai/codex-action@v1`.
+A daily agent keeps the compatibility docs current: it reads `docs/official-sources.json`, fetches the official vendor URLs, and opens a pull request when the evidence changed. It never pushes to `main`.
 
-1. Add `OPENAI_API_KEY` as a repository secret.
-2. Optional: set repository variable `DAILY_DOCS_REVIEWER` to the GitHub username that should receive review requests.
-3. Optional: set repository variable `ENABLE_DAILY_DOCS_AUTO_MERGE` to `true` after branch protection and checks are in place.
-4. Enable GitHub Actions for the repository.
-5. Run `.github/workflows/daily-official-doc-update.yml` manually once from the Actions tab.
+The recommended path is **Claude Routines** — a scheduled Claude Code session that runs in Anthropic's cloud on a Claude subscription, with no API key and no GitHub Actions, and keeps running when your laptop is closed.
 
-The workflow fetches official docs, asks Codex to update the repo docs when evidence changed, validates the result, opens a PR, and optionally enables auto-merge.
+1. In Claude Code, run `/schedule` (or open <https://claude.ai/code/routines>).
+2. Point the routine at this repository and use the prompt in `prompts/daily-official-doc-update.md`.
+3. Schedule it once a day. It opens a PR from a `claude/`-prefixed branch; you review and merge.
+
+Codex users can run the same flow with a Codex App Automation instead. See `docs/cloud-automation.md` for both paths.
 
 ## Local Checks
 
