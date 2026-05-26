@@ -5,7 +5,7 @@ description: 'Use for shared Codex/Claude skill or hook authoring: skill layout,
 
 # Skill Hook Authoring
 
-Create shared skills and hooks from one repo-owned source of truth.
+Create shared skills, hooks, commands, extensions, and plugin packages from one repo-owned source of truth.
 
 ## Core Rules
 
@@ -15,6 +15,8 @@ Create shared skills and hooks from one repo-owned source of truth.
 - Keep `SKILL.md` body under 500 lines (official limit for reliable loading). Put deterministic behavior in scripts; move scenario-specific detail into `reference/*.md` linked **one level deep** from `SKILL.md` (progressive disclosure).
 - `name`: max 64 chars, lowercase/numbers/hyphens only, no reserved words (`anthropic`, `claude`); prefer gerund form (`processing-pdfs`). `description`: max 1024 chars, third person, stating both *what* the skill does and *when* to use it (trigger terms) — not the procedure.
 - Hooks are guardrails, not silent fallback paths. They should block clearly, explain why, and require an explicit operator decision for dangerous actions.
+- Cross-agent guidance must be based on official vendor docs. If a platform does not document a feature, record it as `not documented` or `unknown`; do not infer parity from another agent.
+- **Make hook scripts executable (`chmod +x`) and give them a shebang.** Claude registers hooks as `command: "<abs-path> --args"` and runs them through `/bin/sh`, so a missing exec bit fails with `Permission denied` on *every* matching event (PreToolUse/Stop) in *every* session — one forgotten `chmod +x` silently breaks all agents at once. Codex registers as `node <path>` so it tolerates a missing bit, but always `chmod +x` for parity and **commit the mode** (git stores `100755`). (Trial-and-error 2026-05-26: a new guard hook shipped `644` → `Permission denied` spam across all live sessions until chmod'd.)
 
 ## Recommended Layout
 
@@ -31,6 +33,18 @@ agent-extensions/
 
 Keep the umbrella flat. Do not add a repo-local `skills/` or `hooks/` index unless there is a specific migration plan, because that creates a second source of truth. If a hook belongs to a standalone repo, reference that repo path directly from the installer and agent config.
 
+## Multi-Agent Compatibility Docs
+
+Use these repo documents before changing compatibility claims:
+
+- `docs/official-sources.json` — canonical source manifest for official docs refresh.
+- `docs/compatibility-matrix.md` — current cross-agent support matrix.
+- `docs/plugin-packaging.md` — plugin/extension packaging boundaries.
+- `docs/kuma-studio-patterns.md` — public Kuma Studio operating patterns that can be reused by other agents.
+- `docs/codex-cloud-automation.md` — daily Codex Cloud/App/GitHub Actions automation setup.
+
+Daily refresh automation must read the source manifest, fetch only official URLs, update docs only when evidence changed, and leave a PR rather than pushing to `main`.
+
 ## Cross-Agent Install Pattern
 
 1. Symlink every canonical skill folder into `~/.codex/skills/<id>`.
@@ -38,7 +52,8 @@ Keep the umbrella flat. Do not add a repo-local `skills/` or `hooks/` index unle
 3. Patch `~/.claude/settings.json` idempotently for Claude hooks.
 4. Patch `~/.codex/hooks.json` idempotently for Codex hooks.
 5. Backup mutated JSON config files before writing.
-6. Validate by feeding representative JSON payloads into the hook scripts.
+6. `chmod +x` every hook script before registering it (Claude runs `command` via `/bin/sh`; no exec bit = `Permission denied` everywhere).
+7. Validate by feeding representative JSON payloads into the hook scripts — and run the script **directly** (`./hook.cjs ...`, no `node` prefix) to catch a missing exec bit the way Claude would.
 
 ## Hook Payload Pattern
 
@@ -134,6 +149,7 @@ Codex tool coverage (verified 2026-05-26 against <https://developers.openai.com/
 
 - The skill triggers from its frontmatter description.
 - The hook allows normal commands and blocks the intended risky command.
+- The hook script is executable (`chmod +x`, committed as `100755`) and runs directly without a `node` prefix — no `Permission denied`.
 - The installer is idempotent and can run twice without duplicate hook entries.
 - Config writes are atomic or backup-before-write.
 - Dangerous-mode bypasses are never taught to the agent as automatic retry steps.
