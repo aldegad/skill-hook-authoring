@@ -125,7 +125,10 @@ For `PostToolUse` block (prevent normal post-processing), use `{"decision": "blo
 
 Claude `~/.claude/settings.json` uses the same `hooks.PreToolUse[].hooks[]` shape. Idempotent installers should match on the canonical `command` string and skip if already present.
 
-Caveat: Codex hooks fire reliably for the shell (`Bash`) tool. They do **not** currently fire for `apply_patch` or most MCP tools — design block logic accordingly.
+Codex tool coverage (verified 2026-05-26 against <https://developers.openai.com/codex/hooks> + Codex CLI 0.133): PreToolUse now intercepts **Bash, `apply_patch` file edits, and MCP tool calls**, and a denying PreToolUse prevents the blocked `apply_patch` file from being created (`openai/codex#16732` fixed; PR `#18391`). The earlier "Bash only" behavior is obsolete — do **not** assume apply_patch is unhookable. Two things still bite, so design accordingly:
+
+- **Field shape differs per tool.** Bash and apply_patch carry `tool_input.command`; Write/Edit/MultiEdit carry `tool_input.file_path`; MCP tools send their own args. For `apply_patch` the target path lives in the patch body's `*** Add/Update/Delete File: <path>` header lines, **not** a `file_path` field — read the right field and gate on `tool_name`. Scanning the whole `tool_input` blob over-blocks (it matches the path string appearing in *content*, reads, or even the hook script itself).
+- **Coverage can still be inconsistent across tool handlers** on some versions (`openai/codex#20204`); very old Codex fired hooks for `Bash` only. Verify on the *target* Codex version rather than assuming.
 
 ## Validation Checklist
 
