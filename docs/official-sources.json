@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "updated": "2026-05-26",
+  "policy": {
+    "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
+    "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
+    "allowedHosts": [
+      "developers.openai.com",
+      "docs.anthropic.com",
+      "docs.x.ai",
+      "google-gemini.github.io",
+      "hermes-agent.nousresearch.com",
+      "docs.cursor.com",
+      "cursor.com",
+      "docs.github.com"
+    ]
+  },
+  "sources": [
+    {
+      "id": "openai-codex-automations",
+      "agent": "codex",
+      "kind": "automation",
+      "url": "https://developers.openai.com/codex/app/automations",
+      "claims": ["recurring tasks", "skills in automations", "worktrees"]
+    },
+    {
+      "id": "openai-codex-github-action",
+      "agent": "codex",
+      "kind": "automation",
+      "url": "https://developers.openai.com/codex/github-action",
+      "claims": ["openai/codex-action@v1", "prompt-file", "workspace-write sandbox"]
+    },
+    {
+      "id": "openai-agent-skills",
+      "agent": "codex",
+      "kind": "skills",
+      "url": "https://developers.openai.com/api/docs/guides/tools-skills",
+      "claims": ["SKILL.md manifest", "versioned bundle", "agent skills standard"]
+    },
+    {
+      "id": "openai-codex-hooks",
+      "agent": "codex",
+      "kind": "hooks",
+      "url": "https://developers.openai.com/codex/hooks",
+      "claims": ["lifecycle hooks", "hook payloads", "permission decisions"]
+    },
+    {
+      "id": "openai-codex-plugins",
+      "agent": "codex",
+      "kind": "plugins",
+      "url": "https://developers.openai.com/codex/plugins",
+      "claims": ["skills", "apps", "MCP servers", "marketplaces"]
+    },
+    {
+      "id": "openai-codex-plugin-build",
+      "agent": "codex",
+      "kind": "plugins",
+      "url": "https://developers.openai.com/codex/plugins/build",
+      "claims": [".codex-plugin/plugin.json", "bundled hooks", "bundled MCP servers"]
+    },
+    {
+      "id": "anthropic-claude-hooks",
+      "agent": "claude-code",
+      "kind": "hooks",
+      "url": "https://docs.anthropic.com/en/docs/claude-code/hooks",
+      "claims": ["PreToolUse", "PostToolUse", "settings hooks", "exit code blocking"]
+    },
+    {
+      "id": "anthropic-claude-settings",
+      "agent": "claude-code",
+      "kind": "configuration",
+      "url": "https://docs.anthropic.com/en/docs/claude-code/settings",
+      "claims": ["settings.json", "subagents", "environment variables"]
+    },
+    {
+      "id": "anthropic-claude-slash-commands",
+      "agent": "claude-code",
+      "kind": "commands",
+      "url": "https://docs.anthropic.com/en/docs/claude-code/slash-commands",
+      "claims": ["custom slash commands", ".claude/commands", "MCP prompts as slash commands"]
+    },
+    {
+      "id": "xai-grok-skills-plugins",
+      "agent": "grok",
+      "kind": "plugins",
+      "url": "https://docs.x.ai/build/features/skills-plugins-marketplaces",
+      "claims": ["skills", "plugins", "hooks", "marketplaces", "Claude Code compatibility", "AGENTS.md compatibility"]
+    },
+    {
+      "id": "google-gemini-extensions",
+      "agent": "gemini-cli",
+      "kind": "extensions",
+      "url": "https://google-gemini.github.io/gemini-cli/docs/extensions/",
+      "claims": ["extensions", "gemini-extension.json", "MCP servers", "custom commands", "excludeTools"]
+    },
+    {
+      "id": "google-gemini-commands",
+      "agent": "gemini-cli",
+      "kind": "commands",
+      "url": "https://google-gemini.github.io/gemini-cli/docs/cli/commands.html",
+      "claims": ["/extensions", "/mcp", "/memory", "GEMINI.md"]
+    },
+    {
+      "id": "nous-hermes-overview",
+      "agent": "hermes-agent",
+      "kind": "overview",
+      "url": "https://hermes-agent.nousresearch.com/docs/",
+      "claims": ["skills system", "MCP integration", "memory system", "scheduled tasks"]
+    },
+    {
+      "id": "nous-hermes-cli",
+      "agent": "hermes-agent",
+      "kind": "cli",
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/cli/",
+      "claims": ["CLI", "skills preloading", "toolsets", "worktree"]
+    },
+    {
+      "id": "cursor-cli-overview",
+      "agent": "cursor-cli",
+      "kind": "cli",
+      "url": "https://docs.cursor.com/en/cli/overview",
+      "claims": ["Cursor CLI", "terminal agent"]
+    },
+    {
+      "id": "cursor-cli-using",
+      "agent": "cursor-cli",
+      "kind": "cli",
+      "url": "https://docs.cursor.com/en/cli/using",
+      "claims": ["AGENTS.md", "CLAUDE.md", ".cursor/rules", "output formats"]
+    },
+    {
+      "id": "cursor-cli-parameters",
+      "agent": "cursor-cli",
+      "kind": "cli",
+      "url": "https://docs.cursor.com/en/cli/reference/parameters",
+      "claims": ["parameters", "output-format", "update"]
+    },
+    {
+      "id": "github-auto-merge",
+      "agent": "github",
+      "kind": "pull-request",
+      "url": "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request",
+      "claims": ["auto-merge", "required checks", "required reviews"]
+    },
+    {
+      "id": "github-notifications",
+      "agent": "github",
+      "kind": "notifications",
+      "url": "https://docs.github.com/en/subscriptions-and-notifications/get-started/configuring-notifications",
+      "claims": ["email notifications", "review requests", "watching", "participating"]
+    }
+  ]
+}
