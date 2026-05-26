@@ -2,34 +2,31 @@
 
 Use `$skill-hook-authoring`.
 
-Update this repository's agent compatibility documentation from official vendor documentation only.
+You are maintaining the skill-hook-authoring knowledge-base skill so it stays
+accurate against official vendor documentation. This runs daily and starts with
+zero context, so follow these steps exactly.
 
-## Sources
+**SOURCE OF TRUTH:** Read `docs/official-sources.json` in this repo. ONLY fetch
+the official vendor docs URLs listed there. Do NOT use blogs, Reddit, unofficial
+mirrors, or guesses. No speculation. If a URL in that file 403s or is
+unreachable from this environment, record it as `unverified this run` in your
+summary rather than substituting another source.
 
-Read `docs/official-sources.json`. Treat it as the source manifest. Do not use unofficial docs, blog summaries, Reddit, generated mirrors, or general web search results for compatibility claims.
+**WHAT TO CHECK** across these agents/products: OpenAI Codex, Claude / Claude
+Code, Grok/xAI, Gemini / Gemini CLI, Cursor, Hermes Agent, Kuma Studio. For each,
+review: supported-agent docs, plugin/extension docs, compatibility matrix, and
+Kuma Studio pattern docs. If an official doc confirms a feature difference or
+that something is unavailable, state that explicitly in the docs.
 
-## Tasks
+**IF THERE ARE CHANGES:** make small, reviewable edits to the repo docs. Cite the
+official source URL in the docs or in the PR body. Run
+`node scripts/check-official-sources.mjs --write-report`. Do NOT push to main.
+Create a pull request from a `claude/`-prefixed branch.
 
-1. Run `node scripts/check-official-sources.mjs --write-report`.
-2. Fetch the official URLs listed in `docs/official-sources.json`.
-3. Compare the current docs against the fetched official evidence.
-4. Update only repo-owned canonical docs when evidence changed:
-   - `docs/compatibility-matrix.md`
-   - `docs/plugin-packaging.md`
-   - `docs/kuma-studio-patterns.md` only when public Kuma methodology changed in this repo
-   - `SKILL.md` only for stable entrypoint guidance
-5. Preserve explicit differences between platforms. Do not force one platform's terminology onto another.
-6. If a feature is not documented by the vendor source, write `not documented` or `unknown`.
-7. Do not edit installed home-directory copies such as `~/.codex`, `~/.claude`, `~/.grok`, `~/.gemini`, or `~/.cursor`.
-8. Run `node scripts/check-official-sources.mjs --write-report` again after edits.
+**IF THERE ARE NO CHANGES:** do not modify any file. Leave a short no-op summary
+only.
 
-## Output
-
-If no evidence changed, leave no file edits.
-
-If files changed, summarize:
-
-- official sources checked
-- changed claims
-- validation result
-- any claims left as unknown
+**HARD CONSTRAINTS:** Do NOT modify `~/.codex`, `~/.claude`, or any local skill
+install path. Do NOT modify local machine config. Do NOT push to main. Do NOT use
+OpenAI API keys or GitHub Actions secrets. If you need to widen scope beyond
+this, stop and ask instead of guessing.
