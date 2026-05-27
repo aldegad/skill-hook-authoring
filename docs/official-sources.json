@@ -1,12 +1,13 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-05-26",
+  "updated": "2026-05-27",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
     "allowedHosts": [
       "developers.openai.com",
       "docs.anthropic.com",
+      "code.claude.com",
       "docs.x.ai",
       "google-gemini.github.io",
       "hermes-agent.nousresearch.com",
@@ -62,22 +63,25 @@
       "id": "anthropic-claude-hooks",
       "agent": "claude-code",
       "kind": "hooks",
-      "url": "https://docs.anthropic.com/en/docs/claude-code/hooks",
-      "claims": ["PreToolUse", "PostToolUse", "settings hooks", "exit code blocking"]
+      "url": "https://code.claude.com/docs/en/hooks",
+      "notes": "docs.anthropic.com/en/docs/claude-code/hooks permanently redirects here as of 2026-05-27",
+      "claims": ["PreToolUse", "PostToolUse", "settings hooks", "exit code blocking", "26 lifecycle events", "5 hook types", "command hooks", "HTTP hooks", "MCP tool hooks", "prompt hooks", "agent hooks", "async hooks", "hook frontmatter", "Stop", "SubagentStop", "PreCompact", "PostCompact", "SessionStart", "SessionEnd", "UserPromptSubmit", "WorktreeCreate", "TeammateIdle", "disableAllHooks"]
     },
     {
       "id": "anthropic-claude-settings",
       "agent": "claude-code",
       "kind": "configuration",
-      "url": "https://docs.anthropic.com/en/docs/claude-code/settings",
-      "claims": ["settings.json", "subagents", "environment variables"]
+      "url": "https://code.claude.com/docs/en/settings",
+      "notes": "docs.anthropic.com/en/docs/claude-code/settings permanently redirects here as of 2026-05-27",
+      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "enabledPlugins", "skillOverrides", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls"]
     },
     {
       "id": "anthropic-claude-slash-commands",
       "agent": "claude-code",
       "kind": "commands",
-      "url": "https://docs.anthropic.com/en/docs/claude-code/slash-commands",
-      "claims": ["custom slash commands", ".claude/commands", "MCP prompts as slash commands"]
+      "url": "https://code.claude.com/docs/en/slash-commands",
+      "notes": "docs.anthropic.com/en/docs/claude-code/slash-commands permanently redirects here as of 2026-05-27; page now titled 'Extend Claude with skills'",
+      "claims": ["custom slash commands", ".claude/commands", "MCP prompts as slash commands", "skills system", "SKILL.md", "Agent Skills standard", "agentskills.io", ".claude/skills", "commands merged into skills"]
     },
     {
       "id": "xai-grok-skills-plugins",
@@ -118,22 +122,25 @@
       "id": "cursor-cli-overview",
       "agent": "cursor-cli",
       "kind": "cli",
-      "url": "https://docs.cursor.com/en/cli/overview",
-      "claims": ["Cursor CLI", "terminal agent"]
+      "url": "https://cursor.com/docs/cli/overview",
+      "notes": "docs.cursor.com/en/cli/overview permanently redirects to cursor.com/docs as of 2026-05-27; specific CLI docs verified at cursor.com/docs/cli/overview",
+      "claims": ["Cursor CLI", "terminal agent", "Agent mode", "Plan mode", "Ask mode", "Cloud Agent handoff", "sandbox controls", "worktree flag"]
     },
     {
       "id": "cursor-cli-using",
       "agent": "cursor-cli",
       "kind": "cli",
-      "url": "https://docs.cursor.com/en/cli/using",
-      "claims": ["AGENTS.md", "CLAUDE.md", ".cursor/rules", "output formats"]
+      "url": "https://cursor.com/docs/cli/using",
+      "notes": "docs.cursor.com/en/cli/using permanently redirects to cursor.com/docs as of 2026-05-27; specific CLI docs verified at cursor.com/docs/cli/using",
+      "claims": ["AGENTS.md", "CLAUDE.md", ".cursor/rules", "output formats", "worktree", "MCP auto-detection via mcp.json", "Cloud Agent handoff"]
     },
     {
       "id": "cursor-cli-parameters",
       "agent": "cursor-cli",
       "kind": "cli",
-      "url": "https://docs.cursor.com/en/cli/reference/parameters",
-      "claims": ["parameters", "output-format", "update"]
+      "url": "https://cursor.com/docs/cli/reference/parameters",
+      "notes": "docs.cursor.com/en/cli/reference/parameters permanently redirects to cursor.com/docs as of 2026-05-27; specific CLI docs verified at cursor.com/docs/cli/reference/parameters",
+      "claims": ["parameters", "output-format", "text format", "json format", "stream-json format", "--model", "--mode", "--worktree", "--api-key"]
     },
     {
       "id": "github-auto-merge",
