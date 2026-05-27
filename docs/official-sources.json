@@ -8,6 +8,7 @@
       "developers.openai.com",
       "docs.anthropic.com",
       "code.claude.com",
+      "platform.claude.com",
       "docs.x.ai",
       "google-gemini.github.io",
       "hermes-agent.nousresearch.com",
@@ -82,6 +83,14 @@
       "url": "https://code.claude.com/docs/en/slash-commands",
       "notes": "docs.anthropic.com/en/docs/claude-code/slash-commands permanently redirects here as of 2026-05-27; page now titled 'Extend Claude with skills'",
       "claims": ["custom slash commands", ".claude/commands", "MCP prompts as slash commands", "skills system", "SKILL.md", "Agent Skills standard", "agentskills.io", ".claude/skills", "commands merged into skills"]
+    },
+    {
+      "id": "anthropic-skill-authoring-best-practices",
+      "agent": "claude-code",
+      "kind": "skills",
+      "url": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices",
+      "notes": "Official Skill authoring best practices. The SKILL.md '<500 lines' figure is stated as 'for optimal performance' (a guideline, not a hard loading cap); progressive disclosure pushes detail to reference files.",
+      "claims": ["SKILL.md body under 500 lines for optimal performance", "context window is a shared public good", "progressive disclosure", "references one level deep", "name max 64 chars lowercase-numbers-hyphens no reserved words anthropic/claude", "description max 1024 chars third person what and when", "forward-slash paths only", "gerund naming", "scripts execute without loading into context"]
     },
     {
       "id": "xai-grok-skills-plugins",
