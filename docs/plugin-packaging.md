@@ -1,6 +1,6 @@
 # Plugin And Extension Packaging
 
-Last reviewed: 2026-05-27
+Last reviewed: 2026-05-29
 
 ## Shared Rule
 
@@ -14,7 +14,7 @@ Do not migrate this repo into a Codex plugin layout until there is an explicit p
 
 ## Gemini CLI Extensions
 
-Gemini CLI extensions are installed under `~/.gemini/extensions/<name>` and use `gemini-extension.json`. They can package MCP servers, a context file such as `GEMINI.md`, custom commands, and `excludeTools` rules.
+Gemini CLI extensions are installed under `~/.gemini/extensions/<name>` and use `gemini-extension.json`. They can package MCP servers, a context file (the `contextFileName` manifest field; defaults to `GEMINI.md` if present), custom commands, and `excludeTools` rules. Variable substitution is supported in the manifest via `${extensionPath}`, `${workspacePath}`, and `${/}`.
 
 Gemini copies installed extensions unless `gemini extensions link` is used. For repo-owned development, use link mode to avoid editing generated copies.
 

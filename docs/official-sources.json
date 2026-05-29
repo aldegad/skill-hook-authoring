@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-05-27",
+  "updated": "2026-05-29",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
@@ -66,7 +66,7 @@
       "kind": "hooks",
       "url": "https://code.claude.com/docs/en/hooks",
       "notes": "docs.anthropic.com/en/docs/claude-code/hooks permanently redirects here as of 2026-05-27",
-      "claims": ["PreToolUse", "PostToolUse", "settings hooks", "exit code blocking", "26 lifecycle events", "5 hook types", "command hooks", "HTTP hooks", "MCP tool hooks", "prompt hooks", "agent hooks", "async hooks", "hook frontmatter", "Stop", "SubagentStop", "PreCompact", "PostCompact", "SessionStart", "SessionEnd", "UserPromptSubmit", "WorktreeCreate", "TeammateIdle", "disableAllHooks"]
+      "claims": ["PreToolUse", "PostToolUse", "settings hooks", "exit code blocking", "30 lifecycle events", "5 hook types", "command hooks", "HTTP hooks", "MCP tool hooks", "prompt hooks", "agent hooks", "async hooks", "asyncRewake", "hook frontmatter", "if condition filter", "10000 char output cap", "terminalSequence output", "Stop", "StopFailure", "SubagentStart", "SubagentStop", "PreCompact", "PostCompact", "SessionStart", "SessionEnd", "UserPromptSubmit", "WorktreeCreate", "WorktreeRemove", "TeammateIdle", "PermissionRequest", "PermissionDenied", "PostToolUseFailure", "PostToolBatch", "TaskCreated", "TaskCompleted", "UserPromptExpansion", "CwdChanged", "FileChanged", "ConfigChange", "InstructionsLoaded", "Notification", "Setup", "Elicitation", "ElicitationResult", "MessageDisplay", "disableAllHooks"]
     },
     {
       "id": "anthropic-claude-settings",
@@ -74,7 +74,7 @@
       "kind": "configuration",
       "url": "https://code.claude.com/docs/en/settings",
       "notes": "docs.anthropic.com/en/docs/claude-code/settings permanently redirects here as of 2026-05-27",
-      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "enabledPlugins", "skillOverrides", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls"]
+      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "enabledPlugins", "skillOverrides", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "httpHookAllowedEnvVars", "allowManagedHooksOnly", "bgIsolation", "disableRemoteControl", "policyHelper", "managed-settings.d drop-in directory"]
     },
     {
       "id": "anthropic-claude-slash-commands",
@@ -104,7 +104,7 @@
       "agent": "gemini-cli",
       "kind": "extensions",
       "url": "https://google-gemini.github.io/gemini-cli/docs/extensions/",
-      "claims": ["extensions", "gemini-extension.json", "MCP servers", "custom commands", "excludeTools"]
+      "claims": ["extensions", "gemini-extension.json", "MCP servers", "custom commands", "excludeTools", "contextFileName", "variable substitution"]
     },
     {
       "id": "google-gemini-commands",
@@ -149,7 +149,7 @@
       "kind": "cli",
       "url": "https://cursor.com/docs/cli/reference/parameters",
       "notes": "docs.cursor.com/en/cli/reference/parameters permanently redirects to cursor.com/docs as of 2026-05-27; specific CLI docs verified at cursor.com/docs/cli/reference/parameters",
-      "claims": ["parameters", "output-format", "text format", "json format", "stream-json format", "--model", "--mode", "--worktree", "--api-key"]
+      "claims": ["parameters", "output-format", "text format", "json format", "stream-json format", "--model", "--mode", "--worktree", "--api-key", "--stream-partial-output", "--continue"]
     },
     {
       "id": "github-auto-merge",
