@@ -1,6 +1,6 @@
 # Plugin And Extension Packaging
 
-Last reviewed: 2026-05-27
+Last reviewed: 2026-05-31
 
 ## Shared Rule
 
@@ -26,7 +26,7 @@ Because Grok claims broad compatibility, keep this repo strict: compatibility te
 
 ## Claude Code
 
-The official Claude Code docs (now at code.claude.com as of 2026-05-27) cover hooks, settings, subagents, and a skills system where custom commands are merged into skills (`.claude/commands/` and `.claude/skills/`), following the agentskills.io open standard. Plugin marketplace settings are now documented in official settings sources (`blockedMarketplaces`, `skillOverrides`, `enabledPlugins`, `strictPluginOnlyCustomization`, `pluginTrustMessage`). A dedicated plugin package format equivalent to Codex's `.codex-plugin/plugin.json` is not established in the cited sources, but skills and hooks can be configured through settings.json and skill frontmatter.
+The official Claude Code docs (now at code.claude.com as of 2026-05-27) cover hooks, settings, subagents, and a skills system where custom commands are merged into skills (`.claude/commands/` and `.claude/skills/`), following the agentskills.io open standard. Plugin marketplace settings documented in official settings sources include `blockedMarketplaces`, `strictKnownMarketplaces` (allowlist), `allowedChannelPlugins`, `skillOverrides`, `enabledPlugins`, `strictPluginOnlyCustomization`, and `pluginTrustMessage`. Skill-budget controls (`maxSkillDescriptionChars`, `skillListingBudgetFraction`) and hook-security settings (`allowedHttpHookUrls`, `httpHookAllowedEnvVars`, `allowManagedHooksOnly`) are also documented as of the 2026-05-31 review. A dedicated plugin package format equivalent to Codex's `.codex-plugin/plugin.json` is not established in the cited sources, but skills and hooks can be configured through settings.json and skill frontmatter.
 
 ## Packaging Decision Gate
 
