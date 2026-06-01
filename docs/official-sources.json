@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-05-27",
+  "updated": "2026-06-01",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
@@ -66,7 +66,7 @@
       "kind": "hooks",
       "url": "https://code.claude.com/docs/en/hooks",
       "notes": "docs.anthropic.com/en/docs/claude-code/hooks permanently redirects here as of 2026-05-27",
-      "claims": ["PreToolUse", "PostToolUse", "settings hooks", "exit code blocking", "26 lifecycle events", "5 hook types", "command hooks", "HTTP hooks", "MCP tool hooks", "prompt hooks", "agent hooks", "async hooks", "hook frontmatter", "Stop", "SubagentStop", "PreCompact", "PostCompact", "SessionStart", "SessionEnd", "UserPromptSubmit", "WorktreeCreate", "TeammateIdle", "disableAllHooks"]
+      "claims": ["PreToolUse", "PostToolUse", "settings hooks", "exit code blocking", "30 lifecycle events", "5 hook types", "command hooks", "HTTP hooks", "MCP tool hooks", "prompt hooks", "agent hooks", "async hooks", "hook frontmatter", "Stop", "SubagentStop", "PreCompact", "PostCompact", "SessionStart", "SessionEnd", "UserPromptSubmit", "WorktreeCreate", "TeammateIdle", "disableAllHooks", "Setup", "UserPromptExpansion", "StopFailure", "PostToolUseFailure", "PostToolBatch", "PermissionRequest", "PermissionDenied", "SubagentStart", "TaskCreated", "TaskCompleted", "InstructionsLoaded", "ConfigChange", "CwdChanged", "FileChanged", "WorktreeRemove", "Notification", "MessageDisplay", "Elicitation", "ElicitationResult"]
     },
     {
       "id": "anthropic-claude-settings",
@@ -74,7 +74,7 @@
       "kind": "configuration",
       "url": "https://code.claude.com/docs/en/settings",
       "notes": "docs.anthropic.com/en/docs/claude-code/settings permanently redirects here as of 2026-05-27",
-      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "enabledPlugins", "skillOverrides", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls"]
+      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "enabledPlugins", "skillOverrides", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "allowManagedHooksOnly", "allowedChannelPlugins", "strictKnownMarketplaces", "skillListingBudgetFraction", "maxSkillDescriptionChars"]
     },
     {
       "id": "anthropic-claude-slash-commands",
