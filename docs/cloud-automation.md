@@ -38,10 +38,18 @@ daily schedule
 -> review and merge
 ```
 
-The Claude Routine never commits to `main`. It always opens a pull request from a
-`claude/`-prefixed branch (for example `claude/daily-doc-refresh-YYYY-MM-DD`) so
-every change — including project-instruction baseline drift — is reviewed before
-merge.
+The Claude Routine never commits to `main`. It opens a pull request from a
+branch instead, so every change — including project-instruction baseline drift —
+is reviewed before merge.
+
+**Branch prefix policy.** A configurable custom branch prefix is not documented
+for Claude Routines. By default the routine can only push `claude/`-prefixed
+branches (for example `claude/daily-doc-refresh-YYYY-MM-DD`). To let it push an
+existing branch or a different prefix — such as an org-policy prefix like
+`aldegad/` — enable **Allow unrestricted branch pushes** in that repository's
+routine Permissions. Local agents on this machine are a separate context: the
+local `cc-guard` blocks `claude/` and `codex/` branch names, so do local PR work
+from an `aldegad/`-prefixed branch.
 
 ## Alternative: Codex App Automations
 
