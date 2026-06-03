@@ -31,6 +31,22 @@ Keep the current detailed truth in `docs/compatibility-matrix.md` and `docs/plug
 
 When a runtime capability is not documented, write `not documented` or `unknown` and require live verification before shipping behavior that depends on it.
 
+## Project Instruction Files
+
+Do not assume every non-Claude runtime reads `AGENTS.md`. Use the officially documented project-instruction filename for the target runtime:
+
+| Runtime | Official project instruction/context files |
+|---|---|
+| Codex | `AGENTS.override.md`, `AGENTS.md`, then configured `project_doc_fallback_filenames` |
+| Claude Code | `CLAUDE.md`, `.claude/CLAUDE.md`, `CLAUDE.local.md`, and `.claude/rules/`; Claude docs explicitly say Claude reads `CLAUDE.md`, not `AGENTS.md` |
+| Grok / xAI | `AGENTS.md`, `Agents.md`, `AGENT.md` |
+| Hermes Agent | `.hermes.md` / `HERMES.md`, then `AGENTS.md`, then `CLAUDE.md`, then `.cursorrules`; `SOUL.md` is global identity, not project instructions |
+| Gemini CLI | `GEMINI.md` hierarchical memory |
+| Cursor CLI | `.cursor/rules`, plus project-root `AGENTS.md` and `CLAUDE.md` |
+| Kuma Studio | `AGENTS.md` and `CLAUDE.md` are parallel repo SSoT files for shared rules |
+
+For cross-agent repo rules, maintain the smallest set of files that each runtime actually reads. In Kuma-style Codex/Claude/Grok/Hermes repos, that usually means repo-owned `AGENTS.md` plus a `CLAUDE.md` import/symlink or Claude-specific wrapper; add `GEMINI.md` only when Gemini CLI is a supported runtime.
+
 ## Core Rules
 
 - Pick one canonical repo path first. Installed copies under `~/.claude` and `~/.codex` must be symlinks or generated config entries.

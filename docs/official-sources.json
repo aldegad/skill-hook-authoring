@@ -19,6 +19,13 @@
   },
   "sources": [
     {
+      "id": "openai-codex-agents-md",
+      "agent": "codex",
+      "kind": "project-instructions",
+      "url": "https://developers.openai.com/codex/guides/agents-md",
+      "claims": ["AGENTS.override.md", "AGENTS.md", "project_doc_fallback_filenames", "global guidance", "project instructions", "directory walk"]
+    },
+    {
       "id": "openai-codex-automations",
       "agent": "codex",
       "kind": "automation",
@@ -59,6 +66,13 @@
       "kind": "plugins",
       "url": "https://developers.openai.com/codex/plugins/build",
       "claims": [".codex-plugin/plugin.json", "bundled hooks", "bundled MCP servers"]
+    },
+    {
+      "id": "anthropic-claude-memory",
+      "agent": "claude-code",
+      "kind": "project-instructions",
+      "url": "https://code.claude.com/docs/en/memory",
+      "claims": ["CLAUDE.md", ".claude/CLAUDE.md", "CLAUDE.local.md", ".claude/rules", "Claude reads CLAUDE.md not AGENTS.md", "@AGENTS.md import", "symlink AGENTS.md to CLAUDE.md"]
     },
     {
       "id": "anthropic-claude-hooks",
@@ -112,6 +126,20 @@
       "kind": "commands",
       "url": "https://google-gemini.github.io/gemini-cli/docs/cli/commands.html",
       "claims": ["/extensions", "/mcp", "/memory", "GEMINI.md"]
+    },
+    {
+      "id": "nous-hermes-context-files",
+      "agent": "hermes-agent",
+      "kind": "project-instructions",
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/features/context-files",
+      "claims": [".hermes.md", "HERMES.md", "AGENTS.md", "CLAUDE.md", "SOUL.md", ".cursorrules", ".cursor/rules/*.mdc", "first match wins", "progressive subdirectory discovery", "project context files"]
+    },
+    {
+      "id": "nous-hermes-personality",
+      "agent": "hermes-agent",
+      "kind": "identity",
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/features/personality",
+      "claims": ["SOUL.md", "HERMES_HOME", "global identity", "AGENTS.md for project instructions"]
     },
     {
       "id": "nous-hermes-overview",

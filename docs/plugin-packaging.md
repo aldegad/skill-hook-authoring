@@ -6,6 +6,19 @@ Last reviewed: 2026-06-03
 
 Treat each runtime's package format as a separate adapter over the same canonical knowledge. The canonical instructions live in repo-owned source files; generated installs, plugin bundles, and home-directory copies are derived artifacts.
 
+## Project Instruction Files
+
+Project instruction filenames are runtime-specific and are not the same thing as skills, hooks, or plugin packaging:
+
+- Codex uses `AGENTS.override.md`, `AGENTS.md`, and configured fallback filenames.
+- Claude Code uses `CLAUDE.md` / `.claude/CLAUDE.md` / `CLAUDE.local.md`; when sharing with `AGENTS.md`-based agents, use `@AGENTS.md` import or a symlink.
+- Grok documents the `AGENTS.md` instruction-file family: `AGENTS.md`, `Agents.md`, `AGENT.md`.
+- Hermes documents `.hermes.md` / `HERMES.md`, `AGENTS.md`, `CLAUDE.md`, `.cursorrules`, and `.cursor/rules/*.mdc`; `SOUL.md` is global identity, not project instructions.
+- Gemini CLI uses `GEMINI.md` hierarchical memory.
+- Cursor CLI uses `.cursor/rules` plus project-root `AGENTS.md` and `CLAUDE.md`.
+
+For cross-agent repos, prefer one canonical repo instruction source plus thin runtime wrappers/imports. Do not create parallel full copies unless the divergence is explicit and reviewed.
+
 ## Codex Plugins
 
 Official Codex plugins have `.codex-plugin/plugin.json` at the plugin root. A plugin can point to bundled `skills`, `mcpServers`, `apps`, and `hooks`. Plugin hooks are not automatically trusted; users must review and trust hook definitions.
