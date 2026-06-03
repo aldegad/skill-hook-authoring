@@ -44,12 +44,9 @@ is reviewed before merge.
 
 **Branch prefix policy.** A configurable custom branch prefix is not documented
 for Claude Routines. By default the routine can only push `claude/`-prefixed
-branches (for example `claude/daily-doc-refresh-YYYY-MM-DD`). To let it push an
-existing branch or a different prefix — such as an org-policy prefix like
-`aldegad/` — enable **Allow unrestricted branch pushes** in that repository's
-routine Permissions. Local agents on this machine are a separate context: the
-local `cc-guard` blocks `claude/` and `codex/` branch names, so do local PR work
-from an `aldegad/`-prefixed branch.
+branches (for example `claude/daily-doc-refresh-YYYY-MM-DD`). To push a different
+branch or prefix, enable **Allow unrestricted branch pushes** in that
+repository's routine Permissions.
 
 ## Alternative: Codex App Automations
 
