@@ -54,6 +54,25 @@ for (const source of manifest.sources ?? []) {
   assertArray(source.claims, `${source.id}.claims`);
 }
 
+// Guard the Project Instruction Files baseline so a future edit cannot silently
+// drop the category that the daily refresh must keep verifying. Codex and Claude
+// Code are the anchor runtimes with dedicated official memory/AGENTS.md pages.
+const projectInstructionAgents = new Set(
+  (manifest.sources ?? [])
+    .filter((source) => source.kind === "project-instructions")
+    .map((source) => source.agent)
+);
+if (projectInstructionAgents.size === 0) {
+  fail(
+    "no source has kind=project-instructions; the Project Instruction Files baseline must stay covered"
+  );
+}
+for (const requiredAgent of ["codex", "claude-code"]) {
+  if (!projectInstructionAgents.has(requiredAgent)) {
+    fail(`missing kind=project-instructions source for ${requiredAgent}`);
+  }
+}
+
 if (!skipNetwork) {
   for (const source of manifest.sources ?? []) {
     const started = Date.now();

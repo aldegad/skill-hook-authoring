@@ -14,9 +14,23 @@ summary rather than substituting another source.
 
 **WHAT TO CHECK** across these agents/products: OpenAI Codex, Claude / Claude
 Code, Grok/xAI, Gemini / Gemini CLI, Cursor, Hermes Agent, Kuma Studio. For each,
-review: supported-agent docs, plugin/extension docs, compatibility matrix, and
-Kuma Studio pattern docs. If an official doc confirms a feature difference or
-that something is unavailable, state that explicitly in the docs.
+review: supported-agent docs, plugin/extension docs, project-instruction /
+context-file docs, compatibility matrix, and Kuma Studio pattern docs. If an
+official doc confirms a feature difference or that something is unavailable, state
+that explicitly in the docs.
+
+**PROJECT INSTRUCTION FILES — do not skip this category.** It is not skills,
+hooks, or plugin packaging, so it is easy to miss. Every source in
+`docs/official-sources.json` with `"kind": "project-instructions"` — and any
+instruction-file claims such as `AGENTS.override.md`, `AGENTS.md`, `CLAUDE.md`,
+`GEMINI.md`, `.hermes.md` / `HERMES.md`, or `.cursor/rules` — MUST be fetched and
+re-verified every run. If the official docs changed which filenames a runtime
+reads, their priority order, or which file is project vs. global identity, treat
+the **Project Instruction Files** baseline as drifted and update all three
+mirrors so they stay consistent: the `## Project Instruction Files` sections in
+`SKILL.md` and `docs/plugin-packaging.md`, plus the **Project instructions**
+column of `docs/compatibility-matrix.md`. Do not infer a filename for one runtime
+from another — cite the runtime's own official doc.
 
 **IF THERE ARE CHANGES:** make small, reviewable edits to the repo docs. Cite the
 official source URL in the docs or in the PR body. Run

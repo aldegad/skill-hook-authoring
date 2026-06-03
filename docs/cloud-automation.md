@@ -1,6 +1,6 @@
 # Cloud Automation
 
-Last reviewed: 2026-05-27
+Last reviewed: 2026-06-03
 
 Keep this repo's compatibility docs current by running a daily agent that reads
 `docs/official-sources.json`, fetches the official vendor URLs, and opens a pull
@@ -29,11 +29,24 @@ daily schedule
 -> read docs/official-sources.json
 -> validate official source reachability
 -> fetch only the official vendor URLs
+-> re-verify project-instruction file claims (kind=project-instructions)
 -> update repo docs only when official evidence changed
+-> reconcile Project Instruction Files baseline on drift
+   (SKILL.md, compatibility-matrix.md, plugin-packaging.md)
 -> run node scripts/check-official-sources.mjs --write-report
 -> open a PR from a claude/-prefixed branch (never push to main)
 -> review and merge
 ```
+
+The Claude Routine never commits to `main`. It opens a pull request from a
+branch instead, so every change — including project-instruction baseline drift —
+is reviewed before merge.
+
+**Branch prefix policy.** A configurable custom branch prefix is not documented
+for Claude Routines. By default the routine can only push `claude/`-prefixed
+branches (for example `claude/daily-doc-refresh-YYYY-MM-DD`). To push a different
+branch or prefix, enable **Allow unrestricted branch pushes** in that
+repository's routine Permissions.
 
 ## Alternative: Codex App Automations
 
