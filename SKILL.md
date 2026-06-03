@@ -1,17 +1,42 @@
 ---
 name: skill-hook-authoring
-description: 'Use for shared Codex/Claude skill or hook authoring: skill layout, symlink installs, guard hooks, dangerous-mode guardrails, and ~/.codex vs ~/.claude drift.'
+description: 'Use for agent extension and plugin-like package authoring across Codex, Claude, Grok, and Hermes: skills, hooks, plugin packaging, symlink installs, guardrails, and runtime drift.'
 ---
 
 # Skill Hook Authoring
 
-Create shared skills, hooks, commands, extensions, and plugin packages from one repo-owned source of truth.
+Create shared agent extension packages from one repo-owned source of truth. These packages may contain skills, hooks, commands, scripts, references, assets, MCP/app wiring, or runtime-specific plugin metadata.
+
+## Taxonomy
+
+Use these words precisely:
+
+- **Skill**: instructions the model reads when the task matches. Usually `SKILL.md` plus optional `scripts/`, `references/`, and `assets/`. A skill can tell the model what to do, but it does not enforce tool behavior by itself.
+- **Hook**: a harness-level guard or automation invoked around lifecycle events such as tool calls. A hook can allow, deny, ask, mutate input, or add context depending on runtime support. Hooks must be registered in the runtime config or plugin metadata; putting a hook script inside a skill folder is not enough.
+- **Plugin / extension**: a runtime-specific packaging and trust boundary that can bundle skills, hooks, MCP servers, apps, commands, agents, or metadata. Codex and Grok document plugin packages; Gemini documents extensions; Claude documents skills, hooks, and marketplace/plugin settings but not a Codex-style `.codex-plugin/plugin.json` equivalent in the cited sources.
+- **Package root**: the repo-owned canonical source directory we maintain. Most local "skills" in this workspace are actually plugin-like package roots because they include `SKILL.md`, scripts, docs, installers, and policy.
+
+If the task changes discovery, installation, trust, hook behavior, bundled scripts, or cross-runtime compatibility, treat it as **package authoring**, not just skill text editing.
+
+## Four-Runtime Baseline
+
+Keep the current detailed truth in `docs/compatibility-matrix.md` and `docs/plugin-packaging.md`. This is the short working model:
+
+| Runtime | Skill surface | Hook surface | Plugin/package surface |
+|---|---|---|---|
+| Codex | `SKILL.md` in skill bundles | `~/.codex/hooks.json` or plugin-bundled hooks | `.codex-plugin/plugin.json` can bundle skills, apps, MCP servers, hooks, and marketplace metadata |
+| Claude Code | `.claude/skills`, `.claude/commands`, skill frontmatter/settings | `.claude/settings.json` hooks | Marketplace/plugin settings exist; no cited Codex-style plugin package format |
+| Grok / xAI | Reusable skill folders | User, project, and plugin hook roots | Plugins can bundle skills, agents, hooks, MCP servers, and LSP servers |
+| Hermes Agent | Skills and skill preloading are documented | Hook parity is not documented in the cited source set | MCP/toolsets are documented; plugin packaging parity is not documented here |
+
+When a runtime capability is not documented, write `not documented` or `unknown` and require live verification before shipping behavior that depends on it.
 
 ## Core Rules
 
 - Pick one canonical repo path first. Installed copies under `~/.claude` and `~/.codex` must be symlinks or generated config entries.
 - Do not edit home-directory installed copies directly.
 - Do not keep separate Claude and Codex versions unless a difference is explicitly documented and tested.
+- Name the package layer explicitly before editing: skill-only, hook-only, plugin-like package, or generated runtime plugin. Do not let a `SKILL.md` entrypoint hide installer, hook, or trust-boundary changes.
 - Keep `SKILL.md` body under 500 lines — a performance guideline, **not** a hard loading cap. Anthropic's [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) say "Keep SKILL.md body under 500 lines for optimal performance": once loaded, every line competes with conversation history and other context. Put deterministic behavior in scripts; move scenario-specific detail into `reference/*.md` linked **one level deep** from `SKILL.md` (progressive disclosure).
 - `name`: max 64 chars, lowercase/numbers/hyphens only, no reserved words (`anthropic`, `claude`); prefer gerund form (`processing-pdfs`). `description`: max 1024 chars, third person, stating both *what* the skill does and *when* to use it (trigger terms) — not the procedure.
 - **Quote the `description` if it contains a colon-space (`: `), or the skill silently fails to load.** A `: ` in an unquoted YAML scalar is parsed as a nested mapping → `mapping values are not allowed in this context`. Common trap: `description: ... Korean triggers: 원샷, ...`. Wrap the whole value in single quotes (`description: '...'`); double inner single-quotes, double-quotes are fine inside. Validate frontmatter parses before shipping. (Trial-and-error 2026-05-26: an unquoted description with `Korean triggers:` broke skill loading.)
@@ -33,6 +58,33 @@ agent-extensions/
 ```
 
 Keep the umbrella flat. Do not add a repo-local `skills/` or `hooks/` index unless there is a specific migration plan, because that creates a second source of truth. If a hook belongs to a standalone repo, reference that repo path directly from the installer and agent config.
+
+## Authoring Flow
+
+Before adding or changing a package:
+
+1. Classify the change: skill instruction, hook guard, plugin/extension package, installer/config, or docs-only compatibility claim.
+2. Pick the canonical package root and the generated install paths.
+3. Decide whether each installed artifact is a symlink, generated config entry, copied file, or runtime-native plugin package.
+4. Update the canonical source first, then the installer/config generator, then docs.
+5. Validate discovery in every claimed runtime. For undocumented runtimes, mark support as unknown until live verification exists.
+
+Do not move a root-level `SKILL.md` into a plugin subdirectory, or convert a skill folder into a runtime plugin, unless the installer, docs, validation, and rollback path change in the same commit.
+
+## Retiring Or Renaming Artifacts
+
+Deleting a hook, skill, command, or plugin-like package means removing every active ownership path, not just the visible file:
+
+1. Delete or rename the canonical source file/folder.
+2. Remove active installer registration and generated config writes.
+3. Remove active overlay/settings entries.
+4. Add the old id/path/command to the relevant retired list so future installer runs clean existing symlinks or copies.
+5. Remove live home-directory symlinks/copies if they are repo-owned.
+6. Update docs and plans that describe the artifact in present tense.
+7. Search repo and live config for the old id. Remaining hits should be retired lists or historical notes only.
+8. Run syntax/config checks and prove the installer no longer recreates the retired artifact.
+
+This rule exists because deleting only `~/.claude/hooks/<id>` or only `scripts/hooks/<id>` can let the artifact reappear on the next setup run.
 
 ## Multi-Agent Compatibility Docs
 
