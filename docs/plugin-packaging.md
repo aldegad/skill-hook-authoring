@@ -1,6 +1,6 @@
 # Plugin And Extension Packaging
 
-Last reviewed: 2026-06-03
+Last reviewed: 2026-06-04
 
 ## Shared Rule
 
@@ -39,7 +39,7 @@ Because Grok claims broad compatibility, keep this repo strict: compatibility te
 
 ## Claude Code
 
-The official Claude Code docs (now at code.claude.com as of 2026-05-27) cover hooks, settings, subagents, and a skills system where custom commands are merged into skills (`.claude/commands/` and `.claude/skills/`), following the agentskills.io open standard. Claude Code extends the standard with invocation control, subagent execution, and dynamic context injection. Plugin marketplace settings are now documented in official settings sources (`blockedMarketplaces`, `allowedChannelPlugins`, `skillOverrides`, `enabledPlugins`, `strictPluginOnlyCustomization`, `pluginTrustMessage`). (`enabledPlugins` appears in official docs as a field within plugin definitions; `allowedChannelPlugins` is the admin-level per-channel plugin allowlist. New skill-related settings include `disableSkillShellExecution`, `maxSkillDescriptionChars`, and `skillListingBudgetFraction`. Source: https://code.claude.com/docs/en/settings, verified 2026-06-03.) A dedicated plugin package format equivalent to Codex's `.codex-plugin/plugin.json` is not established in the cited sources, but skills and hooks can be configured through settings.json and skill frontmatter.
+The official Claude Code docs (now at code.claude.com as of 2026-05-27) cover hooks, settings, subagents, and a skills system where custom commands are merged into skills (`.claude/commands/` and `.claude/skills/`), following the agentskills.io open standard. Claude Code extends the standard with invocation control, subagent execution, and dynamic context injection. Plugin marketplace and memory settings are documented in official settings sources (`blockedMarketplaces`, `allowedChannelPlugins`, `skillOverrides`, `enabledPlugins`, `strictPluginOnlyCustomization`, `pluginTrustMessage`, `autoMemoryEnabled`, `autoMemoryDirectory`, `claudeMd`, `claudeMdExcludes`, `httpHookAllowedEnvVars`, `policyHelper`, `parentSettingsBehavior`). (`enabledPlugins` appears in official docs as a field within plugin definitions; `allowedChannelPlugins` is the admin-level per-channel plugin allowlist. Skill-related settings include `disableSkillShellExecution`, `maxSkillDescriptionChars` (default `1536`, v2.1.105+), and `skillListingBudgetFraction`. Managed-only additions: `policyHelper` (v2.1.136+) executes an admin-deployed binary to compute managed settings dynamically; `parentSettingsBehavior` (v2.1.133+) controls merging between admin and parent-supplied settings. Source: https://code.claude.com/docs/en/settings, verified 2026-06-04.) A dedicated plugin package format equivalent to Codex's `.codex-plugin/plugin.json` is not established in the cited sources, but skills and hooks can be configured through settings.json and skill frontmatter.
 
 ## Packaging Decision Gate
 
