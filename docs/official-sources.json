@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-06-03",
+  "updated": "2026-06-05",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
@@ -88,7 +88,7 @@
       "kind": "configuration",
       "url": "https://code.claude.com/docs/en/settings",
       "notes": "docs.anthropic.com/en/docs/claude-code/settings permanently redirects here as of 2026-05-27",
-      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "maxSkillDescriptionChars", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls"]
+      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "maxSkillDescriptionChars", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "strictPluginOnlyCustomization", "pluginTrustMessage", "httpHookAllowedEnvVars"]
     },
     {
       "id": "anthropic-claude-slash-commands",
