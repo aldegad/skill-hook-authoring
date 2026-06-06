@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-06-03",
+  "updated": "2026-06-06",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
@@ -44,7 +44,7 @@
       "agent": "codex",
       "kind": "skills",
       "url": "https://developers.openai.com/api/docs/guides/tools-skills",
-      "claims": ["SKILL.md manifest", "versioned bundle", "agent skills standard"]
+      "claims": ["SKILL.md manifest", "versioned bundle", "agent skills standard", "50 MB zip limit per version", "500 files per version", "25 MB uncompressed limit"]
     },
     {
       "id": "openai-codex-hooks",
@@ -72,7 +72,7 @@
       "agent": "claude-code",
       "kind": "project-instructions",
       "url": "https://code.claude.com/docs/en/memory",
-      "claims": ["CLAUDE.md", ".claude/CLAUDE.md", "CLAUDE.local.md", ".claude/rules", "Claude reads CLAUDE.md not AGENTS.md", "@AGENTS.md import", "symlink AGENTS.md to CLAUDE.md"]
+      "claims": ["CLAUDE.md", ".claude/CLAUDE.md", "CLAUDE.local.md", ".claude/rules", "Claude reads CLAUDE.md not AGENTS.md", "@AGENTS.md import", "symlink AGENTS.md to CLAUDE.md", "auto memory", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "HTML comment stripping in CLAUDE.md"]
     },
     {
       "id": "anthropic-claude-hooks",
@@ -88,7 +88,7 @@
       "kind": "configuration",
       "url": "https://code.claude.com/docs/en/settings",
       "notes": "docs.anthropic.com/en/docs/claude-code/settings permanently redirects here as of 2026-05-27",
-      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "maxSkillDescriptionChars", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls"]
+      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "maxSkillDescriptionChars", "maxSkillDescriptionChars default 1536", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "httpHookAllowedEnvVars", "allowManagedHooksOnly", "policyHelper", "parentSettingsBehavior", "forceLoginMethod", "forceLoginOrgUUID", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes"]
     },
     {
       "id": "anthropic-claude-slash-commands",
@@ -104,7 +104,7 @@
       "kind": "skills",
       "url": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices",
       "notes": "Official Skill authoring best practices. The SKILL.md '<500 lines' figure is stated as 'for optimal performance' (a guideline, not a hard loading cap); progressive disclosure pushes detail to reference files.",
-      "claims": ["SKILL.md body under 500 lines for optimal performance", "context window is a shared public good", "progressive disclosure", "references one level deep", "name max 64 chars lowercase-numbers-hyphens no reserved words anthropic/claude", "description max 1024 chars third person what and when", "forward-slash paths only", "gerund naming", "scripts execute without loading into context"]
+      "claims": ["SKILL.md body under 500 lines for optimal performance", "context window is a shared public good", "progressive disclosure", "references one level deep", "name max 64 chars lowercase-numbers-hyphens no reserved words anthropic/claude", "name no XML tags", "description max 1024 chars third person what and when", "description no XML tags", "forward-slash paths only", "gerund naming", "scripts execute without loading into context"]
     },
     {
       "id": "xai-grok-skills-plugins",
