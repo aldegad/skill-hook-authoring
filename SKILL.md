@@ -1,6 +1,6 @@
 ---
 name: skill-hook-authoring
-description: 'Use for agent extension and plugin-like package authoring across Codex, Claude, Grok, and Hermes: skills, hooks, plugin packaging, symlink installs, guardrails, and runtime drift.'
+description: 'Use for agent extension and plugin-like package authoring across Codex, Claude, Grok, and Hermes: skills, hooks, plugin packaging, session resume, symlink installs, guardrails, and runtime drift.'
 ---
 
 # Skill Hook Authoring
@@ -30,6 +30,15 @@ Keep the current detailed truth in `docs/compatibility-matrix.md` and `docs/plug
 | Hermes Agent | Skills and skill preloading are documented | Hook parity is not documented in the cited source set | MCP/toolsets are documented; plugin packaging parity is not documented here |
 
 When a runtime capability is not documented, write `not documented` or `unknown` and require live verification before shipping behavior that depends on it.
+
+## Session Resume
+
+Same-platform resume (continue the *same* conversation on the *same* engine, by session id) is officially documented for all four worker runtimes. Per-engine resume invocation, session store, and id form live in `docs/compatibility-matrix.md` → **Session Resume**. The working model:
+
+- The minimum to continue is the **resume locator** (session/thread id) plus the engine's resume invocation: Claude `claude --resume <id>`, Codex CLI `codex resume <id>` (desktop app-server: the `thread/resume` method with the recorded `thread.id`), Grok `grok -r/--resume <id>`, Hermes `hermes --resume <id>`.
+- Capture the locator **before the worker exits**, keyed by `cwd` (the most stable signal every engine exposes). Session stores differ — Claude/Codex/Grok keep per-session transcript/rollout files; **Hermes keeps history in SQLite `~/.hermes/state.db`**, so a file scan of `~/.hermes/sessions/` (which holds only API error dumps) finds nothing resumable.
+- **Cross-engine moves** (resume one engine's session under a *different* engine) are a separate, harder problem and out of scope here — keep them off the same-platform path.
+- When a runtime does not document resume, record `not documented` and require live verification before shipping.
 
 ## Project Instruction Files
 

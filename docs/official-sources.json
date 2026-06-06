@@ -192,6 +192,41 @@
       "kind": "notifications",
       "url": "https://docs.github.com/en/subscriptions-and-notifications/get-started/configuring-notifications",
       "claims": ["email notifications", "review requests", "watching", "participating"]
+    },
+    {
+      "id": "openai-codex-cli-reference",
+      "agent": "codex",
+      "kind": "session-resume",
+      "url": "https://developers.openai.com/codex/cli/reference",
+      "claims": ["codex resume", "codex resume --last", "codex exec resume", "--all", "~/.codex/sessions", "rollout jsonl", "~/.codex/history.jsonl"]
+    },
+    {
+      "id": "openai-codex-app-server",
+      "agent": "codex",
+      "kind": "session-resume",
+      "url": "https://developers.openai.com/codex/app-server",
+      "claims": ["thread/start", "thread/resume", "thread/fork", "thread/read", "threadId", "sessionId", "rollout jsonl"]
+    },
+    {
+      "id": "anthropic-claude-sessions",
+      "agent": "claude-code",
+      "kind": "session-resume",
+      "url": "https://code.claude.com/docs/en/sessions",
+      "claims": ["--resume", "--continue", "-c", "/resume", "--fork-session", "same session id reused", "local transcript files"]
+    },
+    {
+      "id": "xai-grok-headless-scripting",
+      "agent": "grok",
+      "kind": "session-resume",
+      "url": "https://docs.x.ai/build/cli/headless-scripting",
+      "claims": ["-r --resume", "-s --session-id", "~/.grok", "session_id"]
+    },
+    {
+      "id": "nous-hermes-cli-resume",
+      "agent": "hermes-agent",
+      "kind": "session-resume",
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/cli/",
+      "claims": ["--resume", "-r", "--continue", "-c", "resume by title", "~/.hermes/state.db sqlite", "session id YYYYMMDD_HHMMSS_suffix"]
     }
   ]
 }
