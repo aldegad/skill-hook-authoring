@@ -15,9 +15,9 @@ summary rather than substituting another source.
 **WHAT TO CHECK** across these agents/products: OpenAI Codex, Claude / Claude
 Code, Grok/xAI, Gemini / Gemini CLI, Cursor, Hermes Agent, Kuma Studio. For each,
 review: supported-agent docs, plugin/extension docs, project-instruction /
-context-file docs, compatibility matrix, and Kuma Studio pattern docs. If an
-official doc confirms a feature difference or that something is unavailable, state
-that explicitly in the docs.
+context-file docs, session-resume docs, compatibility matrix, and Kuma Studio
+pattern docs. If an official doc confirms a feature difference or that something
+is unavailable, state that explicitly in the docs.
 
 **PROJECT INSTRUCTION FILES — do not skip this category.** It is not skills,
 hooks, or plugin packaging, so it is easy to miss. Every source in
@@ -32,10 +32,23 @@ mirrors so they stay consistent: the `## Project Instruction Files` sections in
 column of `docs/compatibility-matrix.md`. Do not infer a filename for one runtime
 from another — cite the runtime's own official doc.
 
+**SESSION RESUME — do not skip this category.** Like project-instruction files,
+it is a capability domain that is easy to miss because it is not skills, hooks,
+or plugin packaging. Every source in `docs/official-sources.json` with
+`"kind": "session-resume"` MUST be fetched and re-verified every run. For each
+runtime confirm the resume invocation (e.g. `--resume`/`resume`/`thread/resume`),
+the session-store location, and the session-id form. If the official docs changed
+any of these, treat the **Session Resume** baseline as drifted and update both
+mirrors so they stay consistent: the `## Session Resume` section of `SKILL.md` and
+the `## Session Resume` table in `docs/compatibility-matrix.md`. Cite the
+runtime's own official doc; do not infer one runtime's resume mechanism from
+another.
+
 **IF THERE ARE CHANGES:** make small, reviewable edits to the repo docs. Cite the
 official source URL in the docs or in the PR body. Run
 `node scripts/check-official-sources.mjs --write-report`. Do NOT push to main.
-Create a pull request from a `claude/`-prefixed branch.
+Create a pull request from an `aldegad/`-prefixed branch (the `cc-guard` hook
+rejects branch names containing `claude` or `codex`).
 
 **IF THERE ARE NO CHANGES:** do not modify any file. Leave a short no-op summary
 only.

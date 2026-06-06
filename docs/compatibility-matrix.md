@@ -14,6 +14,25 @@ This matrix records only official documentation claims from `docs/official-sourc
 | Cursor CLI | Official docs describe CLI agent usage with Agent, Plan, and Ask modes. (Docs moved from docs.cursor.com to cursor.com/docs as of 2026-05-27.) | Hook parity is not documented in the cited source set. | MCP auto-detection via `mcp.json`; plugin packaging parity with Codex is not documented. | Official docs confirm `.cursor/rules`, project-root `AGENTS.md`, and project-root `CLAUDE.md` support. Worktree support via `--worktree` flag is also documented. | External scheduler or CI unless official Cursor automation docs are added. |
 | Kuma Studio | Public repo methodology uses repo SSoT, dispatch delivery, plan close gates, and visible worker surfaces. | Hooks are guardrails and must fail loudly. | Kuma skills live in canonical repo paths and may be installed by symlink or generated config. | `AGENTS.md` and `CLAUDE.md` are parallel SSoT for shared rules. | Use project-specific dispatch, plan, and server workflows; public docs should not depend on private vault content. |
 
+## Session Resume
+
+Same-platform resume (continue an existing conversation on the same engine, by session id) is officially documented for all four primary worker runtimes. Cross-engine moves are a separate concern and out of scope here.
+
+| Platform | Resume invocation | Session store | Session id form | Source (verified 2026-06-06) |
+|---|---|---|---|---|
+| OpenAI Codex (CLI) | `codex resume <SESSION_ID>` or `codex resume --last` (interactive); `codex exec resume [SESSION_ID]` / `--last` (non-interactive). `--all` ignores the cwd filter. | Rollout transcripts under `CODEX_HOME`, e.g. `~/.codex/sessions/` (`rollout-*.jsonl`) plus `~/.codex/history.jsonl`. | session id copied from the picker, `/status`, or the session files. | https://developers.openai.com/codex/cli/reference |
+| OpenAI Codex (app-server) | Call the `thread/resume` method with the recorded `thread.id` over the stdio app-server API. Related: `thread/start`, `thread/fork`, `thread/read`. | Thread data is persisted as JSONL rollout log files (exact directory not explicitly stated in the cited doc; rollout naming matches `~/.codex/sessions/`). | `threadId`; a root thread's id is its `sessionId` (forks keep the root's session id). | https://developers.openai.com/codex/app-server |
+| Claude Code | `claude --resume <session-id>` (or `--continue` / `-c`, or `/resume`). Reopens under the same session id and appends. `--fork-session` copies into a new id. | Local transcript files written continuously (`~/.claude/projects/<cwd-hash>/<id>.jsonl`). | session id (same id reused on resume). | https://code.claude.com/docs/en/sessions |
+| Grok / xAI | `grok -r, --resume <ID>` resumes by session id; `grok -s, --session-id <ID>` creates or resumes a named headless session. | Local session history under `~/.grok/` (live sessions enumerated in `~/.grok/active_sessions.json` as `[{session_id, pid, cwd, opened_at}]`). | `session_id`. | https://docs.x.ai (Headless & Scripting) |
+| Hermes Agent | `hermes --resume <session_id>` / `-r <session_id>`; `hermes --continue` / `-c` resumes the most recent; resume by title also supported. Restores full conversation. | **SQLite `~/.hermes/state.db`** (conversation history, lineage, FTS). NOT the API error dumps under `~/.hermes/sessions/` (`request_dump_*.json`), which are unrelated. | `YYYYMMDD_HHMMSS_<suffix>` (e.g. `20260225_143052_a1b2c3`). | https://hermes-agent.nousresearch.com/docs/user-guide/cli/ |
+
+Notes for implementers:
+
+- The resume **locator** (session/thread id) plus the engine's resume invocation is the minimum needed to continue same-platform. Capture the locator before the worker exits, keyed by cwd (the most stable cross-engine signal exposed here).
+- Codex workers launched through the desktop **app-server** (`codex app-server --listen stdio://`) resume via `thread/resume`, not a CLI flag; if the rollout JSONL lands under `~/.codex/sessions/`, the CLI `codex resume <id>` path may also apply. Verify the live rollout path before relying on either.
+- Hermes resume reads from `state.db` (SQLite), so a file-scan over `~/.hermes/sessions/` will not find resumable state — query the db (or the displayed "Resume this session with: hermes --resume <id>" line) instead.
+- When a runtime does not document a resume capability, record `not documented` and require live verification before shipping.
+
 ## Update Rule
 
 When official docs change:
