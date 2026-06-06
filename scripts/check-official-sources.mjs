@@ -73,6 +73,28 @@ for (const requiredAgent of ["codex", "claude-code"]) {
   }
 }
 
+// Guard the CLI Spawn (headless launch) and Session Resume baselines the same
+// way: a future edit must not silently drop either category that the daily
+// refresh re-verifies. Codex and Claude Code are the anchor runtimes with
+// dedicated official CLI / session pages.
+function guardCategory(kind, label) {
+  const agents = new Set(
+    (manifest.sources ?? [])
+      .filter((source) => source.kind === kind)
+      .map((source) => source.agent)
+  );
+  if (agents.size === 0) {
+    fail(`no source has kind=${kind}; the ${label} baseline must stay covered`);
+  }
+  for (const requiredAgent of ["codex", "claude-code"]) {
+    if (!agents.has(requiredAgent)) {
+      fail(`missing kind=${kind} source for ${requiredAgent}`);
+    }
+  }
+}
+guardCategory("cli-invocation", "CLI Spawn And Headless Launch");
+guardCategory("session-resume", "Session Resume");
+
 if (!skipNetwork) {
   for (const source of manifest.sources ?? []) {
     const started = Date.now();

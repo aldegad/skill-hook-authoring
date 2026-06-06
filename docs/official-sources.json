@@ -10,7 +10,8 @@
       "code.claude.com",
       "platform.claude.com",
       "docs.x.ai",
-      "google-gemini.github.io",
+      "developers.googleblog.com",
+      "antigravity.google",
       "hermes-agent.nousresearch.com",
       "docs.cursor.com",
       "cursor.com",
@@ -114,20 +115,6 @@
       "claims": ["skills", "plugins", "hooks", "marketplaces", "Claude Code compatibility", "AGENTS.md compatibility"]
     },
     {
-      "id": "google-gemini-extensions",
-      "agent": "gemini-cli",
-      "kind": "extensions",
-      "url": "https://google-gemini.github.io/gemini-cli/docs/extensions/",
-      "claims": ["extensions", "gemini-extension.json", "MCP servers", "custom commands", "excludeTools"]
-    },
-    {
-      "id": "google-gemini-commands",
-      "agent": "gemini-cli",
-      "kind": "commands",
-      "url": "https://google-gemini.github.io/gemini-cli/docs/cli/commands.html",
-      "claims": ["/extensions", "/mcp", "/memory", "GEMINI.md"]
-    },
-    {
       "id": "nous-hermes-context-files",
       "agent": "hermes-agent",
       "kind": "project-instructions",
@@ -151,9 +138,9 @@
     {
       "id": "nous-hermes-cli",
       "agent": "hermes-agent",
-      "kind": "cli",
+      "kind": "cli-invocation",
       "url": "https://hermes-agent.nousresearch.com/docs/user-guide/cli/",
-      "claims": ["CLI", "skills preloading", "toolsets", "worktree"]
+      "claims": ["CLI", "skills preloading", "toolsets", "worktree", "hermes chat -q single query", "--model", "--provider nous openrouter", "--toolsets", "no documented JSON output format"]
     },
     {
       "id": "cursor-cli-overview",
@@ -174,10 +161,10 @@
     {
       "id": "cursor-cli-parameters",
       "agent": "cursor-cli",
-      "kind": "cli",
+      "kind": "cli-invocation",
       "url": "https://cursor.com/docs/cli/reference/parameters",
       "notes": "docs.cursor.com/en/cli/reference/parameters permanently redirects to cursor.com/docs as of 2026-05-27; specific CLI docs verified at cursor.com/docs/cli/reference/parameters",
-      "claims": ["parameters", "output-format", "text format", "json format", "stream-json format", "--model", "--mode", "--worktree", "--api-key"]
+      "claims": ["parameters", "-p --print", "output-format", "text format", "json format", "stream-json format", "--stream-partial-output", "--model", "--mode", "-f --force", "--yolo", "--trust", "--resume chatId", "--continue alias resume -1", "agent ls", "agent resume", "agent create-chat", "--worktree", "--api-key"]
     },
     {
       "id": "github-auto-merge",
@@ -227,6 +214,66 @@
       "kind": "session-resume",
       "url": "https://hermes-agent.nousresearch.com/docs/user-guide/cli/",
       "claims": ["--resume", "-r", "--continue", "-c", "resume by title", "~/.hermes/state.db sqlite", "session id YYYYMMDD_HHMMSS_suffix"]
+    },
+    {
+      "id": "openai-codex-cli",
+      "agent": "codex",
+      "kind": "cli-invocation",
+      "url": "https://developers.openai.com/codex/cli",
+      "claims": ["codex launches interactive TUI", "codex optional PROMPT seeds interactive session", "codex exec runs non-interactively for automation", "interactive vs non-interactive"]
+    },
+    {
+      "id": "openai-codex-noninteractive",
+      "agent": "codex",
+      "kind": "cli-invocation",
+      "url": "https://developers.openai.com/codex/noninteractive",
+      "claims": ["non-interactive mode", "codex exec", "stream to stdout JSONL", "--json", "--output-last-message -o", "--model -m", "--sandbox -s", "--cd -C", "stdin dash prompt"]
+    },
+    {
+      "id": "anthropic-claude-cli-reference",
+      "agent": "claude-code",
+      "kind": "cli-invocation",
+      "url": "https://code.claude.com/docs/en/cli-reference",
+      "claims": ["claude -p --print", "cat file pipe claude -p", "--output-format text json stream-json", "--input-format", "--model", "--system-prompt", "--append-system-prompt", "--max-turns", "--max-budget-usd", "--json-schema", "--bare", "--bg background agent", "claude interactive launch", "claude query initial prompt", "claude -c --continue", "claude -r --resume", "--name -n"]
+    },
+    {
+      "id": "anthropic-claude-headless",
+      "agent": "claude-code",
+      "kind": "cli-invocation",
+      "url": "https://code.claude.com/docs/en/headless",
+      "claims": ["headless mode", "print mode -p", "output-format json stream-json", "bare mode", "programmatic invocation", "Agent SDK"]
+    },
+    {
+      "id": "google-antigravity-transition",
+      "agent": "antigravity-cli",
+      "kind": "cli-invocation",
+      "url": "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/",
+      "notes": "Official transition announcement. Gemini CLI -> Antigravity CLI (binary agy). Individual access (AI Pro/Ultra, free Code Assist) ends 2026-06-18; enterprise (Code Assist Standard/Enterprise, Google Cloud, paid Agent Platform API keys) retained; OSS repo stays Apache 2.0.",
+      "claims": ["transition Gemini CLI to Antigravity CLI", "2026-06-18 cutoff for individuals", "enterprise retained", "shared agent harness with Antigravity 2.0", "open-source repo Apache 2.0"]
+    },
+    {
+      "id": "antigravity-cli-reference",
+      "agent": "antigravity-cli",
+      "kind": "cli-invocation",
+      "url": "https://antigravity.google/docs/cli-reference",
+      "notes": "JS-rendered SPA; static fetch returns an empty shell, render dynamically to verify. No headless one-shot flag documented; programmatic use is the Antigravity SDK.",
+      "claims": ["agy binary", "interactive TUI launch", "core slash commands", "/resume /switch /conversation", "/fork /branch", "/model", "/mcp", "/skills", "/permissions", "--sandbox launch override", "--dangerously-skip-permissions", "settings.json keybindings.json"]
+    },
+    {
+      "id": "antigravity-cli-conversations",
+      "agent": "antigravity-cli",
+      "kind": "cli-invocation",
+      "url": "https://antigravity.google/docs/cli-conversations",
+      "notes": "JS-rendered SPA; render dynamically to verify.",
+      "claims": ["agy --continue resumes most recent in workspace", "agy --conversation <uuid>", "/resume picker", "workspace-scoped conversations", "import Antigravity 2.0 desktop threads via Tab", "/fork branch"]
+    },
+    {
+      "id": "antigravity-gcli-migration",
+      "agent": "antigravity-cli",
+      "kind": "cli-invocation",
+      "url": "https://antigravity.google/docs/gcli-migration",
+      "notes": "JS-rendered SPA; render dynamically to verify. GEMINI_API_KEY->AV_API_KEY env swap is NOT stated here (third-party claim); auth is via OS keyring.",
+      "claims": ["agy plugin import gemini", "first-launch auto-conversion", "reads GEMINI.md and AGENTS.md", "global ~/.gemini/GEMINI.md", "workspace skills .gemini/skills -> .agents/skills", "MCP moves to mcp_config.json", "serverUrl schema key", "install ~/.local/bin/agy"]
     }
   ]
 }

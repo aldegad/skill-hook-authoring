@@ -13,11 +13,13 @@ unreachable from this environment, record it as `unverified this run` in your
 summary rather than substituting another source.
 
 **WHAT TO CHECK** across these agents/products: OpenAI Codex, Claude / Claude
-Code, Grok/xAI, Gemini / Gemini CLI, Cursor, Hermes Agent, Kuma Studio. For each,
-review: supported-agent docs, plugin/extension docs, project-instruction /
-context-file docs, session-resume docs, compatibility matrix, and Kuma Studio
-pattern docs. If an official doc confirms a feature difference or that something
-is unavailable, state that explicitly in the docs.
+Code, Grok/xAI, Google Antigravity CLI (`agy`, the Gemini CLI successor; Gemini
+CLI itself retires for individual users 2026-06-18), Cursor, Hermes Agent, Kuma
+Studio. For each, review: supported-agent docs, plugin/extension docs,
+project-instruction / context-file docs, CLI spawn (interactive vs headless
+launch) docs, session-resume docs, compatibility matrix, and Kuma Studio pattern
+docs. If an official doc confirms a feature difference or that something is
+unavailable, state that explicitly in the docs.
 
 **PROJECT INSTRUCTION FILES — do not skip this category.** It is not skills,
 hooks, or plugin packaging, so it is easy to miss. Every source in
@@ -43,6 +45,21 @@ mirrors so they stay consistent: the `## Session Resume` section of `SKILL.md` a
 the `## Session Resume` table in `docs/compatibility-matrix.md`. Cite the
 runtime's own official doc; do not infer one runtime's resume mechanism from
 another.
+
+**CLI SPAWN (HEADLESS LAUNCH) — do not skip this category.** Every source in
+`docs/official-sources.json` with `"kind": "cli-invocation"` MUST be fetched and
+re-verified every run: the interactive launch command, the non-interactive /
+headless command (`claude -p`, `codex exec`, `grok -p`, `hermes chat -q`,
+`cursor-agent -p`, or for Antigravity the lack of a headless flag), and the
+output-format flags. If the official docs changed a spawn flag or output format,
+treat the **CLI Spawn And Headless Launch** baseline as drifted and update both
+mirrors: the `## CLI Spawn And Headless Launch` section of `SKILL.md` and the
+launch/headless tables in `docs/cli-invocation.md`. The Antigravity docs
+(`antigravity.google`) are a JS-rendered SPA — a static fetch returns an empty
+shell, so treat a 200 with no content as `unverified this run` and render it
+dynamically before claiming a change. Note when the **2026-06-18 Gemini CLI
+individual cutoff** has passed so the legacy Gemini references can be retired, and
+record any capability the official docs do not cover as `not documented`.
 
 **IF THERE ARE CHANGES:** make small, reviewable edits to the repo docs. Cite the
 official source URL in the docs or in the PR body. Run

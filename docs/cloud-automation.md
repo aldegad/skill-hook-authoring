@@ -30,9 +30,15 @@ daily schedule
 -> validate official source reachability
 -> fetch only the official vendor URLs
 -> re-verify project-instruction file claims (kind=project-instructions)
+-> re-verify CLI spawn / headless claims (kind=cli-invocation)
+-> re-verify session-resume claims (kind=session-resume)
 -> update repo docs only when official evidence changed
 -> reconcile Project Instruction Files baseline on drift
    (SKILL.md, compatibility-matrix.md, plugin-packaging.md)
+-> reconcile CLI Spawn And Headless Launch baseline on drift
+   (SKILL.md section, docs/cli-invocation.md)
+-> reconcile Session Resume baseline on drift
+   (SKILL.md section, compatibility-matrix.md Session Resume table)
 -> run node scripts/check-official-sources.mjs --write-report
 -> open a PR from an aldegad/-prefixed branch (never push to main)
 -> review and merge

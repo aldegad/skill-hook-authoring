@@ -1,6 +1,6 @@
 ---
 name: skill-hook-authoring
-description: 'Use for agent extension and plugin-like package authoring across Codex, Claude, Grok, and Hermes: skills, hooks, plugin packaging, session resume, symlink installs, guardrails, and runtime drift.'
+description: 'Use for agent extension and plugin-like package authoring across Codex, Claude, Grok, and Hermes: skills, hooks, plugin packaging, CLI spawn and session resume, symlink installs, guardrails, and runtime drift.'
 ---
 
 # Skill Hook Authoring
@@ -31,12 +31,30 @@ Keep the current detailed truth in `docs/compatibility-matrix.md` and `docs/plug
 
 When a runtime capability is not documented, write `not documented` or `unknown` and require live verification before shipping behavior that depends on it.
 
+## CLI Spawn And Headless Launch
+
+When one agent **spawns another** from a script, hook, or orchestrator, use the runtime's documented command for the mode you want — interactive and headless are reached differently. Full tables and citations live in `docs/cli-invocation.md`; resume is covered under **Session Resume** below.
+
+| Runtime | Interactive launch | Headless run |
+|---|---|---|
+| Codex | `codex` / `codex "<p>"` | `codex exec "<p>"` |
+| Claude Code | `claude` / `claude "<q>"` | `claude -p "<q>"` |
+| Grok / xAI | `grok` | `grok -p "<p>"` |
+| Hermes | `hermes chat` | `hermes chat -q "<q>"` |
+| Antigravity CLI | `agy` | not documented (use Antigravity SDK) |
+| Cursor CLI | `cursor-agent` | `cursor-agent -p "<p>"` |
+
+- **The mode switch is not the same shape.** For Claude/Grok/Cursor/Hermes, headless is a **flag** (`-p`/`--print`, or Hermes `-q`) added to the bare interactive command — so interactive = omit the flag. **Codex** is the exception: headless is a separate **subcommand** (`codex exec`), with no `-p` to drop, so a list of only `codex exec …` is *not* "Codex is headless-only". **Antigravity** (`agy`) is TUI-only with **no documented headless one-shot** — run it unattended through the Antigravity SDK, not `agy -p` (which appears only in third-party guides).
+- Output format is not uniform: Codex `--json` (JSONL); Claude/Cursor `--output-format json|stream-json`; Grok `--output-format json`; Hermes and Antigravity document **no** headless JSON flag.
+- Gemini CLI is omitted: it is retired for AI Pro/Ultra and free individual users on **2026-06-18** and replaced by Antigravity CLI (`agy`); enterprise/Google Cloud keeps Gemini CLI. See `docs/cli-invocation.md` → transition section.
+
 ## Session Resume
 
 Same-platform resume (continue the *same* conversation on the *same* engine, by session id) is officially documented for all four worker runtimes. Per-engine resume invocation, session store, and id form live in `docs/compatibility-matrix.md` → **Session Resume**. The working model:
 
 - The minimum to continue is the **resume locator** (session/thread id) plus the engine's resume invocation: Claude `claude --resume <id>`, Codex CLI `codex resume <id>` (desktop app-server: the `thread/resume` method with the recorded `thread.id`), Grok `grok -r/--resume <id>`, Hermes `hermes --resume <id>`.
 - Capture the locator **before the worker exits**, keyed by `cwd` (the most stable signal every engine exposes). Session stores differ — Claude/Codex/Grok keep per-session transcript/rollout files; **Hermes keeps history in SQLite `~/.hermes/state.db`**, so a file scan of `~/.hermes/sessions/` (which holds only API error dumps) finds nothing resumable.
+- **Antigravity CLI** (`agy`, the Gemini CLI successor) resumes into the TUI only: `agy --continue` (most recent in the workspace) or `agy --conversation <uuid>`; conversations are **workspace-scoped** (it lists only sessions started in that cwd).
 - **Cross-engine moves** (resume one engine's session under a *different* engine) are a separate, harder problem and out of scope here — keep them off the same-platform path.
 - When a runtime does not document resume, record `not documented` and require live verification before shipping.
 
@@ -50,11 +68,11 @@ Do not assume every non-Claude runtime reads `AGENTS.md`. Use the officially doc
 | Claude Code | `CLAUDE.md`, `.claude/CLAUDE.md`, `CLAUDE.local.md`, and `.claude/rules/`; Claude docs explicitly say Claude reads `CLAUDE.md`, not `AGENTS.md` |
 | Grok / xAI | `AGENTS.md`, `Agents.md`, `AGENT.md` |
 | Hermes Agent | `.hermes.md` / `HERMES.md`, then `AGENTS.md`, then `CLAUDE.md`, then `.cursorrules`; `SOUL.md` is global identity, not project instructions |
-| Gemini CLI | `GEMINI.md` hierarchical memory |
+| Antigravity CLI (was Gemini CLI) | Reads `GEMINI.md` and `AGENTS.md` (global `~/.gemini/GEMINI.md`); Gemini CLI's `GEMINI.md` hierarchical memory is the legacy form |
 | Cursor CLI | `.cursor/rules`, plus project-root `AGENTS.md` and `CLAUDE.md` |
 | Kuma Studio | `AGENTS.md` and `CLAUDE.md` are parallel repo SSoT files for shared rules |
 
-For cross-agent repo rules, maintain the smallest set of files that each runtime actually reads. In Kuma-style Codex/Claude/Grok/Hermes repos, that usually means repo-owned `AGENTS.md` plus a `CLAUDE.md` import/symlink or Claude-specific wrapper; add `GEMINI.md` only when Gemini CLI is a supported runtime.
+For cross-agent repo rules, maintain the smallest set of files that each runtime actually reads. In Kuma-style Codex/Claude/Grok/Hermes repos, that usually means repo-owned `AGENTS.md` plus a `CLAUDE.md` import/symlink or Claude-specific wrapper; add `GEMINI.md` only when Antigravity CLI (or legacy Gemini CLI) is a supported runtime.
 
 **Symlink the wrapper, edit only the canonical file.** When `CLAUDE.md`/`GEMINI.md` are symlinks to a repo-owned `AGENTS.md`, reads resolve correctly — every runtime sees the canonical content, and git stores the link as mode `120000` (a pointer, not a copy; both links share one blob). But Claude Code's Edit/Write **refuses to write through a symlink** (`Refusing to write through symlink ... pass the real target path explicitly`, verified 2026-06-05), so edits must target the real `AGENTS.md`; treat the symlinks as read-only. This is a feature, not a limitation: it stops an atomic-save from silently swapping the link for a divergent regular file, so the SSoT cannot drift. Use **relative** symlinks (`ln -s AGENTS.md CLAUDE.md`, never an absolute path) so they survive clone/move. Caveat: a Windows checkout without `core.symlinks` materializes the link as a plain text file — use a one-line stub+pointer instead of a symlink when a Windows runtime is in scope.
 
@@ -118,7 +136,8 @@ This rule exists because deleting only `~/.claude/hooks/<id>` or only `scripts/h
 Use these repo documents before changing compatibility claims:
 
 - `docs/official-sources.json` — canonical source manifest for official docs refresh.
-- `docs/compatibility-matrix.md` — current cross-agent support matrix.
+- `docs/compatibility-matrix.md` — current cross-agent support matrix (includes the Session Resume table).
+- `docs/cli-invocation.md` — per-runtime CLI spawn (interactive vs headless) and resume invocation syntax.
 - `docs/plugin-packaging.md` — plugin/extension packaging boundaries.
 - `docs/kuma-studio-patterns.md` — public Kuma Studio operating patterns that can be reused by other agents.
 - `docs/cloud-automation.md` — daily cloud automation setup (Claude Routines, with a Codex App alternative).

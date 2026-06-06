@@ -14,7 +14,7 @@ Project instruction filenames are runtime-specific and are not the same thing as
 - Claude Code uses `CLAUDE.md` / `.claude/CLAUDE.md` / `CLAUDE.local.md`; when sharing with `AGENTS.md`-based agents, use `@AGENTS.md` import or a symlink.
 - Grok documents the `AGENTS.md` instruction-file family: `AGENTS.md`, `Agents.md`, `AGENT.md`.
 - Hermes documents `.hermes.md` / `HERMES.md`, `AGENTS.md`, `CLAUDE.md`, `.cursorrules`, and `.cursor/rules/*.mdc`; `SOUL.md` is global identity, not project instructions.
-- Gemini CLI uses `GEMINI.md` hierarchical memory.
+- Antigravity CLI (the Gemini CLI successor, `agy`) reads `GEMINI.md` and `AGENTS.md`; global `~/.gemini/GEMINI.md`.
 - Cursor CLI uses `.cursor/rules` plus project-root `AGENTS.md` and `CLAUDE.md`.
 
 For cross-agent repos, prefer one canonical repo instruction source plus thin runtime wrappers/imports. Do not create parallel full copies unless the divergence is explicit and reviewed.
@@ -25,11 +25,13 @@ Official Codex plugins have `.codex-plugin/plugin.json` at the plugin root. A pl
 
 Do not migrate this repo into a Codex plugin layout until there is an explicit packaging plan. Moving `SKILL.md` into `skills/<id>/SKILL.md` would change the current root-level skill entrypoint, so it must be done atomically with installer and docs updates.
 
-## Gemini CLI Extensions
+## Antigravity CLI (formerly Gemini CLI extensions)
 
-Gemini CLI extensions are installed under `~/.gemini/extensions/<name>` and use `gemini-extension.json`. They can package MCP servers, a context file such as `GEMINI.md`, custom commands, and `excludeTools` rules.
+**Gemini CLI is retiring** — for AI Pro/Ultra and free individual users it stops serving requests 2026-06-18 (enterprise/Google Cloud retained), and Antigravity CLI (`agy`) is the successor. The legacy Gemini extension model below is kept only to explain the migration.
 
-Gemini copies installed extensions unless `gemini extensions link` is used. For repo-owned development, use link mode to avoid editing generated copies.
+Legacy Gemini CLI extensions installed under `~/.gemini/extensions/<name>` use `gemini-extension.json`. They can package MCP servers, a context file such as `GEMINI.md`, custom commands, and `excludeTools` rules. Gemini copies installed extensions unless `gemini extensions link` is used.
+
+**Transition to Antigravity CLI.** Antigravity converts legacy Gemini extensions to native plugins via `agy plugin import gemini`, moves workspace skills from `.gemini/skills/` to `.agents/skills/`, and moves MCP servers out of `~/.gemini/settings.json` into a standalone `mcp_config.json` (global `~/.gemini/config/mcp_config.json`, workspace `.agents/mcp_config.json`) with the server URI key `url`/`httpUrl` renamed to `serverUrl`. Context files are unchanged: it still reads `GEMINI.md` and `AGENTS.md`. See `docs/cli-invocation.md` for the CLI surface and citations.
 
 ## Grok Plugins
 
