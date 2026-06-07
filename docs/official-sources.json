@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-06-06",
+  "updated": "2026-06-07",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
@@ -199,7 +199,7 @@
       "agent": "claude-code",
       "kind": "session-resume",
       "url": "https://code.claude.com/docs/en/sessions",
-      "claims": ["--resume", "--continue", "-c", "/resume", "--fork-session", "same session id reused", "local transcript files"]
+      "claims": ["--resume", "--continue", "-c", "/resume", "--fork-session", "same session id reused", "local transcript files", "--from-pr", "--no-session-persistence"]
     },
     {
       "id": "xai-grok-headless-scripting",
@@ -227,7 +227,7 @@
       "agent": "codex",
       "kind": "cli-invocation",
       "url": "https://developers.openai.com/codex/noninteractive",
-      "claims": ["non-interactive mode", "codex exec", "stream to stdout JSONL", "--json", "--output-last-message -o", "--model -m", "--sandbox -s", "--cd -C", "stdin dash prompt"]
+      "claims": ["non-interactive mode", "codex exec", "stream to stdout JSONL", "--json", "--output-last-message -o", "--model -m", "--sandbox -s", "--cd -C", "stdin dash prompt", "--ephemeral", "--output-schema"]
     },
     {
       "id": "anthropic-claude-cli-reference",
