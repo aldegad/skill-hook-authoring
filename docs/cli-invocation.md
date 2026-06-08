@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-06-06
+Last reviewed: 2026-06-08
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or
@@ -73,7 +73,7 @@ command to type.
 | Runtime | Continue most recent | Pin a specific session | Headless resume |
 |---|---|---|---|
 | Codex | `codex resume` (picker) | `codex resume <SESSION_ID>` | `codex exec resume --last` / `codex exec resume <SESSION_ID>` (`--all` widens past cwd) |
-| Claude Code | `claude -c` (latest in cwd) | `claude -r "<id-or-name>"` (set a name with `-n`) | add `-p`: `claude -c -p` / `claude -r "<s>" -p` |
+| Claude Code | `claude -c` (latest in cwd) | `claude -r "<id-or-name>"` (set a name with `-n`); `claude --from-pr <number>` (linked to a PR) | add `-p`: `claude -c -p` / `claude -r "<s>" -p` |
 | Grok / xAI | `grok -c` | `grok -r <ID>` / `grok -s <ID>` (named) | add `-p` to the same flags |
 | Hermes Agent | `hermes -c` | `hermes -r <session_id>` (or by title) | not separately documented |
 | Antigravity CLI | `agy --continue` (latest in workspace) | `agy --conversation <uuid>`; in-TUI `/resume` (`/switch`, `/conversation`) picker, Tab imports Antigravity 2.0 desktop threads; `/fork` (`/branch`) | not documented (no headless one-shot) |
