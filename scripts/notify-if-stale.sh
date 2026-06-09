@@ -43,7 +43,12 @@ fi
 : > "$STAMP" 2>/dev/null || true   # refresh the throttle window (also silences a failed fetch for the window)
 
 # Network-bounded fetch; on any failure stay silent rather than nag.
-timeout 5 git fetch --quiet origin main 2>/dev/null || exit 0
+# `timeout` is GNU coreutils and is absent on stock macOS — degrade to gtimeout,
+# then to a plain fetch, rather than failing closed and never checking at all.
+if command -v timeout >/dev/null 2>&1; then TIMEOUT="timeout 5"
+elif command -v gtimeout >/dev/null 2>&1; then TIMEOUT="gtimeout 5"
+else TIMEOUT=""; fi
+$TIMEOUT git fetch --quiet origin main 2>/dev/null || exit 0
 behind=$(git rev-list --count HEAD..origin/main 2>/dev/null) || exit 0
 [ "${behind:-0}" -gt 0 ] || exit 0   # current → silent
 

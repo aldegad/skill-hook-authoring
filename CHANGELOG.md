@@ -5,6 +5,22 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.5 — 2026-06-09
+
+### Fixed
+
+- **Codex stale-hook never fired — matcher bug.** `install-local.mjs` registered
+  the Codex `PreToolUse` hook with a Claude-style `"*"` matcher, but Codex
+  matchers are **regex**, where `"*"` is invalid and matches nothing — so the hook
+  silently never ran (confirmed with a probe hook: the event was never invoked).
+  Changed to `".*"`. Documented the Claude (`"*"`/omit = all) vs. Codex (regex)
+  matcher difference in `SKILL.md`. Claude `SessionStart` path was unaffected.
+- **Stale notifier never fetched on macOS — `timeout` bug.** `notify-if-stale.sh`
+  wrapped the fetch in `timeout 5`, but `timeout` (GNU coreutils) is absent on
+  stock macOS, so it `command not found`-failed and `|| exit 0` made the hook
+  silently skip every fetch — it never fired regardless of staleness. Now degrades
+  `timeout` → `gtimeout` → plain `git fetch`.
+
 ## v1.4 — 2026-06-09
 
 Local install automation for the two runtimes with stable install/hook surfaces
