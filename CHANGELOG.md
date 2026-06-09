@@ -5,6 +5,32 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.3 — 2026-06-09
+
+Closes the daily-refresh loop: the routine can now merge its own docs-only PRs
+behind a deterministic gate, and local checkouts get a nudge when they fall behind.
+
+### Added
+
+- **Auto-merge gate** (`scripts/auto-merge-guard.sh`): squash-merges a refresh PR
+  **only when** the diff is docs/prose-only and `check-official-sources.mjs`
+  passes; otherwise it leaves the PR open for human review. Merge authority sits
+  on the shell gate's exit code, not the agent's judgement. Wired into
+  `prompts/daily-official-doc-update.md` and documented in
+  `docs/cloud-automation.md` (the lightweight "Option A" path — no GitHub Actions
+  or branch protection required).
+- **Stale-checkout notifier** (`scripts/notify-if-stale.sh`): a repo-scoped,
+  read-only, non-blocking Claude Code `SessionStart` hook. Silent when the
+  checkout is current or you are not in this repo; injects a one-line `git pull`
+  heads-up as `additionalContext` when `origin/main` is ahead. Registered in
+  `~/.claude/settings.json` (machine config, not in-repo).
+
+### Changed
+
+- Daily prompt + `README.md`: "you review and merge" → the auto-merge gate handles
+  docs-only passes and everything else waits for review. `Do NOT push to main`
+  softened to "no direct push; merge only via the gate after a PR".
+
 ## v1.2 — 2026-06-09
 
 Repositioning release: the package is now framed as what it had already grown

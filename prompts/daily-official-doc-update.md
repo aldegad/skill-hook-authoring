@@ -74,18 +74,28 @@ wording from future to present tense.
 
 **IF THERE ARE CHANGES:** make small, reviewable edits to the repo docs. Cite the
 official source URL in the docs or in the PR body. Run
-`node scripts/check-official-sources.mjs --write-report`. Do NOT push to main.
-Create a pull request from an `aldegad/`-prefixed branch (the `cc-guard` hook
-rejects branch names containing `claude` or `codex`). **Keep history out of the
-doc bodies:** record the change narrative in `CHANGELOG.md` (with the git tag) —
-`SKILL.md` and `docs/*` state current truth only, so replace a changed fact rather
-than appending the old one. A `Last reviewed:` / `verified` stamp is the only
-dated line allowed in a doc body.
+`node scripts/check-official-sources.mjs --write-report`. Do NOT push to `main`
+directly. Create a pull request from an `aldegad/`-prefixed branch (the `cc-guard`
+hook rejects branch names containing `claude` or `codex`). **Keep history out of
+the doc bodies:** record the change narrative in `CHANGELOG.md` (with the git tag)
+— `SKILL.md` and `docs/*` state current truth only, so replace a changed fact
+rather than appending the old one. A `Last reviewed:` / `verified` stamp is the
+only dated line allowed in a doc body.
+
+**AUTO-MERGE GATE.** After opening the PR, run
+`scripts/auto-merge-guard.sh <PR_NUMBER>`. The guard squash-merges the PR **only
+if** the diff is docs/prose-only and `check-official-sources.mjs` passes;
+otherwise it exits non-zero and leaves the PR open. Merge **only** on the guard's
+exit 0 — never by your own judgement. If the guard declines (it touched code,
+installers, hooks, or config, or a check failed), stop and leave the PR for a
+human to review. This keeps merge authority on a deterministic gate, not on the
+agent's reasoning.
 
 **IF THERE ARE NO CHANGES:** do not modify any file. Leave a short no-op summary
 only.
 
 **HARD CONSTRAINTS:** Do NOT modify `~/.codex`, `~/.claude`, or any local skill
-install path. Do NOT modify local machine config. Do NOT push to main. Do NOT use
-OpenAI API keys or GitHub Actions secrets. If you need to widen scope beyond
+install path. Do NOT modify local machine config. Do NOT push to `main` directly — merge only
+via `scripts/auto-merge-guard.sh` after a PR. Do NOT use OpenAI API keys or
+GitHub Actions secrets. If you need to widen scope beyond
 this, stop and ask instead of guessing.
