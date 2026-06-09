@@ -55,7 +55,7 @@ the same idea, but they are reached differently:
 | Runtime | Headless command | Prompt / stdin | Output format | Useful scripting flags |
 |---|---|---|---|---|
 | Codex | `codex exec "<prompt>"` (alias `codex e`) | prompt arg; `-` reads prompt from stdin | `--json` / `--experimental-json` (JSONL); else final message to stdout, progress to stderr | `--model`/`-m`, `--output-last-message`/`-o <file>`, `--sandbox`/`-s`, `--cd`/`-C` |
-| Claude Code | `claude -p "<query>"` (`--print`) | `cat file \| claude -p "<query>"` | `--output-format text\|json\|stream-json` (+ `--input-format`) | `--model`, `--bare` (skip auto-discovery), `--max-turns`, `--max-budget-usd`, `--json-schema`, `--system-prompt[-file]`, `--append-system-prompt[-file]`, `--permission-prompt-tool`, `--bg` |
+| Claude Code | `claude -p "<query>"` (`--print`) | `cat file \| claude -p "<query>"` | `--output-format text\|json\|stream-json` (+ `--input-format`) | `--model`, `--bare` (skip auto-discovery), `--max-turns`, `--max-budget-usd`, `--json-schema`, `--system-prompt[-file]`, `--append-system-prompt[-file]`, `--permission-prompt-tool`, `--bg`, `--no-session-persistence` |
 | Grok / xAI | `grok -p "<prompt>"` (`--single`) | `grok agent stdio` = ACP agent over JSON-RPC on stdin/stdout | `--output-format plain\|json\|streaming-json` | `--model`/`-m`, `--cwd`, `--always-approve`, `--no-alt-screen`, `--no-auto-update` |
 | Hermes Agent | `hermes chat -q "<query>"` (single query) | not documented (no stdin/JSON piping flag) | not documented (no JSON output-format flag) | `--model`, `--provider nous\|openrouter`, `--toolsets`, `-s <skill>`, `--verbose` |
 | Antigravity CLI | not documented — no `agy -p` one-shot in official docs | — | the TUI can pipe JSON status-line metadata to a shell script, but that is not a one-shot run | use the **Antigravity SDK** for programmatic/unattended runs; `--sandbox`, `--dangerously-skip-permissions` are launch overrides, not a headless mode |
@@ -73,7 +73,7 @@ command to type.
 | Runtime | Continue most recent | Pin a specific session | Headless resume |
 |---|---|---|---|
 | Codex | `codex resume` (picker) | `codex resume <SESSION_ID>` | `codex exec resume --last` / `codex exec resume <SESSION_ID>` (`--all` widens past cwd) |
-| Claude Code | `claude -c` (latest in cwd) | `claude -r "<id-or-name>"` (set a name with `-n`); `claude --from-pr <number>` (linked to a PR) | add `-p`: `claude -c -p` / `claude -r "<s>" -p` |
+| Claude Code | `claude -c` (latest in cwd) | `claude -r "<id-or-name>"` (set a name with `-n`); `claude --from-pr <number>` (resume by PR number or URL) | add `-p`: `claude -c -p` / `claude -r "<s>" -p` |
 | Grok / xAI | `grok -c` | `grok -r <ID>` / `grok -s <ID>` (named) | add `-p` to the same flags |
 | Hermes Agent | `hermes -c` | `hermes -r <session_id>` (or by title) | not separately documented |
 | Antigravity CLI | `agy --continue` (latest in workspace) | `agy --conversation <uuid>`; in-TUI `/resume` (`/switch`, `/conversation`) picker, Tab imports Antigravity 2.0 desktop threads; `/fork` (`/branch`) | not documented (no headless one-shot) |
