@@ -93,28 +93,14 @@ branch protection + required checks) remains a valid alternative — the `github
 sources in `docs/official-sources.json` cover it — but it is not required for the
 gate above.
 
-## Installing Locally + Keeping Checkouts In Sync
+## Keeping Local Checkouts In Sync
 
-The canonical repo is the source of truth; runtime installs are symlinks into it,
-so a single `git pull` refreshes every runtime at once. Install — and optionally
-wire the stale notifier — with `scripts/install-local.mjs`:
+Remote auto-update is handled by the daily refresh plus the auto-merge gate above
+— `origin/main` stays current on its own. Local checkouts sync with a plain
+`git pull`; since runtime installs are symlinks into the canonical repo, one pull
+refreshes every runtime at once. Pull when you start work.
 
-```bash
-node scripts/install-local.mjs --runtime both --with-stale-hook   # claude + codex
-node scripts/install-local.mjs --dry-run --with-stale-hook        # preview, changes nothing
-```
-
-The installer symlinks the skill into `~/.claude/skills/` and/or `~/.codex/skills/`
-(`--link copy` copies instead), and with `--with-stale-hook` registers
-`scripts/notify-if-stale.sh` on the **matrix-correct event per runtime**:
-`SessionStart` for Claude, a throttled `PreToolUse` (matcher `.*`) for Codex, which
-has no SessionStart. It is idempotent and backs up any JSON it patches; it skips a
-runtime whose `~/.<runtime>` root is absent.
-
-The notifier is **opt-in and a convenience only** — not required for the wiki or
-the auto-merge gate. It is repo-scoped, read-only, and non-blocking: silent when
-the checkout is current (or you are not in this repo), a one-line `git pull`
-heads-up when `origin/main` is ahead; neither event can block a session. Local
-install automation covers **Claude and Codex** only — the other tracked runtimes
-have no documented session-start hook, so use a shell-profile cwd guard or a
-manual `git pull` there.
+(An earlier opt-in stale-notifier hook — a per-session `git fetch` on Claude
+`SessionStart` and a per-tool-call `PreToolUse` on Codex — was removed: its cost
+outweighed the convenience for a repo that changes about once a day. Manual
+symlink install is documented in `SKILL.md` → Cross-Agent Install Pattern.)
