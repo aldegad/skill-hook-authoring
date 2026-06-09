@@ -5,6 +5,38 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.2 — 2026-06-09
+
+Repositioning release: the package is now framed as what it had already grown
+into — a cross-runtime interoperability wiki plus the methodology to manage it.
+
+### Changed
+
+- **Repositioned as a cross-runtime agent-platform interoperability wiki +
+  methodology.** `SKILL.md` and `README.md` now lead with the daily-refreshed
+  7-runtime compatibility wiki (Codex, Claude Code, Grok, Hermes, Antigravity
+  CLI, Cursor, Kuma Studio); the old "Four-Runtime Baseline" became "Runtime
+  Coverage" listing all seven. The skill `name` stays `skill-hook-authoring`
+  (install symlinks and the `cc-guard` hook depend on the id).
+
+### Added
+
+- **Billing capability domain.** New `kind: "billing"` sources in
+  `docs/official-sources.json`: Claude Code subscription vs. API billing, and the
+  **2026-06-15** change after which Agent SDK / `claude -p` (headless) usage no
+  longer counts toward the Claude plan. Mirrored as a Billing caveat in
+  `docs/cli-invocation.md` and a "Why not a local cron" block in
+  `docs/cloud-automation.md`; the daily refresh now re-verifies the billing
+  category.
+- **History-out-of-bodies rule** in `SKILL.md` Core Rules and the daily prompt:
+  changelog narrative lives in `CHANGELOG.md` + git tag, doc bodies state current
+  truth only (a `Last reviewed:` / `verified` stamp is the lone dated exception).
+
+### Fixed
+
+- `README.md` daily-refresh branch prefix corrected `claude/` → `aldegad/` (the
+  `cc-guard` hook rejects branch names containing `claude` or `codex`).
+
 ## v1.1 — 2026-06-06
 
 A large doc release adding two capability domains (CLI spawn and session resume),

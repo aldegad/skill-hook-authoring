@@ -22,6 +22,16 @@ Do not set `ANTHROPIC_API_KEY` in the routine environment — Routines bill
 against the subscription usage pool, and a present API key suppresses the
 `/schedule` path.
 
+**Why not a local `claude -p` cron?** A laptop that is on daily makes a local
+`launchd`/`cron` job calling `claude -p` look tempting, but it loses on both
+cost and reliability. Headless `claude -p` bills as **per-token API usage** even
+on an OAuth Pro/Max login with no `ANTHROPIC_API_KEY`, and **from 2026-06-15
+Agent SDK / `claude -p` usage no longer counts toward the Claude plan** — the
+subscription pool is reserved for interactive use. A local job also fires only
+when the machine is awake at the scheduled time. A cloud Routine bills against
+the subscription pool and runs regardless of laptop state, so it wins on both.
+(Sources: the two `kind: "billing"` entries in `docs/official-sources.json`.)
+
 ## Recommended Daily Flow
 
 ```text

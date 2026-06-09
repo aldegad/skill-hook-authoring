@@ -61,11 +61,26 @@ dynamically before claiming a change. Note when the **2026-06-18 Gemini CLI
 individual cutoff** has passed so the legacy Gemini references can be retired, and
 record any capability the official docs do not cover as `not documented`.
 
+**BILLING / PLAN USAGE — do not skip this category.** Every source in
+`docs/official-sources.json` with `"kind": "billing"` MUST be fetched and
+re-verified every run: which usage the Pro/Max subscription covers vs. what bills
+as API, whether a present `ANTHROPIC_API_KEY` switches Claude Code to API billing,
+and the **2026-06-15** change after which Agent SDK / `claude -p` (headless) usage
+no longer counts toward the Claude plan. If the official docs change any of this,
+update the billing caveat in both mirrors so they stay consistent: the **Billing
+caveat** note in `docs/cli-invocation.md` and the **"Why not a local cron"** block
+in `docs/cloud-automation.md`. Once the 2026-06-15 cutoff has passed, shift the
+wording from future to present tense.
+
 **IF THERE ARE CHANGES:** make small, reviewable edits to the repo docs. Cite the
 official source URL in the docs or in the PR body. Run
 `node scripts/check-official-sources.mjs --write-report`. Do NOT push to main.
 Create a pull request from an `aldegad/`-prefixed branch (the `cc-guard` hook
-rejects branch names containing `claude` or `codex`).
+rejects branch names containing `claude` or `codex`). **Keep history out of the
+doc bodies:** record the change narrative in `CHANGELOG.md` (with the git tag) —
+`SKILL.md` and `docs/*` state current truth only, so replace a changed fact rather
+than appending the old one. A `Last reviewed:` / `verified` stamp is the only
+dated line allowed in a doc body.
 
 **IF THERE ARE NO CHANGES:** do not modify any file. Leave a short no-op summary
 only.

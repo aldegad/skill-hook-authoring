@@ -61,6 +61,15 @@ the same idea, but they are reached differently:
 | Antigravity CLI | not documented — no `agy -p` one-shot in official docs | — | the TUI can pipe JSON status-line metadata to a shell script, but that is not a one-shot run | use the **Antigravity SDK** for programmatic/unattended runs; `--sandbox`, `--dangerously-skip-permissions` are launch overrides, not a headless mode |
 | Cursor CLI | `cursor-agent -p "<prompt>"` (`--print`) | print mode for scripts | `--output-format text\|json\|stream-json` (only with `--print`); `--stream-partial-output` | `--model`, `-f`/`--force` (`--yolo`), `--trust` (headless only) |
 
+> **Billing caveat (Claude Code).** Headless `claude -p` is *not* covered like an
+> interactive session: it bills as **per-token API usage** even when
+> authenticated via OAuth on a Pro/Max subscription with no `ANTHROPIC_API_KEY`
+> set, and **from 2026-06-15 Agent SDK / `claude -p` usage no longer counts
+> toward the Claude plan at all** — the subscription pool is reserved for
+> interactive use. For unattended/scheduled work prefer a cloud **Claude Routine**
+> (subscription-pool billing) over a local `claude -p` cron, and run `/status` to
+> confirm the active auth method. See `docs/cloud-automation.md`.
+
 ## C. Resume invocation (command syntax)
 
 Resume splits the same way: for the flag-based runtimes, the resume flag alone
@@ -144,3 +153,5 @@ Official (Google Developers Blog, 2026-05; antigravity.google docs):
 - Antigravity CLI conversations (`--continue`, `--conversation`, `/resume`) — <https://antigravity.google/docs/cli-conversations>
 - Antigravity CLI Gemini migration — <https://antigravity.google/docs/gcli-migration>
 - Cursor CLI parameters — <https://cursor.com/docs/cli/reference/parameters>
+- Claude Code with Pro/Max plan (billing) — <https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan>
+- Claude Agent SDK / headless plan usage (2026-06-15 change) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
