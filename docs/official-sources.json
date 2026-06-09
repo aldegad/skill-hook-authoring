@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-06-08",
+  "updated": "2026-06-09",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
@@ -73,7 +73,7 @@
       "agent": "claude-code",
       "kind": "project-instructions",
       "url": "https://code.claude.com/docs/en/memory",
-      "claims": ["CLAUDE.md", ".claude/CLAUDE.md", "CLAUDE.local.md", ".claude/rules", "Claude reads CLAUDE.md not AGENTS.md", "@AGENTS.md import", "symlink AGENTS.md to CLAUDE.md", "auto memory", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "HTML comment stripping in CLAUDE.md"]
+      "claims": ["CLAUDE.md", ".claude/CLAUDE.md", "CLAUDE.local.md", ".claude/rules", "Claude reads CLAUDE.md not AGENTS.md", "@AGENTS.md import", "symlink AGENTS.md to CLAUDE.md", "auto memory", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "HTML comment stripping in CLAUDE.md", "paths frontmatter for .claude/rules/ conditional loading", "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD", "--add-dir flag"]
     },
     {
       "id": "anthropic-claude-hooks",
@@ -89,7 +89,7 @@
       "kind": "configuration",
       "url": "https://code.claude.com/docs/en/settings",
       "notes": "docs.anthropic.com/en/docs/claude-code/settings permanently redirects here as of 2026-05-27",
-      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "maxSkillDescriptionChars", "maxSkillDescriptionChars default 1536", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "httpHookAllowedEnvVars", "allowManagedHooksOnly", "policyHelper", "parentSettingsBehavior", "forceLoginMethod", "forceLoginOrgUUID", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "claudeMd", "forceRemoteSettingsRefresh", "allowManagedPermissionRulesOnly", "allowManagedMcpServersOnly", "requiredMinimumVersion", "requiredMaximumVersion", "enableAllProjectMcpServers", "enabledMcpjsonServers", "disabledMcpjsonServers", "allowAllClaudeAiMcps"]
+      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "maxSkillDescriptionChars", "maxSkillDescriptionChars default 1536", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "httpHookAllowedEnvVars", "allowManagedHooksOnly", "policyHelper", "parentSettingsBehavior", "forceLoginMethod", "forceLoginOrgUUID", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "claudeMd", "forceRemoteSettingsRefresh", "allowManagedPermissionRulesOnly", "allowManagedMcpServersOnly", "requiredMinimumVersion", "requiredMaximumVersion", "enableAllProjectMcpServers", "enabledMcpjsonServers", "disabledMcpjsonServers", "allowAllClaudeAiMcps", "allowedMcpServers", "deniedMcpServers", "channelsEnabled", "workflowKeywordTriggerEnabled", "disableRemoteControl", "attribution", "minimumVersion", "strictPluginOnlyCustomization", "pluginTrustMessage"]
     },
     {
       "id": "anthropic-claude-slash-commands",
@@ -234,14 +234,14 @@
       "agent": "claude-code",
       "kind": "cli-invocation",
       "url": "https://code.claude.com/docs/en/cli-reference",
-      "claims": ["claude -p --print", "cat file pipe claude -p", "--output-format text json stream-json", "--input-format", "--model", "--system-prompt", "--append-system-prompt", "--max-turns", "--max-budget-usd", "--json-schema", "--bare", "--bg background agent", "claude interactive launch", "claude query initial prompt", "claude -c --continue", "claude -r --resume", "--name -n"]
+      "claims": ["claude -p --print", "cat file pipe claude -p", "--output-format text json stream-json", "--input-format", "--model", "--system-prompt", "--append-system-prompt", "--max-turns", "--max-budget-usd", "--json-schema", "--bare", "--bg background agent", "claude interactive launch", "claude query initial prompt", "claude -c --continue", "claude -r --resume", "--name -n", "--allowedTools", "--permission-mode acceptEdits dontAsk"]
     },
     {
       "id": "anthropic-claude-headless",
       "agent": "claude-code",
       "kind": "cli-invocation",
       "url": "https://code.claude.com/docs/en/headless",
-      "claims": ["headless mode", "print mode -p", "output-format json stream-json", "bare mode", "programmatic invocation", "Agent SDK"]
+      "claims": ["headless mode", "print mode -p", "output-format json stream-json", "bare mode", "bare mode recommended for scripts will become default for -p", "programmatic invocation", "Agent SDK", "--allowedTools", "--permission-mode acceptEdits dontAsk", "stdin capped 10MB v2.1.128", "background task grace period 5s v2.1.163", "Agent SDK subscription credit starting 2026-06-15"]
     },
     {
       "id": "google-antigravity-transition",
