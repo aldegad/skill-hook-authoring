@@ -76,11 +76,36 @@ behavior of a cloud routine.
 
 Use the same prompt from `prompts/daily-official-doc-update.md`.
 
-## Editing And Review
+## Auto-Merge Gate
 
-- Review the daily PR diff in the repository's Pull Requests tab before merging.
-- Run `node scripts/check-official-sources.mjs --write-report` locally before
-  pushing any manual edits.
-- Optionally enable GitHub auto-merge once branch protection and required checks
-  are in place (the `github` sources in `docs/official-sources.json` cover the
-  official auto-merge and notification docs).
+After the daily routine opens a PR it runs `scripts/auto-merge-guard.sh
+<PR_NUMBER>`, which squash-merges **only when** the diff is docs/prose-only and
+`check-official-sources.mjs` passes — otherwise it leaves the PR open. Merge
+authority sits on that deterministic shell gate, not on the agent's judgement: a
+change that touches code, installers, hooks, or config (or that fails the check)
+always waits for a human. This is the lightweight path — the agent triggers the
+gate, the gate's exit code decides — and it needs no GitHub Actions or
+branch-protection setup.
+
+For manual edits, run `node scripts/check-official-sources.mjs --write-report`
+locally before pushing. Native GitHub auto-merge (`gh pr merge --auto` gated on
+branch protection + required checks) remains a valid alternative — the `github`
+sources in `docs/official-sources.json` cover it — but it is not required for the
+gate above.
+
+## Keeping Local Checkouts In Sync
+
+The wiki's source of truth is the canonical repo, and runtime installs are
+symlinks into it, so a single `git pull` refreshes every runtime at once. To
+avoid forgetting that pull, register `scripts/notify-if-stale.sh` as a Claude
+Code `SessionStart` hook in `~/.claude/settings.json`:
+
+```json
+{ "hooks": { "SessionStart": [ { "hooks": [
+  { "type": "command", "command": "<repo>/scripts/notify-if-stale.sh" } ] } ] } }
+```
+
+It is repo-scoped, read-only, and non-blocking: when the checkout is current (or
+you are not in this repo) it stays silent; when `origin/main` is ahead it injects
+a one-line heads-up that a `git pull` is due. SessionStart hooks cannot block the
+session, so it never interrupts work.
