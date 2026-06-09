@@ -26,7 +26,7 @@ The recommended path is **Claude Routines** — a scheduled Claude Code session 
 
 1. In Claude Code, run `/schedule` (or open <https://claude.ai/code/routines>).
 2. Point the routine at this repository and use the prompt in `prompts/daily-official-doc-update.md`.
-3. Schedule it once a day. It opens a PR from an `aldegad/`-prefixed branch (the `cc-guard` hook rejects `claude`/`codex` branch names); you review and merge.
+3. Schedule it once a day. It opens a PR for you to review and merge (branch-prefix policy is in `docs/cloud-automation.md`).
 
 Codex users can run the same flow with a Codex App Automation instead. See `docs/cloud-automation.md` for both paths.
 
