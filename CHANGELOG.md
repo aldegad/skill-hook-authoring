@@ -5,6 +5,20 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.6 — 2026-06-09
+
+### Removed
+
+- **Stale-checkout notifier + local installer rolled back.** Removed
+  `scripts/notify-if-stale.sh` and `scripts/install-local.mjs`. The per-session
+  `git fetch` (Claude `SessionStart`) and per-tool-call process fork (Codex
+  `PreToolUse`) cost more than the convenience was worth for a repo that changes
+  about once a day. **Remote auto-update stays** via the daily refresh +
+  auto-merge gate; sync local checkouts with a plain `git pull`. The matcher and
+  macOS-`timeout` lessons from v1.5 are kept in `SKILL.md` as runtime-compat
+  knowledge, and manual symlink install remains in the Cross-Agent Install
+  Pattern.
+
 ## v1.5 — 2026-06-09
 
 ### Fixed
