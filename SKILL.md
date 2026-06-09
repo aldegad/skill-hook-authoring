@@ -1,11 +1,16 @@
 ---
 name: skill-hook-authoring
-description: 'Use for agent extension and plugin-like package authoring across Codex, Claude, Grok, and Hermes: skills, hooks, plugin packaging, CLI spawn and session resume, symlink installs, guardrails, and runtime drift.'
+description: 'Cross-runtime agent-platform interoperability wiki, refreshed daily from official vendor docs: how Codex, Claude Code, Grok, Hermes, Antigravity CLI, Cursor, and Kuma Studio compare across skills, hooks, plugins/extensions, project-instruction files, CLI spawn, session resume, and billing — plus the authoring rules to ship one source of truth without drifting between runtimes.'
 ---
 
-# Skill Hook Authoring
+# Cross-Runtime Agent-Platform Interoperability
 
-Create shared agent extension packages from one repo-owned source of truth. These packages may contain skills, hooks, commands, scripts, references, assets, MCP/app wiring, or runtime-specific plugin metadata.
+This package is two things at once:
+
+1. **A compatibility wiki**, refreshed daily from official vendor docs, recording how today's agent runtimes — Codex, Claude Code, Grok, Hermes, Antigravity CLI, Cursor, and Kuma Studio — compare across skills, hooks, plugins/extensions, project-instruction files, CLI spawn (interactive vs headless), session resume, and billing. Every claim cites the vendor's own docs; absent docs are recorded as `not documented`, never inferred.
+2. **A methodology** for *interoperating and managing* those runtimes: how to ship one repo-owned source of truth — skills, hooks, commands, scripts, references, assets, MCP/app wiring, or runtime-specific plugin metadata — without drifting between agents.
+
+The detailed comparison lives in `docs/` (start with `docs/compatibility-matrix.md`); the daily refresh keeps it current (`docs/cloud-automation.md`). The rest of this file is the authoring/interoperation methodology that turns that wiki into shippable, non-drifting packages.
 
 ## Taxonomy
 
@@ -18,9 +23,9 @@ Use these words precisely:
 
 If the task changes discovery, installation, trust, hook behavior, bundled scripts, or cross-runtime compatibility, treat it as **package authoring**, not just skill text editing.
 
-## Four-Runtime Baseline
+## Runtime Coverage
 
-Keep the current detailed truth in `docs/compatibility-matrix.md` and `docs/plugin-packaging.md`. This is the short working model:
+Seven runtimes are tracked. The detailed, source-cited truth lives in `docs/compatibility-matrix.md` and `docs/plugin-packaging.md`; this is the short working model:
 
 | Runtime | Skill surface | Hook surface | Plugin/package surface |
 |---|---|---|---|
@@ -28,6 +33,9 @@ Keep the current detailed truth in `docs/compatibility-matrix.md` and `docs/plug
 | Claude Code | `.claude/skills`, `.claude/commands`, skill frontmatter/settings | `.claude/settings.json` hooks | Marketplace/plugin settings exist; no cited Codex-style plugin package format |
 | Grok / xAI | Reusable skill folders | User, project, and plugin hook roots | Plugins can bundle skills, agents, hooks, MCP servers, and LSP servers |
 | Hermes Agent | Skills and skill preloading are documented | Hook parity is not documented in the cited source set | MCP/toolsets are documented; plugin packaging parity is not documented here |
+| Antigravity CLI (`agy`, was Gemini CLI) | `.agents/skills/` (global `~/.gemini/antigravity-cli/skills/`) | TUI `/hooks` browser; config format not verified in the cited render | Native plugins; MCP via standalone `mcp_config.json` |
+| Cursor CLI | reusable agent context; `.cursor/rules` | not documented in the cited source set | MCP auto-detection via `mcp.json`; Codex-style packaging not documented |
+| Kuma Studio | skills in canonical repo paths | guardrail hooks that must fail loudly | symlink or generated-config install |
 
 When a runtime capability is not documented, write `not documented` or `unknown` and require live verification before shipping behavior that depends on it.
 
@@ -88,6 +96,7 @@ For cross-agent repo rules, maintain the smallest set of files that each runtime
 - Hooks are guardrails, not silent fallback paths. They should block clearly, explain why, and require an explicit operator decision for dangerous actions.
 - Cross-agent guidance must be based on official vendor docs. If a platform does not document a feature, record it as `not documented` or `unknown`; do not infer parity from another agent.
 - **Make hook scripts executable (`chmod +x`) and give them a shebang.** Claude registers hooks as `command: "<abs-path> --args"` and runs them through `/bin/sh`, so a missing exec bit fails with `Permission denied` on *every* matching event (PreToolUse/Stop) in *every* session — one forgotten `chmod +x` silently breaks all agents at once. Codex registers as `node <path>` so it tolerates a missing bit, but always `chmod +x` for parity and **commit the mode** (git stores `100755`). (Trial-and-error 2026-05-26: a new guard hook shipped `644` → `Permission denied` spam across all live sessions until chmod'd.)
+- **Keep history out of doc bodies.** Changelog narrative — what was added/changed/removed and when — lives in `CHANGELOG.md` plus the git tag (the version SSoT), never accreting in `SKILL.md` or `docs/*` prose. A doc body states the **current** truth only; when a fact changes, replace it, don't append the old one. The one exception is a *verification* stamp (`Last reviewed: YYYY-MM-DD`, `verified YYYY-MM-DD`): that is provenance for a live claim, not history. This is what keeps a daily-refreshed wiki from turning into a changelog as it is re-verified.
 
 ## Recommended Layout
 

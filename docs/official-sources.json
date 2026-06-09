@@ -15,7 +15,8 @@
       "hermes-agent.nousresearch.com",
       "docs.cursor.com",
       "cursor.com",
-      "docs.github.com"
+      "docs.github.com",
+      "support.claude.com"
     ]
   },
   "sources": [
@@ -274,6 +275,22 @@
       "url": "https://antigravity.google/docs/gcli-migration",
       "notes": "JS-rendered SPA; render dynamically to verify. GEMINI_API_KEY->AV_API_KEY env swap is NOT stated here (third-party claim); auth is via OS keyring.",
       "claims": ["agy plugin import gemini", "first-launch auto-conversion", "reads GEMINI.md and AGENTS.md", "global ~/.gemini/GEMINI.md", "workspace skills .gemini/skills -> .agents/skills", "MCP moves to mcp_config.json", "serverUrl schema key", "install ~/.local/bin/agy"]
+    },
+    {
+      "id": "anthropic-claude-code-subscription-billing",
+      "agent": "claude-code",
+      "kind": "billing",
+      "url": "https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan",
+      "notes": "Subscription covers interactive Claude Code; a present ANTHROPIC_API_KEY switches Claude Code to pay-as-you-go API billing. Run /status to see which auth method is active.",
+      "claims": ["Pro plan", "Max plan", "subscription covers interactive Claude Code", "ANTHROPIC_API_KEY present switches to API billing", "/status shows auth method", "interactive use covered by plan"]
+    },
+    {
+      "id": "anthropic-agent-sdk-plan-usage",
+      "agent": "claude-code",
+      "kind": "billing",
+      "url": "https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan",
+      "notes": "From 2026-06-15, Agent SDK and claude -p (headless/print) usage no longer counts toward Claude plan limits; the subscription pool is reserved for interactive Claude Code/Cowork. Headless/SDK runs bill as API usage.",
+      "claims": ["Agent SDK with Claude plan", "claude -p headless", "2026-06-15 SDK and claude -p usage no longer counts toward plan limits", "subscription reserved for interactive use", "headless bills as API usage"]
     }
   ]
 }
