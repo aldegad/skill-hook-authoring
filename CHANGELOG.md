@@ -5,6 +5,17 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.5 — 2026-06-09
+
+### Fixed
+
+- **Codex stale-hook never fired — matcher bug.** `install-local.mjs` registered
+  the Codex `PreToolUse` hook with a Claude-style `"*"` matcher, but Codex
+  matchers are **regex**, where `"*"` is invalid and matches nothing — so the hook
+  silently never ran (confirmed with a probe hook: the event was never invoked).
+  Changed to `".*"`. Documented the Claude (`"*"`/omit = all) vs. Codex (regex)
+  matcher difference in `SKILL.md`. Claude `SessionStart` path was unaffected.
+
 ## v1.4 — 2026-06-09
 
 Local install automation for the two runtimes with stable install/hook surfaces

@@ -105,9 +105,11 @@ function registerStaleHook(rt) {
   cfg.hooks[event] = cfg.hooks[event] || [];
   if (hasCommand(cfg.hooks[event], notifyHook)) { log(`${rt}: ${event} notifier already registered — skip`); return; }
   backup(file);
+  // Claude matchers treat "*"/""/omitted as match-all; Codex matchers are
+  // REGEX (e.g. "^Bash$"), where "*" is invalid and matches nothing — use ".*".
   const entry = rt === "claude"
     ? { hooks: [{ type: "command", command: notifyHook }] }
-    : { matcher: "*", hooks: [{ type: "command", command: notifyHook, timeout: 30 }] };
+    : { matcher: ".*", hooks: [{ type: "command", command: notifyHook, timeout: 30 }] };
   cfg.hooks[event].push(entry);
   writeJson(file, cfg);
   log(`${rt}: registered ${event} stale-checkout notifier`);

@@ -107,7 +107,7 @@ node scripts/install-local.mjs --dry-run --with-stale-hook        # preview, cha
 The installer symlinks the skill into `~/.claude/skills/` and/or `~/.codex/skills/`
 (`--link copy` copies instead), and with `--with-stale-hook` registers
 `scripts/notify-if-stale.sh` on the **matrix-correct event per runtime**:
-`SessionStart` for Claude, a throttled `PreToolUse` (matcher `*`) for Codex, which
+`SessionStart` for Claude, a throttled `PreToolUse` (matcher `.*`) for Codex, which
 has no SessionStart. It is idempotent and backs up any JSON it patches; it skips a
 runtime whose `~/.<runtime>` root is absent.
 
