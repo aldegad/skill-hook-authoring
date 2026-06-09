@@ -5,6 +5,28 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.4 — 2026-06-09
+
+Local install automation for the two runtimes with stable install/hook surfaces
+(Claude + Codex), and the stale notifier extended to cover Codex.
+
+### Added
+
+- **`scripts/install-local.mjs`** — local installer. `--runtime claude|codex|both`,
+  `--link symlink|copy`, `--with-stale-hook`, `--dry-run`. Symlinks (or copies)
+  the skill into `~/.<runtime>/skills/`, is idempotent, backs up any JSON it
+  patches, and skips a runtime whose `~/.<runtime>` root is absent.
+
+### Changed
+
+- **Stale-checkout notifier now covers Codex.** `scripts/notify-if-stale.sh`
+  auto-detects the hook event: Claude `SessionStart` (once per session) and Codex
+  `PreToolUse` (per tool call, self-throttled ~6h via a stamp file). It injects
+  `additionalContext` with no `permissionDecision`, so the tool call proceeds
+  normally and nothing blocks. `install-local.mjs --with-stale-hook` registers it
+  on the matrix-correct event per runtime. The `docs/cloud-automation.md` install
+  section was rewritten around the installer; the notifier stays opt-in.
+
 ## v1.3 — 2026-06-09
 
 Closes the daily-refresh loop: the routine can now merge its own docs-only PRs

@@ -93,19 +93,28 @@ branch protection + required checks) remains a valid alternative — the `github
 sources in `docs/official-sources.json` cover it — but it is not required for the
 gate above.
 
-## Keeping Local Checkouts In Sync
+## Installing Locally + Keeping Checkouts In Sync
 
-The wiki's source of truth is the canonical repo, and runtime installs are
-symlinks into it, so a single `git pull` refreshes every runtime at once. To
-avoid forgetting that pull, register `scripts/notify-if-stale.sh` as a Claude
-Code `SessionStart` hook in `~/.claude/settings.json`:
+The canonical repo is the source of truth; runtime installs are symlinks into it,
+so a single `git pull` refreshes every runtime at once. Install — and optionally
+wire the stale notifier — with `scripts/install-local.mjs`:
 
-```json
-{ "hooks": { "SessionStart": [ { "hooks": [
-  { "type": "command", "command": "<repo>/scripts/notify-if-stale.sh" } ] } ] } }
+```bash
+node scripts/install-local.mjs --runtime both --with-stale-hook   # claude + codex
+node scripts/install-local.mjs --dry-run --with-stale-hook        # preview, changes nothing
 ```
 
-It is repo-scoped, read-only, and non-blocking: when the checkout is current (or
-you are not in this repo) it stays silent; when `origin/main` is ahead it injects
-a one-line heads-up that a `git pull` is due. SessionStart hooks cannot block the
-session, so it never interrupts work.
+The installer symlinks the skill into `~/.claude/skills/` and/or `~/.codex/skills/`
+(`--link copy` copies instead), and with `--with-stale-hook` registers
+`scripts/notify-if-stale.sh` on the **matrix-correct event per runtime**:
+`SessionStart` for Claude, a throttled `PreToolUse` (matcher `*`) for Codex, which
+has no SessionStart. It is idempotent and backs up any JSON it patches; it skips a
+runtime whose `~/.<runtime>` root is absent.
+
+The notifier is **opt-in and a convenience only** — not required for the wiki or
+the auto-merge gate. It is repo-scoped, read-only, and non-blocking: silent when
+the checkout is current (or you are not in this repo), a one-line `git pull`
+heads-up when `origin/main` is ahead; neither event can block a session. Local
+install automation covers **Claude and Codex** only — the other tracked runtimes
+have no documented session-start hook, so use a shell-profile cwd guard or a
+manual `git pull` there.

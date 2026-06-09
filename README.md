@@ -16,6 +16,7 @@ Every compatibility claim cites the vendor's own docs; where a runtime does not 
 - `docs/official-sources.json` is the source manifest that the daily refresh re-verifies.
 - `docs/cloud-automation.md` explains the daily update automation and why it runs in the cloud, not locally.
 - `docs/kuma-studio-patterns.md` captures public Kuma Studio operating patterns.
+- `scripts/install-local.mjs` installs the skill into Claude/Codex and can wire the opt-in stale-checkout notifier (`scripts/notify-if-stale.sh`).
 - `CHANGELOG.md` plus the git tag are the version record. History stays here, not in the doc bodies.
 
 ## Daily Wiki Refresh
