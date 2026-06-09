@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-06-07
+Last reviewed: 2026-06-08
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or

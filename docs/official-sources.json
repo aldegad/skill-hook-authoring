@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-06-07",
+  "updated": "2026-06-08",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
@@ -31,7 +31,7 @@
       "agent": "codex",
       "kind": "automation",
       "url": "https://developers.openai.com/codex/app/automations",
-      "claims": ["recurring tasks", "skills in automations", "worktrees"]
+      "claims": ["recurring tasks", "skills in automations", "worktrees", "Thread Automations", "Standalone Automations", "Project-Scoped Automations"]
     },
     {
       "id": "openai-codex-github-action",
@@ -89,7 +89,7 @@
       "kind": "configuration",
       "url": "https://code.claude.com/docs/en/settings",
       "notes": "docs.anthropic.com/en/docs/claude-code/settings permanently redirects here as of 2026-05-27",
-      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "maxSkillDescriptionChars", "maxSkillDescriptionChars default 1536", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "httpHookAllowedEnvVars", "allowManagedHooksOnly", "policyHelper", "parentSettingsBehavior", "forceLoginMethod", "forceLoginOrgUUID", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes"]
+      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "maxSkillDescriptionChars", "maxSkillDescriptionChars default 1536", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "httpHookAllowedEnvVars", "allowManagedHooksOnly", "policyHelper", "parentSettingsBehavior", "forceLoginMethod", "forceLoginOrgUUID", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "claudeMd", "forceRemoteSettingsRefresh", "allowManagedPermissionRulesOnly", "allowManagedMcpServersOnly", "requiredMinimumVersion", "requiredMaximumVersion", "enableAllProjectMcpServers", "enabledMcpjsonServers", "disabledMcpjsonServers", "allowAllClaudeAiMcps"]
     },
     {
       "id": "anthropic-claude-slash-commands",
@@ -199,7 +199,7 @@
       "agent": "claude-code",
       "kind": "session-resume",
       "url": "https://code.claude.com/docs/en/sessions",
-      "claims": ["--resume", "--continue", "-c", "/resume", "--fork-session", "same session id reused", "local transcript files", "--from-pr", "--no-session-persistence"]
+      "claims": ["--resume", "--continue", "-c", "/resume", "--fork-session", "same session id reused", "local transcript files", "--from-pr", "cleanupPeriodDays", "CLAUDE_CODE_SKIP_PROMPT_HISTORY", "--no-session-persistence", "/branch", "/rename", "/export", "session picker Ctrl+W Ctrl+A Ctrl+B"]
     },
     {
       "id": "xai-grok-headless-scripting",
@@ -227,7 +227,7 @@
       "agent": "codex",
       "kind": "cli-invocation",
       "url": "https://developers.openai.com/codex/noninteractive",
-      "claims": ["non-interactive mode", "codex exec", "stream to stdout JSONL", "--json", "--output-last-message -o", "--model -m", "--sandbox -s", "--cd -C", "stdin dash prompt", "--ephemeral", "--output-schema"]
+      "claims": ["non-interactive mode", "codex exec", "stream to stdout JSONL", "--json", "--output-last-message -o", "--model -m", "--sandbox -s", "--cd -C", "stdin dash prompt", "--output-schema", "--ephemeral", "--skip-git-repo-check", "--ignore-user-config", "--ignore-rules", "CODEX_API_KEY"]
     },
     {
       "id": "anthropic-claude-cli-reference",
