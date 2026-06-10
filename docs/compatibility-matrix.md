@@ -16,6 +16,21 @@ For per-runtime **CLI spawn (interactive vs headless launch)** and resume invoca
 | Cursor CLI | Official docs describe CLI agent usage with Agent, Plan, and Ask modes. (Docs moved from docs.cursor.com to cursor.com/docs as of 2026-05-27.) | Hook parity is not documented in the cited source set. | MCP auto-detection via `mcp.json`; plugin packaging parity with Codex is not documented. | Official docs confirm `.cursor/rules`, project-root `AGENTS.md`, and project-root `CLAUDE.md` support. Worktree support via `--worktree` flag is also documented. | External scheduler or CI unless official Cursor automation docs are added. |
 | Kuma Studio | Public repo methodology uses repo SSoT, dispatch delivery, plan close gates, and visible worker surfaces. | Hooks are guardrails and must fail loudly. | Kuma skills live in canonical repo paths and may be installed by symlink or generated config. | `AGENTS.md` and `CLAUDE.md` are parallel SSoT for shared rules. | Use project-specific dispatch, plan, and server workflows; public docs should not depend on private vault content. |
 
+## Skill Invocation
+
+How a *typed* command reaches a skill differs per runtime — the explicit-invocation token is **not** portable, even where the `SKILL.md` format is. Do not assume `/<skill-name>` works everywhere.
+
+| Platform | Explicit (user-typed) invocation | Model-triggered invocation | Source (verified 2026-06-10) |
+|---|---|---|---|
+| Claude Code | `/<skill-name>` — "You can type `/skill-name` to invoke it directly." Custom commands are merged into skills (`.claude/commands/deploy.md` and `.claude/skills/deploy/SKILL.md` both create `/deploy`). | Claude loads a skill automatically when relevant. `disable-model-invocation: true` restricts a skill to user-only invocation (removes it from Claude's context and from subagent preloading). | https://code.claude.com/docs/en/skills |
+| OpenAI Codex | `/skills` opens the skill selector; `$<skill-name>` mentions a skill in the prompt ("run `/skills` or type `$` to mention a skill"). Typing `/<skill-name>` is **not** a documented invocation form. | "Codex can choose a skill when your task matches the skill `description`." Disable with `allow_implicit_invocation: false` in the skill's `agents/openai.yaml`. | https://developers.openai.com/codex/skills |
+| Grok / xAI | "User-invocable skills also appear as slash commands, for example `/<skill-name>`." | Automatic invocation mechanics are not detailed in the cited page; discovery and slash invocation are. | https://docs.x.ai/build/features/skills-plugins-marketplaces |
+| Hermes Agent | not documented in the cited source set | Skills and skill preloading are documented; trigger mechanics not detailed. | https://hermes-agent.nousresearch.com/docs |
+| Antigravity CLI | not documented in the cited source set | not documented | — |
+| Cursor CLI | not documented in the cited source set | not documented | — |
+
+Implementer note: a cross-engine "typed command" surface therefore cannot standardize on one token. Ship the capability as a skill with strong trigger terms in `description` (works everywhere via model-triggering), and treat `/name` (Claude/Grok) vs `$name` (Codex) as per-engine sugar. Do not re-implement a slash parser in a host GUI/terminal layer above the engines to paper over this — see SKILL.md → Core Rules.
+
 ## Session Resume
 
 Same-platform resume (continue an existing conversation on the same engine, by session id) is officially documented for all four primary worker runtimes. Cross-engine moves are a separate concern and out of scope here.
