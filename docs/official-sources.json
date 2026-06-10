@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-06-09",
+  "updated": "2026-06-10",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
@@ -141,7 +141,7 @@
       "agent": "hermes-agent",
       "kind": "cli-invocation",
       "url": "https://hermes-agent.nousresearch.com/docs/user-guide/cli/",
-      "claims": ["CLI", "skills preloading", "toolsets", "worktree", "hermes chat -q single query", "--model", "--provider nous openrouter", "--toolsets", "no documented JSON output format"]
+      "claims": ["CLI", "skills preloading", "toolsets", "worktree", "hermes chat -q single query", "--model", "--provider nous openrouter", "--toolsets", "no documented JSON output format", "--tui modern terminal UI launch", "-w isolated worktree interactive mode", "-z single query within worktree"]
     },
     {
       "id": "cursor-cli-overview",
@@ -200,14 +200,14 @@
       "agent": "claude-code",
       "kind": "session-resume",
       "url": "https://code.claude.com/docs/en/sessions",
-      "claims": ["--resume", "--continue", "-c", "/resume", "--fork-session", "same session id reused", "local transcript files", "--from-pr", "cleanupPeriodDays", "CLAUDE_CODE_SKIP_PROMPT_HISTORY", "--no-session-persistence", "/branch", "/rename", "/export", "session picker Ctrl+W Ctrl+A Ctrl+B"]
+      "claims": ["--resume", "--continue", "-c", "/resume", "--fork-session", "same session id reused", "local transcript files", "--from-pr", "cleanupPeriodDays", "CLAUDE_CODE_SKIP_PROMPT_HISTORY", "--no-session-persistence", "/branch", "/rewind fork alias", "/rename", "/export", "session picker Ctrl+W Ctrl+A Ctrl+B"]
     },
     {
       "id": "xai-grok-headless-scripting",
       "agent": "grok",
       "kind": "session-resume",
       "url": "https://docs.x.ai/build/cli/headless-scripting",
-      "claims": ["-r --resume", "-s --session-id", "~/.grok", "session_id"]
+      "claims": ["-c --continue", "-r --resume", "-s --session-id", "~/.grok", "session_id"]
     },
     {
       "id": "nous-hermes-cli-resume",
@@ -289,8 +289,8 @@
       "agent": "claude-code",
       "kind": "billing",
       "url": "https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan",
-      "notes": "From 2026-06-15, Agent SDK and claude -p (headless/print) usage no longer counts toward Claude plan limits; the subscription pool is reserved for interactive Claude Code/Cowork. Headless/SDK runs bill as API usage.",
-      "claims": ["Agent SDK with Claude plan", "claude -p headless", "2026-06-15 SDK and claude -p usage no longer counts toward plan limits", "subscription reserved for interactive use", "headless bills as API usage"]
+      "notes": "From 2026-06-15, Agent SDK and claude -p (headless/print) usage on eligible subscription plans (Pro/Max/Team/Enterprise) draws from a separate monthly Agent SDK credit — per-user, refreshes monthly, does not carry over — separate from interactive Claude plan limits. Accounts using ANTHROPIC_API_KEY continue on pay-as-you-go API billing.",
+      "claims": ["Agent SDK with Claude plan", "claude -p headless", "2026-06-15 SDK and claude -p usage draws from separate monthly Agent SDK credit", "monthly Agent SDK credit per-user refreshes monthly does not carry over", "subscription reserved for interactive use", "ANTHROPIC_API_KEY users remain pay-as-you-go API billing"]
     }
   ]
 }

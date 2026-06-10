@@ -1,6 +1,6 @@
 # Cross-Agent Compatibility Matrix
 
-Last reviewed: 2026-06-09
+Last reviewed: 2026-06-10
 
 This matrix records only official documentation claims from `docs/official-sources.json`. If a feature is absent from official docs, write `not documented` instead of inferring support.
 
@@ -35,12 +35,12 @@ Implementer note: a cross-engine "typed command" surface therefore cannot standa
 
 Same-platform resume (continue an existing conversation on the same engine, by session id) is officially documented for all four primary worker runtimes. Cross-engine moves are a separate concern and out of scope here.
 
-| Platform | Resume invocation | Session store | Session id form | Source (verified 2026-06-08) |
+| Platform | Resume invocation | Session store | Session id form | Source (verified 2026-06-10) |
 |---|---|---|---|---|
 | OpenAI Codex (CLI) | `codex resume <SESSION_ID>` or `codex resume --last` (interactive); `codex exec resume [SESSION_ID]` / `--last` (non-interactive). `--all` ignores the cwd filter. | Rollout transcripts under `CODEX_HOME`, e.g. `~/.codex/sessions/` (`rollout-*.jsonl`) plus `~/.codex/history.jsonl`. | session id copied from the picker, `/status`, or the session files. | https://developers.openai.com/codex/cli/reference |
 | OpenAI Codex (app-server) | Call the `thread/resume` method with the recorded `thread.id` over the stdio app-server API. Related: `thread/start`, `thread/fork`, `thread/read`. | Thread data is persisted as JSONL rollout log files (exact directory not explicitly stated in the cited doc; rollout naming matches `~/.codex/sessions/`). | `threadId`; a root thread's id is its `sessionId` (forks keep the root's session id). | https://developers.openai.com/codex/app-server |
 | Claude Code | `claude --resume <session-id>` (or `--continue` / `-c`, or `/resume`). Reopens under the same session id and appends. `--fork-session` copies into a new id. `claude --from-pr <number>` resumes the session linked to a pull request and also accepts PR/MR URLs. | Local transcript files written continuously (`~/.claude/projects/<cwd-hash>/<id>.jsonl`); removed after `cleanupPeriodDays` (default 30) days. | session id (same id reused on resume). | https://code.claude.com/docs/en/sessions |
-| Grok / xAI | `grok -r, --resume <ID>` resumes by session id; `grok -s, --session-id <ID>` creates or resumes a named headless session. | Local session history under `~/.grok/` (live sessions enumerated in `~/.grok/active_sessions.json` as `[{session_id, pid, cwd, opened_at}]`). | `session_id`. | https://docs.x.ai (Headless & Scripting) |
+| Grok / xAI | `grok -c, --continue` continues the most recent session in cwd; `grok -r, --resume <ID>` resumes by session id; `grok -s, --session-id <ID>` creates or resumes a named headless session. | Local session history under `~/.grok/` (live sessions enumerated in `~/.grok/active_sessions.json` as `[{session_id, pid, cwd, opened_at}]`). | `session_id`. | https://docs.x.ai/build/cli/headless-scripting |
 | Hermes Agent | `hermes --resume <session_id>` / `-r <session_id>`; `hermes --continue` / `-c` resumes the most recent; resume by title also supported. Restores full conversation. | **SQLite `~/.hermes/state.db`** (conversation history, lineage, FTS). NOT the API error dumps under `~/.hermes/sessions/` (`request_dump_*.json`), which are unrelated. | `YYYYMMDD_HHMMSS_<suffix>` (e.g. `20260225_143052_a1b2c3`). | https://hermes-agent.nousresearch.com/docs/user-guide/cli/ |
 | Antigravity CLI (`agy`, the Gemini CLI successor) | `agy --conversation <uuid>` pins a specific conversation; `agy --continue` resumes the most recent in the workspace; in-TUI `/resume` (`/switch`, `/conversation`) opens a picker, `/fork` (`/branch`) branches, and Tab imports Antigravity 2.0 desktop threads. TUI-only (no headless resume). | Conversations are **workspace-scoped** (only sessions started in the current directory are listed); config under `~/.gemini/antigravity-cli/`. | `<uuid>` (e.g. `9a8b7c6d-…`). | https://antigravity.google/docs/cli-conversations |
 
