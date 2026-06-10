@@ -138,8 +138,16 @@ Deleting a hook, skill, command, or plugin-like package means removing every act
 6. Update docs and plans that describe the artifact in present tense.
 7. Search repo and live config for the old id. Remaining hits should be retired lists or historical notes only.
 8. Run syntax/config checks and prove the installer no longer recreates the retired artifact.
+9. Sweep *instructions* that point at the old name, not just code: agent-executed
+   docs (`AGENTS.md`/`CLAUDE.md`-class files, operating doctrine, skill bodies)
+   referencing a renamed/retired CLI verb or moved doc path fail at runtime the
+   moment an agent follows them. Concretely: grep doc corpora for backticked
+   command mentions (e.g. launcher subcommands like `kuma <verb>`) and for
+   relative links to the old path. Prefer a CI guard that re-checks this on
+   every test run (kuma-studio: `docs-reference-integrity.test.mjs` — relative
+   `.md` links must resolve; backticked launcher verbs must map to a real bin).
 
-This rule exists because deleting only `~/.claude/hooks/<id>` or only `scripts/hooks/<id>` can let the artifact reappear on the next setup run.
+This rule exists because deleting only `~/.claude/hooks/<id>` or only `scripts/hooks/<id>` can let the artifact reappear on the next setup run — and because instructions pointing at the old name keep *re-teaching* agents the broken path long after the code is gone (trial-and-error 2026-06-10: `kuma read`/`kuma vault`/`kuma spawn-all` doc mentions all outlived their bins).
 
 ## Multi-Agent Compatibility Docs
 
