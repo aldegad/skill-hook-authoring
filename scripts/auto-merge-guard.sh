@@ -16,7 +16,7 @@ PR="${1:?usage: auto-merge-guard.sh <PR_NUMBER> [BASE_REF]}"
 BASE="${2:-origin/main}"
 
 # Files the guard is willing to auto-merge. Anything else → human review.
-SAFE='^(docs/|prompts/|reports/|SKILL\.md|README\.md|CHANGELOG\.md)$'
+SAFE='^(docs/|prompts/|reports/|SKILL\.md$|README(\.[A-Za-z-]+)?\.md$|CHANGELOG\.md$)'
 
 changed=$(git diff --name-only "$BASE"...HEAD)
 if [ -z "$changed" ]; then

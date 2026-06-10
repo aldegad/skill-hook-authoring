@@ -1,5 +1,7 @@
 # Cross-Runtime Agent-Platform Interoperability
 
+[English](README.md) | [한국어](README.ko.md) | [日本語](README.ja.md) | [简体中文](README.zh-Hans.md) | [Español](README.es.md) | [Français](README.fr.md) | [Deutsch](README.de.md)
+
 Two things in one repo:
 
 1. **A compatibility wiki**, refreshed daily from official vendor docs, recording how today's agent runtimes — Codex, Claude Code, Grok, Hermes, Antigravity CLI, Cursor, and Kuma Studio — compare across skills, hooks, plugins/extensions, project-instruction files, CLI spawn (interactive vs headless), session resume, and billing.

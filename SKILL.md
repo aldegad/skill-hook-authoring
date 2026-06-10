@@ -39,6 +39,8 @@ Seven runtimes are tracked. The detailed, source-cited truth lives in `docs/comp
 
 When a runtime capability is not documented, write `not documented` or `unknown` and require live verification before shipping behavior that depends on it.
 
+**Explicit skill invocation is not the same token across runtimes.** Claude Code and Grok expose user-invocable skills as `/<skill-name>` slash commands (Claude: custom commands are merged into skills, and `disable-model-invocation: true` makes a skill user-only); Codex uses `/skills` (selector) or `$<skill-name>` (mention) — typed `/<skill-name>` is not a documented Codex form, and `allow_implicit_invocation: false` in `agents/openai.yaml` turns off description-matching; Hermes/Antigravity/Cursor document no typed invocation token. Full source-cited table: `docs/compatibility-matrix.md` → **Skill Invocation**. For cross-engine commands, rely on description-triggered invocation as the portable layer and treat the typed token as per-engine sugar.
+
 ## CLI Spawn And Headless Launch
 
 When one agent **spawns another** from a script, hook, or orchestrator, use the runtime's documented command for the mode you want — interactive and headless are reached differently. Full tables and citations live in `docs/cli-invocation.md`; resume is covered under **Session Resume** below.
@@ -94,6 +96,7 @@ For cross-agent repo rules, maintain the smallest set of files that each runtime
 - `name`: max 64 chars, lowercase/numbers/hyphens only, no XML tags, no reserved words (`anthropic`, `claude`); prefer gerund form (`processing-pdfs`). `description`: max 1024 chars, no XML tags, third person, stating both *what* the skill does and *when* to use it (trigger terms) — not the procedure.
 - **Quote the `description` if it contains a colon-space (`: `), or the skill silently fails to load.** A `: ` in an unquoted YAML scalar is parsed as a nested mapping → `mapping values are not allowed in this context`. Common trap: `description: ... Korean triggers: 원샷, ...`. Wrap the whole value in single quotes (`description: '...'`); double inner single-quotes, double-quotes are fine inside. Validate frontmatter parses before shipping. (Trial-and-error 2026-05-26: an unquoted description with `Korean triggers:` broke skill loading.)
 - Hooks are guardrails, not silent fallback paths. They should block clearly, explain why, and require an explicit operator decision for dangerous actions.
+- **Do not re-implement a slash surface in a host layer above the engine.** A GUI/terminal wrapper that intercepts keystrokes to fake `/command` creates a second input path that must re-derive session context (current target resolution, ambiguity handling) the engine-side skill already has, and it standardizes on one invocation token where runtimes differ (Claude/Grok `/name` vs Codex `$name` — see Runtime Coverage above). Forward typed input to the engine verbatim and ship the capability as a skill + CLI; reserve host-level interception for things no engine surface can do. (Trial-and-error 2026-06-10: kuma-studio's WorkspaceTerminal `/kuma-plan` interception + popover — parser, popover UI, server route, i18n in 4 locales, tests — shipped validator-passed and was removed the same day in favor of the engine-native `kuma-plan` skill.)
 - Cross-agent guidance must be based on official vendor docs. If a platform does not document a feature, record it as `not documented` or `unknown`; do not infer parity from another agent.
 - **Make hook scripts executable (`chmod +x`) and give them a shebang.** Claude registers hooks as `command: "<abs-path> --args"` and runs them through `/bin/sh`, so a missing exec bit fails with `Permission denied` on *every* matching event (PreToolUse/Stop) in *every* session — one forgotten `chmod +x` silently breaks all agents at once. Codex registers as `node <path>` so it tolerates a missing bit, but always `chmod +x` for parity and **commit the mode** (git stores `100755`). (Trial-and-error 2026-05-26: a new guard hook shipped `644` → `Permission denied` spam across all live sessions until chmod'd.)
 - **Hook scripts must not assume GNU coreutils.** macOS ships neither `timeout` nor `stat -c`; a hook that calls them unguarded fails on *every* macOS agent — and a fail-closed `|| exit 0` turns that into a silent no-op that looks like "working but quiet". Detect and degrade (`command -v timeout || gtimeout || plain`) and use portable forms (`stat -f %m || stat -c %Y`). (Trial-and-error 2026-06-09: a `timeout 5 git fetch` in a SessionStart/PreToolUse hook silently `command not found`-failed on macOS, so the hook never fetched and never fired — it took a probe hook to notice.)
@@ -138,8 +141,16 @@ Deleting a hook, skill, command, or plugin-like package means removing every act
 6. Update docs and plans that describe the artifact in present tense.
 7. Search repo and live config for the old id. Remaining hits should be retired lists or historical notes only.
 8. Run syntax/config checks and prove the installer no longer recreates the retired artifact.
+9. Sweep *instructions* that point at the old name, not just code: agent-executed
+   docs (`AGENTS.md`/`CLAUDE.md`-class files, operating doctrine, skill bodies)
+   referencing a renamed/retired CLI verb or moved doc path fail at runtime the
+   moment an agent follows them. Concretely: grep doc corpora for backticked
+   command mentions (e.g. launcher subcommands like `kuma <verb>`) and for
+   relative links to the old path. Prefer a CI guard that re-checks this on
+   every test run (kuma-studio: `docs-reference-integrity.test.mjs` — relative
+   `.md` links must resolve; backticked launcher verbs must map to a real bin).
 
-This rule exists because deleting only `~/.claude/hooks/<id>` or only `scripts/hooks/<id>` can let the artifact reappear on the next setup run.
+This rule exists because deleting only `~/.claude/hooks/<id>` or only `scripts/hooks/<id>` can let the artifact reappear on the next setup run — and because instructions pointing at the old name keep *re-teaching* agents the broken path long after the code is gone (trial-and-error 2026-06-10: `kuma read`/`kuma vault`/`kuma spawn-all` doc mentions all outlived their bins).
 
 ## Multi-Agent Compatibility Docs
 

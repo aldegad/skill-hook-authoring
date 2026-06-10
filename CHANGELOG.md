@@ -5,6 +5,22 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.7 — 2026-06-10
+
+### Added
+
+- **Skill Invocation matrix.** New `docs/compatibility-matrix.md` → **Skill
+  Invocation** section: per-runtime explicit (user-typed) invocation token and
+  model-triggered invocation, source-cited (verified 2026-06-10). Key fact:
+  Claude Code and Grok expose skills as `/<skill-name>`; Codex uses `/skills`
+  or `$<skill-name>` — typed `/<skill-name>` is not a documented Codex form.
+  `SKILL.md` Runtime Coverage gained the short working model.
+- **Core rule: no host-layer slash surface.** Don't intercept keystrokes in a
+  GUI/terminal wrapper to fake `/command` above the engine — it duplicates the
+  engine-side skill's context resolution and assumes one invocation token
+  across runtimes. (Trial-and-error 2026-06-10: kuma-studio WorkspaceTerminal
+  `/kuma-plan` popover shipped and was removed the same day.)
+
 ## v1.6 — 2026-06-09
 
 ### Removed
