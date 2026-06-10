@@ -1,36 +1,40 @@
-# 跨运行时 Agent 平台互操作性
+<p align="center">
+  <img src="assets/icon.png" width="168" alt="单一事实来源向每个代理运行时辐射" />
+</p>
+
+# 跨运行时代理平台互操作性
 
 [English](README.md) | [한국어](README.ko.md) | [日本語](README.ja.md) | [简体中文](README.zh-Hans.md) | [Español](README.es.md) | [Français](README.fr.md) | [Deutsch](README.de.md)
 
-一个仓库中的两件事：
+该仓库包含两部分内容：
 
-1. **兼容性维基**，每日从官方厂商文档刷新，记录当下的 Agent 运行时——Codex、Claude Code、Grok、Hermes、Antigravity CLI、Cursor 和 Kuma Studio——在 skills、hooks、plugins/extensions、project-instruction 文件、CLI 启动方式（交互式 vs 无头）、会话恢复和计费方面的对比。
-2. **一种互操作与管理这些运行时的方法论**：托管一个由仓库统一维护的真相来源（skills、hooks、commands、scripts、references、assets、MCP/app 接线方式，或运行时特定的插件元数据），并避免在不同 Agent 间漂移。
+1. **兼容性维基**，每日从官方供应商文档刷新一次，记录当今代理运行时——Codex、Claude Code、Grok、Hermes、Antigravity CLI、Cursor 和 Kuma Studio——在技能、钩子、插件/扩展、项目指令文件、CLI 启动方式（交互式 vs 无头）、会话恢复和计费方面的对比情况。
+2. **一个互操作与管理这些运行时的方法论**：通过在仓库内维护单一可信源（技能、钩子、命令、脚本、参考资料、资源、MCP/app 接线，或运行时特定的插件元数据），在不同代理之间保持一致，避免漂移。
 
-每一条兼容性声明都引用供应商自身文档；若某运行时未在文档中说明某项能力，维基会记录为 `not documented`，而不是推断能力等同。
+所有兼容性结论都引用供应商自身文档；当某个运行时未在文档中说明某项能力时，维基会记录为 `not documented`，而不是推断其兼容性。
 
-## 本仓库拥有的内容
+## 本仓库的内容范围
 
-- `SKILL.md` 是 skill 入口点，也是创作/互操作方法论。
-- `docs/compatibility-matrix.md` 是跨运行时对照表（包含 Session Resume 表）。
-- `docs/cli-invocation.md` 记录各运行时的 CLI 启动方式（交互式 vs 无头）与恢复语法。
-- `docs/plugin-packaging.md` 说明不同平台下插件/扩展打包方式的差异。
-- `docs/official-sources.json` 是每日刷新时会复核的来源清单。
-- `docs/cloud-automation.md` 说明每日更新自动化以及为何它在云端运行而非本地。
-- `docs/kuma-studio-patterns.md` 记录了公开的 Kuma Studio 运行模式。
-- `CHANGELOG.md` 和 git tag 是版本记录。历史记录在这里，而不是写在文档正文中。
+- `SKILL.md` 是技能入口及编写/互操作方法论。
+- `docs/compatibility-matrix.md` 是跨运行时对照表（包含会话恢复表）。
+- `docs/cli-invocation.md` 记录各运行时的 CLI 启动方式（交互式 vs 无头）及恢复语法。
+- `docs/plugin-packaging.md` 说明不同平台间插件/扩展打包的差异。
+- `docs/official-sources.json` 是每日刷新时会复验的来源清单。
+- `docs/cloud-automation.md` 说明每日更新自动化及其为何在云端而非本地运行。
+- `docs/kuma-studio-patterns.md` 记录公开的 Kuma Studio 运行模式。
+- `CHANGELOG.md` 与 Git 标签共同构成版本记录。历史仅保留于此，而不写入文档正文。
 
 ## 每日维基刷新
 
-一个每日运行的 Agent 会保持维基更新：它读取 `docs/official-sources.json`，抓取官方厂商链接，并在证据发生变化时创建 pull request。它不会推送到 `main`。
+一名日常运行的代理负责保持维基最新：它读取 `docs/official-sources.json`，抓取官方供应商链接，并在证据发生变化时打开拉取请求。它不会直接推送到 `main`。
 
-推荐路径是 **Claude Routines**——在 Anthropic 云端运行的定时 Claude Code 会话，基于 Claude 订阅，无需 API key，也无需 GitHub Actions，并且在笔记本关闭时仍可持续运行。通过 `claude -p` **本地**运行刷新已不推荐：自 2026-06-15 起，符合条件订阅计划中的 Agent SDK / `claude -p` 使用会消耗单独的月度 Agent SDK 信用额度（按用户每月重置，不可结转），且本地 cron 仅在机器唤醒时触发。详见 `docs/cloud-automation.md`。
+推荐方式是 **Claude Routines**——一种在 Anthropic 的 Claude 订阅云端运行的定时 Claude Code 会话，无需 API key，也不依赖 GitHub Actions，并且在笔记本电脑关闭时仍可持续运行。通过 `claude -p` 在本地运行刷新不被推荐：自 2026-06-15 起，合格订阅方案中的 Agent SDK / `claude -p` 用量会从独立的每月 Agent SDK 额度中扣除（按用户每月重置，不可结转），且本地 cron 仅在机器唤醒时触发。详见 `docs/cloud-automation.md`。
 
 1. 在 Claude Code 中运行 `/schedule`（或打开 <https://claude.ai/code/routines>）。
-2. 将例程指向本仓库，并使用 `prompts/daily-official-doc-update.md` 中的提示词。
-3. 将其安排为每天一次。它会打开 PR，然后执行自动合并门禁：仅对通过来源检查且仅含文档更改的情况进行 squash 合并；其他更改需等待你审核（见 `docs/cloud-automation.md`）。
+2. 将例程指向该仓库，并使用 `prompts/daily-official-doc-update.md` 中的提示词。
+3. 将其安排为每日运行一次。它会先打开一个 PR，然后执行自动合并闸门：通过来源校验且仅文档变更的内容会被 squash 合并；其他更改需你审核后再处理（见 `docs/cloud-automation.md`）。
 
-Codex 用户也可以使用 Codex App Automation 按照同样流程执行。见 `docs/cloud-automation.md` 了解两种路径。
+Codex 用户也可以使用 Codex App Automation 按照同样流程运行。两种方式见 `docs/cloud-automation.md`。
 
 ## 本地检查
 

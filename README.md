@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/icon.png" width="168" alt="One source of truth radiating to every agent runtime" />
+</p>
+
 # Cross-Runtime Agent-Platform Interoperability
 
 [English](README.md) | [한국어](README.ko.md) | [日本語](README.ja.md) | [简体中文](README.zh-Hans.md) | [Español](README.es.md) | [Français](README.fr.md) | [Deutsch](README.de.md)
