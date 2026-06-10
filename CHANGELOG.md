@@ -5,6 +5,27 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.8 — 2026-06-11
+
+### Added
+
+- **Multilingual README.** `README.ko/ja/zh-Hans/es/fr/de.md` generated from
+  the English source (the SSoT) with a language switcher; regenerate via
+  `kuma translate README.md --lang <code>` after editing the English file.
+- **Identity icon.** `assets/icon.png` (hub-cube: one source-of-truth core
+  radiating to seven runtime nodes) at the top of every README edition.
+
+### Fixed
+
+- **Auto-merge gate never fired.** `scripts/auto-merge-guard.sh` SAFE regex was
+  whole-string anchored (`^(docs/|...)$`), so `docs/<file>` never matched and
+  every daily-refresh PR stalled for human review. Regex fixed; PR #18 and
+  #25 then merged through the gate.
+- **Agent SDK billing claim corrected** (via PR #25): from 2026-06-15,
+  `claude -p` / Agent SDK usage on eligible plans draws from a separate
+  monthly Agent SDK credit — not plain per-token API billing. README and
+  `docs/cloud-automation.md` aligned.
+
 ## v1.7 — 2026-06-10
 
 ### Added
