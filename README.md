@@ -24,7 +24,7 @@ Every compatibility claim cites the vendor's own docs; where a runtime does not 
 
 A daily agent keeps the wiki current: it reads `docs/official-sources.json`, fetches the official vendor URLs, and opens a pull request when the evidence changed. It never pushes to `main`.
 
-The recommended path is **Claude Routines** — a scheduled Claude Code session that runs in Anthropic's cloud on a Claude subscription, with no API key and no GitHub Actions, and keeps running when your laptop is closed. Running the refresh **locally** via `claude -p` is discouraged: headless `claude -p` bills as per-token API usage (not the subscription), and from 2026-06-15 Agent SDK / `claude -p` usage no longer counts toward the Claude plan at all. See `docs/cloud-automation.md`.
+The recommended path is **Claude Routines** — a scheduled Claude Code session that runs in Anthropic's cloud on a Claude subscription, with no API key and no GitHub Actions, and keeps running when your laptop is closed. Running the refresh **locally** via `claude -p` is discouraged: from 2026-06-15, Agent SDK / `claude -p` usage on eligible subscription plans draws from a separate monthly Agent SDK credit (per-user, refreshes monthly, does not carry over) instead of the interactive plan pool — and a local cron only fires while the machine is awake. See `docs/cloud-automation.md`.
 
 1. In Claude Code, run `/schedule` (or open <https://claude.ai/code/routines>).
 2. Point the routine at this repository and use the prompt in `prompts/daily-official-doc-update.md`.
