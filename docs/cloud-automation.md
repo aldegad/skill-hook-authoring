@@ -1,6 +1,6 @@
 # Cloud Automation
 
-Last reviewed: 2026-06-03
+Last reviewed: 2026-06-10
 
 Keep this repo's compatibility docs current by running a daily agent that reads
 `docs/official-sources.json`, fetches the official vendor URLs, and opens a pull
@@ -24,12 +24,13 @@ against the subscription usage pool, and a present API key suppresses the
 
 **Why not a local `claude -p` cron?** A laptop that is on daily makes a local
 `launchd`/`cron` job calling `claude -p` look tempting, but it loses on both
-cost and reliability. Headless `claude -p` bills as **per-token API usage** even
-on an OAuth Pro/Max login with no `ANTHROPIC_API_KEY`, and **from 2026-06-15
-Agent SDK / `claude -p` usage no longer counts toward the Claude plan** — the
-subscription pool is reserved for interactive use. A local job also fires only
-when the machine is awake at the scheduled time. A cloud Routine bills against
-the subscription pool and runs regardless of laptop state, so it wins on both.
+cost and reliability. **From 2026-06-15**, Agent SDK and `claude -p` usage on
+eligible subscription plans (Pro, Max, Team, Enterprise) draws from a **separate
+monthly Agent SDK credit** (per-user, refreshes monthly, does not carry over),
+separate from interactive plan limits. For `ANTHROPIC_API_KEY` users billing
+remains pay-as-you-go API usage. Either way, a local job also fires only when
+the machine is awake at the scheduled time. A cloud Routine uses the interactive
+subscription pool and runs regardless of laptop state, so it wins on both counts.
 (Sources: the two `kind: "billing"` entries in `docs/official-sources.json`.)
 
 ## Recommended Daily Flow

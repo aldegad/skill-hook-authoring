@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-06-08
+Last reviewed: 2026-06-10
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or
@@ -62,13 +62,14 @@ the same idea, but they are reached differently:
 | Cursor CLI | `cursor-agent -p "<prompt>"` (`--print`) | print mode for scripts | `--output-format text\|json\|stream-json` (only with `--print`); `--stream-partial-output` | `--model`, `-f`/`--force` (`--yolo`), `--trust` (headless only) |
 
 > **Billing caveat (Claude Code).** Headless `claude -p` is *not* covered like an
-> interactive session: it bills as **per-token API usage** even when
-> authenticated via OAuth on a Pro/Max subscription with no `ANTHROPIC_API_KEY`
-> set, and **from 2026-06-15 Agent SDK / `claude -p` usage no longer counts
-> toward the Claude plan at all** — the subscription pool is reserved for
-> interactive use. For unattended/scheduled work prefer a cloud **Claude Routine**
-> (subscription-pool billing) over a local `claude -p` cron, and run `/status` to
-> confirm the active auth method. See `docs/cloud-automation.md`.
+> interactive session. **From 2026-06-15**, Agent SDK and `claude -p` usage on
+> eligible subscription plans (Pro, Max, Team, Enterprise) draws from a **separate
+> monthly Agent SDK credit** — per-user, refreshes monthly, does not carry over,
+> and is separate from interactive usage limits. For accounts using
+> `ANTHROPIC_API_KEY`, billing remains pay-as-you-go API usage regardless of plan.
+> Run `/status` to confirm the active auth method. For unattended/scheduled work
+> prefer a cloud **Claude Routine** over a local `claude -p` cron. See
+> `docs/cloud-automation.md`. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan)
 
 ## C. Resume invocation (command syntax)
 
