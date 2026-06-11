@@ -225,7 +225,7 @@ Legacy (still supported by both engines):
 {"decision": "block", "reason": "safedeps: install not approved ..."}
 ```
 
-`permissionDecision` accepts `"allow" | "deny" | "ask" | "defer"` on both engines. `hookSpecificOutput` may also carry `updatedInput` (replace the tool input before it runs) and `additionalContext` (inject context for the model). For **allow**, exit 0 with no output is sufficient; or emit `permissionDecision: "allow"` explicitly.
+`permissionDecision` accepts `"allow" | "deny" | "ask" | "defer"` on Claude Code; official Codex hooks docs document only `"allow"` and `"deny"` for PreToolUse — `"ask"` and `"defer"` are not confirmed for Codex. `hookSpecificOutput` may also carry `updatedInput` (replace the tool input before it runs) and `additionalContext` (inject context for the model). For **allow**, exit 0 with no output is sufficient; or emit `permissionDecision: "allow"` explicitly.
 
 **Do not use `{"continue": false, "stopReason": "..."}` for PreToolUse** — that is the schema for the `Stop` hook (final-exit block), not for PreToolUse. Same applies to `{"continue": true}` as an allow signal. Mixing them up silently fails closed or open depending on the engine version.
 
