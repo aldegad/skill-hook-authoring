@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-06-10",
+  "updated": "2026-06-12",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
@@ -82,7 +82,7 @@
       "kind": "hooks",
       "url": "https://code.claude.com/docs/en/hooks",
       "notes": "docs.anthropic.com/en/docs/claude-code/hooks permanently redirects here as of 2026-05-27",
-      "claims": ["PreToolUse", "PostToolUse", "settings hooks", "exit code blocking", "30 lifecycle events", "5 hook types", "command hooks", "HTTP hooks", "MCP tool hooks", "prompt hooks", "agent hooks", "async hooks", "hook frontmatter", "Stop", "StopFailure", "SubagentStop", "SubagentStart", "PreCompact", "PostCompact", "SessionStart", "Setup", "SessionEnd", "UserPromptSubmit", "UserPromptExpansion", "WorktreeCreate", "WorktreeRemove", "TeammateIdle", "disableAllHooks", "PostToolUseFailure", "PostToolBatch", "PermissionRequest", "PermissionDenied", "TaskCreated", "TaskCompleted", "FileChanged", "ConfigChange", "CwdChanged", "InstructionsLoaded", "MessageDisplay", "Notification", "Elicitation", "ElicitationResult"]
+      "claims": ["PreToolUse", "PostToolUse", "settings hooks", "exit code blocking", "30 lifecycle events", "5 hook types", "command hooks", "HTTP hooks", "MCP tool hooks", "prompt hooks", "agent hooks", "async hooks", "hook frontmatter", "Stop", "StopFailure", "SubagentStop", "SubagentStart", "PreCompact", "PostCompact", "SessionStart", "Setup", "SessionEnd", "UserPromptSubmit", "UserPromptExpansion", "WorktreeCreate", "WorktreeRemove", "TeammateIdle", "PostToolUseFailure", "PostToolBatch", "PermissionRequest", "PermissionDenied", "TaskCreated", "TaskCompleted", "FileChanged", "ConfigChange", "CwdChanged", "InstructionsLoaded", "MessageDisplay", "Notification", "Elicitation", "ElicitationResult"]
     },
     {
       "id": "anthropic-claude-settings",
@@ -90,7 +90,7 @@
       "kind": "configuration",
       "url": "https://code.claude.com/docs/en/settings",
       "notes": "docs.anthropic.com/en/docs/claude-code/settings permanently redirects here as of 2026-05-27",
-      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "maxSkillDescriptionChars", "maxSkillDescriptionChars default 1536", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "httpHookAllowedEnvVars", "allowManagedHooksOnly", "policyHelper", "parentSettingsBehavior", "forceLoginMethod", "forceLoginOrgUUID", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "claudeMd", "forceRemoteSettingsRefresh", "allowManagedPermissionRulesOnly", "allowManagedMcpServersOnly", "requiredMinimumVersion", "requiredMaximumVersion", "enableAllProjectMcpServers", "enabledMcpjsonServers", "disabledMcpjsonServers", "allowAllClaudeAiMcps", "allowedMcpServers", "deniedMcpServers", "channelsEnabled", "workflowKeywordTriggerEnabled", "disableRemoteControl", "attribution", "minimumVersion", "strictPluginOnlyCustomization", "pluginTrustMessage"]
+      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "maxSkillDescriptionChars", "maxSkillDescriptionChars default 1536", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "httpHookAllowedEnvVars", "allowManagedHooksOnly", "policyHelper", "parentSettingsBehavior", "forceLoginMethod", "forceLoginOrgUUID", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "claudeMd", "forceRemoteSettingsRefresh", "allowManagedPermissionRulesOnly", "allowManagedMcpServersOnly", "requiredMinimumVersion", "requiredMaximumVersion", "enableAllProjectMcpServers", "enabledMcpjsonServers", "disabledMcpjsonServers", "allowAllClaudeAiMcps", "allowedMcpServers", "deniedMcpServers", "channelsEnabled", "workflowKeywordTriggerEnabled", "disableRemoteControl", "attribution", "minimumVersion", "strictPluginOnlyCustomization", "pluginTrustMessage", "disableAllHooks"]
     },
     {
       "id": "anthropic-claude-slash-commands",
@@ -98,7 +98,7 @@
       "kind": "commands",
       "url": "https://code.claude.com/docs/en/slash-commands",
       "notes": "docs.anthropic.com/en/docs/claude-code/slash-commands permanently redirects here as of 2026-05-27; page now titled 'Extend Claude with skills'",
-      "claims": ["custom slash commands", ".claude/commands", "MCP prompts as slash commands", "skills system", "SKILL.md", "Agent Skills standard", "agentskills.io", ".claude/skills", "commands merged into skills", "bundled skills", "invocation control", "subagent execution", "dynamic context injection"]
+      "claims": ["custom slash commands", ".claude/commands", "skills system", "SKILL.md", "Agent Skills standard", "agentskills.io", ".claude/skills", "commands merged into skills", "bundled skills", "invocation control", "subagent execution", "dynamic context injection"]
     },
     {
       "id": "anthropic-skill-authoring-best-practices",
@@ -106,7 +106,7 @@
       "kind": "skills",
       "url": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices",
       "notes": "Official Skill authoring best practices. The SKILL.md '<500 lines' figure is stated as 'for optimal performance' (a guideline, not a hard loading cap); progressive disclosure pushes detail to reference files.",
-      "claims": ["SKILL.md body under 500 lines for optimal performance", "context window is a shared public good", "progressive disclosure", "references one level deep", "name max 64 chars lowercase-numbers-hyphens no reserved words anthropic/claude", "name no XML tags", "description max 1024 chars third person what and when", "description no XML tags", "forward-slash paths only", "gerund naming", "scripts execute without loading into context"]
+      "claims": ["SKILL.md body under 500 lines for optimal performance", "context window is a public good", "progressive disclosure", "references one level deep", "name max 64 chars lowercase-numbers-hyphens no reserved words anthropic/claude", "name no XML tags", "description max 1024 chars third person what and when", "description no XML tags", "forward-slash paths only", "gerund naming", "scripts execute without loading into context"]
     },
     {
       "id": "xai-grok-skills-plugins",
@@ -141,7 +141,7 @@
       "agent": "hermes-agent",
       "kind": "cli-invocation",
       "url": "https://hermes-agent.nousresearch.com/docs/user-guide/cli/",
-      "claims": ["CLI", "skills preloading", "toolsets", "worktree", "hermes chat -q single query", "--model", "--provider nous openrouter", "--toolsets", "no documented JSON output format", "--tui modern terminal UI launch", "-w isolated worktree interactive mode", "-z single query within worktree"]
+      "claims": ["CLI", "skills preloading", "toolsets", "worktree", "hermes chat -q single query", "--model", "--provider nous openrouter", "--toolsets", "no documented JSON output format", "-w isolated worktree interactive mode", "-z single query within worktree"]
     },
     {
       "id": "cursor-cli-overview",

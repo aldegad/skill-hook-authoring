@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-06-10
+Last reviewed: 2026-06-12
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or
@@ -65,8 +65,13 @@ the same idea, but they are reached differently:
 > interactive session. **From 2026-06-15**, Agent SDK and `claude -p` usage on
 > eligible subscription plans (Pro, Max, Team, Enterprise) draws from a **separate
 > monthly Agent SDK credit** — per-user, refreshes monthly, does not carry over,
-> and is separate from interactive usage limits. For accounts using
-> `ANTHROPIC_API_KEY`, billing remains pay-as-you-go API usage regardless of plan.
+> and is separate from interactive usage limits. Credit amounts per plan tier
+> (confirmed 2026-06-12 via https://support.claude.com/en/articles/15036540):
+> Pro $20/month; Max 5× $100/month; Max 20× $200/month; Team Standard seat
+> $20/month, Team Premium seat $100/month; Enterprise seat-based Premium
+> $200/month. Credits are per-account and cannot be shared or pooled across
+> teammates. For accounts using `ANTHROPIC_API_KEY`, billing remains
+> pay-as-you-go API usage regardless of plan and no monthly credit is issued.
 > Run `/status` to confirm the active auth method. For unattended/scheduled work
 > prefer a cloud **Claude Routine** over a local `claude -p` cron. See
 > `docs/cloud-automation.md`. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan)
