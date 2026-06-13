@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-06-10",
+  "updated": "2026-06-13",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
@@ -90,7 +90,7 @@
       "kind": "configuration",
       "url": "https://code.claude.com/docs/en/settings",
       "notes": "docs.anthropic.com/en/docs/claude-code/settings permanently redirects here as of 2026-05-27",
-      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "maxSkillDescriptionChars", "maxSkillDescriptionChars default 1536", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "httpHookAllowedEnvVars", "allowManagedHooksOnly", "policyHelper", "parentSettingsBehavior", "forceLoginMethod", "forceLoginOrgUUID", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "claudeMd", "forceRemoteSettingsRefresh", "allowManagedPermissionRulesOnly", "allowManagedMcpServersOnly", "requiredMinimumVersion", "requiredMaximumVersion", "enableAllProjectMcpServers", "enabledMcpjsonServers", "disabledMcpjsonServers", "allowAllClaudeAiMcps", "allowedMcpServers", "deniedMcpServers", "channelsEnabled", "workflowKeywordTriggerEnabled", "disableRemoteControl", "attribution", "minimumVersion", "strictPluginOnlyCustomization", "pluginTrustMessage"]
+      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "disableBundledSkills", "maxSkillDescriptionChars", "maxSkillDescriptionChars default 1536", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "httpHookAllowedEnvVars", "allowManagedHooksOnly", "policyHelper", "parentSettingsBehavior", "forceLoginMethod", "forceLoginOrgUUID", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "claudeMd", "forceRemoteSettingsRefresh", "allowManagedPermissionRulesOnly", "allowManagedMcpServersOnly", "requiredMinimumVersion", "requiredMaximumVersion", "enableAllProjectMcpServers", "enabledMcpjsonServers", "disabledMcpjsonServers", "allowAllClaudeAiMcps", "allowedMcpServers", "deniedMcpServers", "channelsEnabled", "disableRemoteControl", "attribution", "minimumVersion", "pluginTrustMessage"]
     },
     {
       "id": "anthropic-claude-slash-commands",
