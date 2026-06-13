@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-06-10",
+  "updated": "2026-06-11",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
@@ -53,7 +53,7 @@
       "agent": "codex",
       "kind": "hooks",
       "url": "https://developers.openai.com/codex/hooks",
-      "claims": ["lifecycle hooks", "hook payloads", "permission decisions"]
+      "claims": ["lifecycle hooks", "hook payloads", "permission decisions", "async hooks not yet implemented", "prompt handler type not yet implemented", "agent handler type not yet implemented", "updatedMCPToolOutput not yet implemented", "suppressOutput not yet implemented"]
     },
     {
       "id": "openai-codex-plugins",
@@ -82,7 +82,7 @@
       "kind": "hooks",
       "url": "https://code.claude.com/docs/en/hooks",
       "notes": "docs.anthropic.com/en/docs/claude-code/hooks permanently redirects here as of 2026-05-27",
-      "claims": ["PreToolUse", "PostToolUse", "settings hooks", "exit code blocking", "30 lifecycle events", "5 hook types", "command hooks", "HTTP hooks", "MCP tool hooks", "prompt hooks", "agent hooks", "async hooks", "hook frontmatter", "Stop", "StopFailure", "SubagentStop", "SubagentStart", "PreCompact", "PostCompact", "SessionStart", "Setup", "SessionEnd", "UserPromptSubmit", "UserPromptExpansion", "WorktreeCreate", "WorktreeRemove", "TeammateIdle", "disableAllHooks", "PostToolUseFailure", "PostToolBatch", "PermissionRequest", "PermissionDenied", "TaskCreated", "TaskCompleted", "FileChanged", "ConfigChange", "CwdChanged", "InstructionsLoaded", "MessageDisplay", "Notification", "Elicitation", "ElicitationResult"]
+      "claims": ["PreToolUse", "PostToolUse", "settings hooks", "exit code blocking", "30 lifecycle events", "5 hook types", "command hooks", "HTTP hooks", "MCP tool hooks", "prompt hooks", "agent hooks", "async hooks", "asyncRewake", "hook frontmatter", "once: true skill frontmatter hooks", "if field per-hook filtering", "updatedInput PreToolUse rewrites tool input before execution", "updatedToolOutput PostToolUse rewrites tool output", "Stop", "StopFailure", "SubagentStop", "SubagentStart", "PreCompact", "PostCompact", "SessionStart", "Setup", "SessionEnd", "UserPromptSubmit", "UserPromptExpansion", "WorktreeCreate", "WorktreeRemove", "TeammateIdle", "disableAllHooks", "PostToolUseFailure", "PostToolBatch", "PermissionRequest", "PermissionDenied", "TaskCreated", "TaskCompleted", "FileChanged", "ConfigChange", "ConfigChange blockable", "CwdChanged", "InstructionsLoaded", "MessageDisplay", "Notification", "Elicitation", "ElicitationResult"]
     },
     {
       "id": "anthropic-claude-settings",
