@@ -1,6 +1,6 @@
 # Plugin And Extension Packaging
 
-Last reviewed: 2026-06-09
+Last reviewed: 2026-06-13
 
 ## Shared Rule
 
@@ -41,7 +41,23 @@ Because Grok claims broad compatibility, keep this repo strict: compatibility te
 
 ## Claude Code
 
-The official Claude Code docs (now at code.claude.com as of 2026-05-27) cover hooks, settings, subagents, and a skills system where custom commands are merged into skills (`.claude/commands/` and `.claude/skills/`), following the agentskills.io open standard. Claude Code extends the standard with invocation control, subagent execution, and dynamic context injection. Plugin marketplace settings are now documented in official settings sources (`blockedMarketplaces`, `allowedChannelPlugins`, `skillOverrides`, `enabledPlugins`, `strictPluginOnlyCustomization`, `pluginTrustMessage`). (`enabledPlugins` appears in official docs as a field within plugin definitions; `allowedChannelPlugins` is the admin-level per-channel plugin allowlist. Skill-related settings include `disableSkillShellExecution`, `maxSkillDescriptionChars` (default 1536), and `skillListingBudgetFraction`. Hook/HTTP settings include `httpHookAllowedEnvVars` (allowlist of env var names HTTP hooks may interpolate into headers) and `allowManagedHooksOnly`. Managed settings include `policyHelper` (admin-deployed executable computing settings dynamically, v2.1.136+) and `parentSettingsBehavior` (v2.1.133+). Additional managed settings (verified 2026-06-08): `forceRemoteSettingsRefresh`, `allowManagedPermissionRulesOnly`, `allowManagedMcpServersOnly`, `requiredMinimumVersion`, `requiredMaximumVersion`. MCP approval settings (any scope): `enableAllProjectMcpServers`, `enabledMcpjsonServers`, `disabledMcpjsonServers`. Granular MCP server access (managed only): `allowedMcpServers` (allowlist), `deniedMcpServers` (denylist, takes precedence over allowlist). The `claudeMd` key (managed only) lets operators put managed CLAUDE.md content directly inside managed-settings.json instead of deploying a separate file. Auto-memory settings `autoMemoryEnabled` and `autoMemoryDirectory` are documented at code.claude.com/docs/en/memory; `claudeMdExcludes` lets users skip ancestor CLAUDE.md files by glob. Additional settings verified 2026-06-09: `channelsEnabled` (admin channels), `workflowKeywordTriggerEnabled` (v2.1.157+), `disableRemoteControl` (v2.1.128+), `attribution` (git attribution, replaces deprecated `includeCoAuthoredBy`), `minimumVersion` (non-managed downgrade guard). Source: https://code.claude.com/docs/en/settings and https://code.claude.com/docs/en/memory, verified 2026-06-09.) A dedicated plugin package format equivalent to Codex's `.codex-plugin/plugin.json` is not established in the cited sources, but skills and hooks can be configured through settings.json and skill frontmatter.
+Claude Code now documents both standalone project customization and first-class plugins. Standalone `.claude/` is the project/personal quick-iteration surface: `.claude/skills/`, `.claude/commands/`, `.claude/settings.json`, and `.claude/settings.local.json`. Plugins use `.claude-plugin/plugin.json` and can bundle skills, agents, hooks, MCP servers, LSP servers, and monitors; plugin hooks live in `hooks/hooks.json` or inline plugin config. A skill folder that contains `.claude-plugin/plugin.json` loads as a skills-directory plugin named `<name>@skills-dir`, and project `.claude/skills/` plugins require accepting workspace trust. Use standalone `.claude/` for one project, and a plugin when sharing, versioning, marketplace distribution, or namespaced `/plugin:skill` commands matter.
+
+Settings remain hierarchical: user `~/.claude/settings.json`, project `.claude/settings.json`, and local `.claude/settings.local.json`. Keep managed/plugin-marketplace policy details in the settings docs and this repo's source manifest; do not infer Codex `.codex-plugin` parity where Claude documents its own `.claude-plugin` format.
+
+Current settings claims include `disableBundledSkills`. Older `workflowKeywordTriggerEnabled` and `strictPluginOnlyCustomization` claims are not retained because the current official settings docs no longer show them.
+
+## Hermes Agent
+
+Hermes documents several extension surfaces rather than one Codex-style package. Plugins live under `~/.hermes/plugins/<name>/` with `plugin.yaml` and Python `register(ctx)` code. Plugins can register tools, hooks, slash commands, CLI commands, and namespaced skills with `ctx.register_skill()`. General plugins are opt-in through `plugins.enabled` in `~/.hermes/config.yaml`.
+
+Hermes hooks are split across three documented systems: gateway hooks under `~/.hermes/hooks/<name>/`, shell hooks declared in `hooks:` inside `~/.hermes/config.yaml`, and plugin hooks registered with `ctx.register_hook()`. In the cited sources, Hermes does not document a repo-walked project-local skill root or project-local hook directory equivalent to `.agents/skills/` plus `.codex/hooks.json`; for one-project custom behavior, use a plugin or explicit config entry and document the install path.
+
+## Cursor CLI
+
+Cursor documents Agent Skills and Hooks as first-class surfaces. Skills load from project `.agents/skills/` and `.cursor/skills/`, user `~/.agents/skills/` and `~/.cursor/skills/`, and compatibility roots for Claude/Codex skills. Skills may be slash-invoked from Agent chat, auto-applied by context, scoped with `paths`, or made explicit-only with `disable-model-invocation: true`.
+
+Project hooks live at `<project-root>/.cursor/hooks.json` and can be committed to version control; trusted workspaces and cloud agents load them. Cursor also documents team/enterprise hook distribution and hook events for shell, MCP, file access, prompt submission, agent responses, sessions, compaction, and workspace startup. Keep Cursor's hook schema separate from Claude/Codex schemas even when event names look similar.
 
 ## Packaging Decision Gate
 

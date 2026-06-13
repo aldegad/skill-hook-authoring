@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-06-11",
+  "updated": "2026-06-13",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
@@ -49,6 +49,20 @@
       "claims": ["SKILL.md manifest", "versioned bundle", "agent skills standard", "50 MB zip limit per version", "500 files per version", "25 MB uncompressed limit"]
     },
     {
+      "id": "openai-codex-skills",
+      "agent": "codex",
+      "kind": "skills",
+      "url": "https://developers.openai.com/codex/skills",
+      "claims": ["Agent Skills", "SKILL.md", "repo .agents/skills", "cwd to repo root scan", "user ~/.agents/skills", "admin /etc/codex/skills", "system skills", "symlinked skill folders", "/skills selector", "$ skill mention", "allow_implicit_invocation", "agents/openai.yaml"]
+    },
+    {
+      "id": "openai-codex-config-advanced",
+      "agent": "codex",
+      "kind": "configuration",
+      "url": "https://developers.openai.com/codex/config-advanced",
+      "claims": [".codex/config.toml", "project-scoped config", "trusted project", "project-local hooks", "hooks.json", "inline hooks", "project root detection"]
+    },
+    {
       "id": "openai-codex-hooks",
       "agent": "codex",
       "kind": "hooks",
@@ -82,7 +96,7 @@
       "kind": "hooks",
       "url": "https://code.claude.com/docs/en/hooks",
       "notes": "docs.anthropic.com/en/docs/claude-code/hooks permanently redirects here as of 2026-05-27",
-      "claims": ["PreToolUse", "PostToolUse", "settings hooks", "exit code blocking", "30 lifecycle events", "5 hook types", "command hooks", "HTTP hooks", "MCP tool hooks", "prompt hooks", "agent hooks", "async hooks", "asyncRewake", "hook frontmatter", "once: true skill frontmatter hooks", "if field per-hook filtering", "updatedInput PreToolUse rewrites tool input before execution", "updatedToolOutput PostToolUse rewrites tool output", "Stop", "StopFailure", "SubagentStop", "SubagentStart", "PreCompact", "PostCompact", "SessionStart", "Setup", "SessionEnd", "UserPromptSubmit", "UserPromptExpansion", "WorktreeCreate", "WorktreeRemove", "TeammateIdle", "disableAllHooks", "PostToolUseFailure", "PostToolBatch", "PermissionRequest", "PermissionDenied", "TaskCreated", "TaskCompleted", "FileChanged", "ConfigChange", "ConfigChange blockable", "CwdChanged", "InstructionsLoaded", "MessageDisplay", "Notification", "Elicitation", "ElicitationResult"]
+      "claims": ["PreToolUse", "PostToolUse", "settings hooks", "exit code blocking", "30 lifecycle events", "5 hook types", "command hooks", "HTTP hooks", "MCP tool hooks", "prompt hooks", "agent hooks", "async hooks", "asyncRewake", "hook frontmatter", "once: true skill frontmatter hooks", "if field per-hook filtering", "updatedInput PreToolUse rewrites tool input before execution", "updatedToolOutput PostToolUse rewrites tool output", "Stop", "StopFailure", "SubagentStop", "SubagentStart", "PreCompact", "PostCompact", "SessionStart", "Setup", "SessionEnd", "UserPromptSubmit", "UserPromptExpansion", "WorktreeCreate", "WorktreeRemove", "TeammateIdle", "PostToolUseFailure", "PostToolBatch", "PermissionRequest", "PermissionDenied", "TaskCreated", "TaskCompleted", "FileChanged", "ConfigChange", "ConfigChange blockable", "CwdChanged", "InstructionsLoaded", "MessageDisplay", "Notification", "Elicitation", "ElicitationResult"]
     },
     {
       "id": "anthropic-claude-settings",
@@ -90,15 +104,29 @@
       "kind": "configuration",
       "url": "https://code.claude.com/docs/en/settings",
       "notes": "docs.anthropic.com/en/docs/claude-code/settings permanently redirects here as of 2026-05-27",
-      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "maxSkillDescriptionChars", "maxSkillDescriptionChars default 1536", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "httpHookAllowedEnvVars", "allowManagedHooksOnly", "policyHelper", "parentSettingsBehavior", "forceLoginMethod", "forceLoginOrgUUID", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "claudeMd", "forceRemoteSettingsRefresh", "allowManagedPermissionRulesOnly", "allowManagedMcpServersOnly", "requiredMinimumVersion", "requiredMaximumVersion", "enableAllProjectMcpServers", "enabledMcpjsonServers", "disabledMcpjsonServers", "allowAllClaudeAiMcps", "allowedMcpServers", "deniedMcpServers", "channelsEnabled", "workflowKeywordTriggerEnabled", "disableRemoteControl", "attribution", "minimumVersion", "strictPluginOnlyCustomization", "pluginTrustMessage"]
+      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "disableBundledSkills", "maxSkillDescriptionChars", "maxSkillDescriptionChars default 1536", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "httpHookAllowedEnvVars", "allowManagedHooksOnly", "disableAllHooks", "policyHelper", "parentSettingsBehavior", "forceLoginMethod", "forceLoginOrgUUID", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "claudeMd", "forceRemoteSettingsRefresh", "allowManagedPermissionRulesOnly", "allowManagedMcpServersOnly", "requiredMinimumVersion", "requiredMaximumVersion", "enableAllProjectMcpServers", "enabledMcpjsonServers", "disabledMcpjsonServers", "allowAllClaudeAiMcps", "allowedMcpServers", "deniedMcpServers", "channelsEnabled", "disableRemoteControl", "attribution", "minimumVersion", "pluginTrustMessage"]
     },
     {
       "id": "anthropic-claude-slash-commands",
       "agent": "claude-code",
       "kind": "commands",
-      "url": "https://code.claude.com/docs/en/slash-commands",
-      "notes": "docs.anthropic.com/en/docs/claude-code/slash-commands permanently redirects here as of 2026-05-27; page now titled 'Extend Claude with skills'",
-      "claims": ["custom slash commands", ".claude/commands", "MCP prompts as slash commands", "skills system", "SKILL.md", "Agent Skills standard", "agentskills.io", ".claude/skills", "commands merged into skills", "bundled skills", "invocation control", "subagent execution", "dynamic context injection"]
+      "url": "https://code.claude.com/docs/en/skills",
+      "notes": "The old slash-commands page now resolves to the skills surface; Claude Code merges custom commands into skills.",
+      "claims": ["custom slash commands", ".claude/commands", "skills system", "SKILL.md", "Agent Skills standard", "agentskills.io", ".claude/skills", "project .claude/skills", "nested .claude/skills", "commands merged into skills", "bundled skills", "invocation control", "disable-model-invocation", "subagent execution", "dynamic context injection", ".claude-plugin/plugin.json in a skill folder", "skill lifecycle hooks"]
+    },
+    {
+      "id": "anthropic-claude-plugins",
+      "agent": "claude-code",
+      "kind": "plugins",
+      "url": "https://code.claude.com/docs/en/plugins",
+      "claims": [".claude-plugin/plugin.json", "standalone .claude directory", "plugins bundle skills agents hooks MCP servers", "hooks/hooks.json", "plugin-dir", "plugin-name:skill namespace", "project-specific customizations"]
+    },
+    {
+      "id": "anthropic-claude-plugins-reference",
+      "agent": "claude-code",
+      "kind": "plugins",
+      "url": "https://code.claude.com/docs/en/plugins-reference",
+      "claims": ["plugin components", "skills", "agents", "hooks", "MCP servers", "LSP servers", "monitors", "skills-directory plugins", ".claude-plugin/plugin.json", "hooks/hooks.json", "inline plugin hooks"]
     },
     {
       "id": "anthropic-skill-authoring-best-practices",
@@ -106,7 +134,7 @@
       "kind": "skills",
       "url": "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices",
       "notes": "Official Skill authoring best practices. The SKILL.md '<500 lines' figure is stated as 'for optimal performance' (a guideline, not a hard loading cap); progressive disclosure pushes detail to reference files.",
-      "claims": ["SKILL.md body under 500 lines for optimal performance", "context window is a shared public good", "progressive disclosure", "references one level deep", "name max 64 chars lowercase-numbers-hyphens no reserved words anthropic/claude", "name no XML tags", "description max 1024 chars third person what and when", "description no XML tags", "forward-slash paths only", "gerund naming", "scripts execute without loading into context"]
+      "claims": ["SKILL.md body under 500 lines for optimal performance", "context window is a public good", "progressive disclosure", "references one level deep", "name max 64 chars lowercase-numbers-hyphens no reserved words anthropic/claude", "name no XML tags", "description max 1024 chars third person what and when", "description no XML tags", "forward-slash paths only", "gerund naming", "scripts execute without loading into context"]
     },
     {
       "id": "xai-grok-skills-plugins",
@@ -137,11 +165,32 @@
       "claims": ["skills system", "MCP integration", "memory system", "scheduled tasks"]
     },
     {
+      "id": "nous-hermes-hooks",
+      "agent": "hermes-agent",
+      "kind": "hooks",
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/features/hooks",
+      "claims": ["gateway hooks", "plugin hooks", "shell hooks", "~/.hermes/hooks", "~/.hermes/config.yaml hooks", "ctx.register_hook", "pre_tool_call", "post_tool_call", "pre_llm_call", "post_llm_call", "on_session_start", "on_session_end"]
+    },
+    {
+      "id": "nous-hermes-plugins",
+      "agent": "hermes-agent",
+      "kind": "plugins",
+      "url": "https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins",
+      "claims": ["plugin.yaml", "~/.hermes/plugins", "plugins.enabled", "register tools", "register hooks", "register slash commands", "register CLI commands", "ctx.register_skill", "plugin:skill namespace"]
+    },
+    {
+      "id": "nous-hermes-plugin-build",
+      "agent": "hermes-agent",
+      "kind": "plugins",
+      "url": "https://hermes-agent.nousresearch.com/docs/guides/build-a-hermes-plugin",
+      "claims": ["build a Hermes plugin", "plugin.yaml", "~/.hermes/plugins", "lifecycle hooks", "bundled skill", "ctx.register_hook", "ctx.register_skill", "requires_env"]
+    },
+    {
       "id": "nous-hermes-cli",
       "agent": "hermes-agent",
       "kind": "cli-invocation",
       "url": "https://hermes-agent.nousresearch.com/docs/user-guide/cli/",
-      "claims": ["CLI", "skills preloading", "toolsets", "worktree", "hermes chat -q single query", "--model", "--provider nous openrouter", "--toolsets", "no documented JSON output format", "--tui modern terminal UI launch", "-w isolated worktree interactive mode", "-z single query within worktree"]
+      "claims": ["CLI", "skills preloading", "toolsets", "worktree", "hermes chat -q single query", "--model", "--provider nous openrouter", "--toolsets", "no documented JSON output format", "-w isolated worktree interactive mode", "-z single query within worktree"]
     },
     {
       "id": "cursor-cli-overview",
@@ -158,6 +207,20 @@
       "url": "https://cursor.com/docs/cli/using",
       "notes": "docs.cursor.com/en/cli/using permanently redirects to cursor.com/docs as of 2026-05-27; specific CLI docs verified at cursor.com/docs/cli/using",
       "claims": ["AGENTS.md", "CLAUDE.md", ".cursor/rules", "output formats", "worktree", "MCP auto-detection via mcp.json", "Cloud Agent handoff"]
+    },
+    {
+      "id": "cursor-agent-skills",
+      "agent": "cursor-cli",
+      "kind": "skills",
+      "url": "https://cursor.com/docs/skills",
+      "claims": ["Agent Skills", "SKILL.md", ".agents/skills", ".cursor/skills", "~/.agents/skills", "~/.cursor/skills", ".claude/skills compatibility", ".codex/skills compatibility", "slash invocation", "paths", "disable-model-invocation", "scripts", "references", "assets"]
+    },
+    {
+      "id": "cursor-hooks",
+      "agent": "cursor-cli",
+      "kind": "hooks",
+      "url": "https://cursor.com/docs/hooks",
+      "claims": ["hooks", ".cursor/hooks.json", "project hooks", "cloud agent support", "command-based hooks", "prompt-based hooks", "beforeShellExecution", "beforeMCPExecution", "beforeSubmitPrompt", "afterAgentResponse", "workspaceOpen", "failClosed", "permission allow deny ask"]
     },
     {
       "id": "cursor-cli-parameters",

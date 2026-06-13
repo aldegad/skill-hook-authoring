@@ -65,11 +65,15 @@ the same idea, but they are reached differently:
 > interactive session. **From 2026-06-15**, Agent SDK and `claude -p` usage on
 > eligible subscription plans (Pro, Max, Team, Enterprise) draws from a **separate
 > monthly Agent SDK credit** — per-user, refreshes monthly, does not carry over,
-> and is separate from interactive usage limits. For accounts using
-> `ANTHROPIC_API_KEY`, billing remains pay-as-you-go API usage regardless of plan.
-> Run `/status` to confirm the active auth method. For unattended/scheduled work
-> prefer a cloud **Claude Routine** over a local `claude -p` cron. See
-> `docs/cloud-automation.md`. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan)
+> and is separate from interactive usage limits. Current credit amounts are Pro
+> $20/month, Max 5x $100/month, Max 20x $200/month, Team Standard seat
+> $20/month, Team Premium seat $100/month, and Enterprise seat-based Premium
+> $200/month. Credits are per-account, not shared or pooled. For accounts using
+> `ANTHROPIC_API_KEY`, billing remains pay-as-you-go API usage regardless of plan
+> and no monthly credit applies. Run `/status` to confirm the active auth method.
+> For unattended/scheduled work prefer a cloud **Claude Routine** over a local
+> `claude -p` cron. See `docs/cloud-automation.md`. (Source:
+> https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan)
 
 ## C. Resume invocation (command syntax)
 

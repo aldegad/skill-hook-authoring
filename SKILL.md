@@ -29,17 +29,17 @@ Seven runtimes are tracked. The detailed, source-cited truth lives in `docs/comp
 
 | Runtime | Skill surface | Hook surface | Plugin/package surface |
 |---|---|---|---|
-| Codex | `SKILL.md` in skill bundles | `~/.codex/hooks.json` or plugin-bundled hooks | `.codex-plugin/plugin.json` can bundle skills, apps, MCP servers, hooks, and marketplace metadata |
-| Claude Code | `.claude/skills`, `.claude/commands`, skill frontmatter/settings | `.claude/settings.json` hooks | Marketplace/plugin settings exist; no cited Codex-style plugin package format |
-| Grok / xAI | Reusable skill folders | User, project, and plugin hook roots | Plugins can bundle skills, agents, hooks, MCP servers, and LSP servers |
-| Hermes Agent | Skills and skill preloading are documented | Hook parity is not documented in the cited source set | MCP/toolsets are documented; plugin packaging parity is not documented here |
+| Codex | Repo `.agents/skills/` plus user/admin/system skill roots | User/project `.codex/hooks.json` or inline config hooks, plus plugin-bundled hooks | `.codex-plugin/plugin.json` can bundle skills, apps, MCP servers, hooks, and marketplace metadata |
+| Claude Code | Project/user `.claude/skills/`, `.claude/commands`, add-dir skills, and skill-directory plugins | User/project/local `.claude/settings*.json` hooks, plugin hooks, and skill lifecycle hooks | `.claude-plugin/plugin.json` plugins can bundle skills, agents, hooks, MCP servers, LSP servers, and monitors |
+| Grok / xAI | User, project, plugin, and configured skill roots | User, project, and plugin hook roots | Plugins can bundle skills, agents, hooks, MCP servers, and LSP servers |
+| Hermes Agent | Skills, skill taps, and plugin-bundled skills are documented | Gateway hooks, shell hooks, and plugin hooks are documented | `plugin.yaml` plugins under `~/.hermes/plugins/` can bundle tools, hooks, slash commands, CLI commands, and skills |
 | Antigravity CLI (`agy`, was Gemini CLI) | `.agents/skills/` (global `~/.gemini/antigravity-cli/skills/`) | TUI `/hooks` browser; config format not verified in the cited render | Native plugins; MCP via standalone `mcp_config.json` |
-| Cursor CLI | reusable agent context; `.cursor/rules` | not documented in the cited source set | MCP auto-detection via `mcp.json`; Codex-style packaging not documented |
+| Cursor CLI | Project/user `.agents/skills/` and `.cursor/skills/`, plus Claude/Codex compatibility skill roots | Project `.cursor/hooks.json`, team/enterprise hooks, and command/prompt hook events | Plugins are documented separately; hooks include `workspaceOpen` plugin-path injection, but do not infer Codex-style package parity |
 | Kuma Studio | skills in canonical repo paths | guardrail hooks that must fail loudly | symlink or generated-config install |
 
 When a runtime capability is not documented, write `not documented` or `unknown` and require live verification before shipping behavior that depends on it.
 
-**Explicit skill invocation is not the same token across runtimes.** Claude Code and Grok expose user-invocable skills as `/<skill-name>` slash commands (Claude: custom commands are merged into skills, and `disable-model-invocation: true` makes a skill user-only); Codex uses `/skills` (selector) or `$<skill-name>` (mention) — typed `/<skill-name>` is not a documented Codex form, and `allow_implicit_invocation: false` in `agents/openai.yaml` turns off description-matching; Hermes/Antigravity/Cursor document no typed invocation token. Full source-cited table: `docs/compatibility-matrix.md` → **Skill Invocation**. For cross-engine commands, rely on description-triggered invocation as the portable layer and treat the typed token as per-engine sugar.
+**Explicit skill invocation is not the same token across runtimes.** Claude Code, Grok, and Cursor expose user-invocable skills as slash commands such as `/<skill-name>` (Claude/Cursor: `disable-model-invocation: true` makes a skill explicit-only); Codex uses `/skills` (selector) or `$<skill-name>` (mention) — typed `/<skill-name>` is not a documented Codex form, and `allow_implicit_invocation: false` in `agents/openai.yaml` turns off description-matching; Hermes/Antigravity document no typed invocation token. Full source-cited table: `docs/compatibility-matrix.md` → **Skill Invocation**. For cross-engine commands, rely on description-triggered invocation as the portable layer and treat the typed token as per-engine sugar.
 
 ## CLI Spawn And Headless Launch
 
@@ -167,13 +167,12 @@ Daily refresh automation must read the source manifest, fetch only official URLs
 
 ## Cross-Agent Install Pattern
 
-1. Symlink every canonical skill folder into `~/.codex/skills/<id>`.
-2. Symlink the same folders into `~/.claude/skills/<id>` when that root exists.
-3. Patch `~/.claude/settings.json` idempotently for Claude hooks.
-4. Patch `~/.codex/hooks.json` idempotently for Codex hooks.
-5. Backup mutated JSON config files before writing.
-6. `chmod +x` every hook script before registering it (Claude runs `command` via `/bin/sh`; no exec bit = `Permission denied` everywhere).
-7. Validate by feeding representative JSON payloads into the hook scripts — and run the script **directly** (`./hook.cjs ...`, no `node` prefix) to catch a missing exec bit the way Claude would.
+1. Prefer repo-local skill roots when the runtime documents them (`.agents/skills/`, `.claude/skills/`, `.grok/skills/`, `.cursor/skills/`) and the workflow is project-specific.
+2. Symlink user-wide canonical skill folders into the runtime's documented user skill root only when the workflow should apply outside one repo.
+3. Patch project-local hook config for project guardrails; patch user-level hook config only for personal/global guardrails.
+4. Backup mutated JSON config files before writing.
+5. `chmod +x` every hook script before registering it (Claude runs `command` via `/bin/sh`; no exec bit = `Permission denied` everywhere).
+6. Validate by feeding representative JSON payloads into the hook scripts — and run the script **directly** (`./hook.cjs ...`, no `node` prefix) to catch a missing exec bit the way Claude would.
 
 ## Hook Payload Pattern
 
@@ -225,7 +224,7 @@ Legacy (still supported by both engines):
 {"decision": "block", "reason": "safedeps: install not approved ..."}
 ```
 
-`permissionDecision` accepts `"allow" | "deny" | "ask" | "defer"` on Claude Code; official Codex hooks docs document only `"allow"` and `"deny"` for PreToolUse — `"ask"` and `"defer"` are not confirmed for Codex. `hookSpecificOutput` may also carry `updatedInput` (replace the tool input before it runs) and `additionalContext` (inject context for the model). For **allow**, exit 0 with no output is sufficient; or emit `permissionDecision: "allow"` explicitly.
+`permissionDecision` accepts `"allow" | "deny" | "ask" | "defer"` on Claude Code. Official Codex hooks docs document only `"allow"` and `"deny"` for `PreToolUse`; `"ask"` and `"defer"` are not confirmed for Codex. `hookSpecificOutput` may also carry `updatedInput` (replace the tool input before it runs) and `additionalContext` (inject context for the model). For **allow**, exit 0 with no output is sufficient; or emit `permissionDecision: "allow"` explicitly.
 
 **Do not use `{"continue": false, "stopReason": "..."}` for PreToolUse** — that is the schema for the `Stop` hook (final-exit block), not for PreToolUse. Same applies to `{"continue": true}` as an allow signal. Mixing them up silently fails closed or open depending on the engine version.
 

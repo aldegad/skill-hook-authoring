@@ -5,6 +5,31 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.9 — 2026-06-13
+
+### Changed
+
+- **Project-local skills/hooks matrix refreshed.** Added a direct
+  `docs/compatibility-matrix.md` table for project-specific skills and hooks:
+  Codex, Claude Code, Grok, and Cursor are documented as project-local
+  skills+hooks; Antigravity and Hermes are recorded as partial where official
+  docs do not establish the same repo-local pair.
+- **Claude Code packaging updated.** Claude now has documented
+  `.claude-plugin/plugin.json` plugins, skills-directory plugins, plugin hooks,
+  and project `.claude/skills/`; older "no cited Codex-style package format"
+  wording was replaced with Claude's own plugin format.
+- **Hermes and Cursor surfaces updated.** Hermes now records gateway hooks,
+  shell hooks, plugin hooks, and `plugin.yaml` plugins with bundled skills.
+  Cursor now records Agent Skills and project `.cursor/hooks.json` hooks.
+- **Daily refresh PRs absorbed.** Folded in open PR #26, #27, and #28 factual
+  updates: Codex hook gaps, Claude hook capabilities, Claude Agent SDK credit
+  amounts, and corrected Claude settings claims.
+
+### Added
+
+- New official source entries for Codex skills/config, Claude plugins/reference,
+  Hermes hooks/plugins/build-plugin, and Cursor skills/hooks.
+
 ## v1.8 — 2026-06-11
 
 ### Added
