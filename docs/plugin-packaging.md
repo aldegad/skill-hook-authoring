@@ -1,6 +1,6 @@
 # Plugin And Extension Packaging
 
-Last reviewed: 2026-06-13
+Last reviewed: 2026-06-14
 
 ## Shared Rule
 
@@ -41,7 +41,9 @@ Because Grok claims broad compatibility, keep this repo strict: compatibility te
 
 ## Claude Code
 
-Claude Code now documents both standalone project customization and first-class plugins. Standalone `.claude/` is the project/personal quick-iteration surface: `.claude/skills/`, `.claude/commands/`, `.claude/settings.json`, and `.claude/settings.local.json`. Plugins use `.claude-plugin/plugin.json` and can bundle skills, agents, hooks, MCP servers, LSP servers, and monitors; plugin hooks live in `hooks/hooks.json` or inline plugin config. A skill folder that contains `.claude-plugin/plugin.json` loads as a skills-directory plugin named `<name>@skills-dir`, and project `.claude/skills/` plugins require accepting workspace trust. Use standalone `.claude/` for one project, and a plugin when sharing, versioning, marketplace distribution, or namespaced `/plugin:skill` commands matter.
+Claude Code now documents both standalone project customization and first-class plugins. Standalone `.claude/` is the project/personal quick-iteration surface: `.claude/skills/`, `.claude/commands/`, `.claude/settings.json`, and `.claude/settings.local.json`. Plugins use `.claude-plugin/plugin.json` and can bundle skills, agents, hooks, MCP servers, LSP servers, monitors, and a `bin/` directory whose executables are added to the Bash tool's `PATH`; plugin hooks live in `hooks/hooks.json` or inline plugin config; a `settings.json` at the plugin root can ship default `agent` and `subagentStatusLine` settings. A skill folder that contains `.claude-plugin/plugin.json` loads as a skills-directory plugin named `<name>@skills-dir`, and project `.claude/skills/` plugins require accepting workspace trust. Use standalone `.claude/` for one project, and a plugin when sharing, versioning, marketplace distribution, or namespaced `/plugin:skill` commands matter.
+
+**Plugin development CLI.** `claude plugin init <name>` scaffolds a skills-directory plugin under `~/.claude/skills/<name>/`. The `--plugin-dir` flag accepts a `.zip` archive as well as a directory (from v2.1.128); `--plugin-url` loads a plugin from a remote URL for that session. Run `/reload-plugins` inside a session to pick up plugin edits without restarting. `claude plugin validate` runs the same structural checks that the marketplace submission pipeline uses.
 
 Settings remain hierarchical: user `~/.claude/settings.json`, project `.claude/settings.json`, and local `.claude/settings.local.json`. Keep managed/plugin-marketplace policy details in the settings docs and this repo's source manifest; do not infer Codex `.codex-plugin` parity where Claude documents its own `.claude-plugin` format.
 
