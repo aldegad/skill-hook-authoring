@@ -169,7 +169,7 @@
       "agent": "hermes-agent",
       "kind": "hooks",
       "url": "https://hermes-agent.nousresearch.com/docs/user-guide/features/hooks",
-      "claims": ["gateway hooks", "plugin hooks", "shell hooks", "~/.hermes/hooks", "~/.hermes/config.yaml hooks", "ctx.register_hook", "pre_tool_call", "post_tool_call", "pre_llm_call", "post_llm_call", "on_session_start", "on_session_end"]
+      "claims": ["gateway hooks", "plugin hooks", "shell hooks", "~/.hermes/hooks", "~/.hermes/config.yaml hooks", "ctx.register_hook", "pre_tool_call", "post_tool_call", "pre_llm_call", "post_llm_call", "on_session_start", "on_session_end", "on_session_finalize", "on_session_reset", "subagent_stop", "transform_tool_result", "transform_terminal_output", "transform_llm_output", "pre_gateway_dispatch", "pre_approval_request", "post_approval_response", "gateway:startup", "agent:start", "agent:step", "agent:end", "command:* wildcard gateway hook", "shell hooks approval security model", "hooks_auto_accept config", "--accept-hooks flag"]
     },
     {
       "id": "nous-hermes-plugins",
@@ -220,7 +220,7 @@
       "agent": "cursor-cli",
       "kind": "hooks",
       "url": "https://cursor.com/docs/hooks",
-      "claims": ["hooks", ".cursor/hooks.json", "project hooks", "cloud agent support", "command-based hooks", "prompt-based hooks", "beforeShellExecution", "beforeMCPExecution", "beforeSubmitPrompt", "afterAgentResponse", "workspaceOpen", "failClosed", "permission allow deny ask"]
+      "claims": ["hooks", ".cursor/hooks.json", "project hooks", "~/.cursor/hooks.json user-level hooks", "cloud agent support", "command-based hooks", "prompt-based hooks", "Enterprise Team Project User priority order", "sessionStart", "sessionEnd", "preToolUse", "postToolUse", "postToolUseFailure", "subagentStart", "subagentStop", "beforeShellExecution", "afterShellExecution", "beforeMCPExecution", "afterMCPExecution", "beforeReadFile", "afterFileEdit", "beforeSubmitPrompt", "afterAgentResponse", "afterAgentThought", "preCompact", "stop", "workspaceOpen", "beforeTabFileRead", "afterTabFileEdit", "failClosed", "permission allow deny ask"]
     },
     {
       "id": "cursor-cli-parameters",
@@ -298,7 +298,7 @@
       "agent": "claude-code",
       "kind": "cli-invocation",
       "url": "https://code.claude.com/docs/en/cli-reference",
-      "claims": ["claude -p --print", "cat file pipe claude -p", "--output-format text json stream-json", "--input-format", "--model", "--system-prompt", "--append-system-prompt", "--max-turns", "--max-budget-usd", "--json-schema", "--bare", "--bg background agent", "claude interactive launch", "claude query initial prompt", "claude -c --continue", "claude -r --resume", "--name -n", "--allowedTools", "--permission-mode acceptEdits dontAsk"]
+      "claims": ["claude -p --print", "cat file pipe claude -p", "--output-format text json stream-json", "--input-format", "--model", "--system-prompt", "--append-system-prompt", "--max-turns", "--max-budget-usd", "--json-schema", "--bare", "--bg background agent", "claude interactive launch", "claude query initial prompt", "claude -c --continue", "claude -r --resume", "--name -n", "--allowedTools", "--permission-mode default acceptEdits plan auto dontAsk bypassPermissions", "--plugin-url fetch plugin zip from URL session only", "--agents inline subagent JSON", "--agent specify agent for session", "--settings path or inline JSON override", "--safe-mode disable all customizations for troubleshooting v2.1.169", "--tools restrict built-in tools", "--disallowedTools deny rules", "--effort level low medium high xhigh max", "--worktree -w isolated git worktree", "--from-pr PR number or GitHub GitLab Bitbucket PR URL"]
     },
     {
       "id": "anthropic-claude-headless",
