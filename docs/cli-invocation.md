@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-06-10
+Last reviewed: 2026-06-15
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or
@@ -55,7 +55,7 @@ the same idea, but they are reached differently:
 | Runtime | Headless command | Prompt / stdin | Output format | Useful scripting flags |
 |---|---|---|---|---|
 | Codex | `codex exec "<prompt>"` (alias `codex e`) | prompt arg; `-` reads prompt from stdin | `--json` / `--experimental-json` (JSONL); else final message to stdout, progress to stderr | `--model`/`-m`, `--output-last-message`/`-o <file>`, `--sandbox`/`-s`, `--cd`/`-C` |
-| Claude Code | `claude -p "<query>"` (`--print`) | `cat file \| claude -p "<query>"` | `--output-format text\|json\|stream-json` (+ `--input-format`) | `--model`, `--bare` (skip auto-discovery; recommended for scripts, will become default for `-p`), `--allowedTools`, `--permission-mode acceptEdits\|dontAsk`, `--max-turns`, `--max-budget-usd`, `--json-schema`, `--system-prompt[-file]`, `--append-system-prompt[-file]`, `--permission-prompt-tool`, `--bg`, `--no-session-persistence` |
+| Claude Code | `claude -p "<query>"` (`--print`) | `cat file \| claude -p "<query>"` | `--output-format text\|json\|stream-json` (+ `--input-format`) | `--model`, `--bare` (skip auto-discovery; recommended for scripts, will become default for `-p`), `--allowedTools`, `--permission-mode default\|acceptEdits\|plan\|auto\|dontAsk\|bypassPermissions`, `--max-turns`, `--max-budget-usd`, `--json-schema`, `--system-prompt[-file]`, `--append-system-prompt[-file]`, `--permission-prompt-tool`, `--bg`, `--no-session-persistence`, `--plugin-url <url>` (fetch plugin zip for session), `--agents <json>` (inline subagent definitions), `--settings <file-or-json>` |
 | Grok / xAI | `grok -p "<prompt>"` (`--single`) | `grok agent stdio` = ACP agent over JSON-RPC on stdin/stdout | `--output-format plain\|json\|streaming-json` | `--model`/`-m`, `--cwd`, `--always-approve`, `--no-alt-screen`, `--no-auto-update` |
 | Hermes Agent | `hermes chat -q "<query>"` (single query) | not documented (no stdin/JSON piping flag) | not documented (no JSON output-format flag) | `--model`, `--provider nous\|openrouter`, `--toolsets`, `-s <skill>`, `--verbose` |
 | Antigravity CLI | not documented — no `agy -p` one-shot in official docs | — | the TUI can pipe JSON status-line metadata to a shell script, but that is not a one-shot run | use the **Antigravity SDK** for programmatic/unattended runs; `--sandbox`, `--dangerously-skip-permissions` are launch overrides, not a headless mode |
@@ -67,8 +67,11 @@ the same idea, but they are reached differently:
 > monthly Agent SDK credit** — per-user, refreshes monthly, does not carry over,
 > and is separate from interactive usage limits. Current credit amounts are Pro
 > $20/month, Max 5x $100/month, Max 20x $200/month, Team Standard seat
-> $20/month, Team Premium seat $100/month, and Enterprise seat-based Premium
-> $200/month. Credits are per-account, not shared or pooled. For accounts using
+> $20/month, Team Premium seat $100/month, Enterprise usage-based seat
+> $20/month, and Enterprise seat-based Premium $200/month. Credits are
+> per-account, not shared or pooled. When the monthly credit depletes,
+> additional usage flows to usage credits at standard API rates (if enabled),
+> or requests pause until renewal. For accounts using
 > `ANTHROPIC_API_KEY`, billing remains pay-as-you-go API usage regardless of plan
 > and no monthly credit applies. Run `/status` to confirm the active auth method.
 > For unattended/scheduled work prefer a cloud **Claude Routine** over a local

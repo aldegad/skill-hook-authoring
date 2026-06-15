@@ -1,6 +1,6 @@
 # Plugin And Extension Packaging
 
-Last reviewed: 2026-06-14
+Last reviewed: 2026-06-15
 
 ## Shared Rule
 
@@ -53,13 +53,13 @@ Current settings claims include `disableBundledSkills`. Older `workflowKeywordTr
 
 Hermes documents several extension surfaces rather than one Codex-style package. Plugins live under `~/.hermes/plugins/<name>/` with `plugin.yaml` and Python `register(ctx)` code. Plugins can register tools, hooks, slash commands, CLI commands, and namespaced skills with `ctx.register_skill()`. General plugins are opt-in through `plugins.enabled` in `~/.hermes/config.yaml`.
 
-Hermes hooks are split across three documented systems: gateway hooks under `~/.hermes/hooks/<name>/`, shell hooks declared in `hooks:` inside `~/.hermes/config.yaml`, and plugin hooks registered with `ctx.register_hook()`. In the cited sources, Hermes does not document a repo-walked project-local skill root or project-local hook directory equivalent to `.agents/skills/` plus `.codex/hooks.json`; for one-project custom behavior, use a plugin or explicit config entry and document the install path.
+Hermes hooks are split across three documented systems: gateway hooks under `~/.hermes/hooks/<name>/` (each a directory containing `HOOK.yaml` and `handler.py`), shell hooks declared in `hooks:` inside `~/.hermes/config.yaml`, and plugin hooks registered with `ctx.register_hook()`. Plugin hooks include control-flow hooks that can block or rewrite tool/LLM output (`pre_tool_call`, `pre_llm_call`, `transform_tool_result`, `transform_terminal_output`, `transform_llm_output`) and lifecycle observer hooks (`post_tool_call`, `post_llm_call`, `on_session_start`, `on_session_end`, `on_session_finalize`, `on_session_reset`, `subagent_stop`), plus gateway-specific hooks (`pre_gateway_dispatch`, `pre_approval_request`, `post_approval_response`). Shell hooks require an approval dialog the first time each `(event, command)` pair runs; decisions persist to `~/.hermes/shell-hooks-allowlist.json`. In the cited sources, Hermes does not document a repo-walked project-local skill root or project-local hook directory equivalent to `.agents/skills/` plus `.codex/hooks.json`; for one-project custom behavior, use a plugin or explicit config entry and document the install path.
 
 ## Cursor CLI
 
 Cursor documents Agent Skills and Hooks as first-class surfaces. Skills load from project `.agents/skills/` and `.cursor/skills/`, user `~/.agents/skills/` and `~/.cursor/skills/`, and compatibility roots for Claude/Codex skills. Skills may be slash-invoked from Agent chat, auto-applied by context, scoped with `paths`, or made explicit-only with `disable-model-invocation: true`.
 
-Project hooks live at `<project-root>/.cursor/hooks.json` and can be committed to version control; trusted workspaces and cloud agents load them. Cursor also documents team/enterprise hook distribution and hook events for shell, MCP, file access, prompt submission, agent responses, sessions, compaction, and workspace startup. Keep Cursor's hook schema separate from Claude/Codex schemas even when event names look similar.
+Hooks are configured at four scopes in priority order: enterprise (MDM-managed system-wide), team (Enterprise cloud dashboard), project (`<project-root>/.cursor/hooks.json`, committable to version control), and user (`~/.cursor/hooks.json`). Cloud agents load project hooks; team and enterprise hooks are distributed via the dashboard. Cursor documents events for sessions, tool-use, subagents, shell/MCP execution, file access, prompt submission, agent responses, Tab completions, compaction, and workspace startup — a broader event set than prior reviews captured. Keep Cursor's hook schema separate from Claude/Codex schemas even when event names look similar.
 
 ## Packaging Decision Gate
 
