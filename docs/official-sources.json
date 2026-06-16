@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-06-13",
+  "updated": "2026-06-16",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
@@ -88,7 +88,7 @@
       "agent": "claude-code",
       "kind": "project-instructions",
       "url": "https://code.claude.com/docs/en/memory",
-      "claims": ["CLAUDE.md", ".claude/CLAUDE.md", "CLAUDE.local.md", ".claude/rules", "Claude reads CLAUDE.md not AGENTS.md", "@AGENTS.md import", "symlink AGENTS.md to CLAUDE.md", "auto memory", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "HTML comment stripping in CLAUDE.md", "paths frontmatter for .claude/rules/ conditional loading", "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD", "--add-dir flag"]
+      "claims": ["CLAUDE.md", ".claude/CLAUDE.md", "CLAUDE.local.md", ".claude/rules", "Claude reads CLAUDE.md not AGENTS.md", "@AGENTS.md import", "symlink AGENTS.md to CLAUDE.md", "auto memory", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "HTML comment stripping in CLAUDE.md", "paths frontmatter for .claude/rules/ conditional loading", "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD", "--add-dir flag", "CLAUDE_CODE_DISABLE_AUTO_MEMORY env var", "CLAUDE_CODE_NEW_INIT env var for interactive multi-phase init flow", "~/.claude/rules/ user-level rules for all projects", "CLAUDE_CONFIG_DIR env var for session storage directory", "auto memory MEMORY.md loads first 200 lines or 25KB at session start", "managed CLAUDE.md macOS /Library/Application Support/ClaudeCode/CLAUDE.md", "managed CLAUDE.md Linux and WSL /etc/claude-code/CLAUDE.md", "managed CLAUDE.md Windows C:/Program Files/ClaudeCode/CLAUDE.md", "claudeMd key in managed-settings.json for inline CLAUDE.md content", "managed CLAUDE.md cannot be excluded by claudeMdExcludes"]
     },
     {
       "id": "anthropic-claude-hooks",
@@ -96,7 +96,7 @@
       "kind": "hooks",
       "url": "https://code.claude.com/docs/en/hooks",
       "notes": "docs.anthropic.com/en/docs/claude-code/hooks permanently redirects here as of 2026-05-27",
-      "claims": ["PreToolUse", "PostToolUse", "settings hooks", "exit code blocking", "30 lifecycle events", "5 hook types", "command hooks", "HTTP hooks", "MCP tool hooks", "prompt hooks", "agent hooks", "async hooks", "asyncRewake", "hook frontmatter", "once: true skill frontmatter hooks", "if field per-hook filtering", "updatedInput PreToolUse rewrites tool input before execution", "updatedToolOutput PostToolUse rewrites tool output", "Stop", "StopFailure", "SubagentStop", "SubagentStart", "PreCompact", "PostCompact", "SessionStart", "Setup", "SessionEnd", "UserPromptSubmit", "UserPromptExpansion", "WorktreeCreate", "WorktreeRemove", "TeammateIdle", "PostToolUseFailure", "PostToolBatch", "PermissionRequest", "PermissionDenied", "TaskCreated", "TaskCompleted", "FileChanged", "ConfigChange", "ConfigChange blockable", "CwdChanged", "InstructionsLoaded", "MessageDisplay", "Notification", "Elicitation", "ElicitationResult"]
+      "claims": ["PreToolUse", "PostToolUse", "settings hooks", "exit code blocking", "30 lifecycle events", "5 hook types", "command hooks", "HTTP hooks", "MCP tool hooks", "prompt hooks", "agent hooks", "async hooks", "asyncRewake", "hook frontmatter", "once: true skill frontmatter hooks", "if field per-hook filtering", "updatedInput PreToolUse rewrites tool input before execution", "updatedToolOutput PostToolUse rewrites tool output", "Stop", "StopFailure", "SubagentStop", "SubagentStart", "PreCompact", "PostCompact", "SessionStart", "Setup", "SessionEnd", "UserPromptSubmit", "UserPromptExpansion", "WorktreeCreate", "WorktreeRemove", "TeammateIdle", "PostToolUseFailure", "PostToolBatch", "PermissionRequest", "PermissionDenied", "TaskCreated", "TaskCompleted", "FileChanged", "ConfigChange", "ConfigChange blockable", "CwdChanged", "InstructionsLoaded", "MessageDisplay", "Notification", "Elicitation", "ElicitationResult", "additionalContext context injection for PostToolUse Stop SubagentStart SessionStart Setup UserPromptSubmit", "sessionTitle in SessionStart hookSpecificOutput", "initialUserMessage in SessionStart hookSpecificOutput", "watchPaths in SessionStart hookSpecificOutput", "reloadSkills in SessionStart hookSpecificOutput", "terminalSequence output field for desktop notifications", "CLAUDE_PLUGIN_ROOT path placeholder", "CLAUDE_PLUGIN_DATA path placeholder", "CLAUDE_ENV_FILE for environment variable persistence in SessionStart Setup CwdChanged FileChanged"]
     },
     {
       "id": "anthropic-claude-settings",
@@ -104,7 +104,7 @@
       "kind": "configuration",
       "url": "https://code.claude.com/docs/en/settings",
       "notes": "docs.anthropic.com/en/docs/claude-code/settings permanently redirects here as of 2026-05-27",
-      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "disableBundledSkills", "maxSkillDescriptionChars", "maxSkillDescriptionChars default 1536", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "httpHookAllowedEnvVars", "allowManagedHooksOnly", "disableAllHooks", "policyHelper", "parentSettingsBehavior", "forceLoginMethod", "forceLoginOrgUUID", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "claudeMd", "forceRemoteSettingsRefresh", "allowManagedPermissionRulesOnly", "allowManagedMcpServersOnly", "requiredMinimumVersion", "requiredMaximumVersion", "enableAllProjectMcpServers", "enabledMcpjsonServers", "disabledMcpjsonServers", "allowAllClaudeAiMcps", "allowedMcpServers", "deniedMcpServers", "channelsEnabled", "disableRemoteControl", "attribution", "minimumVersion", "pluginTrustMessage"]
+      "claims": ["settings.json", "subagents", "environment variables", "plugin marketplace", "blockedMarketplaces", "allowedChannelPlugins", "enabledPlugins", "skillOverrides", "disableSkillShellExecution", "disableBundledSkills", "maxSkillDescriptionChars", "maxSkillDescriptionChars default 1536", "skillListingBudgetFraction", "strictKnownMarketplaces", "pluginSuggestionMarketplaces", "sandbox settings", "worktree configuration", "managed settings", "allowedHttpHookUrls", "httpHookAllowedEnvVars", "allowManagedHooksOnly", "disableAllHooks", "policyHelper", "parentSettingsBehavior", "forceLoginMethod", "forceLoginOrgUUID", "autoMemoryEnabled", "autoMemoryDirectory", "claudeMdExcludes", "claudeMd", "forceRemoteSettingsRefresh", "allowManagedPermissionRulesOnly", "allowManagedMcpServersOnly", "requiredMinimumVersion", "requiredMaximumVersion", "enableAllProjectMcpServers", "enabledMcpjsonServers", "disabledMcpjsonServers", "allowAllClaudeAiMcps", "allowedMcpServers", "deniedMcpServers", "channelsEnabled", "disableRemoteControl", "attribution", "minimumVersion", "pluginTrustMessage", "autoCompactEnabled default true v2.1.119", "fileCheckpointingEnabled default true v2.1.119", "env environment variables for sessions and subprocesses", "model override default model", "effortLevel persist effort level low medium high xhigh", "disableAutoMode prevent auto mode activation", "plansDirectory where plan files are stored", "cleanupPeriodDays session file retention default 30 minimum 1", "defaultShell bash or powershell", "editorMode normal or vim default normal", "language preferred response language", "includeGitInstructions default true", "disableWorkflows disable dynamic workflows", "disableAgentView turn off background agents", "disableDeepLinkRegistration prevent claude-cli:// handler", "fallbackModel fallback model chain", "advisorModel model for server-side advisor", "modelOverrides map Anthropic model IDs to provider-specific IDs"]
     },
     {
       "id": "anthropic-claude-slash-commands",
@@ -119,7 +119,7 @@
       "agent": "claude-code",
       "kind": "plugins",
       "url": "https://code.claude.com/docs/en/plugins",
-      "claims": [".claude-plugin/plugin.json", "standalone .claude directory", "plugins bundle skills agents hooks MCP servers", "hooks/hooks.json", "plugin-dir", "plugin-name:skill namespace", "project-specific customizations"]
+      "claims": [".claude-plugin/plugin.json", "standalone .claude directory", "plugins bundle skills agents hooks MCP servers LSP servers monitors", "hooks/hooks.json", "plugin-dir", "plugin-name:skill namespace", "project-specific customizations", "--plugin-url flag for URL-hosted zip archives", "bin/ directory adds executables to Bash PATH while plugin active", "monitors/ directory with monitors.json for background monitors", "claude plugin init command scaffolds plugin in skills directory", "CLAUDE_CODE_SYNC_PLUGIN_INSTALL env var for SDK plugin install events", ".lsp.json at plugin root for LSP server configuration", "plugin root settings.json applies agent and subagentStatusLine defaults when plugin enabled", "/reload-plugins command reloads plugins skills agents hooks MCP LSP without restart", "claude-plugins-official curated marketplace auto-registered on first interactive launch", "claude-community public community marketplace"]
     },
     {
       "id": "anthropic-claude-plugins-reference",
@@ -220,7 +220,7 @@
       "agent": "cursor-cli",
       "kind": "hooks",
       "url": "https://cursor.com/docs/hooks",
-      "claims": ["hooks", ".cursor/hooks.json", "project hooks", "cloud agent support", "command-based hooks", "prompt-based hooks", "beforeShellExecution", "beforeMCPExecution", "beforeSubmitPrompt", "afterAgentResponse", "workspaceOpen", "failClosed", "permission allow deny ask"]
+      "claims": ["hooks", ".cursor/hooks.json", "project hooks", "cloud agent support", "command-based hooks", "prompt-based hooks", "beforeShellExecution", "afterShellExecution", "beforeMCPExecution", "afterMCPExecution", "beforeSubmitPrompt", "afterAgentResponse", "afterAgentThought", "workspaceOpen", "failClosed", "permission allow deny ask", "sessionStart", "sessionEnd", "preToolUse", "postToolUse", "postToolUseFailure", "subagentStart", "subagentStop", "preCompact", "stop", "beforeReadFile", "afterFileEdit", "beforeTabFileRead Tab inline-completion hook", "afterTabFileEdit Tab inline-completion hook", "cloud agent supports shell file tool subagent lifecycle hooks", "cloud agent does not support sessionStart sessionEnd beforeSubmitPrompt Tab hooks workspaceOpen"]
     },
     {
       "id": "cursor-cli-parameters",
@@ -263,7 +263,7 @@
       "agent": "claude-code",
       "kind": "session-resume",
       "url": "https://code.claude.com/docs/en/sessions",
-      "claims": ["--resume", "--continue", "-c", "/resume", "--fork-session", "same session id reused", "local transcript files", "--from-pr", "cleanupPeriodDays", "CLAUDE_CODE_SKIP_PROMPT_HISTORY", "--no-session-persistence", "/branch", "/rewind fork alias", "/rename", "/export", "session picker Ctrl+W Ctrl+A Ctrl+B"]
+      "claims": ["--resume", "--continue", "-c", "/resume", "--fork-session", "same session id reused", "local transcript files", "--from-pr", "cleanupPeriodDays", "CLAUDE_CODE_SKIP_PROMPT_HISTORY", "--no-session-persistence", "/branch", "/rewind fork alias", "/rename", "/export", "session picker Ctrl+W Ctrl+A Ctrl+B", "CLAUDE_CONFIG_DIR env var for session storage", "claude --resume with no args opens session picker", "/cd command relocates session to new directory v2.1.169", "headless sessions (claude -p) and Agent SDK sessions do not appear in picker but resumable by session ID", "--from-pr also accepts GitHub Enterprise GitLab Bitbucket pull or merge request URLs", "Ctrl+R in session picker renames session", "Space in session picker previews session content", "session auto-named on plan accept if name not set"]
     },
     {
       "id": "xai-grok-headless-scripting",
@@ -305,7 +305,7 @@
       "agent": "claude-code",
       "kind": "cli-invocation",
       "url": "https://code.claude.com/docs/en/headless",
-      "claims": ["headless mode", "print mode -p", "output-format json stream-json", "bare mode", "bare mode recommended for scripts will become default for -p", "programmatic invocation", "Agent SDK", "--allowedTools", "--permission-mode acceptEdits dontAsk", "stdin capped 10MB v2.1.128", "background task grace period 5s v2.1.163", "Agent SDK subscription credit starting 2026-06-15"]
+      "claims": ["headless mode", "print mode -p", "output-format json stream-json", "bare mode", "bare mode recommended for scripts will become default for -p", "programmatic invocation", "Agent SDK", "--allowedTools", "--permission-mode acceptEdits dontAsk", "stdin capped 10MB v2.1.128", "background task grace period 5s v2.1.163", "--settings flag for bare mode auth and config", "--mcp-config flag for bare mode MCP servers", "--agents flag for bare mode custom agents", "--plugin-dir and --plugin-url flags", "--include-partial-messages flag for stream-json streaming tokens", "system/api_retry stream event on retryable API errors", "system/init stream event reports session metadata plugins tools", "CLAUDE_CODE_SYNC_PLUGIN_INSTALL env var emits system/plugin_install events"]
     },
     {
       "id": "google-antigravity-transition",
@@ -352,8 +352,8 @@
       "agent": "claude-code",
       "kind": "billing",
       "url": "https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan",
-      "notes": "From 2026-06-15, Agent SDK and claude -p (headless/print) usage on eligible subscription plans (Pro/Max/Team/Enterprise) draws from a separate monthly Agent SDK credit — per-user, refreshes monthly, does not carry over — separate from interactive Claude plan limits. Accounts using ANTHROPIC_API_KEY continue on pay-as-you-go API billing.",
-      "claims": ["Agent SDK with Claude plan", "claude -p headless", "2026-06-15 SDK and claude -p usage draws from separate monthly Agent SDK credit", "monthly Agent SDK credit per-user refreshes monthly does not carry over", "subscription reserved for interactive use", "ANTHROPIC_API_KEY users remain pay-as-you-go API billing"]
+      "notes": "As of 2026-06-16, the billing change originally planned for 2026-06-15 has been PAUSED. The page now states: 'We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits.' Accounts using ANTHROPIC_API_KEY continue on pay-as-you-go API billing. The original plan described separate monthly credits per plan tier (Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise $200) but this plan is paused and not in effect.",
+      "claims": ["Agent SDK with Claude plan", "claude -p headless", "2026-06-15 Agent SDK billing change paused as of 2026-06-16", "Agent SDK and claude -p currently draw from regular subscription usage limits same as interactive use", "ANTHROPIC_API_KEY users remain pay-as-you-go API billing", "original plan described separate monthly credits per plan tier but change is paused"]
     }
   ]
 }

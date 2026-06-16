@@ -1,6 +1,6 @@
 # Plugin And Extension Packaging
 
-Last reviewed: 2026-06-13
+Last reviewed: 2026-06-16
 
 ## Shared Rule
 
@@ -57,7 +57,7 @@ Hermes hooks are split across three documented systems: gateway hooks under `~/.
 
 Cursor documents Agent Skills and Hooks as first-class surfaces. Skills load from project `.agents/skills/` and `.cursor/skills/`, user `~/.agents/skills/` and `~/.cursor/skills/`, and compatibility roots for Claude/Codex skills. Skills may be slash-invoked from Agent chat, auto-applied by context, scoped with `paths`, or made explicit-only with `disable-model-invocation: true`.
 
-Project hooks live at `<project-root>/.cursor/hooks.json` and can be committed to version control; trusted workspaces and cloud agents load them. Cursor also documents team/enterprise hook distribution and hook events for shell, MCP, file access, prompt submission, agent responses, sessions, compaction, and workspace startup. Keep Cursor's hook schema separate from Claude/Codex schemas even when event names look similar.
+Project hooks live at `<project-root>/.cursor/hooks.json` and can be committed to version control; trusted workspaces and cloud agents load them. Cursor also documents team/enterprise hook distribution and hook events for shell, MCP, file access, prompt submission, agent responses, sessions, compaction, workspace startup, and Tab inline-completion hooks (`beforeTabFileRead`, `afterTabFileEdit`). Cloud agents do not support `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, Tab hooks, or `workspaceOpen`. Keep Cursor's hook schema separate from Claude/Codex schemas even when event names look similar.
 
 ## Packaging Decision Gate
 
