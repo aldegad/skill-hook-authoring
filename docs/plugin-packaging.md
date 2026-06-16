@@ -1,6 +1,6 @@
 # Plugin And Extension Packaging
 
-Last reviewed: 2026-06-15
+Last reviewed: 2026-06-16
 
 ## Shared Rule
 
@@ -59,7 +59,7 @@ Hermes hooks are split across three documented systems: gateway hooks under `~/.
 
 Cursor documents Agent Skills and Hooks as first-class surfaces. Skills load from project `.agents/skills/` and `.cursor/skills/`, user `~/.agents/skills/` and `~/.cursor/skills/`, and compatibility roots for Claude/Codex skills. Skills may be slash-invoked from Agent chat, auto-applied by context, scoped with `paths`, or made explicit-only with `disable-model-invocation: true`.
 
-Hooks are configured at four scopes in priority order: enterprise (MDM-managed system-wide), team (Enterprise cloud dashboard), project (`<project-root>/.cursor/hooks.json`, committable to version control), and user (`~/.cursor/hooks.json`). Cloud agents load project hooks; team and enterprise hooks are distributed via the dashboard. Cursor documents events for sessions, tool-use, subagents, shell/MCP execution, file access, prompt submission, agent responses, Tab completions, compaction, and workspace startup — a broader event set than prior reviews captured. Keep Cursor's hook schema separate from Claude/Codex schemas even when event names look similar.
+Hooks are configured at four scopes in priority order: enterprise (MDM-managed system-wide), team (Enterprise cloud dashboard), project (`<project-root>/.cursor/hooks.json`, committable to version control), and user (`~/.cursor/hooks.json`). Cloud agents load project hooks; team and enterprise hooks are distributed via the dashboard. Cursor documents events for sessions, tool-use, subagents, shell/MCP execution, file access, prompt submission, agent responses, Tab inline-completion hooks (`beforeTabFileRead`, `afterTabFileEdit`), compaction, and workspace startup — a broader event set than prior reviews captured; cloud agents do not support `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, Tab hooks, or `workspaceOpen`. Keep Cursor's hook schema separate from Claude/Codex schemas even when event names look similar.
 
 ## Packaging Decision Gate
 
