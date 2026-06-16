@@ -27,11 +27,23 @@ Do not migrate this repo into a Codex plugin layout until there is an explicit p
 
 ## Antigravity CLI (formerly Gemini CLI extensions)
 
-**Gemini CLI is retiring** — for AI Pro/Ultra and free individual users it stops serving requests 2026-06-18 (enterprise/Google Cloud retained), and Antigravity CLI (`agy`) is the successor. The legacy Gemini extension model below is kept only to explain the migration.
+**Gemini CLI is retiring** — for AI Pro/Ultra and free individual users it stops serving requests 2026-06-18 (enterprise/Google Cloud retained), and Antigravity CLI (`agy`) is the successor. The native Antigravity plugin format below is the current packaging surface; the legacy Gemini extension model is kept only to explain the migration.
 
-Legacy Gemini CLI extensions installed under `~/.gemini/extensions/<name>` use `gemini-extension.json`. They can package MCP servers, a context file such as `GEMINI.md`, custom commands, and `excludeTools` rules. Gemini copies installed extensions unless `gemini extensions link` is used.
+**Native Antigravity plugins.** A plugin is a namespaced bundle staged under `~/.gemini/antigravity-cli/plugins/<name>/`:
 
-**Transition to Antigravity CLI.** Antigravity converts legacy Gemini extensions to native plugins via `agy plugin import gemini`, moves workspace skills from `.gemini/skills/` to `.agents/skills/`, and moves MCP servers out of `~/.gemini/settings.json` into a standalone `mcp_config.json` (global `~/.gemini/config/mcp_config.json`, workspace `.agents/mcp_config.json`) with the server URI key `url`/`httpUrl` renamed to `serverUrl`. Context files are unchanged: it still reads `GEMINI.md` and `AGENTS.md`. See `docs/cli-invocation.md` for the CLI surface and citations.
+```text
+~/.gemini/antigravity-cli/plugins/<name>/
+├── plugin.json        # required package marker
+├── mcp_config.json    # optional MCP servers
+├── hooks.json         # optional pre/post tool event hooks
+├── skills/            # optional skills (compile to /<skill-name> slash commands)
+├── agents/            # optional subagent templates
+└── rules/             # optional codebase rules
+```
+
+Manage plugins with `agy plugin list`, `agy plugin install <path>`, `agy plugin enable`/`disable <name>`, and `agy plugin uninstall <name>`. Hooks are pre/post-tool (e.g. a pre-flight check or a post-write formatter), declared either in a plugin's `hooks.json` or the primary `~/.gemini/antigravity-cli/settings.json`, and browsable in the TUI with `/hooks`. Workspace-local skills live in `.agents/skills/` (global `~/.gemini/antigravity-cli/skills/`) and compile to typed `/<skill-name>` slash commands on launch; MCP servers live in a standalone `mcp_config.json` (workspace `.agents/mcp_config.json`) using the `serverUrl` key (`url`/`httpUrl` unsupported). (Verified by dynamic render of the JS-rendered docs, 2026-06-16.)
+
+**Legacy Gemini extensions and migration.** Legacy Gemini CLI extensions installed under `~/.gemini/extensions/<name>` use `gemini-extension.json` and can package MCP servers, a context file such as `GEMINI.md`, custom commands, and `excludeTools` rules (copied unless `gemini extensions link` is used). `agy plugin import gemini` converts them to native plugins — parsing the extension manifests, converting legacy commands to skills, and migrating MCP server definitions — and first launch offers the same auto-conversion. Workspace skills move `.gemini/skills/` → `.agents/skills/`; MCP moves out of `~/.gemini/settings.json` into a standalone `mcp_config.json` (workspace `.agents/mcp_config.json`; the global path is cited inconsistently across Google's own docs — `~/.gemini/config/mcp_config.json` on the migration page vs `~/.gemini/antigravity-cli/mcp_config.json` on the plugins page) with `url`/`httpUrl` renamed to `serverUrl`. Context files are unchanged: it still reads `GEMINI.md` and `AGENTS.md`. See `docs/cli-invocation.md` for the CLI surface and citations.
 
 ## Grok Plugins
 

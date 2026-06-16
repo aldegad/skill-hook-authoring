@@ -5,6 +5,39 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.10 — 2026-06-16
+
+### Changed
+
+- **Agent SDK billing change paused.** The 2026-06-15 separate-monthly-credit
+  change is paused; `claude -p` and Agent SDK usage still draw from the regular
+  subscription limits. Corrected in `docs/cli-invocation.md`,
+  `docs/cloud-automation.md`, and the `anthropic-*` billing sources.
+- **Claude/Cursor refresh claims** folded in: new Claude hooks/settings/memory/
+  sessions/plugins claims, Cursor tab hooks + cloud-agent hook restrictions, and
+  the `/migrate-to-skills` command.
+
+### Added — Antigravity CLI gathered by dynamic render
+
+The daily automation marks `antigravity.google/docs/*` unreachable (JS-rendered
+SPA → static fetch returns an empty shell). Rendered the pages dynamically and
+folded in the verified truth, correcting drift:
+
+- **Hooks now documented** (was "config format not verified"): pre/post-tool
+  hooks live in a plugin's `hooks.json` or the primary `settings.json`, browsed
+  via `/hooks`.
+- **Native plugin layout documented**: `~/.gemini/antigravity-cli/plugins/<name>/`
+  with `plugin.json` (required), `hooks.json`, `mcp_config.json`, `skills/`,
+  `agents/`, `rules/`; managed by `agy plugin list/install/enable/disable/uninstall`.
+- **Skill invocation corrected** (was "no typed invocation token"): registered
+  skills auto-compile to typed `/<skill-name>` slash commands in the TUI.
+- **Antigravity SDK** is the programmatic/headless path: `pip install
+  google-antigravity`, Python `Agent`/`LocalAgentConfig`.
+- New official sources tracked: `antigravity-cli-plugins`, `antigravity-cli-using`,
+  `antigravity-cli-install`, `antigravity-sdk-overview`; existing three Antigravity
+  sources stamped "verified by dynamic render 2026-06-16". Recorded the global
+  `mcp_config.json` path inconsistency between Google's migration and plugins pages.
+
 ## v1.9 — 2026-06-13
 
 ### Changed

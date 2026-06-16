@@ -320,24 +320,56 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli-reference",
-      "notes": "JS-rendered SPA; static fetch returns an empty shell, render dynamically to verify. No headless one-shot flag documented; programmatic use is the Antigravity SDK.",
-      "claims": ["agy binary", "interactive TUI launch", "core slash commands", "/resume /switch /conversation", "/fork /branch", "/model", "/mcp", "/skills", "/permissions", "--sandbox launch override", "--dangerously-skip-permissions", "settings.json keybindings.json"]
+      "notes": "JS-rendered SPA; static fetch returns an empty shell — render dynamically to verify (verified by dynamic render 2026-06-16). No headless one-shot flag documented; programmatic use is the Antigravity SDK.",
+      "claims": ["agy binary", "interactive TUI launch", "core slash commands", "/resume /switch /conversation", "/fork /branch", "/model", "/mcp", "/skills", "/permissions", "/hooks browses pre-flight post-format script hooks", "/config /settings settings editor", "/keybindings editor", "/rewind /undo", "/agents subagent manager", "/tasks", "--sandbox launch override", "--dangerously-skip-permissions launch override", "settings.json keybindings.json", "settings.json toolPermission request-review proceed-in-sandbox always-proceed strict", "settings.json artifactReviewPolicy", "settings.json enableTerminalSandbox", "settings.json at ~/.gemini/antigravity-cli/settings.json"]
     },
     {
       "id": "antigravity-cli-conversations",
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli-conversations",
-      "notes": "JS-rendered SPA; render dynamically to verify.",
-      "claims": ["agy --continue resumes most recent in workspace", "agy --conversation <uuid>", "/resume picker", "workspace-scoped conversations", "import Antigravity 2.0 desktop threads via Tab", "/fork branch"]
+      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-16).",
+      "claims": ["agy --continue resumes most recent in workspace", "agy --conversation <uuid>", "/resume picker filter by description or id", "workspace-scoped conversations", "import Antigravity 2.0 desktop threads via Tab confirm with y", "/fork branch clones conversation thread not git checkout", "on CLI close it prints the exact command to resume that session"]
     },
     {
       "id": "antigravity-gcli-migration",
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/gcli-migration",
-      "notes": "JS-rendered SPA; render dynamically to verify. GEMINI_API_KEY->AV_API_KEY env swap is NOT stated here (third-party claim); auth is via OS keyring.",
-      "claims": ["agy plugin import gemini", "first-launch auto-conversion", "reads GEMINI.md and AGENTS.md", "global ~/.gemini/GEMINI.md", "workspace skills .gemini/skills -> .agents/skills", "MCP moves to mcp_config.json", "serverUrl schema key", "install ~/.local/bin/agy"]
+      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-16). GEMINI_API_KEY->AV_API_KEY env swap is NOT stated here (third-party claim); auth is via OS keyring. Doc inconsistency: this page puts the global MCP config at ~/.gemini/config/mcp_config.json, while cli-plugins puts it at ~/.gemini/antigravity-cli/mcp_config.json; the workspace path .agents/mcp_config.json is consistent across both.",
+      "claims": ["agy plugin import gemini", "first-launch auto-conversion checklist", "legacy commands converted to skills on import", "reads GEMINI.md and AGENTS.md", "global ~/.gemini/GEMINI.md", "workspace skills .gemini/skills -> .agents/skills", "MCP moves to standalone mcp_config.json", "serverUrl schema key url/httpUrl unsupported", "install ~/.local/bin/agy"]
+    },
+    {
+      "id": "antigravity-cli-plugins",
+      "agent": "antigravity-cli",
+      "kind": "plugins",
+      "url": "https://antigravity.google/docs/cli-plugins",
+      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-16). Documents the native plugin layout, hook config, skill->slash-command behavior, and MCP config that the cli-reference page does not.",
+      "claims": ["plugins are namespaced bundles", "plugins staged at ~/.gemini/antigravity-cli/plugins/<name>/", "plugin.json required package marker", "hooks.json optional pre/post tool event hooks", "mcp_config.json optional in plugin", "skills/ agents/ rules/ optional plugin dirs", "agy plugin list", "agy plugin install <path>", "agy plugin enable <name>", "agy plugin disable <name>", "agy plugin uninstall <name>", "workspace skills .agents/skills/ with name/description frontmatter", "global skills ~/.gemini/antigravity-cli/skills/", "skills auto-convert to /<skill-name> slash commands in the TUI", "hooks defined in plugin hooks.json or primary settings.json", "/hooks inspects loaded active hooks", "hooks run pre-flight checks or post-generation formats", "/mcp manager overlay", "global MCP ~/.gemini/antigravity-cli/mcp_config.json", "workspace MCP .agents/mcp_config.json", "serverUrl key required url/httpUrl unsupported"]
+    },
+    {
+      "id": "antigravity-cli-using",
+      "agent": "antigravity-cli",
+      "kind": "configuration",
+      "url": "https://antigravity.google/docs/cli-using",
+      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-16).",
+      "claims": ["settings.json at ~/.gemini/antigravity-cli/settings.json", "/config or /settings opens the settings overlay", "--sandbox and --dangerously-skip-permissions are launch overrides over settings.json", "keybindings.json at ~/.gemini/antigravity-cli/keybindings.json", "/keybindings editor", "! prefix runs terminal commands", "@ triggers path suggestions", "? lists slash commands", "/resume lists and resumes prior conversation logs", "on close it prints the exact resume command", "cli.exit and cli.enter keybindings cannot be disabled"]
+    },
+    {
+      "id": "antigravity-cli-install",
+      "agent": "antigravity-cli",
+      "kind": "cli-invocation",
+      "url": "https://antigravity.google/docs/cli-install",
+      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-16).",
+      "claims": ["macOS/Linux install curl -fsSL https://antigravity.google/cli/install.sh | bash", "installs the binary to ~/.local/bin/agy", "Windows PowerShell irm https://antigravity.google/cli/install.ps1 | iex", "Windows installs to AppData\\Local\\agy\\bin", "--skip-aliases --skip-path install flags", "auth via OS keyring Apple Keychain/Secret Service/Windows Credential Manager", "browser OAuth fallback when no saved session", "SSH manual URL-plus-code OAuth loop", "/logout purges keyring profile"]
+    },
+    {
+      "id": "antigravity-sdk-overview",
+      "agent": "antigravity-cli",
+      "kind": "cli-invocation",
+      "url": "https://antigravity.google/docs/sdk-overview",
+      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-16). This is the documented programmatic/headless path since agy has no headless one-shot flag.",
+      "claims": ["Antigravity SDK is a Python framework", "pip install google-antigravity", "from google.antigravity import Agent, LocalAgentConfig", "shares the agent harness with the CLI and Antigravity 2.0", "tools built-in custom-Python-function MCP-server Agent-Skill", "declarative deny-by-default policies deny/allow/ask_user", "lifecycle hooks Inspect/Decide/Transform across nine points", "streaming multimodal sub-agents structured-output human-in-the-loop"]
     },
     {
       "id": "anthropic-claude-code-subscription-billing",
