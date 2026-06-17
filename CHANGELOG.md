@@ -5,6 +5,33 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.11 — 2026-06-17
+
+### Added — Project Instruction File Loading mechanics
+
+The compat matrix recorded project-instruction *filenames* per engine but not how
+each engine **discovers, merges, and times** those files. Added a dedicated
+`docs/compatibility-matrix.md` → **Project Instruction File Loading** section (and
+a condensed working model in `SKILL.md` → Project Instruction Files), source-cited
+per engine along two axes — ancestor walk-up and subdirectory discovery
+(upfront vs on-demand):
+
+- **Claude Code** — ancestor chain (cwd → fs root) loaded **in full at launch**,
+  concatenated root → cwd (closer wins); nested subdir `CLAUDE.md` loaded
+  **on-demand** and not re-injected after `/compact` until touched again.
+- **Codex** — walks *root → down to cwd*, ≤ 1 file/dir, closer overrides, built
+  once per run under a 32 KiB cap, **no subdirectory lookahead**.
+- **Gemini / Antigravity** — global + ancestor + **entire subtree below cwd
+  concatenated upfront** (`.gitignore`-aware); `/memory show|reload`.
+- **Hermes** — **single** project file, first-match (`.hermes.md` → `AGENTS.md`
+  → `CLAUDE.md` → `.cursorrules`), no merge; on-demand dir + 5-parent discovery
+  during file ops; `SOUL.md` always separate.
+- **Cursor** — project-root `AGENTS.md`/`CLAUDE.md` only; tree-walk/merge
+  **not documented**. **Grok** — Claude-compat claimed, tree semantics **unknown**.
+
+New source `gemini-cli-gemini-md` added to `official-sources.json`; codex and
+claude entries' claims augmented with the loading-mechanics keywords.
+
 ## v1.10 — 2026-06-16
 
 ### Changed

@@ -84,6 +84,16 @@ Do not assume every non-Claude runtime reads `AGENTS.md`. Use the officially doc
 
 For cross-agent repo rules, maintain the smallest set of files that each runtime actually reads. In Kuma-style Codex/Claude/Grok/Hermes repos, that usually means repo-owned `AGENTS.md` plus a `CLAUDE.md` import/symlink or Claude-specific wrapper; add `GEMINI.md` only when Antigravity CLI (or legacy Gemini CLI) is a supported runtime.
 
+**The filename is only half the contract — *loading mechanics* differ per engine** along two axes: ancestor walk-up (climb cwd → root, merging every file passed) and subdirectory discovery (nested files below cwd, loaded upfront vs on-demand). Full source-cited comparison: `docs/compatibility-matrix.md` → **Project Instruction File Loading**. The working model:
+
+- **Claude Code** loads ancestor `CLAUDE.md`/`CLAUDE.local.md` from cwd up to the filesystem root **in full at launch** (concatenated root → cwd, closer-to-cwd wins), and discovers nested subdirectory `CLAUDE.md` **on-demand** when it reads files there (not re-injected after `/compact` until that dir is touched again). So it is *not* "just root + cwd" — it is the whole ancestor chain eagerly plus the descendant tree lazily.
+- **Codex** walks *root → down to cwd*, ≤ 1 file per dir, concatenated with closer files overriding, built **once per run** under a 32 KiB cap — and has **no subdirectory lookahead** (never reads below cwd).
+- **Gemini / Antigravity** concatenates global + ancestor + the **entire subtree below cwd upfront** (`.gitignore`-aware) into the prompt.
+- **Hermes** loads a **single** project file (first match: `.hermes.md` → `AGENTS.md` → `CLAUDE.md` → `.cursorrules`, no merge) but does on-demand discovery of the dir + 5 parents during file ops.
+- **Cursor** documents project-root `AGENTS.md`/`CLAUDE.md` only; tree-walk/merge is **not documented**. **Grok** claims Claude-compat but its tree semantics are **unknown** — verify live.
+
+Implication for cross-engine repos: a module-specific instruction placed in a deep subdirectory is seen eagerly by Gemini, lazily by Claude/Hermes, and **never** by Codex (below cwd) — keep anything Codex must obey at or above the launch directory.
+
 **Symlink the wrapper, edit only the canonical file.** When `CLAUDE.md`/`GEMINI.md` are symlinks to a repo-owned `AGENTS.md`, reads resolve correctly — every runtime sees the canonical content, and git stores the link as mode `120000` (a pointer, not a copy; both links share one blob). But Claude Code's Edit/Write **refuses to write through a symlink** (`Refusing to write through symlink ... pass the real target path explicitly`, verified 2026-06-05), so edits must target the real `AGENTS.md`; treat the symlinks as read-only. This is a feature, not a limitation: it stops an atomic-save from silently swapping the link for a divergent regular file, so the SSoT cannot drift. Use **relative** symlinks (`ln -s AGENTS.md CLAUDE.md`, never an absolute path) so they survive clone/move. Caveat: a Windows checkout without `core.symlinks` materializes the link as a plain text file — use a one-line stub+pointer instead of a symlink when a Windows runtime is in scope.
 
 ## Core Rules
