@@ -1001,7 +1001,7 @@
         "subdirectory context below cwd",
         "concatenated with origin separators",
         "/memory show",
-        "/memory reload",
+        "/memory refresh",
         "legacy form inherited by Antigravity GEMINI.md"
       ]
     },

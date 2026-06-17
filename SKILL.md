@@ -88,7 +88,7 @@ For cross-agent repo rules, maintain the smallest set of files that each runtime
 
 - **Claude Code** loads ancestor `CLAUDE.md`/`CLAUDE.local.md` from cwd up to the filesystem root **in full at launch** (concatenated root → cwd, closer-to-cwd wins), and discovers nested subdirectory `CLAUDE.md` **on-demand** when it reads files there (not re-injected after `/compact` until that dir is touched again). So it is *not* "just root + cwd" — it is the whole ancestor chain eagerly plus the descendant tree lazily.
 - **Codex** walks *root → down to cwd*, ≤ 1 file per dir, concatenated with closer files overriding, built **once per run** under a 32 KiB cap — and has **no subdirectory lookahead** (never reads below cwd).
-- **Gemini / Antigravity** concatenates global + ancestor + the **entire subtree below cwd upfront** (`.gitignore`-aware) into the prompt.
+- **Gemini / Antigravity** concatenates global + ancestor + the **entire subtree below cwd** into the prompt sent with **every request** (`.gitignore`-aware) — always in context, not lazy like Claude.
 - **Hermes** loads a **single** project file (first match: `.hermes.md` → `AGENTS.md` → `CLAUDE.md` → `.cursorrules`, no merge) but does on-demand discovery of the dir + 5 parents during file ops.
 - **Cursor** documents project-root `AGENTS.md`/`CLAUDE.md` only; tree-walk/merge is **not documented**. **Grok** claims Claude-compat but its tree semantics are **unknown** — verify live.
 
