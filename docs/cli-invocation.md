@@ -33,7 +33,12 @@ the same idea, but they are reached differently:
   omit the headless flag.**
 - **Headless is a separate subcommand for Codex.** `codex` (and `codex resume`)
   are interactive; `codex exec` (and `codex exec resume`) are headless. There is
-  no `-p` flag to drop — the interactive and headless paths are different commands.
+  no print/headless `-p` flag to drop — the interactive and headless paths are
+  different commands. Note Codex *does* have a `-p`, but it is `--profile` (a
+  config-profile selector), **not** a prompt/headless flag: bare `codex -p`
+  errors asking for a profile value. So "Codex has no `-p`" is wrong — it has no
+  *headless/print* `-p` (verified on `codex-cli 0.140`; `codex --help` lists
+  `-p, --profile`).
 - **Antigravity CLI documents no headless one-shot flag at all.** `agy` is a TUI;
   programmatic / unattended use goes through the **Antigravity SDK**, not an
   `agy -p` flag. Community guides show `agy -p`, but it is not in the official
@@ -54,7 +59,7 @@ the same idea, but they are reached differently:
 
 | Runtime | Headless command | Prompt / stdin | Output format | Useful scripting flags |
 |---|---|---|---|---|
-| Codex | `codex exec "<prompt>"` (alias `codex e`) | prompt arg; `-` reads prompt from stdin | `--json` / `--experimental-json` (JSONL); else final message to stdout, progress to stderr | `--model`/`-m`, `--output-last-message`/`-o <file>`, `--sandbox`/`-s`, `--cd`/`-C` |
+| Codex | `codex exec "<prompt>"` (alias `codex e`) | prompt arg; `-` reads prompt from stdin | `--json` / `--experimental-json` (JSONL); else final message to stdout, progress to stderr | `--model`/`-m`, `--output-last-message`/`-o <file>`, `--sandbox`/`-s`, `--cd`/`-C`. (Aside: `-p` is `--profile`, a config-profile selector — **not** a print/headless flag.) |
 | Claude Code | `claude -p "<query>"` (`--print`) | `cat file \| claude -p "<query>"` | `--output-format text\|json\|stream-json` (+ `--input-format`) | `--model`, `--bare` (skip auto-discovery; recommended for scripts, will become default for `-p`), `--allowedTools`, `--permission-mode default\|acceptEdits\|plan\|auto\|dontAsk\|bypassPermissions`, `--max-turns`, `--max-budget-usd`, `--json-schema`, `--system-prompt[-file]`, `--append-system-prompt[-file]`, `--permission-prompt-tool`, `--bg`, `--no-session-persistence`, `--plugin-url <url>` (fetch plugin zip for session), `--agents <json>` (inline subagent definitions), `--settings <file-or-json>` |
 | Grok / xAI | `grok -p "<prompt>"` (`--single`) | `grok agent stdio` = ACP agent over JSON-RPC on stdin/stdout | `--output-format plain\|json\|streaming-json` | `--model`/`-m`, `--cwd`, `--always-approve`, `--no-alt-screen`, `--no-auto-update` |
 | Hermes Agent | `hermes chat -q "<query>"` (single query) | not documented (no stdin/JSON piping flag) | not documented (no JSON output-format flag) | `--model`, `--provider nous\|openrouter`, `--toolsets`, `-s <skill>`, `--verbose` |
