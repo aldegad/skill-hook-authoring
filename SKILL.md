@@ -18,7 +18,7 @@ Use these words precisely:
 
 - **Skill**: instructions the model reads when the task matches. Usually `SKILL.md` plus optional `scripts/`, `references/`, and `assets/`. A skill can tell the model what to do, but it does not enforce tool behavior by itself.
 - **Hook**: a harness-level guard or automation invoked around lifecycle events such as tool calls. A hook can allow, deny, ask, mutate input, or add context depending on runtime support. Hooks must be registered in the runtime config or plugin metadata; putting a hook script inside a skill folder is not enough.
-- **Plugin / extension**: a runtime-specific packaging and trust boundary that can bundle skills, hooks, MCP servers, apps, commands, agents, or metadata. Codex and Grok document plugin packages; Gemini documents extensions; Claude documents skills, hooks, and marketplace/plugin settings but not a Codex-style `.codex-plugin/plugin.json` equivalent in the cited sources.
+- **Plugin / extension**: a runtime-specific packaging and trust boundary that can bundle skills, hooks, MCP servers, apps, commands, agents, or metadata. Codex and Grok document plugin packages; Antigravity documents native plugins (legacy Gemini extensions migrate in via `agy plugin import gemini`); Claude documents a first-class `.claude-plugin/plugin.json` plugin format — the direct analogue of Codex's `.codex-plugin/plugin.json` — bundling skills, agents, hooks, MCP servers, LSP servers, and monitors.
 - **Package root**: the repo-owned canonical source directory we maintain. Most local "skills" in this workspace are actually plugin-like package roots because they include `SKILL.md`, scripts, docs, installers, and policy.
 
 If the task changes discovery, installation, trust, hook behavior, bundled scripts, or cross-runtime compatibility, treat it as **package authoring**, not just skill text editing.
@@ -56,7 +56,7 @@ When one agent **spawns another** from a script, hook, or orchestrator, use the 
 
 - **The mode switch is not the same shape.** For Claude/Grok/Cursor/Hermes, headless is a **flag** (`-p`/`--print`, or Hermes `-q`) added to the bare interactive command — so interactive = omit the flag. **Codex** is the exception: headless is a separate **subcommand** (`codex exec`), with no print/headless `-p` to drop (Codex's `-p` *is* `--profile`, a config-profile selector — not a prompt flag, so "Codex has no `-p`" is wrong; it has no *headless* `-p`), so a list of only `codex exec …` is *not* "Codex is headless-only". **Antigravity** (`agy`) is TUI-only with **no documented headless one-shot** — run it unattended through the Antigravity SDK, not `agy -p` (which appears only in third-party guides).
 - Output format is not uniform: Codex `--json` (JSONL); Claude/Cursor `--output-format json|stream-json`; Grok `--output-format json`; Hermes and Antigravity document **no** headless JSON flag.
-- Gemini CLI is omitted: it is retired for AI Pro/Ultra and free individual users on **2026-06-18** and replaced by Antigravity CLI (`agy`); enterprise/Google Cloud keeps Gemini CLI. See `docs/cli-invocation.md` → transition section.
+- Gemini CLI is omitted: **as of 2026-06-18 it has stopped serving** AI Pro/Ultra and free individual users (replaced by Antigravity CLI, `agy`); enterprise/Google Cloud keeps Gemini CLI. See `docs/cli-invocation.md` → transition section.
 
 ## Session Resume
 
@@ -77,7 +77,7 @@ Do not assume every non-Claude runtime reads `AGENTS.md`. Use the officially doc
 | Codex | `AGENTS.override.md`, `AGENTS.md`, then configured `project_doc_fallback_filenames` |
 | Claude Code | `CLAUDE.md`, `.claude/CLAUDE.md`, `CLAUDE.local.md`, and `.claude/rules/`; Claude docs explicitly say Claude reads `CLAUDE.md`, not `AGENTS.md` |
 | Grok / xAI | `AGENTS.md`, `Agents.md`, `AGENT.md` |
-| Hermes Agent | `.hermes.md` / `HERMES.md`, then `AGENTS.md`, then `CLAUDE.md`, then `.cursorrules`; `SOUL.md` is global identity, not project instructions |
+| Hermes Agent | `.hermes.md` / `HERMES.md`, then `AGENTS.md`, then `CLAUDE.md`, then `.cursorrules`, then `.cursor/rules/*.mdc`; `SOUL.md` is global identity, not project instructions |
 | Antigravity CLI (was Gemini CLI) | Reads `GEMINI.md` and `AGENTS.md` (global `~/.gemini/GEMINI.md`); Gemini CLI's `GEMINI.md` hierarchical memory is the legacy form |
 | Cursor CLI | `.cursor/rules`, plus project-root `AGENTS.md` and `CLAUDE.md` |
 | Kuma Studio | `AGENTS.md` and `CLAUDE.md` are parallel repo SSoT files for shared rules |
@@ -89,7 +89,7 @@ For cross-agent repo rules, maintain the smallest set of files that each runtime
 - **Claude Code** loads ancestor `CLAUDE.md`/`CLAUDE.local.md` from cwd up to the filesystem root **in full at launch** (concatenated root → cwd, closer-to-cwd wins), and discovers nested subdirectory `CLAUDE.md` **on-demand** when it reads files there (not re-injected after `/compact` until that dir is touched again). So it is *not* "just root + cwd" — it is the whole ancestor chain eagerly plus the descendant tree lazily.
 - **Codex** walks *root → down to cwd*, ≤ 1 file per dir, concatenated with closer files overriding, built **once per run** under a 32 KiB cap — and has **no subdirectory lookahead** (never reads below cwd).
 - **Gemini / Antigravity** concatenates global + ancestor + the **entire subtree below cwd** into the prompt sent with **every request** (`.gitignore`-aware) — always in context, not lazy like Claude.
-- **Hermes** loads a **single** project file (first match: `.hermes.md` → `AGENTS.md` → `CLAUDE.md` → `.cursorrules`, no merge) but does on-demand discovery of the dir + 5 parents during file ops.
+- **Hermes** loads a **single** project file (first match: `.hermes.md` → `AGENTS.md` → `CLAUDE.md` → `.cursorrules` → `.cursor/rules/*.mdc`, no merge) but does on-demand discovery of the dir + 5 parents (each checked at most once per session) during file ops.
 - **Cursor** documents project-root `AGENTS.md`/`CLAUDE.md` only; tree-walk/merge is **not documented**. **Grok** claims Claude-compat but its tree semantics are **unknown** — verify live.
 
 Implication for cross-engine repos: a module-specific instruction placed in a deep subdirectory is seen eagerly by Gemini, lazily by Claude/Hermes, and **never** by Codex (below cwd) — keep anything Codex must obey at or above the launch directory.
@@ -234,7 +234,7 @@ Legacy (still supported by both engines):
 {"decision": "block", "reason": "safedeps: install not approved ..."}
 ```
 
-`permissionDecision` accepts `"allow" | "deny" | "ask" | "defer"` on Claude Code. Official Codex hooks docs document only `"allow"` and `"deny"` for `PreToolUse`; `"ask"` and `"defer"` are not confirmed for Codex. `hookSpecificOutput` may also carry `updatedInput` (replace the tool input before it runs) and `additionalContext` (inject context for the model). For **allow**, exit 0 with no output is sufficient; or emit `permissionDecision: "allow"` explicitly.
+`permissionDecision` accepts `"allow" | "deny" | "ask" | "defer"` on Claude Code. Official Codex hooks docs document only `"allow"` and `"deny"` for `PreToolUse`; `"ask"` (and the legacy `decision: "approve"`, plus `continue`/`stopReason`/`suppressOutput`) are documented as **parsed but not yet supported** on Codex, and `"defer"` is not documented for Codex at all. Codex's separate `PermissionRequest` hook uses a `behavior` field (`"allow"`/`"deny"` with an optional `message`), not `permissionDecision`. `hookSpecificOutput` may also carry `updatedInput` (replace the tool input before it runs) and `additionalContext` (inject context for the model). For **allow**, exit 0 with no output is sufficient; or emit `permissionDecision: "allow"` explicitly.
 
 **Do not use `{"continue": false, "stopReason": "..."}` for PreToolUse** — that is the schema for the `Stop` hook (final-exit block), not for PreToolUse. Same applies to `{"continue": true}` as an allow signal. Mixing them up silently fails closed or open depending on the engine version.
 
@@ -271,8 +271,9 @@ Claude `~/.claude/settings.json` uses the same `hooks.PreToolUse[].hooks[]` shap
 
 **Matcher syntax is NOT shared, even though the payload schema is.** Claude treats a matcher of `"*"`, `""`, or omitted as match-all; **Codex matchers are regular expressions** (`^Bash$`, `Edit|Write`, `mcp__.*`). A literal `"*"` is an invalid regex in Codex and silently matches **nothing**, so a hook registered with Claude-style `"*"` never fires — use `".*"` to match all tools on Codex. (Trial-and-error 2026-06-09: a Codex `PreToolUse` notifier registered with `"*"` never fired — confirmed via a probe hook that the event was never invoked — until the matcher was changed to `".*"`.)
 
-Codex tool coverage (verified 2026-05-26 against <https://developers.openai.com/codex/hooks> + Codex CLI 0.133): PreToolUse now intercepts **Bash, `apply_patch` file edits, and MCP tool calls**, and a denying PreToolUse prevents the blocked `apply_patch` file from being created (`openai/codex#16732` fixed; PR `#18391`). The earlier "Bash only" behavior is obsolete — do **not** assume apply_patch is unhookable. Two things still bite, so design accordingly:
+Codex tool coverage (verified 2026-06-18 against <https://developers.openai.com/codex/hooks>): PreToolUse intercepts **Bash, `apply_patch` file edits, and MCP tool calls**, and a denying PreToolUse prevents the blocked `apply_patch` file from being created (`openai/codex#16732` fixed; PR `#18391`). The earlier "Bash only" behavior is obsolete — do **not** assume apply_patch is unhookable. Three things still bite, so design accordingly:
 
+- **Shell coverage is partial — "only the simple ones".** The official docs state PreToolUse "doesn't intercept all shell calls yet, only the simple ones" (and excludes WebSearch and other non-shell tools), so a compound/complex shell invocation can still slip past a Bash `PreToolUse` guard. Treat a Bash hook as best-effort, not a complete shell gate.
 - **Field shape differs per tool.** Bash and apply_patch carry `tool_input.command`; Write/Edit/MultiEdit carry `tool_input.file_path`; MCP tools send their own args. For `apply_patch` the target path lives in the patch body's `*** Add/Update/Delete File: <path>` header lines, **not** a `file_path` field — read the right field and gate on `tool_name`. Scanning the whole `tool_input` blob over-blocks (it matches the path string appearing in *content*, reads, or even the hook script itself).
 - **Coverage can still be inconsistent across tool handlers** on some versions (`openai/codex#20204`); very old Codex fired hooks for `Bash` only. Verify on the *target* Codex version rather than assuming.
 

@@ -1,73 +1,73 @@
 <p align="center">
-  <img src="assets/icon.png" width="168" alt="Eine verlässliche Quelle, die auf jede Agent-Laufzeit ausstrahlt" />
+  <img src="assets/icon.png" width="168" alt="Eine einzige wahre Quelle, die auf jede Agent-Laufzeit ausstrahlt" />
 </p>
 
-<h1 align="center">Laufzeitübergreifende Interoperabilität von Agent-Plattformen</h1>
+<h1 align="center">Plattform-Interoperabilität zwischen Agent-Laufzeiten</h1>
 
-<p align="center"><b>Eine verlässliche Quelle für deine Skills, Hooks und Plugins — in jedem KI-Coding-Agenten, den du nutzt.</b></p>
+<p align="center"><b>Eine einzige Wahrheitquelle für deine Skills, Hooks und Plugins — auf jedem KI-Coding-Agenten, den du nutzt.</b></p>
 
 <p align="center">
 
-[English](README.md) | [한국어](README.ko.md) | [日本語](README.ja.md) | [简体中文](README.zh-Hans.md) | [Español](README.es.md) | [Français](README.fr.md) | [Deutsch](README.de.md)
+[Englisch](README.md) | [Koreanisch](README.ko.md) | [Japanisch](README.ja.md) | [Vereinfachtes Chinesisch](README.zh-Hans.md) | [Spanisch](README.es.md) | [Französisch](README.fr.md) | [Deutsch](README.de.md)
 
 </p>
 
 ---
 
-Du läufst nicht mehr nur einen KI-Agenten. Codex, Claude Code, Grok, Hermes, Antigravity, Cursor — jeder hat seine eigene Vorstellung davon, was ein „Skill“ ist, wo Hooks registriert werden, welche Anweisungsdatei gelesen wird, wie Sitzungen fortgesetzt werden und wie das Abrechnungssystem wirklich funktioniert. Dieselben Werkzeuge von Hand für alle bereitzustellen führt dazu, dass sie innerhalb einer Woche auseinanderdriften. Fragst du „Kann ich auf Runtime Y überhaupt X machen?“, liegt die Antwort auf sieben verschiedenen Dokumentationsseiten — oder nirgendwo dokumentiert.
+Du betreibst nicht mehr nur einen AI-Agenten. Codex, Claude Code, Grok, Hermes, Antigravity, Cursor — jeder hat seine eigene Vorstellung davon, was ein „Skill“ ist, wo Hooks registriert werden, welche Anleitungsdatei gelesen wird, wie Sitzungen fortgesetzt werden und wie das Billing tatsächlich funktioniert. Schickt man dasselbe Tooling manuell an alle, entfernen sie sich innerhalb einer Woche voneinander. Auf die Frage „Kann ich bei Laufzeit Y überhaupt X tun?“ bekommt man die Antwort oft auf sieben verschiedenen Dokumentationsseiten — oder gar nicht dokumentiert.
 
-Dieses Repository ist die Karte und die Methode:
+Dieses Repo ist die Karte und die Methode:
 
-1. **Ein Kompatibilitäts-Wiki, täglich aus offiziellen Anbieter-Dokumentationen aktualisiert.** Sieben Laufzeiten — Codex, Claude Code, Grok, Hermes, Antigravity CLI, Cursor und Kuma Studio — werden im Vergleich von Skills, Hooks, Plugins/Erweiterungen, Projektanweisungs- und Gedächtnisdateien, CLI-Start (interaktiv vs. headless), Sitzungs-Wiederaufnahme und Abrechnung betrachtet.
-2. **Eine Methodik für eine repo-eigene Wahrheitssource** — Skills, Hooks, Befehle, Skripte, Referenzen, Assets, MCP/App-Verkabelung, Plugin-Metadaten — ohne Drift in jeder Laufzeit installieren: ein kanonischer Paketstamm, Symlink-Installationen, klare Verfahren zum Außerkraftsetzen/Umbenennen und eine Validierungsgliederung.
+1. **Ein Kompatibilitäts-Wiki, täglich aus den offiziellen Herstellerdokumenten aktualisiert.** Sieben Laufzeiten — Codex, Claude Code, Grok, Hermes, Antigravity CLI, Cursor und Kuma Studio — werden anhand von Skills, Hooks, Plugins/Erweiterungen, Projektanweisungs- und Speicherdateien, CLI-Start (interaktiv vs. headless), Sitzungswiederaufnahme und Abrechnung verglichen.
+2. **Eine Methodik zum Ausrollen einer repository-eigenen einzigen Wahrheit** — Skills, Hooks, Befehle, Skripte, Referenzen, Assets, MCP/App-Verknüpfungen, Plugin-Metadaten — ohne Drift auf jede Laufzeit installiert: ein kanonischer Paket-Root, Symlink-Installationen, eindeutige Verfahren zum Stilllegen/Umbenennen und eine Validierungsliste.
 
-## Was es beantwortet
+## Was beantwortet wird
 
-Fragen, für die du sonst einen Nachmittag verbrannt hättest, mit Belegen beantwortet:
+Fragen, für die man sonst leicht einen Nachmittag verbrät, mit Zitaten beantwortet:
 
-| Du fragst | Das Wiki beantwortet |
+| Du fragst | Die Wiki antwortet |
 |---|---|
-| „Kann ich einen Skill in Grok oder Hermes ausschalten?“ | Es gibt auf beiden keine offizielle pro-Skill-Fehlerstatus. Daher muss das Ausschalten den Skill aus der Entdeckungswurzel entfernen. Diese Tatsache unterscheidet einen echten Schalter von einer falschen Annahme. |
-| „Welche Anweisungsdatei liest jeder Agent?“ | `AGENTS.md` vs `CLAUDE.md` vs `GEMINI.md` vs `.hermes.md` — wer was mit welcher Priorität liest und wie man eine einzige Datei über alle teilt. |
-| „Wie setze ich eine Sitzung aus einem Skript fort?“ | Die Tabelle „Session Resume“ gibt Wiederaufnahmebefehl, Sitzungs-Store-Standort und Sitzungs-ID-Format für jede Laufzeit an. |
-| „Verursacht mein nächtlicher `claude -p`-Cron Kosten?“ | Die Abrechnungszeilen zeigen genau, wie Headless-/SDK-Nutzung berechnet wird — einschließlich der Änderung der Agent SDK-Credits am 15.06.2026. |
-| „Ist `/<skill-name>` in Codex möglich?“ | Nein — Codex nutzt `$<skill-name>`. Die Skill-Invocation-Matrix zeigt das echte Invokations-Token jeder Laufzeit, damit du nicht annimmst, dass ein Token überall funktioniert. |
+| „Kann ich einen Skill in Grok oder Hermes ausschalten?“ | Nein, es gibt für keinen von beiden einen offiziellen Schalter pro Skill — eine Umschaltung muss daher den Skill aus der Entdeckungswurzel entfernen. Genau dieser Umstand macht den Unterschied zwischen einem echten Toggle und einer Lüge. |
+| „Welche Anleitungsdatei liest jeder Agent ein?“ | `AGENTS.md` vs `CLAUDE.md` vs `GEMINI.md` vs `.hermes.md` — wer was liest, in welcher Priorität und wie man eine Datei für alle gemeinsam nutzt. |
+| „Wie setze ich eine Sitzung aus einem Skript fort?“ | Die Tabelle zur Sitzungswiederaufnahme: Fortsetzungsbefehl, Speicherort des Session Stores und Session-ID-Format für jede Laufzeit. |
+| „Verursacht mein nächtlicher `claude -p`-Cron Kosten?“ | Die Billing-Zeilen zeigen exakt, wie die headless/SDK-Nutzung berechnet wird — inklusive der 2026-06-15-Änderung der Agent-SDK-Credits, die aktuell **ausgesetzt** ist (Stand 2026-06-18 entnimmt `claude -p` weiterhin aus deinem Nutzungs-Kontingent im Abo). |
+| „Gibt es auf Codex `/<skill-name>`?“ | Nein — Codex nutzt `$<skill-name>`. Die Matrix zur Skill-Aufruf-Syntax enthält jedes reale Invocations-Token jeder Laufzeit, damit du nicht mehr annimmst, dass ein Token überall gleich funktioniert. |
 
-**Das ist die Grundlage, auf der du Verwaltungswerkzeuge aufbaust.** Das Skill-/Hook-Umschalt-System von Kuma Studio — jedes beliebige Skill oder Hook per GUI in Claude, Codex, Grok und Hermes ein- oder auszuschalten — wurde direkt auf diesen Fakten aufgebaut: Das Wiki zeigt, wo der echte Schalter jeder Laufzeit liegt (`skillOverrides`, `[[skills.config]]`, Hook-State-Keys), und wo offiziell kein Schalter existiert, steht das ebenfalls dort, sodass die Werkzeuge bewusst ausgleichen statt zu raten. Egal welche cross-agent Dashboard-, Sync- oder Fleet-Verwaltung du baust, dieses Wiki ist die nötige Wahrheitsschicht.
+**Das ist die Ebene, auf der du Management-Tools aufbaust.** Kuma Studios Skill-/Hook-Umschaltsystem — das jede Skill- oder Hook-Funktion in Claude, Codex, Grok und Hermes über eine einzige GUI an- oder ausschaltet — wurde direkt auf diesen Fakten aufgebaut: Die Wiki nennt den tatsächlichen Schalter für jede Laufzeit (`skillOverrides`, `[[skills.config]]`, Hook-State-Keys), und wo es offiziell keinen Schalter gibt, sagt sie das ebenfalls, sodass das Tooling bewusst kompensiert statt zu raten. Egal, ob du ein cross-agent Dashboard, ein Sync-Tool oder einen Flottenmanager baust, dieses Wiki ist die nötige Grundlage der Wahrheit.
 
-## Warum ihm vertrauen
+## Warum man es vertrauen kann
 
-- **Jede Aussage belegt sich mit der offiziellen Dokumentation des Anbieters.** Keine Bauchgefühle, keine Gerüchte, kein „bei mir hat es funktioniert“.
-- **Abwesenheit wird dokumentiert, nicht abgeleitet.** Wo eine Laufzeit eine Fähigkeit nicht dokumentiert, steht im Wiki `not documented`, statt Parität zu unterstellen — zu wissen, dass ein Schalter *nicht existiert*, ist so wertvoll wie zu wissen, wo er ist.
-- **Es verifiziert sich selbst täglich.** Ein geplanter Cloud-Agent lädt jede Quelle aus `docs/official-sources.json` neu und öffnet eine PR, wenn sich Belege geändert haben; ein deterministisches Gate merged automatisch nur Dokumentsänderungen, die den Quellencheck bestehen. Veraltete Kompatibilitätstabellen sind die Ursache für verrottendes cross-runtime Werkzeug — dieses hier bleibt nicht stehen.
+- **Jede Aussage basiert auf der Dokumentation des Anbieters.** Kein Bauchgefühl, kein Stammtisch-Wissen, kein „bei mir lief es so“.
+- **Fehlende Funktionen werden erfasst, nicht ermittelt.** Wo eine Laufzeit eine Fähigkeit nicht dokumentiert, steht dort `not documented` statt einer angenommenen Gleichwertigkeit — zu wissen, dass ein Schalter *nicht existiert*, ist genauso wertvoll wie zu wissen, wo er ist.
+- **Es überprüft sich selbst täglich neu.** Ein geplanter Cloud-Agent liest jede Quelle in `docs/official-sources.json` erneut ein und öffnet ein PR, wenn sich Belege geändert haben; eine deterministische Gate prüft und mergt automatisch Dokumentationsänderungen, die den Quellencheck bestehen. Veraltete Kompatibilitätstabellen lassen Cross-Runtime-Tooling verfallen — dieses hier bleibt nicht statisch.
 
-## Was dieses Repository enthält
+## Was dieses Repo besitzt
 
-- `SKILL.md` — der Skill-Einstiegspunkt sowie die Autorenschafts-/Interoperabilitätsmethodik.
-- `docs/compatibility-matrix.md` — der Laufzeitvergleich (Skills/Hooks/Plugins/Instructions, Session Resume, Skill Invocation).
-- `docs/cli-invocation.md` — pro Laufzeit CLI-Start (interaktiv vs. headless) und Wiederaufnahme-Syntax.
-- `docs/plugin-packaging.md` — wie sich Plugin-/Erweiterungs-Packaging je Plattform unterscheidet.
-- `docs/official-sources.json` — das Quellenmanifest, das die tägliche Aktualisierung erneut verifiziert.
-- `docs/cloud-automation.md` — die tägliche Update-Automatisierung und warum sie in der Cloud läuft.
-- `docs/kuma-studio-patterns.md` — öffentliche Betriebsabläufe von Kuma Studio.
-- `CHANGELOG.md` plus das Git-Tag — die Versionshistorie. Die Historie bleibt hier, nicht in den Dokumentenkörpern.
+- `SKILL.md` — der Skill-Entrypoint sowie die Methodik für Authoring und Interoperabilität.
+- `docs/compatibility-matrix.md` — der plattformübergreifende Vergleich (Skills/Hooks/Plugins/Instruktionen, Sitzungswiederaufnahme, Skill-Aufruf).
+- `docs/cli-invocation.md` — CLI-Start pro Laufzeit (interaktiv vs. headless) und Wiederaufnahmesyntax.
+- `docs/plugin-packaging.md` — wie sich Plugin-/Erweiterungs-Paketierung plattformabhängig unterscheidet.
+- `docs/official-sources.json` — das Quellen-Manifest, das die tägliche Aktualisierung erneut verifiziert.
+- `docs/cloud-automation.md` — die tägliche Aktualisierungsautomatisierung und warum sie in der Cloud läuft.
+- `docs/kuma-studio-patterns.md` — öffentliche Betriebs-Patterns von Kuma Studio.
+- `CHANGELOG.md` plus das Git-Tag — die Versionshistorie. Die Historie bleibt hier und nicht in den Dokumenten selbst.
 
 ## Tägliche Wiki-Aktualisierung
 
-Ein täglicher Agent hält das Wiki aktuell: Er liest `docs/official-sources.json`, ruft die offiziellen Anbieter-URLs ab und öffnet eine Pull Request, wenn sich Belege geändert haben. Er pusht nicht direkt nach `main`.
+Ein täglicher Agent hält das Wiki aktuell: Er liest `docs/official-sources.json`, ruft die offiziellen Anbieter-URLs ab und öffnet eine Pull Request, wenn sich die Belege ändern. Auf `main` wird nicht direkt gepusht.
 
-Der empfohlene Weg ist **Claude Routines** — eine geplante Claude-Code-Sitzung, die in Anthropics Cloud auf einem Claude-Abo läuft, ohne API-Key und ohne GitHub Actions, und weiterläuft, wenn dein Laptop geschlossen ist. Das lokale Ausführen der Aktualisierung über `claude -p` wird nicht empfohlen: Seit dem 15.06.2026 nutzt die Agent SDK-/`claude -p`-Nutzung auf berechtigten Abonnementplänen einen separaten monatlichen Agent SDK Credit (pro Nutzer, erneuert monatlich, nicht übertragbar) statt des Pools für interaktive Nutzung — und ein lokaler Cron läuft nur, wenn der Rechner eingeschaltet ist. Siehe `docs/cloud-automation.md`.
+Der empfohlene Weg ist **Claude Routines** — eine geplante Claude Code-Sitzung, die in Anthropic Cloud auf einem Claude-Abo läuft, ohne API-Key und ohne GitHub Actions, und die auch läuft, wenn dein Laptop zugeklappt ist. Die Ausführung **lokal** über `claude -p` wird vor allem aus **Zuverlässigkeitsgründen** abgeraten: Ein lokaler Cron läuft nur, solange der Rechner aktiv ist, während eine Cloud-Routine unabhängig vom Laptop-Zustand läuft. (Zum Billing: Die für Juni 15, 2026 angekündigte getrennte monatliche Gutschriftenänderung ist aktuell **ausgesetzt**, daher entnimmt `claude -p` und die Agent SDK-Nutzung weiterhin den Nutzungs-Pool deines Abonnements (Stand 2026-06-18); bei `ANTHROPIC_API_KEY` gilt weiterhin Pay-as-you-go.) Siehe `docs/cloud-automation.md`.
 
-1. Führe in Claude Code `/schedule` aus (oder öffne <https://claude.ai/code/routines>).
-2. Richte die Routine auf dieses Repository aus und verwende den Prompt aus `prompts/daily-official-doc-update.md`.
-3. Plane sie auf täglich. Sie öffnet eine PR und führt anschließend ein Auto-Merge-Gate aus, das Dokumentenänderungen, die den Quellencheck bestehen, als Squash-Merge zusammenführt; alles andere wartet auf deine Freigabe (siehe `docs/cloud-automation.md`).
+1. Starte in Claude Code `/schedule` (oder öffne <https://claude.ai/code/routines>).
+2. Richte die Routine auf dieses Repository und nutze den Prompt in `prompts/daily-official-doc-update.md`.
+3. Plane sie auf einmal täglich. Sie öffnet ein PR und führt dann ein Auto-Merge-Gate aus, das Docs-only-Änderungen, die den Quellcheck bestehen, squash-merged; alles andere wartet auf deine Freigabe (siehe `docs/cloud-automation.md`).
 
-Codex-Nutzende können denselben Ablauf mit einer Codex App Automation nutzen. Siehe `docs/cloud-automation.md` für beide Wege.
+Codex-Nutzer können denselben Ablauf mit einer Codex App Automation ausführen. Siehe `docs/cloud-automation.md` für beide Wege.
 
-## Lokale Prüfungen
+## Lokale Checks
 
 ```bash
 node scripts/check-official-sources.mjs --write-report
 ```
 
-Das Skript validiert Quellen-IDs, erlaubte offizielle Hosts, Erreichbarkeit der URLs, die erforderlichen Quellkategorien und das `SKILL.md`-Zeilenbudget.
+Das Skript validiert Quell-IDs, erlaubte offizielle Hosts, URL-Erreichbarkeit, die erforderlichen Quellkategorien und das `SKILL.md`-Zeilenbudget.

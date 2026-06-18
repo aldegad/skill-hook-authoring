@@ -5,6 +5,67 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.12 — 2026-06-18
+
+Full adversarial re-verification of every source against the official vendor docs
+(7 WebFetch-able runtimes fact-checked in parallel; all 7 Antigravity SPA pages
+re-rendered dynamically). The Antigravity surface confirmed with **zero drift**
+from the 2026-06-16 render. Corrections and currency updates:
+
+### Fixed
+
+- **Grok session store was fabricated.** The Session Resume table claimed
+  `~/.grok/active_sessions.json` with a `[{session_id, pid, cwd, opened_at}]`
+  schema; the official headless-scripting doc documents only `~/.grok/sessions`
+  and no such index. Corrected to `~/.grok/sessions` and the index marked
+  `not documented`.
+- **Unsourced "Apache 2.0" claim removed.** The Google transition blog does
+  **not** mention Apache-2.0, the OSS repo's fate, or the `agy` binary name; those
+  were attributed to the blog URL. De-attributed in `official-sources.json` and
+  `cli-invocation.md` (the binary name stays sourced to the antigravity.google docs).
+- **Gemini CLI cutoff shifted future → present.** 2026-06-18 (the individual
+  cutoff) is today; `SKILL.md`, `cli-invocation.md`, `compatibility-matrix.md`,
+  and `plugin-packaging.md` now read in present/past tense.
+- **`check-official-sources.mjs` was failing since v1.11.** The `gemini-cli-gemini-md`
+  source's host `google-gemini.github.io` was never added to `policy.allowedHosts`.
+  Added it; the check passes (51 sources).
+- **README billing was stale.** v1.10 paused the 2026-06-15 Agent SDK credit
+  change everywhere except `README.md`, which still described it as in effect.
+  Corrected (English + all six translations regenerated). The daily prompt's
+  billing/cutoff instructions were likewise updated.
+- **SKILL.md self-contradiction.** The taxonomy still said Claude documents "no
+  Codex-style `.codex-plugin/plugin.json` equivalent"; Claude documents
+  `.claude-plugin/plugin.json`. Fixed.
+- **`/status` over-claimed.** The Pro/Max page references `/status` only for
+  remaining-plan-allocation, not for revealing the active auth method. Reworded in
+  `official-sources.json` and `cli-invocation.md`.
+- **Codex plugins-overview claims trimmed.** The overview page lists only
+  skills/apps/MCP servers; `marketplaces`/`hooks` were moved to the `plugins/build`
+  source where they are actually documented.
+
+### Changed (currency)
+
+- **Cursor cloud-agent unsupported hook set expanded** to include
+  `beforeMCPExecution`/`afterMCPExecution`, `afterAgentResponse`/`afterAgentThought`,
+  and `stop` ("Not yet wired for cloud agents"); recorded `failClosed` default
+  `false`, `loop_limit` default `5` (Cursor) / `null` (Claude Code), and the
+  per-OS enterprise `hooks.json` paths.
+- **Hermes:** added the `session:reset` gateway event and the
+  `HERMES_ACCEPT_HOOKS=1` shell-hook bypass; appended `.cursor/rules/*.mdc` to the
+  SKILL.md precedence summaries.
+- **Codex:** documented the PreToolUse "only the simple ones" shell-coverage
+  caveat, the lifecycle event set in the matrix, the `behavior`-field
+  `PermissionRequest` hook (and `ask`/`approve` as "parsed but not yet supported"),
+  and the `codex exec` automation flags (`--ephemeral`, `--output-schema`,
+  `--ignore-rules`, `--ignore-user-config`, `CODEX_API_KEY`).
+- **Grok:** documented hook env vars (`GROK_HOOK_*`), marketplace config sources
+  (`[[marketplace.sources]]`, `known_marketplaces.json`, `--plugin-dir`).
+- **Claude:** noted `claude setup-token` and `--output-format json` `total_cost_usd`
+  for scripted/CI billing, the `--bare` API-key auth requirement, and the
+  `skillOverrides` value set (`on`/`name-only`/`user-invocable-only`/`off`).
+- All `Last reviewed:` / `verified` / dynamic-render stamps refreshed to
+  2026-06-18; manifest `updated` → 2026-06-18.
+
 ## v1.11 — 2026-06-17
 
 ### Added — Project Instruction File Loading mechanics

@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-06-16
+Last reviewed: 2026-06-18
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or
@@ -16,11 +16,11 @@ here are tracked as `kind: "cli-invocation"` sources in
 `docs/official-sources.json`; the resume claims as `kind: "session-resume"`. Both
 are re-verified by the daily refresh (`prompts/daily-official-doc-update.md`).
 
-> **Gemini CLI is retired here.** Google is moving Gemini CLI to **Antigravity
-> CLI** (binary `agy`); for AI Pro/Ultra and free individual users Gemini CLI
-> stops serving requests **2026-06-18**. We track Antigravity CLI as the
-> Google-family runtime below. Gemini CLI still exists on an enterprise/Google
-> Cloud entitlement and as an Apache-2.0 repo — see the transition section.
+> **Gemini CLI is retired here.** Google moved Gemini CLI to **Antigravity
+> CLI** (binary `agy`); for AI Pro/Ultra and free individual users Gemini CLI,
+> **as of 2026-06-18, has stopped serving requests**. We track Antigravity CLI as
+> the Google-family runtime below. Gemini CLI still exists on an enterprise/Google
+> Cloud entitlement — see the transition section.
 
 ## The mode switch is not the same shape across runtimes
 
@@ -59,25 +59,25 @@ the same idea, but they are reached differently:
 
 | Runtime | Headless command | Prompt / stdin | Output format | Useful scripting flags |
 |---|---|---|---|---|
-| Codex | `codex exec "<prompt>"` (alias `codex e`) | prompt arg; `-` reads prompt from stdin | `--json` / `--experimental-json` (JSONL); else final message to stdout, progress to stderr | `--model`/`-m`, `--output-last-message`/`-o <file>`, `--sandbox`/`-s`, `--cd`/`-C`. (Aside: `-p` is `--profile`, a config-profile selector — **not** a print/headless flag.) |
+| Codex | `codex exec "<prompt>"` (alias `codex e`) | prompt arg; `-` reads prompt from stdin | `--json` / `--experimental-json` (JSONL); else final message to stdout, progress to stderr | `--model`/`-m`, `--output-last-message`/`-o <file>`, `--sandbox`/`-s`, `--cd`/`-C`, `--output-schema <file>` (JSON-Schema-constrained final message), `--ephemeral` (don't persist rollout files), `--ignore-user-config`, `--ignore-rules`; `CODEX_API_KEY` for inline auth. (Aside: `-p` is `--profile`, a config-profile selector — **not** a print/headless flag.) |
 | Claude Code | `claude -p "<query>"` (`--print`) | `cat file \| claude -p "<query>"` | `--output-format text\|json\|stream-json` (+ `--input-format`) | `--model`, `--bare` (skip auto-discovery; recommended for scripts, will become default for `-p`), `--allowedTools`, `--permission-mode default\|acceptEdits\|plan\|auto\|dontAsk\|bypassPermissions`, `--max-turns`, `--max-budget-usd`, `--json-schema`, `--system-prompt[-file]`, `--append-system-prompt[-file]`, `--permission-prompt-tool`, `--bg`, `--no-session-persistence`, `--plugin-url <url>` (fetch plugin zip for session), `--agents <json>` (inline subagent definitions), `--settings <file-or-json>` |
 | Grok / xAI | `grok -p "<prompt>"` (`--single`) | `grok agent stdio` = ACP agent over JSON-RPC on stdin/stdout | `--output-format plain\|json\|streaming-json` | `--model`/`-m`, `--cwd`, `--always-approve`, `--no-alt-screen`, `--no-auto-update` |
 | Hermes Agent | `hermes chat -q "<query>"` (single query) | not documented (no stdin/JSON piping flag) | not documented (no JSON output-format flag) | `--model`, `--provider nous\|openrouter`, `--toolsets`, `-s <skill>`, `--verbose` |
 | Antigravity CLI | not documented — no `agy -p` one-shot in official docs | — | the TUI can pipe JSON status-line metadata to a shell script, but that is not a one-shot run | use the **Antigravity SDK** (`pip install google-antigravity`; Python `Agent` + `LocalAgentConfig`) for programmatic/unattended runs; `--sandbox`, `--dangerously-skip-permissions` are launch overrides, not a headless mode |
 | Cursor CLI | `cursor-agent -p "<prompt>"` (`--print`) | print mode for scripts | `--output-format text\|json\|stream-json` (only with `--print`); `--stream-partial-output` | `--model`, `-f`/`--force` (`--yolo`), `--trust` (headless only) |
 
-> **Billing caveat (Claude Code).** As of 2026-06-16, the Agent SDK billing
-> change announced for 2026-06-15 has been **paused**. The official support page
-> now states: *"We're pausing the changes to Claude Agent SDK usage described
-> below. For now, nothing has changed: Claude Agent SDK, `claude -p`, and
-> third-party app usage still draw from your subscription's usage limits."*
-> For accounts using `ANTHROPIC_API_KEY`, billing remains pay-as-you-go API
-> usage. Run `/status` to confirm the active auth method. For unattended/scheduled
-> work prefer a cloud **Claude Routine** over a local `claude -p` cron; the
-> reliability advantage (Routine runs regardless of laptop state) still applies.
-> See `docs/cloud-automation.md`. (Source:
+> **Billing caveat (Claude Code).** As of 2026-06-18, the Agent SDK billing
+> change announced for 2026-06-15 remains **paused**. The official support page
+> opens with a dated banner: *"Update June 15: We're pausing the changes to Claude
+> Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK,
+> `claude -p`, and third-party app usage still draw from your subscription's usage
+> limits."* For accounts using `ANTHROPIC_API_KEY`, billing remains pay-as-you-go
+> API usage; run `/status` to monitor your remaining plan allocation. For
+> unattended/scheduled work prefer a cloud **Claude Routine** over a local
+> `claude -p` cron; the reliability advantage (Routine runs regardless of laptop
+> state) still applies. See `docs/cloud-automation.md`. (Source:
 > https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan,
-> verified 2026-06-16.)
+> verified 2026-06-18.)
 
 ## C. Resume invocation (command syntax)
 
@@ -106,13 +106,14 @@ runtime's resume command accepts. Antigravity conversations are
 
 ## Gemini CLI → Antigravity CLI transition
 
-Official (Google Developers Blog, 2026-05; antigravity.google docs):
+Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
 
-- **Cutoff:** On **2026-06-18**, Gemini CLI and the Gemini Code Assist IDE
-  extensions stop serving requests for Google AI Pro/Ultra and free individual
-  users. Enterprise (Gemini Code Assist Standard/Enterprise, Google Cloud, paid
-  Agent Platform API keys) keep Gemini CLI with the latest models; the
-  open-source repo stays Apache 2.0.
+- **Cutoff:** As of **2026-06-18**, Gemini CLI and the Gemini Code Assist IDE
+  extensions have stopped serving requests for Google AI Pro/Ultra and free
+  individual users. Enterprise (Gemini Code Assist Standard/Enterprise, Google
+  Cloud GitHub, paid Gemini / Gemini Enterprise Agent Platform API keys) keep
+  Gemini CLI with the latest models. (The blog does not state the open-source
+  repo's license; the earlier "Apache 2.0" note is dropped as unsourced.)
 - **Successor:** Antigravity CLI (`agy`) shares the agent harness with the
   Antigravity 2.0 desktop app and the **Antigravity SDK**
   (`pip install google-antigravity`) — the documented programmatic/headless path,
@@ -155,7 +156,7 @@ Official (Google Developers Blog, 2026-05; antigravity.google docs):
   (JSONL); Claude/Cursor `--output-format json|stream-json`; Grok
   `--output-format json`. Hermes and Antigravity document **no** headless JSON
   output flag.
-- **Claude Code Agent SDK billing (status as of 2026-06-16):** The billing change planned for 2026-06-15 has been **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-06-16.)
+- **Claude Code Agent SDK billing (status as of 2026-06-18):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token, requires a subscription) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-06-18.)
 - Session resume identifiers differ (UUID session id vs. human name vs.
   `--last` / `-1` vs. `--conversation <uuid>`). Store a resume handle in the form
   that runtime's resume command accepts, and remember whether you need the
@@ -181,4 +182,4 @@ Official (Google Developers Blog, 2026-05; antigravity.google docs):
 - Antigravity SDK (programmatic/headless path) — <https://antigravity.google/docs/sdk-overview>
 - Cursor CLI parameters — <https://cursor.com/docs/cli/reference/parameters>
 - Claude Code with Pro/Max plan (billing) — <https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan>
-- Claude Agent SDK / headless plan usage (2026-06-15 change **paused** as of 2026-06-16) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
+- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-06-18) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>

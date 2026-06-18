@@ -57,20 +57,23 @@ mirrors: the `## CLI Spawn And Headless Launch` section of `SKILL.md` and the
 launch/headless tables in `docs/cli-invocation.md`. The Antigravity docs
 (`antigravity.google`) are a JS-rendered SPA — a static fetch returns an empty
 shell, so treat a 200 with no content as `unverified this run` and render it
-dynamically before claiming a change. Note when the **2026-06-18 Gemini CLI
-individual cutoff** has passed so the legacy Gemini references can be retired, and
-record any capability the official docs do not cover as `not documented`.
+dynamically before claiming a change. The **2026-06-18 Gemini CLI individual
+cutoff** has now passed (reached 2026-06-18), so keep legacy Gemini references in
+past tense and retire any that are stale; record any capability the official docs
+do not cover as `not documented`.
 
 **BILLING / PLAN USAGE — do not skip this category.** Every source in
 `docs/official-sources.json` with `"kind": "billing"` MUST be fetched and
 re-verified every run: which usage the Pro/Max subscription covers vs. what bills
 as API, whether a present `ANTHROPIC_API_KEY` switches Claude Code to API billing,
-and the **2026-06-15** change after which Agent SDK / `claude -p` (headless) usage
-no longer counts toward the Claude plan. If the official docs change any of this,
-update the billing caveat in both mirrors so they stay consistent: the **Billing
-caveat** note in `docs/cli-invocation.md` and the **"Why not a local cron"** block
-in `docs/cloud-automation.md`. Once the 2026-06-15 cutoff has passed, shift the
-wording from future to present tense.
+and the status of the **2026-06-15** Agent SDK / `claude -p` plan-usage change.
+As of 2026-06-18 that change is **paused** (Agent SDK and `claude -p` still draw
+from the subscription usage limits, same as interactive use). Confirm each run
+whether it is still paused, resumed, or cancelled, and keep the status + date
+current. If the official docs change any of this, update the billing caveat in
+both mirrors so they stay consistent: the **Billing caveat** note in
+`docs/cli-invocation.md` and the **"Why not a local cron"** block in
+`docs/cloud-automation.md`.
 
 **IF THERE ARE CHANGES:** make small, reviewable edits to the repo docs. Cite the
 official source URL in the docs or in the PR body. Run

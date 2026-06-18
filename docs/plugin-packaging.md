@@ -1,6 +1,6 @@
 # Plugin And Extension Packaging
 
-Last reviewed: 2026-06-16
+Last reviewed: 2026-06-18
 
 ## Shared Rule
 
@@ -27,7 +27,7 @@ Do not migrate this repo into a Codex plugin layout until there is an explicit p
 
 ## Antigravity CLI (formerly Gemini CLI extensions)
 
-**Gemini CLI is retiring** — for AI Pro/Ultra and free individual users it stops serving requests 2026-06-18 (enterprise/Google Cloud retained), and Antigravity CLI (`agy`) is the successor. The native Antigravity plugin format below is the current packaging surface; the legacy Gemini extension model is kept only to explain the migration.
+**Gemini CLI is retired** — for AI Pro/Ultra and free individual users it has stopped serving requests as of 2026-06-18 (enterprise/Google Cloud retained), and Antigravity CLI (`agy`) is the successor. The native Antigravity plugin format below is the current packaging surface; the legacy Gemini extension model is kept only to explain the migration.
 
 **Native Antigravity plugins.** A plugin is a namespaced bundle staged under `~/.gemini/antigravity-cli/plugins/<name>/`:
 
@@ -41,13 +41,13 @@ Do not migrate this repo into a Codex plugin layout until there is an explicit p
 └── rules/             # optional codebase rules
 ```
 
-Manage plugins with `agy plugin list`, `agy plugin install <path>`, `agy plugin enable`/`disable <name>`, and `agy plugin uninstall <name>`. Hooks are pre/post-tool (e.g. a pre-flight check or a post-write formatter), declared either in a plugin's `hooks.json` or the primary `~/.gemini/antigravity-cli/settings.json`, and browsable in the TUI with `/hooks`. Workspace-local skills live in `.agents/skills/` (global `~/.gemini/antigravity-cli/skills/`) and compile to typed `/<skill-name>` slash commands on launch; MCP servers live in a standalone `mcp_config.json` (workspace `.agents/mcp_config.json`) using the `serverUrl` key (`url`/`httpUrl` unsupported). (Verified by dynamic render of the JS-rendered docs, 2026-06-16.)
+Manage plugins with `agy plugin list`, `agy plugin install <path>`, `agy plugin enable`/`disable <name>`, and `agy plugin uninstall <name>`. Hooks are pre/post-tool (e.g. a pre-flight check or a post-write formatter), declared either in a plugin's `hooks.json` or the primary `~/.gemini/antigravity-cli/settings.json`, and browsable in the TUI with `/hooks`. Workspace-local skills live in `.agents/skills/` (global `~/.gemini/antigravity-cli/skills/`) and compile to typed `/<skill-name>` slash commands on launch; MCP servers live in a standalone `mcp_config.json` (workspace `.agents/mcp_config.json`) using the `serverUrl` key (`url`/`httpUrl` unsupported). (Verified by dynamic render of the JS-rendered docs, 2026-06-18.)
 
 **Legacy Gemini extensions and migration.** Legacy Gemini CLI extensions installed under `~/.gemini/extensions/<name>` use `gemini-extension.json` and can package MCP servers, a context file such as `GEMINI.md`, custom commands, and `excludeTools` rules (copied unless `gemini extensions link` is used). `agy plugin import gemini` converts them to native plugins — parsing the extension manifests, converting legacy commands to skills, and migrating MCP server definitions — and first launch offers the same auto-conversion. Workspace skills move `.gemini/skills/` → `.agents/skills/`; MCP moves out of `~/.gemini/settings.json` into a standalone `mcp_config.json` (workspace `.agents/mcp_config.json`; the global path is cited inconsistently across Google's own docs — `~/.gemini/config/mcp_config.json` on the migration page vs `~/.gemini/antigravity-cli/mcp_config.json` on the plugins page) with `url`/`httpUrl` renamed to `serverUrl`. Context files are unchanged: it still reads `GEMINI.md` and `AGENTS.md`. See `docs/cli-invocation.md` for the CLI surface and citations.
 
 ## Grok Plugins
 
-xAI docs describe Grok plugins as bundles of skills, agents, hooks, MCP servers, and LSP servers. Grok also documents user, project, and plugin roots for skills and hooks, marketplace sources, Claude Code compatibility, and AGENTS.md compatibility.
+xAI docs describe Grok plugins as bundles of skills, agents, hooks, MCP servers, and LSP servers. Grok also documents user, project, and plugin roots for skills and hooks, marketplace sources, Claude Code compatibility, and AGENTS.md compatibility. Marketplaces are configured via `[[marketplace.sources]]` in `~/.grok/config.toml`, `~/.grok/plugins/known_marketplaces.json`, and the `--plugin-dir <path>` flag; hooks receive `GROK_HOOK_EVENT`, `GROK_HOOK_NAME`, `GROK_SESSION_ID`, `GROK_WORKSPACE_ROOT` (plus `GROK_PLUGIN_ROOT`/`GROK_PLUGIN_DATA` for plugin hooks), and project `.grok/hooks/` requires `/hooks-trust`.
 
 Because Grok claims broad compatibility, keep this repo strict: compatibility text should cite the Grok docs and still verify behavior on the target Grok version before shipping hooks.
 
@@ -71,7 +71,7 @@ Hermes hooks are split across three documented systems: gateway hooks under `~/.
 
 Cursor documents Agent Skills and Hooks as first-class surfaces. Skills load from project `.agents/skills/` and `.cursor/skills/`, user `~/.agents/skills/` and `~/.cursor/skills/`, and compatibility roots for Claude/Codex skills. Skills may be slash-invoked from Agent chat, auto-applied by context, scoped with `paths`, or made explicit-only with `disable-model-invocation: true`.
 
-Hooks are configured at four scopes in priority order: enterprise (MDM-managed system-wide), team (Enterprise cloud dashboard), project (`<project-root>/.cursor/hooks.json`, committable to version control), and user (`~/.cursor/hooks.json`). Cloud agents load project hooks; team and enterprise hooks are distributed via the dashboard. Cursor documents events for sessions, tool-use, subagents, shell/MCP execution, file access, prompt submission, agent responses, Tab inline-completion hooks (`beforeTabFileRead`, `afterTabFileEdit`), compaction, and workspace startup — a broader event set than prior reviews captured; cloud agents do not support `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, Tab hooks, or `workspaceOpen`. Keep Cursor's hook schema separate from Claude/Codex schemas even when event names look similar.
+Hooks are configured at four scopes in priority order: enterprise (MDM-managed system-wide), team (Enterprise cloud dashboard), project (`<project-root>/.cursor/hooks.json`, committable to version control), and user (`~/.cursor/hooks.json`). Cloud agents load project hooks; team and enterprise hooks are distributed via the dashboard. Cursor documents events for sessions, tool-use, subagents, shell/MCP execution, file access, prompt submission, agent responses, Tab inline-completion hooks (`beforeTabFileRead`, `afterTabFileEdit`), compaction, and workspace startup — a broader event set than prior reviews captured; cloud agents do not support `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, `beforeMCPExecution`, `afterMCPExecution`, `afterAgentResponse`, `afterAgentThought`, `stop`, Tab hooks, or `workspaceOpen` (the docs mark these "Not yet wired for cloud agents" or unavailable due to VM-timing). `failClosed` defaults to `false`; `loop_limit` defaults to `5` on Cursor (`null` = no cap on Claude Code). Keep Cursor's hook schema separate from Claude/Codex schemas even when event names look similar.
 
 ## Packaging Decision Gate
 
