@@ -1,6 +1,6 @@
 ---
 name: skill-hook-authoring
-description: 'Cross-runtime agent-platform interoperability wiki, refreshed daily from official vendor docs: how Codex, Claude Code, Grok, Hermes, Antigravity CLI, Cursor, and Kuma Studio compare across skills, hooks, plugins/extensions, project-instruction files, CLI spawn, session resume, and billing — plus the authoring rules to ship one source of truth without drifting between runtimes.'
+description: 'Cross-runtime agent-platform interoperability wiki and authoring methodology, refreshed daily from official vendor docs: how Codex, Claude Code, Grok, Hermes, Antigravity CLI, Cursor, and Kuma Studio compare across skills, hooks, plugins/extensions, project-instruction files, CLI spawn, session resume, and billing, plus the rules to ship one source of truth without drifting between runtimes. Use when authoring, editing, retiring, renaming, or debugging a skill / hook / slash-command / plugin, or when a skill is not triggering and its description needs fixing. Triggers (KR/EN): 스킬 만들기/작성/수정/폐기/삭제/이름변경, 스킬 폐기, 스킬 발동 안 됨, 트리거 안 걸림, description 고치기, 훅 작성/수정, 슬래시 커맨드 추가, 플러그인 패키징, 크로스런타임 호환; skill authoring/editing/retire/rename, skill not triggering, fix skill description, hook authoring, slash command, plugin packaging, cross-runtime compatibility, Codex/Claude/Grok/Hermes/Antigravity/Cursor skill and hook comparison.'
 ---
 
 # Cross-Runtime Agent-Platform Interoperability
