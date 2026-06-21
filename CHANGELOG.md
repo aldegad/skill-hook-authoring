@@ -5,6 +5,41 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.13 — 2026-06-22
+
+Daily re-verification of all 51 official sources (six WebFetch-able runtimes
+fact-checked in parallel; all seven Antigravity SPA pages re-rendered
+dynamically; both billing pages re-fetched live). Two real drifts corrected, the
+Agent SDK billing change confirmed **still paused**, and verification stamps
+refreshed.
+
+### Fixed
+
+- **Hermes `subagent_start` hook was missing.** The official hooks doc documents
+  both `subagent_start` and `subagent_stop` plugin hooks; the repo enumerations
+  listed only `subagent_stop`. Added `subagent_start` in `compatibility-matrix.md`,
+  `plugin-packaging.md`, and the `nous-hermes-hooks` claims in
+  `official-sources.json`.
+- **Gemini "origin-path separators" was unsourced.** The official `gemini-md`
+  page states only that it "concatenates the contents of all found files" and
+  documents no separator/origin-marker format. Reworded to "separator format not
+  documented" in `compatibility-matrix.md` and the `gemini-cli-gemini-md` claim in
+  `official-sources.json`.
+
+### Verified (no content change)
+
+- **Agent SDK / `claude -p` billing still paused.** The 2026-06-15 change remains
+  paused per the live support-page banner; subscription usage limits still cover
+  Agent SDK, `claude -p`, and third-party app usage. Status dates moved
+  2026-06-18 → 2026-06-22 in `cli-invocation.md` and `cloud-automation.md`.
+- **All seven Antigravity SPA pages re-rendered with zero drift** (cli-reference,
+  conversations, sdk-overview, plugins, using, install, gcli-migration); the
+  documented MCP global-path inconsistency (`~/.gemini/config/` per migration vs
+  `~/.gemini/antigravity-cli/` per plugins) still stands. Render stamps refreshed
+  to 2026-06-22.
+- Codex (13), Claude Code (10), Grok (2), Cursor (5), GitHub (2), and the Gemini
+  transition blog re-verified against official docs with no drift.
+
 ## v1.12 — 2026-06-18
 
 Full adversarial re-verification of every source against the official vendor docs
