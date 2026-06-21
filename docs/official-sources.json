@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-06-18",
+  "updated": "2026-06-22",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
@@ -512,6 +512,7 @@
         "on_session_end",
         "on_session_finalize",
         "on_session_reset",
+        "subagent_start",
         "subagent_stop",
         "transform_tool_result",
         "transform_terminal_output",
@@ -932,7 +933,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/",
-      "notes": "Official transition announcement, posted 2026-05-19. Gemini CLI -> Antigravity CLI. Individual access (AI Pro/Ultra, free Code Assist) ends 2026-06-18 (reached today, 2026-06-18); enterprise (Code Assist Standard/Enterprise, Google Cloud GitHub, paid Gemini / Gemini Enterprise Agent Platform API keys) retained. The blog does NOT name the agy binary or mention Apache-2.0 / the OSS repo's fate; those facts belong to the antigravity.google docs, not this URL.",
+      "notes": "Official transition announcement, posted 2026-05-19. Gemini CLI -> Antigravity CLI. Individual access (AI Pro/Ultra, free Code Assist) ends 2026-06-18 (reached 2026-06-18); enterprise (Code Assist Standard/Enterprise, Google Cloud GitHub, paid Gemini / Gemini Enterprise Agent Platform API keys) retained. The blog does NOT name the agy binary or mention Apache-2.0 / the OSS repo's fate; those facts belong to the antigravity.google docs, not this URL.",
       "claims": [
         "transition Gemini CLI to Antigravity CLI",
         "blog posted 2026-05-19",
@@ -946,7 +947,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli-reference",
-      "notes": "JS-rendered SPA; static fetch returns an empty shell — render dynamically to verify (verified by dynamic render 2026-06-18). No headless one-shot flag documented; programmatic use is the Antigravity SDK.",
+      "notes": "JS-rendered SPA; static fetch returns an empty shell — render dynamically to verify (verified by dynamic render 2026-06-22). No headless one-shot flag documented; programmatic use is the Antigravity SDK.",
       "claims": [
         "agy binary",
         "interactive TUI launch",
@@ -977,7 +978,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli-conversations",
-      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-18).",
+      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-22).",
       "claims": [
         "agy --continue resumes most recent in workspace",
         "agy --conversation <uuid>",
@@ -993,7 +994,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/gcli-migration",
-      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-18). GEMINI_API_KEY->AV_API_KEY env swap is NOT stated here (third-party claim); auth is via OS keyring. Doc inconsistency: this page puts the global MCP config at ~/.gemini/config/mcp_config.json, while cli-plugins puts it at ~/.gemini/antigravity-cli/mcp_config.json; the workspace path .agents/mcp_config.json is consistent across both.",
+      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-22). GEMINI_API_KEY->AV_API_KEY env swap is NOT stated here (third-party claim); auth is via OS keyring. Doc inconsistency: this page puts the global MCP config at ~/.gemini/config/mcp_config.json, while cli-plugins puts it at ~/.gemini/antigravity-cli/mcp_config.json; the workspace path .agents/mcp_config.json is consistent across both.",
       "claims": [
         "agy plugin import gemini",
         "first-launch auto-conversion checklist",
@@ -1017,7 +1018,7 @@
         "global context ~/.gemini/GEMINI.md",
         "project/ancestor context up to .git root",
         "subdirectory context below cwd",
-        "concatenated with origin separators",
+        "concatenates contents of all found files",
         "/memory show",
         "/memory refresh",
         "legacy form inherited by Antigravity GEMINI.md"
@@ -1028,7 +1029,7 @@
       "agent": "antigravity-cli",
       "kind": "plugins",
       "url": "https://antigravity.google/docs/cli-plugins",
-      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-18). Documents the native plugin layout, hook config, skill->slash-command behavior, and MCP config that the cli-reference page does not.",
+      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-22). Documents the native plugin layout, hook config, skill->slash-command behavior, and MCP config that the cli-reference page does not.",
       "claims": [
         "plugins are namespaced bundles",
         "plugins staged at ~/.gemini/antigravity-cli/plugins/<name>/",
@@ -1058,7 +1059,7 @@
       "agent": "antigravity-cli",
       "kind": "configuration",
       "url": "https://antigravity.google/docs/cli-using",
-      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-18).",
+      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-22).",
       "claims": [
         "settings.json at ~/.gemini/antigravity-cli/settings.json",
         "/config or /settings opens the settings overlay",
@@ -1078,7 +1079,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli-install",
-      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-18).",
+      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-22).",
       "claims": [
         "macOS/Linux install curl -fsSL https://antigravity.google/cli/install.sh | bash",
         "installs the binary to ~/.local/bin/agy",
@@ -1096,7 +1097,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/sdk-overview",
-      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-18). This is the documented programmatic/headless path since agy has no headless one-shot flag.",
+      "notes": "JS-rendered SPA; render dynamically to verify (verified by dynamic render 2026-06-22). This is the documented programmatic/headless path since agy has no headless one-shot flag.",
       "claims": [
         "Antigravity SDK is a Python framework",
         "pip install google-antigravity",
@@ -1128,11 +1129,11 @@
       "agent": "claude-code",
       "kind": "billing",
       "url": "https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan",
-      "notes": "Re-verified 2026-06-18: the billing change originally planned for 2026-06-15 is still PAUSED. The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits.' Accounts using an API key continue on pay-as-you-go API billing. The original plan described separate monthly credits per plan tier (Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise $200) but this plan is paused and not in effect.",
+      "notes": "Re-verified 2026-06-22: the billing change originally planned for 2026-06-15 is still PAUSED. The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits.' Accounts using an API key continue on pay-as-you-go API billing. The original plan described separate monthly credits per plan tier (Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise $200) but this plan is paused and not in effect.",
       "claims": [
         "Agent SDK with Claude plan",
         "claude -p headless",
-        "2026-06-15 Agent SDK billing change still paused as of 2026-06-18",
+        "2026-06-15 Agent SDK billing change still paused as of 2026-06-22",
         "Agent SDK and claude -p currently draw from regular subscription usage limits same as interactive use",
         "API key accounts remain pay-as-you-go API billing",
         "original plan described separate monthly credits per plan tier but change is paused"
