@@ -30,7 +30,7 @@
 | “我可以在 Grok 或 Hermes 上关闭某个技能吗？” | 两者都没有官方的单个技能禁用能力，因此开关只能通过将技能移出发现根目录来实现。这个事实决定了是发布真实可行的开关，还是发布错误信息。 |
 | “每个代理读取哪个指令文件？” | `AGENTS.md` vs `CLAUDE.md` vs `GEMINI.md` vs `.hermes.md`——谁读哪个、优先级如何，以及如何让同一份文件在它们之间共享。 |
 | “如何从脚本恢复会话？” | 会话恢复表：每个运行时的恢复命令、会话存储位置与会话 ID 格式。 |
-| “我每天晚间的 `claude -p` 定时任务会让我付费吗？” | 计费行明确记录了无头模式/SDK 的计费方式，包括 `2026-06-15` 的 Agent SDK 信用额度变更，目前该变更已**暂停**（截至 `2026-06-18`，`claude -p` 仍从你的订阅使用额度中扣减）。 |
+| “我每天晚间的 `claude -p` 定时任务会让我付费吗？” | 在订阅下，它从你的套餐使用额度中扣减 —— 与交互式使用同一额度池，没有单独的按次调用信用额（2026-06-15 公布的单独计费信用额变更已暂停且未生效；`ANTHROPIC_API_KEY` 账户仍按量计费）。计费行记录了当前已核实的状态与日期。 |
 | “在 Codex 上有 `/<skill-name>` 这种用法吗？” | 不能——Codex 使用的是 `$<skill-name>`。技能调用矩阵记录了各运行时真实可用的调用令牌，因此你不必假设某个令牌在所有运行时都通用。 |
 
 **这就是你构建管理工具的基础层。** Kuma Studio 的技能/钩子开关系统——从一个 GUI 同时在 Claude、Codex、Grok 与 Hermes 上打开或关闭任意技能与钩子——正是基于这些事实直接构建的：该维基说明了每个运行时真实的开关位置（`skillOverrides`、`[[skills.config]]`、钩子状态键），并在官方不存在开关的场景下也明确说明，因此工具会有意识地进行补偿，而不是猜测。无论你在构建跨代理仪表盘、同步工具还是fleet管理器，这份维基都是它需要的事实依据。
@@ -56,7 +56,7 @@
 
 一个每日代理会保持维基最新：它读取 `docs/official-sources.json`，抓取官方供应商链接，在证据变化时打开 PR。它从不直接推送到 `main`。
 
-推荐路径是 **Claude Routines**——一个在 Anthropic 云端运行、基于 Claude 订阅、无需 API key 且无需 GitHub Actions 的定时 Claude Code 会话；即使笔记本关闭也能持续运行。通过 `claude -p` **本地**执行刷新主要不推荐，核心原因是**可靠性**：本地 cron 只有在机器唤醒时触发，而云端 Routine 则不受笔记本状态影响。关于计费：2026-06-15 公布的“按月独立信用额”变更目前已**暂停**，因此截至 `2026-06-18`，`claude -p` 与 Agent SDK 用量仍从你的订阅使用池扣减；`ANTHROPIC_API_KEY` 用户则继续按量计费。详见 `docs/cloud-automation.md`。
+推荐路径是 **Claude Routines**——一个在 Anthropic 云端运行、基于 Claude 订阅、无需 API key 且无需 GitHub Actions 的定时 Claude Code 会话；即使笔记本关闭也能持续运行。通过 `claude -p` **本地**执行刷新主要不推荐，核心原因是**可靠性**：本地 cron 只有在机器唤醒时触发，而云端 Routine 则不受笔记本状态影响。关于计费：在订阅下，`claude -p` 与 Agent SDK 用量从你的套餐使用池扣减 —— 2026-06-15 公布的“按月独立信用额”变更已暂停且未生效；`ANTHROPIC_API_KEY` 用户则继续按量计费。`docs/cli-invocation.md` 记录了当前已核实的状态与日期。详见 `docs/cloud-automation.md`。
 
 1. 在 Claude Code 中运行 `/schedule`（或打开 <https://claude.ai/code/routines>）。
 2. 将例程指向本仓库，并使用 `prompts/daily-official-doc-update.md` 中的提示词。

@@ -67,10 +67,14 @@ do not cover as `not documented`.
 re-verified every run: which usage the Pro/Max subscription covers vs. what bills
 as API, whether a present `ANTHROPIC_API_KEY` switches Claude Code to API billing,
 and the status of the **2026-06-15** Agent SDK / `claude -p` plan-usage change.
-As of 2026-06-18 that change is **paused** (Agent SDK and `claude -p` still draw
-from the subscription usage limits, same as interactive use). Confirm each run
-whether it is still paused, resumed, or cancelled, and keep the status + date
-current. If the official docs change any of this, update the billing caveat in
+As of 2026-06-24 that change is **paused** (Agent SDK and `claude -p` still draw
+from the subscription usage limits, same as interactive use — no separate per-run
+credit). Confirm each run whether it is still paused, resumed, or cancelled, and
+keep the status + date current. This is a **time-sensitive status claim**: advance
+its `verified` / `as of` date on every successful re-verification even when the
+status word is unchanged (see the freshness-stamp rule under **IF THERE ARE NO
+CHANGES**), because a "paused" status that reads as months-old looks wrong even
+when it is still true. If the official docs change any of this, update the billing caveat in
 both mirrors so they stay consistent: the **Billing caveat** note in
 `docs/cli-invocation.md` and the **"Why not a local cron"** block in
 `docs/cloud-automation.md`.
@@ -94,8 +98,20 @@ installers, hooks, or config, or a check failed), stop and leave the PR for a
 human to review. This keeps merge authority on a deterministic gate, not on the
 agent's reasoning.
 
-**IF THERE ARE NO CHANGES:** do not modify any file. Leave a short no-op summary
-only.
+**IF THERE ARE NO CHANGES:** do not modify any file — **with one exception, the
+freshness-stamp rule.** A `verified` / `Last reviewed:` / `as of <date>` stamp is
+provenance for a *live* claim, not static prose: its whole job is to say "this was
+re-checked on this date." So when you re-fetch a **time-sensitive status claim**
+(a status that can flip between runs — billing paused/resumed/cancelled, an
+announced-but-not-yet-effective cutoff, any "currently X" / "as of <date>" status)
+and it is unchanged, you MUST still advance that claim's date stamp to today and
+the doc-level `Last reviewed:` to today. That date bump *is* a legitimate content
+change — open the small PR for it; it is not "no changes". Do NOT advance stamps on
+stable structural facts (e.g. `codex exec` is the headless command) — those keep
+their stamp until the fact itself changes, so the refresh stays low-noise. The
+billing **paused** status and any dated cutoff are the canonical time-sensitive
+claims; keep their stamps current every run so a still-true status never rots into
+looking wrong. Outside that exception, leave a short no-op summary only.
 
 **HARD CONSTRAINTS:** Do NOT modify `~/.codex`, `~/.claude`, or any local skill
 install path. Do NOT modify local machine config. Do NOT push to `main` directly — merge only

@@ -30,7 +30,7 @@
 | "Can I toggle a skill off on Grok or Hermes?" | 공식적으로 Grok나 Hermes 둘 다 스킬 단위 비활성화 기능이 없습니다. 따라서 토글은 발견 루트(discovery root)에서 스킬을 제거하는 방식으로 처리해야 합니다. 이 차이가 “실제 동작하는 토글”과 “거짓 토글”의 경계를 만듭니다. |
 | "Which instruction file does each agent read?" | `AGENTS.md` vs `CLAUDE.md` vs `GEMINI.md` vs `.hermes.md`—각 런타임이 어떤 파일을 우선순위로 읽는지, 그리고 이 파일들을 어떻게 하나로 공유할지 설명합니다. |
 | "How do I resume a session from a script?" | 세션 재개 표를 통해 각 런타임의 재개 명령, 세션 저장 위치, 세션 ID 형식을 확인할 수 있습니다. |
-| "Will my nightly `claude -p` cron cost me money?" | 과금 행렬은 헤드리스/SDK 사용이 어떻게 과금되는지 정확히 추적합니다. 여기에는 2026-06-15에 발표된 Agent SDK 크레딧 변경도 포함되는데, 현재(2026-06-18 기준) **일시 중단** 상태이므로 `claude -p`는 여전히 구독 사용 한도에서 차감됩니다. |
+| "Will my nightly `claude -p` cron cost me money?" | 구독에서는 플랜 사용 한도에서 차감됩니다 — 인터랙티브 사용과 같은 풀이며, 별도의 호출당 크레딧은 없습니다 (2026-06-15에 발표된 별도 청구 크레딧 변경은 일시 중단되어 적용되지 않습니다. `ANTHROPIC_API_KEY` 계정은 기존처럼 pay-as-you-go). 과금 행에 현재 검증된 상태와 날짜가 있습니다. |
 | "Is `/<skill-name>` a thing on Codex?" | 아닙니다. Codex는 `$<skill-name>` 형식을 사용합니다. 스킬 호출 매트릭스는 각 런타임의 실제 호출 토큰을 기록해, 어디서든 하나의 토큰이 통한다는 가정을 없애줍니다. |
 
 **이것은 관리형 도구를 구축하는 기반입니다.** Kuma Studio의 스킬/훅 토글 시스템—하나의 GUI에서 Claude, Codex, Grok, Hermes의 스킬이나 훅을 모두 켜고 끌 수 있는 기능—는 바로 이 위키를 바탕으로 만들어졌습니다. 위키는 각 런타임의 실제 온/오프 스위치(`skillOverrides`, `[[skills.config]]`, 훅 상태 키)를 알려주고, 공식적으로 스위치가 없는 경우에도 그 사실을 명시해 툴링이 추측하지 않고 의도적으로 대응하도록 합니다. 어떤 크로스 에이전트 대시보드, 동기화 도구, 플릿 관리자를 만들더라도, 이 위키가 신뢰할 수 있는 기준점이 됩니다.
@@ -56,7 +56,7 @@
 
 전담 에이전트가 위키를 최신 상태로 유지합니다. `docs/official-sources.json`을 읽고 공식 공급사 URL을 다시 가져온 뒤, 근거가 바뀐 경우 PR을 엽니다. `main`에는 직접 푸시하지 않습니다.
 
-권장 방식은 **Claude Routines**입니다. Anthropic 클라우드에서 Claude 구독 기반으로 동작하는 예약 Claude Code 세션을 사용하면, API 키 없이도 GitHub Actions 없이 운영할 수 있으며, 노트북이 꺼져 있어도 계속 실행됩니다. 반면 `claude -p`로 로컬에서 갱신을 실행하는 방식은 주로 **신뢰성** 때문에 권장되지 않습니다. 로컬 cron은 기기가 깨어 있을 때만 동작하는 반면, 클라우드 Routine은 노트북 상태와 무관하게 실행됩니다. (과금 관련: 2026-06-15로 발표된 월별 별도 크레딧 변경은 현재 **일시 중단** 상태이므로, 2026-06-18 기준 `claude -p` 및 Agent SDK 사용은 여전히 구독 사용 풀에서 차감됩니다. `ANTHROPIC_API_KEY` 사용자는 기존처럼 pay-as-you-go입니다.) 자세한 내용은 `docs/cloud-automation.md`를 참고하세요.
+권장 방식은 **Claude Routines**입니다. Anthropic 클라우드에서 Claude 구독 기반으로 동작하는 예약 Claude Code 세션을 사용하면, API 키 없이도 GitHub Actions 없이 운영할 수 있으며, 노트북이 꺼져 있어도 계속 실행됩니다. 반면 `claude -p`로 로컬에서 갱신을 실행하는 방식은 주로 **신뢰성** 때문에 권장되지 않습니다. 로컬 cron은 기기가 깨어 있을 때만 동작하는 반면, 클라우드 Routine은 노트북 상태와 무관하게 실행됩니다. (과금 관련: 구독에서 `claude -p` 및 Agent SDK 사용은 플랜 사용 풀에서 차감됩니다 — 2026-06-15로 발표된 월별 별도 크레딧 변경은 일시 중단되어 적용되지 않습니다. `ANTHROPIC_API_KEY` 사용자는 기존처럼 pay-as-you-go입니다. 현재 검증된 상태와 날짜는 `docs/cli-invocation.md`에 있습니다.) 자세한 내용은 `docs/cloud-automation.md`를 참고하세요.
 
 1. Claude Code에서 `/schedule`을 실행하거나 <https://claude.ai/code/routines>를 엽니다.
 2. 이 리포지토리를 대상으로 설정하고 `prompts/daily-official-doc-update.md`의 프롬프트를 사용합니다.
