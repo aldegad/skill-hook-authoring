@@ -5,6 +5,24 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.15 — 2026-06-25
+
+Daily refresh: billing status re-verified live, unchanged; freshness stamps advanced.
+
+### Changed
+
+- **Billing status re-verified live 2026-06-25, still paused.** The official
+  support page banner still reads *"Update June 15: We're pausing the changes to
+  Claude Agent SDK usage described below. For now, nothing has changed: Claude
+  Agent SDK, `claude -p`, and third-party app usage still draw from your
+  subscription's usage limits."* The Pro/Max page (subscription covers interactive
+  Claude Code; a present `ANTHROPIC_API_KEY` switches to pay-as-you-go API billing;
+  `/status` monitors allocation) is also unchanged. Advanced every billing
+  time-sensitive stamp 06-24 → 06-25 (`cli-invocation.md`, `cloud-automation.md`,
+  `official-sources.json`, the daily prompt) per the freshness-stamp carve-out. No
+  structural facts changed; the Gemini cutoff (2026-06-18, a settled past event)
+  and the Antigravity SPA render stamps (06-22, structural) were left untouched.
+
 ## v1.14 — 2026-06-24
 
 Fixed the daily refresh's blind spot for **time-sensitive status claims** and
