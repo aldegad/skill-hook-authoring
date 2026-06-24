@@ -5,6 +5,43 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.14 — 2026-06-24
+
+Fixed the daily refresh's blind spot for **time-sensitive status claims** and
+re-verified the Claude billing status live.
+
+### Fixed
+
+- **Stale freshness stamps were rotting a still-true claim.** The daily prompt's
+  `IF THERE ARE NO CHANGES: do not modify any file` rule suppressed verification-date
+  bumps, so the billing "paused" status kept its stamp across the no-op 06-23 and
+  06-24 runs even though it was re-checked — making a correct claim read as
+  stale/wrong. Added a **freshness-stamp carve-out**: a *time-sensitive status
+  claim* (billing paused/resumed/cancelled, an announced-but-not-yet-effective
+  cutoff, any "currently X" status) MUST advance its `verified` / `as of` date and
+  the doc-level `Last reviewed:` on every successful re-verification, even with no
+  wording change — that date bump *is* a legitimate edit, not "no changes". Stable
+  structural facts keep their stamp until the fact itself changes (no new churn).
+  Codified in `prompts/daily-official-doc-update.md` and the SKILL.md "Keep history
+  out of doc bodies" rule.
+
+### Changed
+
+- **Billing status re-verified live 2026-06-24, unchanged.** The official support
+  page banner still reads *"Update June 15: We're pausing the changes… nothing has
+  changed: Claude Agent SDK, `claude -p`, and third-party app usage still draw from
+  your subscription's usage limits."* Advanced every billing freshness stamp
+  06-22 → 06-24 (`cli-invocation.md`, `cloud-automation.md`, `official-sources.json`,
+  the daily prompt) and led the wording with the practical outcome (draws from the
+  subscription pool, no separate per-run credit). The Antigravity SPA render stamps
+  (06-22) were deliberately left untouched — they are structural, not re-rendered
+  this run.
+- **README billing made durable across all 7 editions.** Removed the self-rotting
+  inline `as of <date>` from the human-facing READMEs (English + six translations),
+  which were the source of per-day translation churn; they now state the durable
+  fact and defer the dated verified status to `docs/cli-invocation.md` (the SSoT
+  stamp).
+
 ## v1.13 — 2026-06-22
 
 Daily re-verification of all 51 official sources (six WebFetch-able runtimes

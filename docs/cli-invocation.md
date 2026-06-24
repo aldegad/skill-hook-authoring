@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-06-22
+Last reviewed: 2026-06-24
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or
@@ -66,7 +66,9 @@ the same idea, but they are reached differently:
 | Antigravity CLI | not documented — no `agy -p` one-shot in official docs | — | the TUI can pipe JSON status-line metadata to a shell script, but that is not a one-shot run | use the **Antigravity SDK** (`pip install google-antigravity`; Python `Agent` + `LocalAgentConfig`) for programmatic/unattended runs; `--sandbox`, `--dangerously-skip-permissions` are launch overrides, not a headless mode |
 | Cursor CLI | `cursor-agent -p "<prompt>"` (`--print`) | print mode for scripts | `--output-format text\|json\|stream-json` (only with `--print`); `--stream-partial-output` | `--model`, `-f`/`--force` (`--yolo`), `--trust` (headless only) |
 
-> **Billing caveat (Claude Code).** As of 2026-06-22, the Agent SDK billing
+> **Billing caveat (Claude Code).** On a subscription, `claude -p` and Agent SDK
+> runs draw from your plan's usage limits — the same pool as interactive use, with
+> no separate per-run credit. As of 2026-06-24, the Agent SDK billing
 > change announced for 2026-06-15 remains **paused**. The official support page
 > opens with a dated banner: *"Update June 15: We're pausing the changes to Claude
 > Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK,
@@ -77,7 +79,7 @@ the same idea, but they are reached differently:
 > `claude -p` cron; the reliability advantage (Routine runs regardless of laptop
 > state) still applies. See `docs/cloud-automation.md`. (Source:
 > https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan,
-> verified 2026-06-22.)
+> verified 2026-06-24.)
 
 ## C. Resume invocation (command syntax)
 
@@ -156,7 +158,7 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
   (JSONL); Claude/Cursor `--output-format json|stream-json`; Grok
   `--output-format json`. Hermes and Antigravity document **no** headless JSON
   output flag.
-- **Claude Code Agent SDK billing (status as of 2026-06-22):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token, requires a subscription) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-06-22.)
+- **Claude Code Agent SDK billing (status as of 2026-06-24):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token, requires a subscription) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-06-24.)
 - Session resume identifiers differ (UUID session id vs. human name vs.
   `--last` / `-1` vs. `--conversation <uuid>`). Store a resume handle in the form
   that runtime's resume command accepts, and remember whether you need the
@@ -182,4 +184,4 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
 - Antigravity SDK (programmatic/headless path) — <https://antigravity.google/docs/sdk-overview>
 - Cursor CLI parameters — <https://cursor.com/docs/cli/reference/parameters>
 - Claude Code with Pro/Max plan (billing) — <https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan>
-- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-06-22) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
+- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-06-24) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
