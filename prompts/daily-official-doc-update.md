@@ -67,7 +67,7 @@ do not cover as `not documented`.
 re-verified every run: which usage the Pro/Max subscription covers vs. what bills
 as API, whether a present `ANTHROPIC_API_KEY` switches Claude Code to API billing,
 and the status of the **2026-06-15** Agent SDK / `claude -p` plan-usage change.
-As of 2026-06-25 that change is **paused** (Agent SDK and `claude -p` still draw
+As of 2026-06-26 that change is **paused** (Agent SDK and `claude -p` still draw
 from the subscription usage limits, same as interactive use — no separate per-run
 credit). Confirm each run whether it is still paused, resumed, or cancelled, and
 keep the status + date current. This is a **time-sensitive status claim**: advance
