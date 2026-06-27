@@ -3,6 +3,7 @@
   "updated": "2026-06-27",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
+    "nonVendorRule": "A small number of non-vendor runtimes (e.g. gajae-code, a community/MIT project) are tracked from their own project README rather than vendor docs. They must be explicitly flagged as community/non-vendor in the docs, held to the same not-documented discipline, and never presented as official vendor guarantees.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
     "allowedHosts": [
       "developers.openai.com",
@@ -17,7 +18,8 @@
       "docs.cursor.com",
       "cursor.com",
       "docs.github.com",
-      "support.claude.com"
+      "support.claude.com",
+      "github.com"
     ]
   },
   "sources": [
@@ -1137,6 +1139,27 @@
         "Agent SDK and claude -p currently draw from regular subscription usage limits same as interactive use",
         "API key accounts remain pay-as-you-go API billing",
         "original plan described separate monthly credits per plan tier but change is paused"
+      ]
+    },
+    {
+      "id": "gajae-code-readme",
+      "agent": "gajae-code",
+      "kind": "community-runtime",
+      "url": "https://github.com/Yeachan-Heo/gajae-code",
+      "notes": "NON-VENDOR community project (MIT, beta) by Yeachan-Heo; this README is the only source, not vendor docs. Flagged the same way Kuma Studio is. Verified 2026-06-27. A coding-agent harness (binary `gjc`) that runs adjacent to other CLIs; install with `bun install -g gajae-code` (scoped `@gajae-code/coding-agent`). Interactive `gjc` / `gjc --tmux` / `gjc --tmux --worktree <branch>`; headless `gjc --mode rpc` (no JSON/output-format flag). Skills are the only documented extension surface: SKILL.md-format under `~/.gjc/skills/`, listed/read with `gjc skills list` / `gjc skills read <name>`, invoked as `/skill:<name>` (colon form), defaults deep-interview/ralplan/ultragoal/team. Hooks, plugins, session-id resume, and project-instruction-file loading are all NOT documented. User config `~/.gjc/config.yml`; per-project state `.gjc/`.",
+      "claims": [
+        "community MIT project, not a vendor product",
+        "binary gjc; install via bun install -g gajae-code",
+        "interactive gjc / gjc --tmux / --worktree",
+        "headless gjc --mode rpc with no JSON output flag",
+        "skills in ~/.gjc/skills/ via gjc skills list/read",
+        "skill invocation token /skill:<name> colon form",
+        "default skills deep-interview ralplan ultragoal team",
+        "hooks not documented",
+        "plugins/extensions not documented",
+        "session-id resume not documented",
+        "project instruction file loading not documented",
+        "config ~/.gjc/config.yml and per-project .gjc/ state"
       ]
     }
   ]

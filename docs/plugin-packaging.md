@@ -16,6 +16,7 @@ Project instruction filenames are runtime-specific and are not the same thing as
 - Hermes documents `.hermes.md` / `HERMES.md`, `AGENTS.md`, `CLAUDE.md`, `.cursorrules`, and `.cursor/rules/*.mdc`; `SOUL.md` is global identity, not project instructions.
 - Antigravity CLI (the Gemini CLI successor, `agy`) reads `GEMINI.md` and `AGENTS.md`; global `~/.gemini/GEMINI.md`.
 - Cursor CLI uses `.cursor/rules` plus project-root `AGENTS.md` and `CLAUDE.md`.
+- gajae-code (`gjc`, community) documents **no** project-instruction-file loader; its config is `~/.gjc/config.yml` (user) plus a per-project `.gjc/` state dir. Do not assume it reads `AGENTS.md`/`CLAUDE.md`.
 
 For cross-agent repos, prefer one canonical repo instruction source plus thin runtime wrappers/imports. Do not create parallel full copies unless the divergence is explicit and reviewed.
 
@@ -72,6 +73,10 @@ Hermes hooks are split across three documented systems: gateway hooks under `~/.
 Cursor documents Agent Skills and Hooks as first-class surfaces. Skills load from project `.agents/skills/` and `.cursor/skills/`, user `~/.agents/skills/` and `~/.cursor/skills/`, and compatibility roots for Claude/Codex skills. Skills may be slash-invoked from Agent chat, auto-applied by context, scoped with `paths`, or made explicit-only with `disable-model-invocation: true`.
 
 Hooks are configured at four scopes in priority order: enterprise (MDM-managed system-wide), team (Enterprise cloud dashboard), project (`<project-root>/.cursor/hooks.json`, committable to version control), and user (`~/.cursor/hooks.json`). Cloud agents load project hooks; team and enterprise hooks are distributed via the dashboard. Cursor documents events for sessions, tool-use, subagents, shell/MCP execution, file access, prompt submission, agent responses, Tab inline-completion hooks (`beforeTabFileRead`, `afterTabFileEdit`), compaction, and workspace startup — a broader event set than prior reviews captured; cloud agents do not support `sessionStart`, `sessionEnd`, `beforeSubmitPrompt`, `beforeMCPExecution`, `afterMCPExecution`, `afterAgentResponse`, `afterAgentThought`, `stop`, Tab hooks, or `workspaceOpen` (the docs mark these "Not yet wired for cloud agents" or unavailable due to VM-timing). `failClosed` defaults to `false`; `loop_limit` defaults to `5` on Cursor (`null` = no cap on Claude Code). Keep Cursor's hook schema separate from Claude/Codex schemas even when event names look similar.
+
+## gajae-code (community, non-vendor)
+
+gajae-code (`gjc`, MIT/beta by Yeachan-Heo; GitHub README is the only source, verified 2026-06-27) is a coding-agent harness that runs *adjacent* to other CLIs, not a packaging host. It documents **no plugin/extension format and no hooks** — the README explicitly says it is "not a hidden plugin for Codex CLI, Claude Code, OpenCode, or Claw Code." The one extension surface it does document is **skills**: `SKILL.md`-format skills under `~/.gjc/skills/` (bundled defaults `deep-interview`, `ralplan`, `ultragoal`, `team`), inspected with `gjc skills list` / `gjc skills read <name>` and invoked in-session as `/skill:<name>` (colon form — not the `/<skill-name>` other runtimes use). Install with `bun install -g gajae-code` (scoped package `@gajae-code/coding-agent`); user config is `~/.gjc/config.yml` (provider retry budgets), per-project state lives in `.gjc/`. Treat any plugin/hook claim for gajae as `not documented` until the project documents one.
 
 ## Packaging Decision Gate
 

@@ -5,6 +5,34 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.18 — 2026-06-27
+
+Added **gajae-code** (`gjc`) as an eighth tracked runtime — the first
+**non-vendor** entry alongside Kuma Studio.
+
+### Added
+
+- **gajae-code coverage across the wiki.** gajae-code (community/MIT beta by
+  Yeachan-Heo, binary `gjc`) is a coding-agent harness that runs adjacent to other
+  CLIs. Added rows/sections to every comparison surface: SKILL.md (Runtime Coverage,
+  CLI Spawn, Session Resume, Project Instruction Files, Skill Invocation, plus a
+  trigger keyword `가재`/`gjc`), `docs/compatibility-matrix.md` (all five tables),
+  `docs/cli-invocation.md` (interactive/headless/resume tables + sources), and
+  `docs/plugin-packaging.md` (a dedicated section). Documented facts: install
+  `bun install -g gajae-code`; interactive `gjc` / `--tmux` / `--worktree`; headless
+  `gjc --mode rpc` (no JSON flag); skills in `~/.gjc/skills/` via `gjc skills
+  list/read`, invoked as `/skill:<name>` (colon form — the only runtime that differs
+  from `/<skill-name>`), defaults `deep-interview`/`ralplan`/`ultragoal`/`team`;
+  config `~/.gjc/config.yml` + per-project `.gjc/`. Hooks, plugins, session-id
+  resume, and project-instruction-file loading are all recorded as `not documented`.
+- **Non-vendor source discipline.** Added `policy.nonVendorRule` and a
+  `kind: "community-runtime"` source (`gajae-code-readme`) to
+  `docs/official-sources.json`, and `github.com` to `policy.allowedHosts` so the
+  daily refresh can fetch the README. The daily prompt
+  (`prompts/daily-official-doc-update.md`) now lists gajae-code in WHAT TO CHECK and
+  carries a NON-VENDOR note: re-verify it from its README every run, keep it flagged
+  as community/non-vendor, never present it as a vendor guarantee.
+
 ## v1.17 — 2026-06-27
 
 Daily refresh: billing status re-verified live, unchanged; freshness stamps advanced.

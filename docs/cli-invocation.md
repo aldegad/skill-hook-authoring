@@ -8,6 +8,9 @@ orchestrator), plus the resume command for each. Every row cites the runtime's
 own official docs; where a runtime does not document a capability, the cell says
 `not documented`, never an inferred flag.
 
+One row — **gajae-code** (`gjc`) — is a community/MIT beta, not a vendor product;
+its rows cite the project's GitHub README (verified 2026-06-27), not vendor docs.
+
 This doc owns the **command syntax** (launch / headless / resume invocation).
 For the deeper resume **semantics** — session stores, id form, capture-before-exit,
 and the Codex desktop app-server `thread/resume` protocol — see
@@ -54,6 +57,7 @@ the same idea, but they are reached differently:
 | Hermes Agent | `hermes chat` — interactive chat | type after launch (`-q` switches to a single non-interactive query) |
 | Antigravity CLI | `agy` — launches the TUI (first run does color/rendering/trust setup) | type in the prompt box after launch (no documented seed-prompt or headless `-p` flag) |
 | Cursor CLI | `cursor-agent` — interactive agent | type after launch (`-p`/`--print` switches to headless) |
+| gajae-code (community) | `gjc` — interactive TUI; `gjc --tmux` runs it inside tmux, `gjc --tmux --worktree <branch>` adds a git-worktree per task | `gjc @screenshot.png "<prompt>"` (image + prompt arg); interactive clipboard image paste with Ctrl+V |
 
 ## B. Headless run (non-interactive / print / one-shot)
 
@@ -65,6 +69,7 @@ the same idea, but they are reached differently:
 | Hermes Agent | `hermes chat -q "<query>"` (single query) | not documented (no stdin/JSON piping flag) | not documented (no JSON output-format flag) | `--model`, `--provider nous\|openrouter`, `--toolsets`, `-s <skill>`, `--verbose` |
 | Antigravity CLI | not documented — no `agy -p` one-shot in official docs | — | the TUI can pipe JSON status-line metadata to a shell script, but that is not a one-shot run | use the **Antigravity SDK** (`pip install google-antigravity`; Python `Agent` + `LocalAgentConfig`) for programmatic/unattended runs; `--sandbox`, `--dangerously-skip-permissions` are launch overrides, not a headless mode |
 | Cursor CLI | `cursor-agent -p "<prompt>"` (`--print`) | print mode for scripts | `--output-format text\|json\|stream-json` (only with `--print`); `--stream-partial-output` | `--model`, `-f`/`--force` (`--yolo`), `--trust` (headless only) |
+| gajae-code (community) | `gjc --mode rpc` (RPC mode) | not documented (no stdin/prompt-arg form documented for RPC mode) | not documented (no `--output-format`/`--json` flag) | provider retry budgets in `~/.gjc/config.yml`; BYO provider credentials (Anthropic/OpenAI/Google etc.), MIT/free harness with no billing of its own |
 
 > **Billing caveat (Claude Code).** On a subscription, `claude -p` and Agent SDK
 > runs draw from your plan's usage limits — the same pool as interactive use, with
@@ -98,6 +103,7 @@ command to type.
 | Hermes Agent | `hermes -c` | `hermes -r <session_id>` (or by title) | not separately documented |
 | Antigravity CLI | `agy --continue` (latest in workspace) | `agy --conversation <uuid>`; in-TUI `/resume` (`/switch`, `/conversation`) picker, Tab imports Antigravity 2.0 desktop threads; `/fork` (`/branch`) | not documented (no headless one-shot) |
 | Cursor CLI | `--continue` (alias `--resume=-1`) / `agent resume` | `cursor-agent --resume <chatId>` (list via `agent ls`) | same flags plus `-p`; `agent create-chat` returns a new id |
+| gajae-code (community) | not documented | not documented (worktree isolation via `--worktree <branch>` is not id-keyed resume) | not documented |
 
 **Pinning a specific session** is shell-level on every runtime: `codex resume <id>`,
 `claude -r "<id-or-name>"`, `grok -r <id>`, `hermes -r <id>`,
@@ -183,5 +189,6 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
 - Antigravity CLI install & auth — <https://antigravity.google/docs/cli-install>
 - Antigravity SDK (programmatic/headless path) — <https://antigravity.google/docs/sdk-overview>
 - Cursor CLI parameters — <https://cursor.com/docs/cli/reference/parameters>
+- gajae-code (community project, README — not vendor docs) — <https://github.com/Yeachan-Heo/gajae-code>
 - Claude Code with Pro/Max plan (billing) — <https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan>
 - Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-06-27) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>

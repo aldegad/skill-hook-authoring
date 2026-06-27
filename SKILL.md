@@ -1,6 +1,6 @@
 ---
 name: skill-hook-authoring
-description: 'Cross-runtime agent-platform interoperability wiki and authoring methodology, refreshed daily from official vendor docs: how Codex, Claude Code, Grok, Hermes, Antigravity CLI, Cursor, and Kuma Studio compare across skills, hooks, plugins/extensions, project-instruction files, CLI spawn, session resume, and billing, plus the rules to ship one source of truth without drifting between runtimes. Use when authoring, editing, retiring, renaming, or debugging a skill / hook / slash-command / plugin, or when a skill is not triggering and its description needs fixing. Triggers (KR/EN): 스킬 만들기/작성/수정/폐기/삭제/이름변경, 스킬 폐기, 스킬 발동 안 됨, 트리거 안 걸림, description 고치기, 훅 작성/수정, 슬래시 커맨드 추가, 플러그인 패키징, 크로스런타임 호환; skill authoring/editing/retire/rename, skill not triggering, fix skill description, hook authoring, slash command, plugin packaging, cross-runtime compatibility, Codex/Claude/Grok/Hermes/Antigravity/Cursor skill and hook comparison.'
+description: 'Cross-runtime agent-platform interoperability wiki and authoring methodology, refreshed daily from official vendor docs: how Codex, Claude Code, Grok, Hermes, Antigravity CLI, Cursor, and Kuma Studio compare across skills, hooks, plugins/extensions, project-instruction files, CLI spawn, session resume, and billing, plus the rules to ship one source of truth without drifting between runtimes. Use when authoring, editing, retiring, renaming, or debugging a skill / hook / slash-command / plugin, or when a skill is not triggering and its description needs fixing. Triggers (KR/EN): 스킬 만들기/작성/수정/폐기/삭제/이름변경, 스킬 폐기, 스킬 발동 안 됨, 트리거 안 걸림, description 고치기, 훅 작성/수정, 슬래시 커맨드 추가, 플러그인 패키징, 크로스런타임 호환; skill authoring/editing/retire/rename, skill not triggering, fix skill description, hook authoring, slash command, plugin packaging, cross-runtime compatibility, Codex/Claude/Grok/Hermes/Antigravity/Cursor/gajae-code (가재, gjc) skill and hook comparison.'
 ---
 
 # Cross-Runtime Agent-Platform Interoperability
@@ -25,7 +25,7 @@ If the task changes discovery, installation, trust, hook behavior, bundled scrip
 
 ## Runtime Coverage
 
-Seven runtimes are tracked. The detailed, source-cited truth lives in `docs/compatibility-matrix.md` and `docs/plugin-packaging.md`; this is the short working model:
+Eight runtimes are tracked — seven vendor runtimes plus one community project (**gajae-code**, `gjc`, MIT/beta by Yeachan-Heo, not an official vendor product; flagged the way Kuma Studio is, with its GitHub README as the only source). The detailed, source-cited truth lives in `docs/compatibility-matrix.md` and `docs/plugin-packaging.md`; this is the short working model:
 
 | Runtime | Skill surface | Hook surface | Plugin/package surface |
 |---|---|---|---|
@@ -36,10 +36,11 @@ Seven runtimes are tracked. The detailed, source-cited truth lives in `docs/comp
 | Antigravity CLI (`agy`, was Gemini CLI) | `.agents/skills/` (global `~/.gemini/antigravity-cli/skills/`); skills auto-become `/<name>` slash commands | Hooks in a plugin's `hooks.json` or primary `settings.json` (pre/post-tool); `/hooks` browses loaded hooks | Native plugins at `~/.gemini/antigravity-cli/plugins/<name>/` (`plugin.json`, `hooks.json`, `skills/`, `agents/`, `rules/`) managed by `agy plugin`; MCP via standalone `mcp_config.json` |
 | Cursor CLI | Project/user `.agents/skills/` and `.cursor/skills/`, plus Claude/Codex compatibility skill roots | Project `.cursor/hooks.json`, team/enterprise hooks, and command/prompt hook events | Plugins are documented separately; hooks include `workspaceOpen` plugin-path injection, but do not infer Codex-style package parity |
 | Kuma Studio | skills in canonical repo paths | guardrail hooks that must fail loudly | symlink or generated-config install |
+| gajae-code (`gjc`, community) | `SKILL.md` skills in `~/.gjc/skills/` (`gjc skills list`/`read <name>`); ships `deep-interview`, `ralplan`, `ultragoal`, `team` | not documented | not documented (README explicitly says it is "not a hidden plugin" for other CLIs) |
 
 When a runtime capability is not documented, write `not documented` or `unknown` and require live verification before shipping behavior that depends on it.
 
-**Explicit skill invocation is not the same token across runtimes.** Claude Code, Grok, and Cursor expose user-invocable skills as slash commands such as `/<skill-name>` (Claude/Cursor: `disable-model-invocation: true` makes a skill explicit-only); Codex uses `/skills` (selector) or `$<skill-name>` (mention) — typed `/<skill-name>` is not a documented Codex form, and `allow_implicit_invocation: false` in `agents/openai.yaml` turns off description-matching; Hermes documents no typed invocation token, but Antigravity registers each skill as a typed `/<skill-name>` slash command in the TUI. Full source-cited table: `docs/compatibility-matrix.md` → **Skill Invocation**. For cross-engine commands, rely on description-triggered invocation as the portable layer and treat the typed token as per-engine sugar.
+**Explicit skill invocation is not the same token across runtimes.** Claude Code, Grok, and Cursor expose user-invocable skills as slash commands such as `/<skill-name>` (Claude/Cursor: `disable-model-invocation: true` makes a skill explicit-only); Codex uses `/skills` (selector) or `$<skill-name>` (mention) — typed `/<skill-name>` is not a documented Codex form, and `allow_implicit_invocation: false` in `agents/openai.yaml` turns off description-matching; Hermes documents no typed invocation token, but Antigravity registers each skill as a typed `/<skill-name>` slash command in the TUI; community gajae-code is the odd one out — it uses a **colon** form, `/skill:<name>` (e.g. `/skill:deep-interview`), not `/<skill-name>`. Full source-cited table: `docs/compatibility-matrix.md` → **Skill Invocation**. For cross-engine commands, rely on description-triggered invocation as the portable layer and treat the typed token as per-engine sugar.
 
 ## CLI Spawn And Headless Launch
 
@@ -53,6 +54,7 @@ When one agent **spawns another** from a script, hook, or orchestrator, use the 
 | Hermes | `hermes chat` | `hermes chat -q "<q>"` |
 | Antigravity CLI | `agy` | not documented (use Antigravity SDK) |
 | Cursor CLI | `cursor-agent` | `cursor-agent -p "<p>"` |
+| gajae-code (community) | `gjc` / `gjc --tmux` / `gjc --tmux --worktree <branch>` | `gjc --mode rpc` (no JSON/output-format flag documented) |
 
 - **The mode switch is not the same shape.** For Claude/Grok/Cursor/Hermes, headless is a **flag** (`-p`/`--print`, or Hermes `-q`) added to the bare interactive command — so interactive = omit the flag. **Codex** is the exception: headless is a separate **subcommand** (`codex exec`), with no print/headless `-p` to drop (Codex's `-p` *is* `--profile`, a config-profile selector — not a prompt flag, so "Codex has no `-p`" is wrong; it has no *headless* `-p`), so a list of only `codex exec …` is *not* "Codex is headless-only". **Antigravity** (`agy`) is TUI-only with **no documented headless one-shot** — run it unattended through the Antigravity SDK, not `agy -p` (which appears only in third-party guides).
 - Output format is not uniform: Codex `--json` (JSONL); Claude/Cursor `--output-format json|stream-json`; Grok `--output-format json`; Hermes and Antigravity document **no** headless JSON flag.
@@ -65,6 +67,7 @@ Same-platform resume (continue the *same* conversation on the *same* engine, by 
 - The minimum to continue is the **resume locator** (session/thread id) plus the engine's resume invocation: Claude `claude --resume <id>`, Codex CLI `codex resume <id>` (desktop app-server: the `thread/resume` method with the recorded `thread.id`), Grok `grok -r/--resume <id>`, Hermes `hermes --resume <id>`.
 - Capture the locator **before the worker exits**, keyed by `cwd` (the most stable signal every engine exposes). Session stores differ — Claude/Codex/Grok keep per-session transcript/rollout files; **Hermes keeps history in SQLite `~/.hermes/state.db`**, so a file scan of `~/.hermes/sessions/` (which holds only API error dumps) finds nothing resumable.
 - **Antigravity CLI** (`agy`, the Gemini CLI successor) resumes into the TUI only: `agy --continue` (most recent in the workspace) or `agy --conversation <uuid>`; conversations are **workspace-scoped** (it lists only sessions started in that cwd).
+- **gajae-code** documents **no** session-id resume command; it persists per-session evidence under a project `.gjc/` dir and isolates work with git worktrees (`gjc --tmux --worktree <branch>`), but worktree isolation is not the same as id-keyed resume — treat resume as `not documented`.
 - **Cross-engine moves** (resume one engine's session under a *different* engine) are a separate, harder problem and out of scope here — keep them off the same-platform path.
 - When a runtime does not document resume, record `not documented` and require live verification before shipping.
 
@@ -81,6 +84,7 @@ Do not assume every non-Claude runtime reads `AGENTS.md`. Use the officially doc
 | Antigravity CLI (was Gemini CLI) | Reads `GEMINI.md` and `AGENTS.md` (global `~/.gemini/GEMINI.md`); Gemini CLI's `GEMINI.md` hierarchical memory is the legacy form |
 | Cursor CLI | `.cursor/rules`, plus project-root `AGENTS.md` and `CLAUDE.md` |
 | Kuma Studio | `AGENTS.md` and `CLAUDE.md` are parallel repo SSoT files for shared rules |
+| gajae-code (community) | not documented — README does not document an instruction-file loader (`AGENTS.md`/`CLAUDE.md`/`GEMINI.md`); user config is `~/.gjc/config.yml`, per-project state lives in `.gjc/` |
 
 For cross-agent repo rules, maintain the smallest set of files that each runtime actually reads. In Kuma-style Codex/Claude/Grok/Hermes repos, that usually means repo-owned `AGENTS.md` plus a `CLAUDE.md` import/symlink or Claude-specific wrapper; add `GEMINI.md` only when Antigravity CLI (or legacy Gemini CLI) is a supported runtime.
 

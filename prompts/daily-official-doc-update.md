@@ -15,11 +15,23 @@ summary rather than substituting another source.
 **WHAT TO CHECK** across these agents/products: OpenAI Codex, Claude / Claude
 Code, Grok/xAI, Google Antigravity CLI (`agy`, the Gemini CLI successor; Gemini
 CLI itself retires for individual users 2026-06-18), Cursor, Hermes Agent, Kuma
-Studio. For each, review: supported-agent docs, plugin/extension docs,
+Studio, and gajae-code (`gjc`, community/non-vendor — see the NON-VENDOR note
+below). For each, review: supported-agent docs, plugin/extension docs,
 project-instruction / context-file docs, CLI spawn (interactive vs headless
 launch) docs, session-resume docs, compatibility matrix, and Kuma Studio pattern
 docs. If an official doc confirms a feature difference or that something is
 unavailable, state that explicitly in the docs.
+
+**NON-VENDOR RUNTIME — gajae-code.** One tracked runtime, **gajae-code** (`gjc`, a
+community/MIT beta by Yeachan-Heo), is NOT a vendor product. Its only source is the
+project's GitHub README — the source in `docs/official-sources.json` with
+`"kind": "community-runtime"` (`gajae-code-readme`). Fetch and re-verify it every run
+like the others, but keep it explicitly flagged as community/non-vendor everywhere it
+appears (SKILL.md, `docs/compatibility-matrix.md`, `docs/cli-invocation.md`,
+`docs/plugin-packaging.md`), never present its claims as vendor guarantees, and hold
+every undocumented surface (hooks, plugins, session-id resume, project-instruction
+loading) to the same `not documented` discipline. See `policy.nonVendorRule` in the
+manifest.
 
 **PROJECT INSTRUCTION FILES — do not skip this category.** It is not skills,
 hooks, or plugin packaging, so it is easy to miss. Every source in
