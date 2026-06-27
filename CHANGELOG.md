@@ -5,6 +5,54 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.19 — 2026-06-28
+
+Daily refresh: billing re-verified live (still paused); two verified Claude doc
+drifts recorded in the source manifest; freshness stamps advanced.
+
+### Changed
+
+- **Billing status re-verified live 2026-06-28, still paused.** The official
+  support page banner still reads *"Update June 15: We're pausing the changes to
+  Claude Agent SDK usage described below. For now, nothing has changed: Claude
+  Agent SDK, `claude -p`, and third-party app usage still draw from your
+  subscription's usage limits."* The Pro/Max page still confirms the subscription
+  covers interactive Claude Code, a present `ANTHROPIC_API_KEY` switches to
+  pay-as-you-go API billing, and `/status` monitors plan allocation. Advanced
+  every billing time-sensitive stamp 06-27 → 06-28 (`cli-invocation.md`,
+  `cloud-automation.md`, `official-sources.json`, the daily prompt) per the
+  freshness-stamp carve-out. (Source:
+  https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan)
+
+### Added
+
+- **Claude plugins-reference: themes + channels components recorded.** The
+  official plugins-reference now documents two components beyond the core six
+  (skills, agents, hooks, MCP servers, LSP servers, monitors): an **experimental
+  `themes/`** component (JSON `base` preset + sparse `overrides`, surfaced in
+  `/theme`) and a **`channels`** manifest field declaring MCP-backed
+  message-injection channels. The page also moves `themes` and `monitors` under an
+  `experimental` manifest key (top-level still works with a `claude plugin
+  validate` warning, a future release will require `experimental.*`). Added these
+  as claims to `anthropic-claude-plugins-reference` in `docs/official-sources.json`.
+  (Source: https://code.claude.com/docs/en/plugins-reference)
+- **Claude headless: background-subagent wait cap recorded.** `claude -p` waits
+  for background subagents/workflows (exempt from the 5s grace); since **v2.1.182**
+  that wait is **capped at 10 minutes by default**, tunable via
+  `CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS` (`0` = no limit). Added as claims to
+  `anthropic-claude-headless` in `docs/official-sources.json`. (Source:
+  https://code.claude.com/docs/en/headless)
+
+### Notes
+
+- **Antigravity SPA unverified this run.** The `antigravity.google` docs are a
+  JS-rendered SPA and `claude-in-chrome` was not connected this run, so the six
+  Antigravity sources could not be dynamically rendered; they are recorded as
+  *unverified this run* and their structural render stamps (06-22) were left
+  untouched (no change claimed). All other vendor sources (Codex, Grok, Hermes,
+  Cursor, GitHub) and the gajae-code README re-verified with no drift; their
+  structural stamps were left as-is per the low-noise freshness rule.
+
 ## v1.18 — 2026-06-27
 
 Added **gajae-code** (`gjc`) as an eighth tracked runtime — the first
