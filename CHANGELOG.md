@@ -5,6 +5,39 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.20 — 2026-06-29
+
+Daily refresh: billing re-verified live, still paused; freshness stamps advanced.
+
+### Changed
+
+- **Billing status re-verified live 2026-06-29, still paused.** The official
+  support page banner still reads *"Update June 15: We're pausing the changes to
+  Claude Agent SDK usage described below. For now, nothing has changed: Claude
+  Agent SDK, `claude -p`, and third-party app usage still draw from your
+  subscription's usage limits."* The Pro/Max page still confirms the subscription
+  covers interactive Claude Code, a present `ANTHROPIC_API_KEY` switches to
+  pay-as-you-go API billing, and `/status` monitors plan allocation. Advanced
+  every billing time-sensitive stamp 06-28 → 06-29 (`cli-invocation.md`,
+  `cloud-automation.md`, `official-sources.json`, the daily prompt) per the
+  freshness-stamp carve-out. No structural facts changed. (Source:
+  https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan)
+
+### Notes
+
+- **No structural drift this run.** Codex, Claude, Grok, Hermes, Cursor, and
+  GitHub sources re-verified with no material drift; the two facts recorded
+  yesterday (plugins-reference experimental `themes/` + `channels` field; headless
+  10-minute background-subagent wait cap since v2.1.182) were re-confirmed still
+  present and accurate. The gajae-code README re-verified, no drift; its
+  structural `verified 2026-06-27` stamp was left as-is per the low-noise freshness
+  rule.
+- **Antigravity SPA unverified this run.** The `antigravity.google` docs are a
+  JS-rendered SPA and `claude-in-chrome` was not connected this run, so the six
+  Antigravity sources could not be dynamically rendered; recorded as *unverified
+  this run* and their structural render stamps (06-22) left untouched (no change
+  claimed).
+
 ## v1.19 — 2026-06-28
 
 Daily refresh: billing re-verified live (still paused); two verified Claude doc
