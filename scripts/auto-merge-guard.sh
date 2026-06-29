@@ -36,5 +36,19 @@ if ! node scripts/check-official-sources.mjs --write-report; then
   exit 1
 fi
 
-gh pr merge "$PR" --squash --delete-branch
+# Merge and clean up WITHOUT touching any local branch or checkout.
+# `gh pr merge --delete-branch` switches local HEAD to the base branch (to delete
+# the merged local branch). That fails with "fatal: '<base>' is already used by
+# worktree ..." when the base branch is checked out in a sibling git worktree —
+# which is exactly how the daily routine runs (routine worktree + shared main
+# checkout). So merge without --delete-branch (no local branch ops) and delete the
+# remote branch explicitly (a remote-only ref delete that never switches HEAD).
+# Note: local `main` is intentionally NOT fast-forwarded here — the guard must not
+# touch a sibling worktree's checked-out branch; whoever owns that checkout pulls.
+head=$(gh pr view "$PR" --json headRefName -q '.headRefName')
+gh pr merge "$PR" --squash
+# Best-effort: the squash-merge already succeeded, so a failed branch delete
+# (e.g. already gone, or protected) must not flip the guard to a failure exit.
+git push origin --delete "$head" >/dev/null 2>&1 || \
+  echo "guard: PR #$PR merged, but remote branch '$head' delete was skipped/failed (non-fatal)" >&2
 echo "guard: PR #$PR merged (docs-only diff + source check passed)"
