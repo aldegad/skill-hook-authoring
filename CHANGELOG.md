@@ -5,6 +5,41 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.21 — 2026-06-30
+
+Daily refresh: billing re-verified live, still paused; freshness stamps advanced.
+
+### Changed
+
+- **Billing status re-verified live 2026-06-30, still paused.** The official
+  support page banner still reads *"Update June 15: We're pausing the changes to
+  Claude Agent SDK usage described below. For now, nothing has changed: Claude
+  Agent SDK, `claude -p`, and third-party app usage still draw from your
+  subscription's usage limits."* The Pro/Max page still confirms the subscription
+  covers interactive Claude Code, a present `ANTHROPIC_API_KEY` switches to
+  pay-as-you-go API billing, and `/status` monitors plan allocation. Advanced
+  every billing time-sensitive stamp 06-29 → 06-30 (`cli-invocation.md`,
+  `cloud-automation.md`, `official-sources.json`, the daily prompt) per the
+  freshness-stamp carve-out. No structural facts changed. (Source:
+  https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan)
+
+### Notes
+
+- **No structural drift this run.** Both `kind: "billing"` sources re-verified
+  live with no material drift; all tracked claims still hold. A minor wording
+  clarification on the Pro/Max page (Claude Code's credit prompt and Claude
+  Console's auto-reload are "separate systems") does not contradict any tracked
+  claim, so no doc body changed. The other structural sources (Codex, Claude
+  hooks/settings/plugins, Grok, Hermes, Cursor, GitHub, gajae-code) were carried
+  forward without claimed drift; their structural stamps were left as-is per the
+  low-noise freshness rule.
+- **Antigravity SPA unverified this run.** The `antigravity.google` docs are a
+  JS-rendered SPA; dynamic render via `claude-in-chrome` requires the interactive
+  browser-selection gate, which is not available in this scheduled (ephemeral) job,
+  so the six Antigravity sources could not be rendered. Recorded as *unverified
+  this run* and their structural render stamps (06-22) left untouched (no change
+  claimed).
+
 ## v1.20 — 2026-06-29
 
 Daily refresh: billing re-verified live, still paused; freshness stamps advanced.
