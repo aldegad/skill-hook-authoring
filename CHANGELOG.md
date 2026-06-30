@@ -5,6 +5,25 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.22 — 2026-06-30
+
+Fix the auto-merge guard's post-merge branch cleanup for git-worktree layouts.
+
+### Fixed
+
+- **`auto-merge-guard.sh` no longer fails on `gh pr merge --delete-branch` in a
+  worktree checkout.** When the daily refresh runs from a linked git worktree (the
+  routine's own `aldegad/routine1` worktree) while `main` is checked out in the
+  shared canonical worktree, `--delete-branch`'s post-merge *local* step ("switch
+  off the just-deleted branch") aborts with `fatal: 'main' is already used by
+  worktree ...` — **after** the remote squash-merge has already succeeded, and it
+  leaves the remote branch stale on that failure. The guard now runs
+  `gh pr merge "$PR" --squash` and then deletes the remote ref explicitly
+  (`git push origin --delete <headRefName> || true`), which never touches a local
+  checkout. The routine worktree is left intact for reuse and the next run's
+  `git fetch --prune` clears the stale remote-tracking ref. The merge gate's
+  docs-only + source-check policy is unchanged; only the cleanup mechanics changed.
+
 ## v1.21 — 2026-06-30
 
 Daily refresh: billing re-verified live, still paused; freshness stamps advanced.
