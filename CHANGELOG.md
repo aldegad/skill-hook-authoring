@@ -5,6 +5,24 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.23 — 2026-07-01
+
+Daily refresh: billing re-verified live, still paused; freshness stamps advanced.
+
+### Changed
+
+- **Billing status re-verified live 2026-07-01, still paused.** Both official
+  support pages were fetched this run. The Agent SDK page banner still reads
+  *"Update June 15: We're pausing the changes to Claude Agent SDK usage described
+  below. For now, nothing has changed: Claude Agent SDK, `claude -p`, and
+  third-party app usage still draw from your subscription's usage limits."* The
+  Pro/Max page still confirms the subscription covers Claude Code, a present
+  `ANTHROPIC_API_KEY` switches to pay-as-you-go API billing, and `/status`
+  monitors remaining plan allocation. No structural drift. Advanced every billing
+  time-sensitive stamp 06-30 → 07-01 (`cli-invocation.md`, `cloud-automation.md`,
+  `official-sources.json` `updated` + billing notes/claim). Stable structural
+  stamps (06-22 / 06-27 / the settled 06-18 Gemini cutoff) left untouched.
+
 ## v1.22 — 2026-06-30
 
 Fix the auto-merge guard's post-merge branch cleanup for git-worktree layouts.
