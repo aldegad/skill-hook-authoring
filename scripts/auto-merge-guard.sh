@@ -36,5 +36,21 @@ if ! node scripts/check-official-sources.mjs --write-report; then
   exit 1
 fi
 
-gh pr merge "$PR" --squash --delete-branch
+gh pr merge "$PR" --squash
+
+# Remote-branch cleanup, done explicitly instead of via `gh pr merge --delete-branch`.
+# In a git-worktree layout that flag's post-merge LOCAL step ("switch off the deleted
+# branch") fails with `fatal: 'main' is already used by worktree ...` AFTER the remote
+# merge has already succeeded — and on that failure it also leaves the remote branch
+# stale. Deleting the remote ref directly never touches any local checkout, so the
+# routine worktree is left intact and the next run's `git fetch --prune` clears the
+# stale remote-tracking ref. The cleanup is best-effort and observable: a failed delete
+# logs a note (and the next prune clears it) but does not fail the gate — the merge
+# itself is already verified by the line above.
+HEAD_BRANCH=$(gh pr view "$PR" --json headRefName -q .headRefName 2>/dev/null || true)
+if [ -n "$HEAD_BRANCH" ]; then
+  git push origin --delete "$HEAD_BRANCH" \
+    || echo "guard: note — remote branch $HEAD_BRANCH not deleted (already gone or push declined); next 'git fetch --prune' clears the stale ref" >&2
+fi
+
 echo "guard: PR #$PR merged (docs-only diff + source check passed)"
