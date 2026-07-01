@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-07-01",
+  "updated": "2026-07-02",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "nonVendorRule": "A small number of non-vendor runtimes (e.g. gajae-code, a community/MIT project) are tracked from their own project README rather than vendor docs. They must be explicitly flagged as community/non-vendor in the docs, held to the same not-documented discipline, and never presented as official vendor guarantees.",
@@ -1137,11 +1137,11 @@
       "agent": "claude-code",
       "kind": "billing",
       "url": "https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan",
-      "notes": "Re-verified 2026-07-01: the billing change originally planned for 2026-06-15 is still PAUSED. The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits.' Accounts using an API key continue on pay-as-you-go API billing. The original plan described separate monthly credits per plan tier (Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise $200) but this plan is paused and not in effect.",
+      "notes": "Re-verified 2026-07-02: the billing change originally planned for 2026-06-15 is still PAUSED. The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits.' Accounts using an API key continue on pay-as-you-go API billing. The original plan described separate monthly credits per plan tier (Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise $200) but this plan is paused and not in effect.",
       "claims": [
         "Agent SDK with Claude plan",
         "claude -p headless",
-        "2026-06-15 Agent SDK billing change still paused as of 2026-07-01",
+        "2026-06-15 Agent SDK billing change still paused as of 2026-07-02",
         "Agent SDK and claude -p currently draw from regular subscription usage limits same as interactive use",
         "API key accounts remain pay-as-you-go API billing",
         "original plan described separate monthly credits per plan tier but change is paused"
