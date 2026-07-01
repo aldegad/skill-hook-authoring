@@ -5,6 +5,29 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.24 — 2026-07-02
+
+Daily refresh: billing re-verified live, still paused; Antigravity SPA re-rendered; freshness stamps advanced.
+
+### Changed
+
+- **Billing status re-verified live 2026-07-02, still paused.** The Agent SDK
+  support page was fetched this run and its banner still reads *"Update June 15:
+  We're pausing the changes to Claude Agent SDK usage described below. For now,
+  nothing has changed: Claude Agent SDK, `claude -p`, and third-party app usage
+  still draw from your subscription's usage limits."* No structural drift.
+  Advanced every billing time-sensitive stamp 07-01 → 07-02 (`cli-invocation.md`,
+  `cloud-automation.md`, `official-sources.json` `updated` + billing notes/claim).
+- **Antigravity CLI docs re-verified by dynamic render.** The `antigravity.google`
+  SPA (a static fetch returns an empty shell) was rendered dynamically and the
+  `cli-reference` page still lists every tracked slash command (`/resume` +
+  `/switch`/`/conversation`, `/fork`/`/branch`, `/model`, `/mcp`, `/skills`,
+  `/permissions`, `/hooks`, `/config`/`/settings`, `/keybindings`, `/rewind`,
+  `/agents`, `/tasks`) plus the `settings.json` config-key table. No drift; the
+  structural verification stamp (06-22) is left as-is per the freshness rule.
+- Stable structural stamps (06-22 / 06-27 / the settled 06-18 Gemini cutoff) left
+  untouched.
+
 ## v1.23 — 2026-07-01
 
 Daily refresh: billing re-verified live, still paused; freshness stamps advanced.
