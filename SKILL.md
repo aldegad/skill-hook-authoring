@@ -71,6 +71,16 @@ Same-platform resume (continue the *same* conversation on the *same* engine, by 
 - **Cross-engine moves** (resume one engine's session under a *different* engine) are a separate, harder problem and out of scope here — keep them off the same-platform path.
 - When a runtime does not document resume, record `not documented` and require live verification before shipping.
 
+## Model Lineup
+
+Which models each runtime **currently ships** — the exact ids a caller selects today, their reasoning/effort tiers, and which models the vendor has **retired** — drifts on its own cadence (a new frontier model or a retirement lands independently of any skill/hook/CLI change). The detailed, source-cited record lives in `docs/models/` (one file per runtime, each with a `Last reviewed:` stamp and its official URL); this is the short working model:
+
+- **Claude / Claude Code** — current: Opus 4.8 (`claude-opus-4-8`), Sonnet 5 (`claude-sonnet-5`), Haiku 4.5 (`claude-haiku-4-5`), Fable 5 (`claude-fable-5`). Retired: Opus 4.7 (`claude-opus-4-7` → 4.8) and Sonnet 4.6 (`claude-sonnet-4-6` → 5). Reasoning is extended thinking; the numeric `effort`/`ultracode` labels are a Claude Code caller-layer selector, not distinct vendor models.
+- **Codex** — seed ids `gpt-5.5` / `gpt-5.4-mini` / `gpt-5.3-codex-spark` with reasoning as `model_reasoning_effort` + `service_tier` config knobs; the exact set is `unverified this run` against `developers.openai.com/codex/models`.
+- **Grok / Gemini-Antigravity / Cursor / Hermes** — router- or provider-routed; ids seeded from downstream catalogs and `unverified this run` against each vendor page. Cursor and Hermes select **upstream** provider models rather than shipping their own.
+
+**SSoT boundary — this folder does not own everything model-shaped.** It owns *current shipping ids + tiers + retirement status*, verified against each vendor's official model page. It does **not** own: **pricing/limits** (the `claude-api` skill and vendor pricing pages), the **Kuma Studio spawnable catalog** (`packages/shared/team.json` `modelCatalog` — a *downstream consumer* that syncs from these lineups, never the reverse), or **naming/phonetic-gloss standards** (the Kuma vault `domains/model-frontier.md`). Link to those; do not duplicate. When a value cannot be confirmed against the official doc in a run, mark it `unverified this run` and leave it for the next daily pass — never substitute a guess or a non-vendor mirror.
+
 ## Project Instruction Files
 
 Do not assume every non-Claude runtime reads `AGENTS.md`. Use the officially documented project-instruction filename for the target runtime:

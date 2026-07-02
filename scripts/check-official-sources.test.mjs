@@ -50,6 +50,20 @@ function validManifest() {
         kind: "session-resume",
         url: "https://code.claude.com/docs/en/sessions",
         claims: ["Claude session resume source"]
+      },
+      {
+        id: "codex-model-lineup",
+        agent: "codex",
+        kind: "model-lineup",
+        url: "https://developers.openai.com/codex/models",
+        claims: ["Codex model lineup source"]
+      },
+      {
+        id: "claude-model-lineup",
+        agent: "claude-code",
+        kind: "model-lineup",
+        url: "https://code.claude.com/docs/en/models",
+        claims: ["Claude model lineup source"]
       }
     ]
   };
@@ -110,6 +124,30 @@ test("required baseline categories stay guarded", () => {
   assert.match(
     failures.join("\n"),
     /no source has kind=session-resume; the Session Resume baseline must stay covered/
+  );
+});
+
+test("model-lineup category stays guarded when dropped entirely", () => {
+  const manifest = validManifest();
+  manifest.sources = manifest.sources.filter((source) => source.kind !== "model-lineup");
+
+  const failures = validateManifest(manifest);
+
+  assert.match(
+    failures.join("\n"),
+    /no source has kind=model-lineup; the Model Lineup baseline must stay covered/
+  );
+});
+
+test("model-lineup category requires both codex and claude-code anchors", () => {
+  const manifest = validManifest();
+  manifest.sources = manifest.sources.filter((source) => source.id !== "claude-model-lineup");
+
+  const failures = validateManifest(manifest);
+
+  assert.match(
+    failures.join("\n"),
+    /missing kind=model-lineup source for claude-code/
   );
 });
 

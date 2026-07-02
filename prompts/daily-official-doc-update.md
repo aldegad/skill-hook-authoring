@@ -91,6 +91,29 @@ both mirrors so they stay consistent: the **Billing caveat** note in
 `docs/cli-invocation.md` and the **"Why not a local cron"** block in
 `docs/cloud-automation.md`.
 
+**MODEL LINEUP — do not skip this category.** Every source in
+`docs/official-sources.json` with `"kind": "model-lineup"` MUST be fetched and
+re-verified every run. For each runtime confirm the **current shipping model ids**
+(the exact strings a caller passes), their **reasoning / effort tiers** where the
+vendor documents them, and which models are **retired / superseded** (id + its
+replacement). If the official docs added a model, changed a tier, or retired one,
+treat the **Model Lineup** baseline as drifted and update both mirrors so they
+stay consistent: the `## Model Lineup` section of `SKILL.md` and the matching
+per-runtime file under `docs/models/`. Cite the runtime's own official model page
+(`docs.anthropic.com` for Claude, `developers.openai.com/codex/models` for Codex,
+`docs.x.ai` for Grok, etc.); do not infer one runtime's lineup from another.
+`docs/models/` owns **current shipping ids + tiers + retirement status only** — it
+does NOT own pricing/limits (the `claude-api` skill), the Kuma Studio spawnable
+catalog (`team.json`, a downstream consumer that syncs from these lineups), or
+naming standards (the Kuma vault); link to those, do not duplicate. If a value
+cannot be confirmed against the official doc this run (403/unreachable, a
+JS-rendered SPA returning an empty shell, or simply not yet documented), record it
+as `unverified this run` and leave it for the next pass — never substitute a guess
+or a non-vendor mirror. The per-file `Last reviewed:` stamp is a
+**time-sensitive** provenance line: advance it to today on every successful
+re-verification (see the freshness-stamp rule under **IF THERE ARE NO CHANGES**),
+because a model lineup that reads as months-old looks wrong even when still true.
+
 **IF THERE ARE CHANGES:** make small, reviewable edits to the repo docs. Cite the
 official source URL in the docs or in the PR body. Run
 `node scripts/check-official-sources.mjs --write-report`. Do NOT push to `main`

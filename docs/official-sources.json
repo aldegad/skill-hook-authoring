@@ -1167,6 +1167,49 @@
         "project instruction file loading not documented",
         "config ~/.gjc/config.yml and per-project .gjc/ state"
       ]
+    },
+    {
+      "id": "anthropic-model-lineup",
+      "agent": "claude-code",
+      "kind": "model-lineup",
+      "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
+      "notes": "Current Claude model lineup (ids + reasoning). Mirror: docs/models/claude.md. As of 2026-07-02 current: Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (claude-haiku-4-5), Fable 5 (claude-fable-5); retired: Opus 4.7 (claude-opus-4-7 → 4.8), Sonnet 4.6 (claude-sonnet-4-6 → 5).",
+      "claims": [
+        "claude-opus-4-8 current",
+        "claude-sonnet-5 current",
+        "claude-haiku-4-5 current",
+        "claude-fable-5 current",
+        "claude-opus-4-7 retired superseded by claude-opus-4-8",
+        "claude-sonnet-4-6 superseded by claude-sonnet-5"
+      ]
+    },
+    {
+      "id": "openai-codex-model-lineup",
+      "agent": "codex",
+      "kind": "model-lineup",
+      "url": "https://developers.openai.com/codex/models",
+      "notes": "Current Codex model lineup (ids + model_reasoning_effort / service_tier). Mirror: docs/models/codex.md. Seed ids gpt-5.5 / gpt-5.4-mini / gpt-5.3-codex-spark from the Kuma catalog are unverified this run against this page — the daily refresh must confirm the current set and any retirements here.",
+      "claims": [
+        "gpt-5.5 current",
+        "gpt-5.4-mini current",
+        "gpt-5.3-codex-spark current",
+        "reasoning via model_reasoning_effort and service_tier config knobs",
+        "retired models unverified this run"
+      ]
+    },
+    {
+      "id": "xai-grok-model-lineup",
+      "agent": "grok",
+      "kind": "model-lineup",
+      "url": "https://docs.x.ai/docs/models",
+      "notes": "Current Grok/xAI model lineup. Mirror: docs/models/grok.md. Seed ids grok-build / grok-composer-2.5-fast / grok-4.3 are unverified this run against this page; confirm native ids, tiers, and retirements each run.",
+      "claims": [
+        "grok-build current",
+        "grok-composer-2.5-fast current",
+        "grok-4.3 available via router",
+        "reasoning taxonomy unverified this run",
+        "retired models unverified this run"
+      ]
     }
   ]
 }
