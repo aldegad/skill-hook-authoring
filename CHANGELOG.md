@@ -5,6 +5,42 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.25 — 2026-07-02
+
+New **Model Lineup** category: track each runtime's current shipping model ids, reasoning/effort tiers, and retired models against the official vendor model pages, re-verified by the daily refresh.
+
+### Added
+
+- **`docs/models/` folder** — one file per runtime (`claude`, `codex`, `grok`,
+  `gemini-antigravity`, `cursor`, `hermes`, `kuma-studio`) plus a `README.md`
+  documenting the SSoT boundary, maintenance policy, and provenance-stamp rule.
+  Each file records current shipping model ids, reasoning/effort tiers, retired
+  models, its official source URL, and a `Last reviewed:` stamp. Seed lineup
+  (2026-07-02): Claude = Opus 4.8 / Sonnet 5 / Haiku 4.5 / Fable 5 current, Opus
+  4.7 + Sonnet 4.6 retired; Codex/Grok/others seeded from the Kuma catalog and
+  marked `unverified this run` pending official-page confirmation.
+- **Three `kind: "model-lineup"` sources** in `docs/official-sources.json`
+  (`anthropic-model-lineup` / `openai-codex-model-lineup` / `xai-grok-model-lineup`),
+  anchored on the official model pages (`docs.anthropic.com`,
+  `developers.openai.com/codex/models`, `docs.x.ai`) — all reachable (HTTP 200) in
+  the check run; no new `allowedHosts` needed.
+- **`guardCategory("model-lineup", "Model Lineup")`** in
+  `scripts/check-official-sources.mjs` so a future edit cannot silently drop the
+  category or its codex + claude-code anchors, with two covering tests in
+  `check-official-sources.test.mjs` (drop-entirely and missing-anchor).
+- **`## Model Lineup`** section in `SKILL.md` and a **MODEL LINEUP — do not skip
+  this category** paragraph in `prompts/daily-official-doc-update.md`, both stating
+  the SSoT boundary (owns current ids/tiers/retirement; links out to pricing =
+  `claude-api`, spawnable catalog = kuma-studio `team.json` downstream, naming =
+  Kuma vault) and the `unverified this run` discipline.
+
+### Boundary
+
+- `docs/models/` is a **vendor-truth record**; the Kuma Studio `team.json`
+  `modelCatalog` is a **downstream consumer** that syncs from it, never the
+  reverse. Pricing stays with the `claude-api` skill; naming/phonetic-gloss stays
+  with the Kuma vault. This category links to those, does not duplicate them.
+
 ## v1.24 — 2026-07-02
 
 Daily refresh: billing re-verified live, still paused; Antigravity SPA re-rendered; freshness stamps advanced.

@@ -142,6 +142,7 @@ export function validateManifest(manifest) {
   }
   guardCategory("cli-invocation", "CLI Spawn And Headless Launch");
   guardCategory("session-resume", "Session Resume");
+  guardCategory("model-lineup", "Model Lineup");
 
   return failures;
 }
