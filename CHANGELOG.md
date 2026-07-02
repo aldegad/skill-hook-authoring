@@ -5,6 +5,33 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.26 — 2026-07-03
+
+Daily refresh: billing re-verified live, still paused; Antigravity SPA re-rendered; freshness stamps advanced.
+
+### Changed
+
+- **Billing status re-verified live 2026-07-03, still paused.** The Agent SDK
+  support page (`support.claude.com/.../15036540`) was fetched this run and its
+  banner still reads *"Update June 15: We're pausing the changes to Claude Agent
+  SDK usage described below. For now, nothing has changed: Claude Agent SDK,
+  `claude -p`, and third-party app usage still draw from your subscription's usage
+  limits."* No structural drift. Advanced every billing time-sensitive stamp
+  07-02 → 07-03 (`cli-invocation.md`, `cloud-automation.md`,
+  `official-sources.json` `updated` + billing notes/claim).
+- **Antigravity CLI docs re-verified by dynamic render.** The `antigravity.google`
+  SPA (a static fetch returns an empty shell) was rendered dynamically and the
+  `cli-reference` page still lists every tracked slash command (`/resume` +
+  `/switch`/`/conversation`, `/fork`/`/branch`, `/model`, `/mcp`, `/skills`,
+  `/permissions`, `/hooks`, `/config`/`/settings`, `/keybindings`, `/rewind`,
+  `/agents`, `/tasks`) plus the `settings.json` config-key table
+  (`toolPermission` request-review/proceed-in-sandbox/always-proceed/strict,
+  `artifactReviewPolicy`, `enableTerminalSandbox`). No drift; the structural
+  verification stamp (06-22) is left as-is per the freshness rule.
+- Model-lineup stamps (07-02) left untouched — structural, not re-verified this
+  run — as were the other stable structural stamps (06-22 / 06-27 / the settled
+  06-18 Gemini cutoff). Only time-sensitive billing stamps advance.
+
 ## v1.25 — 2026-07-02
 
 New **Model Lineup** category: track each runtime's current shipping model ids, reasoning/effort tiers, and retired models against the official vendor model pages, re-verified by the daily refresh.
