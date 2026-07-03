@@ -5,6 +5,74 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.27 — 2026-07-04
+
+Daily refresh: all 56 manifest sources re-verified live. Billing still paused;
+model lineups verified against the official Claude/Codex/Grok model pages for
+the first time (Codex adds `gpt-5.4`, deprecates `gpt-5.2`/`gpt-5.3-codex`);
+Codex CLI docs dropped the session-store paths; Antigravity docs moved to
+`/docs/cli/<page>` URLs and resolved the MCP-path inconsistency.
+
+### Changed
+
+- **Billing status re-verified live 2026-07-04, still paused.** The Agent SDK
+  support page banner is character-identical to the 07-03 snapshot ("Update June
+  15: We're pausing the changes…"). Advanced every billing time-sensitive stamp
+  07-03 → 07-04 (`cli-invocation.md`, `cloud-automation.md`,
+  `official-sources.json`).
+- **Model Lineup verified live for Claude, Codex, and Grok** (first live pass
+  since the category shipped in v1.25); `docs/models/claude.md`, `codex.md`,
+  `grok.md` rewritten from the official pages and their `unverified this run`
+  seed caveats cleared:
+  - **Claude:** current = Fable 5, Opus 4.8, Sonnet 5, Haiku 4.5 (id
+    `claude-haiku-4-5-20251001`, alias `claude-haiku-4-5`). Reasoning is
+    **adaptive thinking** on the current generation (Haiku 4.5: extended
+    thinking) — corrected from the earlier blanket "extended thinking". Newly
+    documented, **not GA**: `claude-mythos-5` / `claude-mythos-preview`
+    (invitation-only, Project Glasswing). `claude-opus-4-1-20250805` is
+    deprecated, retiring 2026-08-05. `docs.anthropic.com` now 301-redirects to
+    `platform.claude.com` (same doc; URL kept, redirect noted).
+  - **Codex:** current = `gpt-5.5`, **`gpt-5.4` (new)**, `gpt-5.4-mini`,
+    `gpt-5.3-codex-spark` (text-only research preview, ChatGPT Pro);
+    **deprecated: `gpt-5.2`, `gpt-5.3-codex`** (no one-to-one replacement
+    mapping documented). The models page documents `codex -m <id>` selection but
+    no per-model reasoning/service tiers.
+  - **Grok:** current = `grok-4.3` (1M), `grok-4.20-0309`
+    reasoning/non-reasoning/multi-agent (1M), `grok-build-0.1` (256k), plus
+    Imagine image/video models and the Voice API. Kuma-catalog id
+    `grok-composer-2.5-fast` is **not documented** on the official page (no
+    retired section — recorded as absence, not retirement).
+- **Codex session-store paths no longer documented.** The CLI reference dropped
+  `~/.codex/sessions/` and `~/.codex/history.jsonl`; rollout files survive only
+  indirectly via `--ephemeral`, and the app-server doc adds `thread/archive`
+  (JSONL thread logs, archived-sessions directory, exact paths unstated).
+  Session Resume mirrors updated (`compatibility-matrix.md` Codex rows +
+  implementer note) to `not documented` per the source discipline.
+- **Codex CLI overview no longer states the seed-prompt arg** (`codex
+  "<prompt>"`); marked `unverified this run` in the spawn tables (SKILL.md,
+  `cli-invocation.md`) pending re-anchoring. The noninteractive page also
+  dropped its `--model`/`-m` listing (defers to the CLI reference; the flag
+  remains official via the models page) — manifest note only.
+- **Antigravity docs re-verified by dynamic render (Playwright); all tracked
+  claims hold.** Structural changes: every page moved from `/docs/cli-<page>` to
+  `/docs/cli/<page>` (and `/docs/sdk-overview` → `/docs/sdk/overview`) — old
+  URLs redirect; manifest + doc citations updated to the canonical paths. The
+  plugins page no longer states MCP config paths (defers to a dedicated MCP
+  docs page), which **resolves the previously recorded global-MCP-path
+  inconsistency** — the migration page's `~/.gemini/config/mcp_config.json`
+  (global) / `.agents/mcp_config.json` (workspace) is now the only stated pair.
+  New on the reference page: `/statusline`, `/fast`, `/planning`, `/btw`,
+  `/add-dir`, `/diff`, `/usage` etc.; `plugin.json` now documents a `$schema`
+  with only `name` required.
+- **Claude Code doc drift (3 claims):** `CLAUDE_CONFIG_DIR` left the memory page
+  (sessions page remains the anchor); `maxSkillDescriptionChars` was renamed
+  `skillListingMaxDescChars` (default 1536 unchanged);
+  `CLAUDE_CODE_SYNC_PLUGIN_INSTALL` left the plugins page (headless page remains
+  the anchor). Manifest claims updated; no doc-body mirrors were affected.
+- **Cursor overview no longer mentions the worktree flag** (still documented on
+  cli/using and cli/reference/parameters) — manifest claim moved to those
+  anchors.
+
 ## v1.26 — 2026-07-03
 
 Daily refresh: billing re-verified live, still paused; Antigravity SPA re-rendered; freshness stamps advanced.
