@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-07-03
+Last reviewed: 2026-07-04
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or
@@ -51,7 +51,7 @@ the same idea, but they are reached differently:
 
 | Runtime | Launch interactive TUI | Seed with an initial prompt |
 |---|---|---|
-| Codex | `codex` — "launches the interactive terminal UI (TUI)" | `codex "<prompt>"` (optional PROMPT arg); `codex -m <model> "<prompt>"`; `codex -i <img> "<prompt>"` |
+| Codex | `codex` — "launches the interactive terminal UI (TUI)" | seed-prompt syntax is no longer stated on the CLI overview page (as of 2026-07-04) — treat `codex "<prompt>"` as `unverified this run`; verify against `codex --help` before scripting it |
 | Claude Code | `claude` — start interactive session | `claude "<query>"` — start interactive session with an initial prompt |
 | Grok / xAI | `grok` — interactive TUI | type after launch (no separate seed-prompt form documented; `-p`/`--single` switches to headless) |
 | Hermes Agent | `hermes chat` — interactive chat | type after launch (`-q` switches to a single non-interactive query) |
@@ -73,7 +73,7 @@ the same idea, but they are reached differently:
 
 > **Billing caveat (Claude Code).** On a subscription, `claude -p` and Agent SDK
 > runs draw from your plan's usage limits — the same pool as interactive use, with
-> no separate per-run credit. As of 2026-07-03, the Agent SDK billing
+> no separate per-run credit. As of 2026-07-04, the Agent SDK billing
 > change announced for 2026-06-15 remains **paused**. The official support page
 > opens with a dated banner: *"Update June 15: We're pausing the changes to Claude
 > Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK,
@@ -84,7 +84,7 @@ the same idea, but they are reached differently:
 > `claude -p` cron; the reliability advantage (Routine runs regardless of laptop
 > state) still applies. See `docs/cloud-automation.md`. (Source:
 > https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan,
-> verified 2026-07-03.)
+> verified 2026-07-04.)
 
 ## C. Resume invocation (command syntax)
 
@@ -137,9 +137,10 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
   (global `~/.gemini/antigravity-cli/skills/`); MCP servers move out of
   `~/.gemini/settings.json` into `~/.gemini/config/mcp_config.json` (global) /
   `.agents/mcp_config.json` (workspace), and the server URI key `url`/`httpUrl`
-  becomes `serverUrl`. (Doc inconsistency: the migration page lists the global
-  MCP path as `~/.gemini/config/mcp_config.json`, the plugins page as
-  `~/.gemini/antigravity-cli/mcp_config.json`; the workspace path agrees.)
+  becomes `serverUrl`. (These paths are stated on the migration page; as of
+  2026-07-04 the plugins page no longer lists MCP paths — it defers to a
+  dedicated MCP docs page — so the earlier cross-page global-path inconsistency
+  is resolved.)
 - **Plugins, hooks, skills (now documented):** native plugins live at
   `~/.gemini/antigravity-cli/plugins/<name>/` and bundle `plugin.json` (required),
   `hooks.json`, `mcp_config.json`, `skills/`, `agents/`, and `rules/`, managed by
@@ -164,7 +165,7 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
   (JSONL); Claude/Cursor `--output-format json|stream-json`; Grok
   `--output-format json`. Hermes and Antigravity document **no** headless JSON
   output flag.
-- **Claude Code Agent SDK billing (status as of 2026-07-03):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token, requires a subscription) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-07-03.)
+- **Claude Code Agent SDK billing (status as of 2026-07-04):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token, requires a subscription) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-07-04.)
 - Session resume identifiers differ (UUID session id vs. human name vs.
   `--last` / `-1` vs. `--conversation <uuid>`). Store a resume handle in the form
   that runtime's resume command accepts, and remember whether you need the
@@ -181,14 +182,14 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
 - Grok CLI headless & scripting — <https://docs.x.ai/build/cli/headless-scripting>
 - Hermes Agent CLI — <https://hermes-agent.nousresearch.com/docs/user-guide/cli/>
 - Gemini CLI → Antigravity CLI transition (official blog) — <https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/>
-- Antigravity CLI reference — <https://antigravity.google/docs/cli-reference>
-- Antigravity CLI conversations (`--continue`, `--conversation`, `/resume`) — <https://antigravity.google/docs/cli-conversations>
-- Antigravity CLI Gemini migration — <https://antigravity.google/docs/gcli-migration>
-- Antigravity CLI plugins, hooks & skills — <https://antigravity.google/docs/cli-plugins>
-- Antigravity CLI usage (settings, keybindings, launch overrides) — <https://antigravity.google/docs/cli-using>
-- Antigravity CLI install & auth — <https://antigravity.google/docs/cli-install>
-- Antigravity SDK (programmatic/headless path) — <https://antigravity.google/docs/sdk-overview>
+- Antigravity CLI reference — <https://antigravity.google/docs/cli/reference>
+- Antigravity CLI conversations (`--continue`, `--conversation`, `/resume`) — <https://antigravity.google/docs/cli/conversations>
+- Antigravity CLI Gemini migration — <https://antigravity.google/docs/cli/gcli-migration>
+- Antigravity CLI plugins, hooks & skills — <https://antigravity.google/docs/cli/plugins>
+- Antigravity CLI usage (settings, keybindings, launch overrides) — <https://antigravity.google/docs/cli/using>
+- Antigravity CLI install & auth — <https://antigravity.google/docs/cli/install>
+- Antigravity SDK (programmatic/headless path) — <https://antigravity.google/docs/sdk/overview>
 - Cursor CLI parameters — <https://cursor.com/docs/cli/reference/parameters>
 - gajae-code (community project, README — not vendor docs) — <https://github.com/Yeachan-Heo/gajae-code>
 - Claude Code with Pro/Max plan (billing) — <https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan>
-- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-07-03) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
+- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-07-04) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
