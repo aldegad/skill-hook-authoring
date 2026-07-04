@@ -1,7 +1,7 @@
 # OpenAI Codex — model lineup
 
 Official source: https://developers.openai.com/codex/models
-Last reviewed: 2026-07-04 (verified live against the official Codex models page)
+Last reviewed: 2026-07-05 (verified live against the official Codex models page)
 
 ## Current shipping models
 
@@ -12,8 +12,12 @@ Last reviewed: 2026-07-04 (verified live against the official Codex models page)
 | `gpt-5.4-mini` | `codex -m gpt-5.4-mini` | Fast, efficient mini model for responsive coding tasks and subagents. |
 | `gpt-5.3-codex-spark` | `codex -m gpt-5.3-codex-spark` | Text-only **research preview** optimized for near-instant, real-time coding iteration; available to ChatGPT Pro users. |
 
-- All four are listed as available across Codex CLI & SDK, the Codex app & IDE
-  extension, Codex Cloud, ChatGPT Credits, and API access.
+- Availability matrix: `gpt-5.5`, `gpt-5.4`, and `gpt-5.4-mini` are listed for
+  Codex CLI & SDK, the Codex app & IDE extension, ChatGPT Credits, and API
+  access — **Codex Cloud is marked unavailable for all four models** (the page
+  notes you can't change the default model for Codex cloud tasks).
+  `gpt-5.3-codex-spark` is CLI & SDK + app & IDE only (no Codex Cloud, ChatGPT
+  Credits, or API access).
 - The models page does **not** document per-model reasoning-effort values or
   service tiers. `model_reasoning_effort` and `service_tier` remain config knobs
   (see the Codex config docs) — config values on a model, not distinct model
