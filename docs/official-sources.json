@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-07-04",
+  "updated": "2026-07-05",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "nonVendorRule": "A small number of non-vendor runtimes (e.g. gajae-code, a community/MIT project) are tracked from their own project README rather than vendor docs. They must be explicitly flagged as community/non-vendor in the docs, held to the same not-documented discipline, and never presented as official vendor guarantees.",
@@ -107,6 +107,7 @@
       "agent": "codex",
       "kind": "configuration",
       "url": "https://developers.openai.com/codex/config-advanced",
+      "notes": "2026-07-05: this page documents Codex state locations — CODEX_HOME (defaults to ~/.codex, holding config.toml, auth.json, history.jsonl) and history persistence ('By default, Codex saves local session transcripts under CODEX_HOME (for example, ~/.codex/history.jsonl)', disable via [history] persistence = \"none\", cap via history.max_bytes). This makes it the anchor for the history-file path after the CLI reference dropped it (see openai-codex-cli-reference).",
       "claims": [
         ".codex/config.toml",
         "project-scoped config",
@@ -114,7 +115,11 @@
         "project-local hooks",
         "hooks.json",
         "inline hooks",
-        "project root detection"
+        "project root detection",
+        "CODEX_HOME state location defaults to ~/.codex",
+        "history persistence ~/.codex/history.jsonl",
+        "history persistence none",
+        "history.max_bytes"
       ]
     },
     {
@@ -441,6 +446,7 @@
       "agent": "grok",
       "kind": "plugins",
       "url": "https://docs.x.ai/build/features/skills-plugins-marketplaces",
+      "notes": "2026-07-05: the page now states only the plugin-hook env vars ('Plugin hooks additionally receive GROK_PLUGIN_ROOT and GROK_PLUGIN_DATA in their environment') and defers hook events, JSON format, and the script contract to the dedicated hooks page; GROK_HOOK_EVENT, GROK_HOOK_NAME, GROK_SESSION_ID, GROK_WORKSPACE_ROOT moved to that page (xai-grok-hooks, added this run as their anchor).",
       "claims": [
         "skills",
         "plugins",
@@ -449,10 +455,23 @@
         "marketplaces",
         "Claude Code compatibility",
         "AGENTS.md compatibility",
-        "hook env vars GROK_HOOK_EVENT GROK_HOOK_NAME GROK_SESSION_ID GROK_WORKSPACE_ROOT GROK_PLUGIN_ROOT GROK_PLUGIN_DATA",
+        "plugin hook env vars GROK_PLUGIN_ROOT GROK_PLUGIN_DATA",
         "marketplace.sources in ~/.grok/config.toml",
         "~/.grok/plugins/known_marketplaces.json",
         "--plugin-dir flag"
+      ]
+    },
+    {
+      "id": "xai-grok-hooks",
+      "agent": "grok",
+      "kind": "hooks",
+      "url": "https://docs.x.ai/build/features/hooks",
+      "notes": "Added 2026-07-05 as the anchor for the hook env vars that moved off the skills-plugins-marketplaces page (which now documents only the plugin-hook additions GROK_PLUGIN_ROOT/GROK_PLUGIN_DATA and defers events/JSON/script contract here).",
+      "claims": [
+        "GROK_HOOK_EVENT",
+        "GROK_HOOK_NAME",
+        "GROK_SESSION_ID",
+        "GROK_WORKSPACE_ROOT"
       ]
     },
     {
@@ -494,7 +513,7 @@
         "skills system",
         "MCP integration",
         "memory system",
-        "scheduled tasks"
+        "scheduled automations built-in cron"
       ]
     },
     {
@@ -683,8 +702,10 @@
         "loop_limit default 5 cursor null claude-code",
         "Enterprise hooks /Library/Application Support/Cursor/hooks.json macOS /etc/cursor/hooks.json Linux C:/ProgramData/Cursor/hooks.json Windows",
         "cloud agent supports shell file tool subagent lifecycle hooks plus preCompact",
-        "cloud agent does not support sessionStart sessionEnd beforeSubmitPrompt beforeMCPExecution afterMCPExecution afterAgentResponse afterAgentThought stop Tab hooks workspaceOpen"
-      ]
+        "cloud agent does not support sessionStart sessionEnd beforeSubmitPrompt beforeMCPExecution afterMCPExecution afterAgentResponse afterAgentThought Tab hooks workspaceOpen",
+        "stop cloud status no longer stated"
+      ],
+      "notes": "2026-07-05: stop no longer appears in either cloud-agent table (it was previously listed as unsupported in cloud) — its cloud status is now not stated; the unavailable list is sessionStart/sessionEnd, beforeSubmitPrompt, Tab hooks, workspaceOpen, plus beforeMCPExecution/afterMCPExecution and afterAgentResponse/afterAgentThought ('Not yet wired for cloud agents'). The supported table lists beforeShellExecution, afterShellExecution, beforeReadFile, afterFileEdit, preToolUse, postToolUse, postToolUseFailure, subagentStart, subagentStop, preCompact."
     },
     {
       "id": "cursor-cli-parameters",
@@ -742,15 +763,15 @@
       "agent": "codex",
       "kind": "session-resume",
       "url": "https://developers.openai.com/codex/cli/reference",
-      "notes": "2026-07-04: the page no longer documents the session-store paths ~/.codex/sessions or ~/.codex/history.jsonl (both previously stated here). Rollout files survive only indirectly via --ephemeral ('run without persisting session rollout files to disk'); the app-server doc still describes thread logs persisted as JSONL files. Treat the on-disk session paths as not documented until an official page states them again.",
+      "notes": "2026-07-04: the page no longer documents the session-store paths ~/.codex/sessions or ~/.codex/history.jsonl (both previously stated here). Rollout files survive only indirectly via --ephemeral ('run without persisting session rollout files to disk'); the app-server doc still describes thread logs persisted as JSONL files. 2026-07-05: ~/.codex/history.jsonl is documented again — on the config-advanced page ('Codex saves local session transcripts under CODEX_HOME (for example, ~/.codex/history.jsonl)'), so openai-codex-config-advanced is now the anchor for that path; the rollout/sessions directory (~/.codex/sessions) remains not documented on any official page.",
       "claims": [
         "codex resume",
         "codex resume --last",
         "codex exec resume",
         "--all",
         "rollout jsonl via --ephemeral",
-        "session store path not documented",
-        "~/.codex/history.jsonl not documented"
+        "rollout sessions directory not documented",
+        "~/.codex/history.jsonl anchored on config-advanced"
       ]
     },
     {
@@ -773,10 +794,10 @@
       "agent": "claude-code",
       "kind": "session-resume",
       "url": "https://code.claude.com/docs/en/sessions",
+      "notes": "2026-07-05: the -c short form and the URL-accepting --from-pr forms are no longer stated on this page (it shows claude --continue and 'claude --from-pr <number>' only); both full forms remain on the CLI reference (anthropic-claude-cli-reference: '--continue, -c'; '--from-pr accepts a PR number, a GitHub or GitHub Enterprise PR URL, a GitLab merge request URL, or a Bitbucket pull request URL'), which is the anchor. URL pasting survives here as a session-picker search feature ('Paste a GitHub, GitHub Enterprise, GitLab, or Bitbucket pull or merge request URL to find the session that created it').",
       "claims": [
         "--resume",
         "--continue",
-        "-c",
         "/resume",
         "--fork-session",
         "same session id reused",
@@ -794,7 +815,7 @@
         "claude --resume with no args opens session picker",
         "/cd command relocates session to new directory v2.1.169",
         "headless sessions (claude -p) and Agent SDK sessions do not appear in picker but resumable by session ID",
-        "--from-pr also accepts GitHub Enterprise GitLab Bitbucket pull or merge request URLs",
+        "session picker search accepts pasted GitHub GitHub Enterprise GitLab Bitbucket pull or merge request URLs",
         "Ctrl+R in session picker renames session",
         "Space in session picker previews session content",
         "session auto-named on plan accept if name not set"
@@ -805,6 +826,7 @@
       "agent": "grok",
       "kind": "session-resume",
       "url": "https://docs.x.ai/build/cli/headless-scripting",
+      "notes": "2026-07-05: the ACP example now uses camelCase sessionId ('const { sessionId } = await request(\"session/new\", ...)'); the literal snake_case session_id token no longer appears on the page.",
       "claims": [
         "-p --single",
         "-c --continue",
@@ -813,7 +835,7 @@
         "--output-format plain json streaming-json",
         "grok agent stdio ACP",
         "~/.grok/sessions",
-        "session_id"
+        "sessionId"
       ]
     },
     {
@@ -849,15 +871,14 @@
       "agent": "codex",
       "kind": "cli-invocation",
       "url": "https://developers.openai.com/codex/noninteractive",
-      "notes": "2026-07-04: --model/-m is no longer listed on this page (it defers flag docs to /codex/cli/reference#codex-exec); the flag itself is still official — the models page shows codex -m <id> and codex exec --model usage.",
+      "notes": "2026-07-04: --model/-m is no longer listed on this page (it defers flag docs to /codex/cli/reference#codex-exec); the flag itself is still official — the models page shows codex -m <id> and codex exec --model usage. 2026-07-05: --cd/-C and the -s short alias are no longer stated on this page either (only the long --sandbox form remains); both stay documented on /codex/cli/reference under codex exec ('--cd, -C | path | Set the workspace root before executing the task', '--sandbox, -s') — the page keeps deferring flag docs to the CLI reference.",
       "claims": [
         "non-interactive mode",
         "codex exec",
         "stream to stdout JSONL",
         "--json",
         "--output-last-message -o",
-        "--sandbox -s",
-        "--cd -C",
+        "--sandbox",
         "stdin dash prompt",
         "--output-schema",
         "--ephemeral",
@@ -892,6 +913,7 @@
         "--name -n",
         "--allowedTools",
         "--permission-mode default acceptEdits plan auto dontAsk bypassPermissions",
+        "--permission-mode manual alias of default v2.1.200",
         "--plugin-url fetch plugin zip from URL session only",
         "--agents inline subagent JSON",
         "--agent specify agent for session",
@@ -909,8 +931,9 @@
       "agent": "claude-code",
       "kind": "cli-invocation",
       "url": "https://code.claude.com/docs/en/headless",
+      "notes": "2026-07-05: the page is now titled 'Run Claude Code programmatically' and the literal word 'headless' no longer appears in the body (it says 'non-interactive mode'); the /headless URL slug and all documented behavior are unchanged.",
       "claims": [
-        "headless mode",
+        "programmatic non-interactive mode page titled Run Claude Code programmatically",
         "print mode -p",
         "output-format json stream-json",
         "bare mode",
@@ -1000,7 +1023,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli/gcli-migration",
-      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-04). Page moved from /docs/gcli-migration to /docs/cli/gcli-migration (old URL redirects). GEMINI_API_KEY->AV_API_KEY env swap is NOT stated here (third-party claim); auth is via OS keyring. The earlier global-MCP-path inconsistency is resolved: the cli/plugins page no longer states MCP paths (it defers to a dedicated MCP docs page), so this page's ~/.gemini/config/mcp_config.json (global) / .agents/mcp_config.json (workspace) is the only stated path pair.",
+      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-05). Page moved from /docs/gcli-migration to /docs/cli/gcli-migration (old URL redirects). GEMINI_API_KEY->AV_API_KEY env swap is NOT stated here (third-party claim); auth is via OS keyring. The earlier global-MCP-path inconsistency is resolved: the cli/plugins page no longer states MCP paths (it defers to a dedicated MCP docs page), so this page's ~/.gemini/config/mcp_config.json (global) / .agents/mcp_config.json (workspace) is the only stated path pair. 2026-07-05: the ~/.local/bin/agy install path is no longer stated on this page — the install page (antigravity-cli-install) remains the anchor; the page now also states the global skills path pair (Gemini ~/.gemini/skills/ -> Antigravity ~/.gemini/antigravity-cli/skills/).",
       "claims": [
         "agy plugin import gemini",
         "first-launch auto-conversion checklist",
@@ -1008,9 +1031,9 @@
         "reads GEMINI.md and AGENTS.md",
         "global ~/.gemini/GEMINI.md",
         "workspace skills .gemini/skills -> .agents/skills",
+        "global skills ~/.gemini/skills -> ~/.gemini/antigravity-cli/skills",
         "MCP moves to standalone mcp_config.json",
-        "serverUrl schema key url/httpUrl unsupported",
-        "install ~/.local/bin/agy"
+        "serverUrl schema key url/httpUrl unsupported"
       ]
     },
     {
@@ -1133,11 +1156,11 @@
       "agent": "claude-code",
       "kind": "billing",
       "url": "https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan",
-      "notes": "Re-verified 2026-07-04: the billing change originally planned for 2026-06-15 is still PAUSED. The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits.' Accounts using an API key continue on pay-as-you-go API billing. The original plan described separate monthly credits per plan tier (Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise $200) but this plan is paused and not in effect.",
+      "notes": "Re-verified 2026-07-05: the billing change originally planned for 2026-06-15 is still PAUSED. The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits. The previously announced monthly credit, which would have been available to eligible claimants in connection with these changes, isn't available. We're working to update the plan to better support how users build with Claude subscriptions. When we have an update, we'll share it before anything takes effect.' Accounts using an API key continue on pay-as-you-go API billing. The original (paused, not-in-effect) plan described separate monthly credits per plan tier: Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise usage-based $20, Enterprise seat-based Premium seats $200 (Standard seats not eligible).",
       "claims": [
         "Agent SDK with Claude plan",
         "claude -p headless",
-        "2026-06-15 Agent SDK billing change still paused as of 2026-07-04",
+        "2026-06-15 Agent SDK billing change still paused as of 2026-07-05",
         "Agent SDK and claude -p currently draw from regular subscription usage limits same as interactive use",
         "API key accounts remain pay-as-you-go API billing",
         "original plan described separate monthly credits per plan tier but change is paused"
@@ -1148,13 +1171,13 @@
       "agent": "gajae-code",
       "kind": "community-runtime",
       "url": "https://github.com/Yeachan-Heo/gajae-code",
-      "notes": "NON-VENDOR community project (MIT, beta) by Yeachan-Heo; this README is the only source, not vendor docs. Flagged the same way Kuma Studio is. Verified 2026-06-27. A coding-agent harness (binary `gjc`) that runs adjacent to other CLIs; install with `bun install -g gajae-code` (scoped `@gajae-code/coding-agent`). Interactive `gjc` / `gjc --tmux` / `gjc --tmux --worktree <branch>`; headless `gjc --mode rpc` (no JSON/output-format flag). Skills are the only documented extension surface: SKILL.md-format under `~/.gjc/skills/`, listed/read with `gjc skills list` / `gjc skills read <name>`, invoked as `/skill:<name>` (colon form), defaults deep-interview/ralplan/ultragoal/team. Hooks, plugins, session-id resume, and project-instruction-file loading are all NOT documented. User config `~/.gjc/config.yml`; per-project state `.gjc/`.",
+      "notes": "NON-VENDOR community project (MIT, beta) by Yeachan-Heo; this README is the only source, not vendor docs. Flagged the same way Kuma Studio is. Verified 2026-07-05. A coding-agent harness (binary `gjc`) that runs adjacent to other CLIs; install with `bun install -g gajae-code` (scoped `@gajae-code/coding-agent`). Interactive `gjc` / `gjc --tmux` / `gjc --tmux --worktree <branch>`; headless `gjc --mode rpc` (no JSON/output-format flag). Skills are the only documented extension surface: SKILL.md-format bundled skills installed by `gjc setup defaults` into the user `.gjc` directory (2026-07-05: the exact `~/.gjc/skills/` path is no longer literally stated in the README), listed/read with `gjc skills list` / `gjc skills read <name>`, invoked as `/skill:<name>` (colon form), defaults deep-interview/ralplan/ultragoal/team. Hooks, plugins, session-id resume, and project-instruction-file loading are all NOT documented (re-confirmed by grep). User config `~/.gjc/config.yml`; per-project state `.gjc/`. New README content (0.6-0.7, outside claim scope): `gjc rlm` research/REPL mode, notifications SDK + `gjc daemon` Telegram reference daemon, image input, standalone MCP/ACP/Bridge surfaces.",
       "claims": [
         "community MIT project, not a vendor product",
         "binary gjc; install via bun install -g gajae-code",
         "interactive gjc / gjc --tmux / --worktree",
         "headless gjc --mode rpc with no JSON output flag",
-        "skills in ~/.gjc/skills/ via gjc skills list/read",
+        "bundled skills installed into user .gjc directory via gjc setup defaults; gjc skills list/read",
         "skill invocation token /skill:<name> colon form",
         "default skills deep-interview ralplan ultragoal team",
         "hooks not documented",
@@ -1169,7 +1192,7 @@
       "agent": "claude-code",
       "kind": "model-lineup",
       "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
-      "notes": "Current Claude model lineup (ids + reasoning). Mirror: docs/models/claude.md. Verified live 2026-07-04 (docs.anthropic.com now 301-redirects to platform.claude.com — same official doc). Current: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (id claude-haiku-4-5-20251001, alias claude-haiku-4-5). Reasoning: adaptive thinking on Fable 5 (always on) / Opus 4.8 / Sonnet 5; Haiku 4.5 uses extended thinking. Also documented but NOT generally available: Claude Mythos 5 (claude-mythos-5) and Claude Mythos Preview (claude-mythos-preview), invitation-only via Project Glasswing. Legacy: Opus 4.7 (→ 4.8), Opus 4.6, Sonnet 4.6 (→ 5), Sonnet 4.5, Opus 4.5; deprecated: claude-opus-4-1-20250805 retiring 2026-08-05.",
+      "notes": "Current Claude model lineup (ids + reasoning). Mirror: docs/models/claude.md. Verified live 2026-07-05 (docs.anthropic.com 301-redirects to platform.claude.com/docs/en/about-claude/models/overview — same official doc). Current: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (id claude-haiku-4-5-20251001, alias claude-haiku-4-5). Reasoning: adaptive thinking on Fable 5 (always on) / Opus 4.8 / Sonnet 5; Haiku 4.5 uses extended thinking. Also documented but NOT generally available: Claude Mythos 5 (claude-mythos-5) and Claude Mythos Preview (claude-mythos-preview), invitation-only via Project Glasswing. Legacy: Opus 4.7 (→ 4.8), Opus 4.6, Sonnet 4.6 (→ 5), Sonnet 4.5, Opus 4.5; deprecated: claude-opus-4-1-20250805 retiring 2026-08-05.",
       "claims": [
         "claude-fable-5 current",
         "claude-opus-4-8 current",
@@ -1188,7 +1211,7 @@
       "agent": "codex",
       "kind": "model-lineup",
       "url": "https://developers.openai.com/codex/models",
-      "notes": "Current Codex model lineup. Mirror: docs/models/codex.md. Verified live 2026-07-04: current models are gpt-5.5, gpt-5.4 (flagship), gpt-5.4-mini, and gpt-5.3-codex-spark (text-only research preview, ChatGPT Pro users); gpt-5.2 and gpt-5.3-codex are deprecated when signing in with ChatGPT (no one-to-one replacement mapping — the page says to update to the latest listed model). The models page shows model selection as codex -m <id> but does NOT document per-model reasoning-effort tiers or service tiers; model_reasoning_effort / service_tier remain config knobs documented in the config docs, not on this page.",
+      "notes": "Current Codex model lineup. Mirror: docs/models/codex.md. Verified live 2026-07-05: current models are gpt-5.5, gpt-5.4 (flagship), gpt-5.4-mini, and gpt-5.3-codex-spark (text-only research preview, ChatGPT Pro users); gpt-5.2 and gpt-5.3-codex are deprecated when signing in with ChatGPT (no one-to-one replacement mapping — the page says to update to the latest listed model). The models page shows model selection as codex -m <id> but does NOT document per-model reasoning-effort tiers or service tiers; model_reasoning_effort / service_tier remain config knobs documented in the config docs, not on this page. 2026-07-05: the availability matrix now marks Codex Cloud unavailable for all four models (consistent with 'you can't change the default model for Codex cloud tasks'), and gpt-5.3-codex-spark as CLI & SDK + app & IDE only (no ChatGPT Credits, no API access).",
       "claims": [
         "gpt-5.5 current",
         "gpt-5.4 current",
@@ -1205,7 +1228,7 @@
       "agent": "grok",
       "kind": "model-lineup",
       "url": "https://docs.x.ai/docs/models",
-      "notes": "Current Grok/xAI model lineup. Mirror: docs/models/grok.md. Verified live 2026-07-04: chat/coding models are grok-4.3 (1M context), grok-4.20-0309-reasoning / grok-4.20-0309-non-reasoning (1M), grok-4.20-multi-agent-0309 (1M), and grok-build-0.1 (256k); specialized models are grok-imagine-image / grok-imagine-image-quality / grok-imagine-video / grok-imagine-video-1.5 plus the Grok Voice API. The Kuma-catalog id grok-composer-2.5-fast does NOT appear on this page, and grok-build appears only as grok-build-0.1. The page has no retired/deprecated section — record absences as not-documented, not retirements.",
+      "notes": "Current Grok/xAI model lineup. Mirror: docs/models/grok.md. Verified live 2026-07-05 (unchanged; the sidebar adds a 'Model Retirement on May 15' migration-guide page for the REST API — still no retired/deprecated section on the models page itself): chat/coding models are grok-4.3 (1M context), grok-4.20-0309-reasoning / grok-4.20-0309-non-reasoning (1M), grok-4.20-multi-agent-0309 (1M), and grok-build-0.1 (256k); specialized models are grok-imagine-image / grok-imagine-image-quality / grok-imagine-video / grok-imagine-video-1.5 plus the Grok Voice API. The Kuma-catalog id grok-composer-2.5-fast does NOT appear on this page, and grok-build appears only as grok-build-0.1. The page has no retired/deprecated section — record absences as not-documented, not retirements.",
       "claims": [
         "grok-4.3 current 1M context",
         "grok-4.20-0309-reasoning and grok-4.20-0309-non-reasoning current",

@@ -5,6 +5,79 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.28 — 2026-07-05
+
+Daily refresh: all 56 manifest sources re-verified live (55 prior + 1 added).
+Billing still paused (banner now longer); Codex availability matrix drops Codex
+Cloud for all models; Codex `~/.codex/history.jsonl` re-anchored (documented on
+config-advanced); Grok hook env vars moved to a dedicated hooks page (new
+manifest source); several no-longer-stated anchor moves on Claude/Codex/Cursor
+pages; gajae-code README weakened its skills path.
+
+### Added
+
+- **New manifest source `xai-grok-hooks`** (https://docs.x.ai/build/features/hooks):
+  the skills-plugins-marketplaces page now states only the plugin-hook env vars
+  (`GROK_PLUGIN_ROOT`, `GROK_PLUGIN_DATA`) and defers events/JSON/script contract
+  to the dedicated hooks page, so `GROK_HOOK_EVENT`, `GROK_HOOK_NAME`,
+  `GROK_SESSION_ID`, `GROK_WORKSPACE_ROOT` are re-anchored there (56 sources).
+
+### Changed
+
+- **Billing status re-verified live 2026-07-05, still paused.** The banner now
+  carries two additional sentences: the previously announced monthly credit
+  "isn't available", and any updated plan will be shared "before anything takes
+  effect". The paused credit table also splits Enterprise into usage-based ($20)
+  and seat-based Premium seats ($200, Standard seats not eligible). Advanced all
+  billing time-sensitive stamps 07-04 → 07-05 (`cli-invocation.md`,
+  `cloud-automation.md`, `official-sources.json`).
+- **Codex models availability matrix:** **Codex Cloud is now marked unavailable
+  for all four models** (consistent with "you can't change the default model for
+  Codex cloud tasks"); `gpt-5.3-codex-spark` is CLI & SDK + app & IDE only (no
+  ChatGPT Credits, no API access). Model ids/deprecations unchanged
+  (`docs/models/codex.md`).
+- **Codex session store re-anchored:** `~/.codex/history.jsonl` is documented
+  again — the config-advanced page states "Codex saves local session transcripts
+  under `CODEX_HOME` (for example, `~/.codex/history.jsonl`)" with
+  `[history] persistence = "none"` / `history.max_bytes`; the rollout/sessions
+  directory (`~/.codex/sessions/`) remains not documented. Session Resume
+  mirrors updated (`compatibility-matrix.md`, manifest claims).
+- **Codex noninteractive page keeps thinning:** `--cd`/`-C` and the `-s` short
+  alias are no longer stated there (only long `--sandbox` remains); both stay
+  documented on the CLI reference — claims re-anchored, `cli-invocation.md`
+  headless table unchanged (it already cites the reference).
+- **Claude sessions page anchor moves:** the `-c` short form and the URL-accepting
+  `--from-pr` forms are no longer stated on the sessions page (URL pasting
+  survives as a picker search feature); both remain on the CLI reference, which
+  now anchors them. New on the CLI reference: `--permission-mode manual` (alias
+  of `default`, v2.1.200) — added to `cli-invocation.md`. The headless page is
+  retitled "Run Claude Code programmatically" (the literal word "headless" left
+  the body; same URL and behavior).
+- **Grok headless page:** the ACP example now uses camelCase `sessionId`
+  (`session/new`); the snake_case `session_id` token is gone — Session Resume
+  id-form cell updated.
+- **Cursor hooks:** `stop` no longer appears in either cloud-agent support
+  table — its cloud status is now *not stated* (previously listed as
+  unsupported). Removed `stop` from the cloud-unsupported lists in
+  `compatibility-matrix.md` and `plugin-packaging.md`.
+- **gajae-code README (non-vendor):** the exact `~/.gjc/skills/` path is no
+  longer literally stated — bundled skills install "into your user `.gjc`
+  directory" via `gjc setup defaults`. Weakened the path claim in `SKILL.md`,
+  `compatibility-matrix.md`, `plugin-packaging.md`; README verified stamps
+  2026-06-27 → 2026-07-05. New 0.6/0.7 README content (rlm mode, notifications
+  daemon) noted in the manifest, outside claim scope.
+- **Antigravity (7 SPA pages re-rendered dynamically, Playwright):** the
+  gcli-migration page no longer states the `~/.local/bin/agy` install path (the
+  install page remains the anchor) and now states the global skills path pair
+  (`~/.gemini/skills/` → `~/.gemini/antigravity-cli/skills/`) — claims updated;
+  the other six pages are unchanged.
+- **Hermes overview:** the feature is phrased "Scheduled automations —
+  built-in cron" (claim wording aligned; concept unchanged).
+- **Model lineup stamps:** Claude/Codex/Grok `docs/models/*.md` re-verified live,
+  `Last reviewed` 07-04 → 07-05; fixed the Claude mirror's redirect-URL note
+  (actual target is `platform.claude.com/docs/en/about-claude/models/overview`,
+  no doubled `/docs/` segment).
+
 ## v1.27 — 2026-07-04
 
 Daily refresh: all 56 manifest sources re-verified live. Billing still paused;

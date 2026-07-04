@@ -36,7 +36,7 @@ Eight runtimes are tracked — seven vendor runtimes plus one community project 
 | Antigravity CLI (`agy`, was Gemini CLI) | `.agents/skills/` (global `~/.gemini/antigravity-cli/skills/`); skills auto-become `/<name>` slash commands | Hooks in a plugin's `hooks.json` or primary `settings.json` (pre/post-tool); `/hooks` browses loaded hooks | Native plugins at `~/.gemini/antigravity-cli/plugins/<name>/` (`plugin.json`, `hooks.json`, `skills/`, `agents/`, `rules/`) managed by `agy plugin`; MCP via standalone `mcp_config.json` |
 | Cursor CLI | Project/user `.agents/skills/` and `.cursor/skills/`, plus Claude/Codex compatibility skill roots | Project `.cursor/hooks.json`, team/enterprise hooks, and command/prompt hook events | Plugins are documented separately; hooks include `workspaceOpen` plugin-path injection, but do not infer Codex-style package parity |
 | Kuma Studio | skills in canonical repo paths | guardrail hooks that must fail loudly | symlink or generated-config install |
-| gajae-code (`gjc`, community) | `SKILL.md` skills in `~/.gjc/skills/` (`gjc skills list`/`read <name>`); ships `deep-interview`, `ralplan`, `ultragoal`, `team` | not documented | not documented (README explicitly says it is "not a hidden plugin" for other CLIs) |
+| gajae-code (`gjc`, community) | `SKILL.md` bundled skills installed into the user `.gjc` directory by `gjc setup defaults` (exact path no longer stated; `gjc skills list`/`read <name>`); ships `deep-interview`, `ralplan`, `ultragoal`, `team` | not documented | not documented (README explicitly says it is "not a hidden plugin" for other CLIs) |
 
 When a runtime capability is not documented, write `not documented` or `unknown` and require live verification before shipping behavior that depends on it.
 
