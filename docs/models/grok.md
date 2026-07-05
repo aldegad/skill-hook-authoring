@@ -1,7 +1,9 @@
 # Grok / xAI — model lineup
 
-Official source: https://docs.x.ai/docs/models
-Last reviewed: 2026-07-05 (verified live against the official xAI models page)
+Official source: https://docs.x.ai/developers/models
+(moved from `docs.x.ai/docs/models`, which now 308-redirects here; model detail
+links live under `/developers/models/<id>`)
+Last reviewed: 2026-07-06 (verified live against the official xAI models page)
 
 ## Current shipping models
 

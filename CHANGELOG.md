@@ -5,6 +5,59 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.29 — 2026-07-06
+
+Daily refresh: all 56 manifest sources re-verified live. Billing still paused
+(banner verbatim-unchanged); Codex plugin hooks gain documented env vars
+(including Claude-compat names); the Codex interactive seed-prompt is
+re-anchored on the CLI reference; Cursor's `stop` hook is back in the
+cloud-unavailable table; Hermes adds a `pre_verify` plugin hook event; the Grok
+models page moved to `/developers/models`.
+
+### Changed
+
+- **Billing status re-verified live 2026-07-06, still paused.** The support-page
+  banner is verbatim-unchanged from 07-05 (change paused; monthly credit not
+  available; any update announced before taking effect; API-key accounts stay
+  pay-as-you-go). Advanced the billing time-sensitive stamps 07-05 → 07-06
+  (`cli-invocation.md`, `cloud-automation.md`, `official-sources.json`).
+- **Codex plugin-hook env vars now documented** (plugins/build page): plugin
+  hook commands receive `PLUGIN_ROOT` (installed plugin root) and `PLUGIN_DATA`
+  (writable data directory), and Codex also sets `CLAUDE_PLUGIN_ROOT` /
+  `CLAUDE_PLUGIN_DATA` "for compatibility with existing plugin hooks"; the
+  `plugin.json` `hooks` field accepts a single path or an array (default
+  `hooks/hooks.json`, `${PLUGIN_ROOT}` substitution). Added to
+  `plugin-packaging.md`, `compatibility-matrix.md`, and the manifest claims.
+- **Codex interactive seed-prompt re-anchored:** the CLI reference documents a
+  top-level optional `PROMPT` positional ("Optional text instruction to start
+  the session. Omit to launch the TUI without a pre-filled message."),
+  resolving the 07-04 `unverified` state — `codex "<prompt>"` is official again
+  (`SKILL.md`, `cli-invocation.md`; still absent from the CLI overview page).
+- **Cursor hooks:** `stop` is **back** in the cloud-agent unavailable table as
+  "Not yet wired for cloud agents" (on 07-05 it was briefly unstated). Restored
+  `stop` to the cloud-unsupported lists in `compatibility-matrix.md` and
+  `plugin-packaging.md`.
+- **Hermes hooks:** new plugin control-flow hook event **`pre_verify`** — fires
+  once per turn when the agent edited code, just before it verifies/finishes
+  (related config `agent.verify_guidance: false`). Added to both hook mirrors
+  and the manifest claims.
+- **Grok models page moved:** `docs.x.ai/docs/models` now 308-redirects to
+  `docs.x.ai/developers/models` (model detail links under
+  `/developers/models/<id>`); manifest URL and `docs/models/grok.md` source line
+  updated — all model ids/claims unchanged.
+- **Claude settings page:** `fileCheckpointingEnabled` still documents default
+  `true`, but its v2.1.119 version tie is no longer stated — claim weakened in
+  the manifest (the v2.1.119 note survives only for `autoCompactEnabled` on the
+  config-preference-keys storage list).
+- **Antigravity (7 SPA pages re-rendered dynamically, claude-in-chrome):** all
+  prose/table/inline-code claims verified unchanged; the conversations page no
+  longer mentions the picker's F2 rename (note updated). This run the fenced
+  code blocks hydrated empty under automation, so code-block-only command
+  literals were held via surrounding prose (noted in the manifest).
+- **Model lineup stamps:** Claude/Codex/Grok `docs/models/*.md` re-verified
+  live, `Last reviewed` 07-05 → 07-06; Claude/Codex lineups and the Codex
+  availability matrix unchanged.
+
 ## v1.28 — 2026-07-05
 
 Daily refresh: all 56 manifest sources re-verified live (55 prior + 1 added).
