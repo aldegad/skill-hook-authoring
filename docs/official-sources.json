@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-07-05",
+  "updated": "2026-07-06",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "nonVendorRule": "A small number of non-vendor runtimes (e.g. gajae-code, a community/MIT project) are tracked from their own project README rather than vendor docs. They must be explicitly flagged as community/non-vendor in the docs, held to the same not-documented discipline, and never presented as official vendor guarantees.",
@@ -155,6 +155,7 @@
       "agent": "codex",
       "kind": "plugins",
       "url": "https://developers.openai.com/codex/plugins/build",
+      "notes": "2026-07-06: the page now documents plugin-hook environment variables — 'Plugin hook commands receive the Codex-specific environment variables PLUGIN_ROOT and PLUGIN_DATA. ... Codex also sets CLAUDE_PLUGIN_ROOT and CLAUDE_PLUGIN_DATA for compatibility with existing plugin hooks.' The plugin.json hooks field accepts a single path or an array (default hooks/hooks.json), with ${PLUGIN_ROOT} substitution in commands.",
       "claims": [
         ".codex-plugin/plugin.json",
         "bundled skills",
@@ -162,7 +163,10 @@
         "bundled hooks",
         "bundled MCP servers",
         "interface marketplace metadata",
-        "hook trust gating"
+        "hook trust gating",
+        "plugin hook env vars PLUGIN_ROOT PLUGIN_DATA",
+        "CLAUDE_PLUGIN_ROOT CLAUDE_PLUGIN_DATA set for compatibility",
+        "hooks field single path or array default hooks/hooks.json with PLUGIN_ROOT substitution"
       ]
     },
     {
@@ -272,7 +276,7 @@
       "agent": "claude-code",
       "kind": "configuration",
       "url": "https://code.claude.com/docs/en/settings",
-      "notes": "docs.anthropic.com/en/docs/claude-code/settings permanently redirects here as of 2026-05-27. 2026-07-04: maxSkillDescriptionChars was renamed to skillListingMaxDescChars (same default 1536, per-skill cap on combined description + when_to_use text in the skill listing).",
+      "notes": "docs.anthropic.com/en/docs/claude-code/settings permanently redirects here as of 2026-05-27. 2026-07-04: maxSkillDescriptionChars was renamed to skillListingMaxDescChars (same default 1536, per-skill cap on combined description + when_to_use text in the skill listing). 2026-07-06: fileCheckpointingEnabled still shows default true but its v2.1.119 version tie is no longer stated anywhere on the page (v2.1.119 survives only on the config-preference-keys storage note, which lists autoCompactEnabled).",
       "claims": [
         "settings.json",
         "subagents",
@@ -323,7 +327,7 @@
         "minimumVersion",
         "pluginTrustMessage",
         "autoCompactEnabled default true v2.1.119",
-        "fileCheckpointingEnabled default true v2.1.119",
+        "fileCheckpointingEnabled default true",
         "env environment variables for sessions and subprocesses",
         "model override default model",
         "effortLevel persist effort level low medium high xhigh",
@@ -521,6 +525,7 @@
       "agent": "hermes-agent",
       "kind": "hooks",
       "url": "https://hermes-agent.nousresearch.com/docs/user-guide/features/hooks",
+      "notes": "2026-07-06: new plugin control-flow hook event pre_verify — 'Fires once per turn when the agent edited code, just before it finishes (after the built-in verify-on-stop guard)'; returns {\"action\": \"continue\", \"message\": str} to keep going; related config agent.verify_guidance: false.",
       "claims": [
         "gateway hooks",
         "plugin hooks",
@@ -541,6 +546,7 @@
         "transform_tool_result",
         "transform_terminal_output",
         "transform_llm_output",
+        "pre_verify once per turn when the agent edited code before verify/finish",
         "pre_gateway_dispatch",
         "pre_approval_request",
         "post_approval_response",
@@ -702,10 +708,9 @@
         "loop_limit default 5 cursor null claude-code",
         "Enterprise hooks /Library/Application Support/Cursor/hooks.json macOS /etc/cursor/hooks.json Linux C:/ProgramData/Cursor/hooks.json Windows",
         "cloud agent supports shell file tool subagent lifecycle hooks plus preCompact",
-        "cloud agent does not support sessionStart sessionEnd beforeSubmitPrompt beforeMCPExecution afterMCPExecution afterAgentResponse afterAgentThought Tab hooks workspaceOpen",
-        "stop cloud status no longer stated"
+        "cloud agent does not support sessionStart sessionEnd beforeSubmitPrompt beforeMCPExecution afterMCPExecution afterAgentResponse afterAgentThought stop Tab hooks workspaceOpen"
       ],
-      "notes": "2026-07-05: stop no longer appears in either cloud-agent table (it was previously listed as unsupported in cloud) — its cloud status is now not stated; the unavailable list is sessionStart/sessionEnd, beforeSubmitPrompt, Tab hooks, workspaceOpen, plus beforeMCPExecution/afterMCPExecution and afterAgentResponse/afterAgentThought ('Not yet wired for cloud agents'). The supported table lists beforeShellExecution, afterShellExecution, beforeReadFile, afterFileEdit, preToolUse, postToolUse, postToolUseFailure, subagentStart, subagentStop, preCompact."
+      "notes": "2026-07-06: stop is back in the cloud-unavailable table as 'Not yet wired for cloud agents.' (on 2026-07-05 it had briefly disappeared from both cloud-agent tables). The unavailable list is sessionStart/sessionEnd, beforeSubmitPrompt, Tab hooks, workspaceOpen, plus beforeMCPExecution/afterMCPExecution, afterAgentResponse/afterAgentThought, and stop ('Not yet wired for cloud agents'). The supported table lists beforeShellExecution, afterShellExecution, beforeReadFile, afterFileEdit, preToolUse, postToolUse, postToolUseFailure, subagentStart, subagentStop, preCompact."
     },
     {
       "id": "cursor-cli-parameters",
@@ -771,7 +776,8 @@
         "--all",
         "rollout jsonl via --ephemeral",
         "rollout sessions directory not documented",
-        "~/.codex/history.jsonl anchored on config-advanced"
+        "~/.codex/history.jsonl anchored on config-advanced",
+        "optional PROMPT positional seeds the interactive session"
       ]
     },
     {
@@ -858,7 +864,7 @@
       "agent": "codex",
       "kind": "cli-invocation",
       "url": "https://developers.openai.com/codex/cli",
-      "notes": "2026-07-04: the optional PROMPT argument that seeds an interactive session is no longer stated on this page (not contradicted, just absent) — treat seed-prompt syntax as unverified this run until re-anchored on an official page.",
+      "notes": "2026-07-04: the optional PROMPT argument that seeds an interactive session is no longer stated on this page (not contradicted, just absent). 2026-07-06: still absent here, but the seed-prompt syntax is re-anchored — the CLI reference (openai-codex-cli-reference) documents a top-level optional PROMPT positional: 'Optional text instruction to start the session. Omit to launch the TUI without a pre-filled message.'",
       "claims": [
         "codex launches interactive TUI",
         "codex exec runs non-interactively for automation",
@@ -979,7 +985,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli/reference",
-      "notes": "JS-rendered SPA; static fetch returns an empty shell — render dynamically to verify (re-verified by dynamic render 2026-07-04). Page moved from /docs/cli-reference to /docs/cli/reference (old URL redirects). No headless one-shot flag documented; programmatic use is the Antigravity SDK. The --sandbox / --dangerously-skip-permissions launch overrides and the settings.json path are documented on the cli/using page (antigravity-cli-using), not here. New commands in the core table as of 2026-07-04: /add-dir, /btw, /clear, /diff, /exit, /fast, /logout, /open, /planning, /rename, /statusline, /title, /usage.",
+      "notes": "JS-rendered SPA; static fetch returns an empty shell — render dynamically to verify (re-verified by dynamic render 2026-07-06, claude-in-chrome). Page moved from /docs/cli-reference to /docs/cli/reference (old URL redirects). No headless one-shot flag documented; programmatic use is the Antigravity SDK. The --sandbox / --dangerously-skip-permissions launch overrides and the settings.json path are documented on the cli/using page (antigravity-cli-using), not here. New commands in the core table as of 2026-07-04: /add-dir, /btw, /clear, /diff, /exit, /fast, /logout, /open, /planning, /rename, /statusline, /title, /usage.",
       "claims": [
         "interactive TUI launch",
         "core slash commands",
@@ -1007,7 +1013,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli/conversations",
-      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-04). Page moved from /docs/cli-conversations to /docs/cli/conversations (old URL redirects). Picker also supports F2 rename. The on-close resume-command printout is stated on the cli/using page (Auto-Save Resume).",
+      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-06, claude-in-chrome). Page moved from /docs/cli-conversations to /docs/cli/conversations (old URL redirects). 2026-07-06: the picker's F2-rename mention is no longer on the page (picker steps show keyword filter, arrow/page navigation, Enter/Esc only). The on-close resume-command printout is stated on the cli/using page (Auto-Save Resume).",
       "claims": [
         "agy --continue resumes most recent in workspace",
         "agy --conversation <uuid>",
@@ -1023,7 +1029,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli/gcli-migration",
-      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-05). Page moved from /docs/gcli-migration to /docs/cli/gcli-migration (old URL redirects). GEMINI_API_KEY->AV_API_KEY env swap is NOT stated here (third-party claim); auth is via OS keyring. The earlier global-MCP-path inconsistency is resolved: the cli/plugins page no longer states MCP paths (it defers to a dedicated MCP docs page), so this page's ~/.gemini/config/mcp_config.json (global) / .agents/mcp_config.json (workspace) is the only stated path pair. 2026-07-05: the ~/.local/bin/agy install path is no longer stated on this page — the install page (antigravity-cli-install) remains the anchor; the page now also states the global skills path pair (Gemini ~/.gemini/skills/ -> Antigravity ~/.gemini/antigravity-cli/skills/).",
+      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-06, claude-in-chrome; this run the fenced code blocks hydrated empty under automation, so code-block-only literals were held via surrounding prose/tables — all prose, table, and inline-code claims verified). Page moved from /docs/gcli-migration to /docs/cli/gcli-migration (old URL redirects). GEMINI_API_KEY->AV_API_KEY env swap is NOT stated here (third-party claim); auth is via OS keyring. The earlier global-MCP-path inconsistency is resolved: the cli/plugins page no longer states MCP paths (it defers to a dedicated MCP docs page), so this page's ~/.gemini/config/mcp_config.json (global) / .agents/mcp_config.json (workspace) is the only stated path pair. 2026-07-05: the ~/.local/bin/agy install path is no longer stated on this page — the install page (antigravity-cli-install) remains the anchor; the page now also states the global skills path pair (Gemini ~/.gemini/skills/ -> Antigravity ~/.gemini/antigravity-cli/skills/).",
       "claims": [
         "agy plugin import gemini",
         "first-launch auto-conversion checklist",
@@ -1058,7 +1064,7 @@
       "agent": "antigravity-cli",
       "kind": "plugins",
       "url": "https://antigravity.google/docs/cli/plugins",
-      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-04). Page moved from /docs/cli-plugins to /docs/cli/plugins (old URL redirects). Documents the native plugin layout, hook config, and skill->slash-command behavior. As of 2026-07-04 the page no longer states MCP config paths — its MCP section defers to a dedicated MCP docs page; the migration page (antigravity-gcli-migration) remains the stated-path anchor (~/.gemini/config/mcp_config.json global, .agents/mcp_config.json workspace, serverUrl key). New: plugin.json documents a $schema URL (https://antigravity.google/schemas/v1/plugin.json) and a full JSON Schema with only name required.",
+      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-06, claude-in-chrome). Page moved from /docs/cli-plugins to /docs/cli/plugins (old URL redirects). Documents the native plugin layout, hook config, and skill->slash-command behavior. As of 2026-07-04 the page no longer states MCP config paths — its MCP section defers to a dedicated MCP docs page; the migration page (antigravity-gcli-migration) remains the stated-path anchor (~/.gemini/config/mcp_config.json global, .agents/mcp_config.json workspace, serverUrl key). New: plugin.json documents a $schema URL (https://antigravity.google/schemas/v1/plugin.json) and a full JSON Schema with only name required.",
       "claims": [
         "plugins are namespaced bundles",
         "plugins staged at ~/.gemini/antigravity-cli/plugins/<name>/",
@@ -1086,7 +1092,7 @@
       "agent": "antigravity-cli",
       "kind": "configuration",
       "url": "https://antigravity.google/docs/cli/using",
-      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-04). Page moved from /docs/cli-using to /docs/cli/using (old URL redirects).",
+      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-06, claude-in-chrome). Page moved from /docs/cli-using to /docs/cli/using (old URL redirects).",
       "claims": [
         "settings.json at ~/.gemini/antigravity-cli/settings.json",
         "/config or /settings opens the settings overlay",
@@ -1106,7 +1112,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli/install",
-      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-04). Page moved from /docs/cli-install to /docs/cli/install (old URL redirects).",
+      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-06, claude-in-chrome). Page moved from /docs/cli-install to /docs/cli/install (old URL redirects).",
       "claims": [
         "macOS/Linux install curl -fsSL https://antigravity.google/cli/install.sh | bash",
         "installs the binary to ~/.local/bin/agy",
@@ -1124,7 +1130,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/sdk/overview",
-      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-04). Page moved from /docs/sdk-overview to /docs/sdk/overview (old URL redirects). This is the documented programmatic/headless path since agy has no headless one-shot flag.",
+      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-06, claude-in-chrome). Page moved from /docs/sdk-overview to /docs/sdk/overview (old URL redirects). This is the documented programmatic/headless path since agy has no headless one-shot flag.",
       "claims": [
         "Antigravity SDK is a Python framework",
         "pip install google-antigravity",
@@ -1156,11 +1162,11 @@
       "agent": "claude-code",
       "kind": "billing",
       "url": "https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan",
-      "notes": "Re-verified 2026-07-05: the billing change originally planned for 2026-06-15 is still PAUSED. The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits. The previously announced monthly credit, which would have been available to eligible claimants in connection with these changes, isn't available. We're working to update the plan to better support how users build with Claude subscriptions. When we have an update, we'll share it before anything takes effect.' Accounts using an API key continue on pay-as-you-go API billing. The original (paused, not-in-effect) plan described separate monthly credits per plan tier: Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise usage-based $20, Enterprise seat-based Premium seats $200 (Standard seats not eligible).",
+      "notes": "Re-verified 2026-07-06: the billing change originally planned for 2026-06-15 is still PAUSED. The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits. The previously announced monthly credit, which would have been available to eligible claimants in connection with these changes, isn't available. We're working to update the plan to better support how users build with Claude subscriptions. When we have an update, we'll share it before anything takes effect.' Accounts using an API key continue on pay-as-you-go API billing. The original (paused, not-in-effect) plan described separate monthly credits per plan tier: Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise usage-based $20, Enterprise seat-based Premium seats $200 (Standard seats not eligible).",
       "claims": [
         "Agent SDK with Claude plan",
         "claude -p headless",
-        "2026-06-15 Agent SDK billing change still paused as of 2026-07-05",
+        "2026-06-15 Agent SDK billing change still paused as of 2026-07-06",
         "Agent SDK and claude -p currently draw from regular subscription usage limits same as interactive use",
         "API key accounts remain pay-as-you-go API billing",
         "original plan described separate monthly credits per plan tier but change is paused"
@@ -1171,7 +1177,7 @@
       "agent": "gajae-code",
       "kind": "community-runtime",
       "url": "https://github.com/Yeachan-Heo/gajae-code",
-      "notes": "NON-VENDOR community project (MIT, beta) by Yeachan-Heo; this README is the only source, not vendor docs. Flagged the same way Kuma Studio is. Verified 2026-07-05. A coding-agent harness (binary `gjc`) that runs adjacent to other CLIs; install with `bun install -g gajae-code` (scoped `@gajae-code/coding-agent`). Interactive `gjc` / `gjc --tmux` / `gjc --tmux --worktree <branch>`; headless `gjc --mode rpc` (no JSON/output-format flag). Skills are the only documented extension surface: SKILL.md-format bundled skills installed by `gjc setup defaults` into the user `.gjc` directory (2026-07-05: the exact `~/.gjc/skills/` path is no longer literally stated in the README), listed/read with `gjc skills list` / `gjc skills read <name>`, invoked as `/skill:<name>` (colon form), defaults deep-interview/ralplan/ultragoal/team. Hooks, plugins, session-id resume, and project-instruction-file loading are all NOT documented (re-confirmed by grep). User config `~/.gjc/config.yml`; per-project state `.gjc/`. New README content (0.6-0.7, outside claim scope): `gjc rlm` research/REPL mode, notifications SDK + `gjc daemon` Telegram reference daemon, image input, standalone MCP/ACP/Bridge surfaces.",
+      "notes": "NON-VENDOR community project (MIT, beta) by Yeachan-Heo; this README is the only source, not vendor docs. Flagged the same way Kuma Studio is. Verified 2026-07-06. A coding-agent harness (binary `gjc`) that runs adjacent to other CLIs; install with `bun install -g gajae-code` (scoped `@gajae-code/coding-agent`). Interactive `gjc` / `gjc --tmux` / `gjc --tmux --worktree <branch>`; headless `gjc --mode rpc` (no JSON/output-format flag). Skills are the only documented extension surface: SKILL.md-format bundled skills installed by `gjc setup defaults` into the user `.gjc` directory (2026-07-05: the exact `~/.gjc/skills/` path is no longer literally stated in the README), listed/read with `gjc skills list` / `gjc skills read <name>`, invoked as `/skill:<name>` (colon form), defaults deep-interview/ralplan/ultragoal/team. Hooks, plugins, session-id resume, and project-instruction-file loading are all NOT documented (re-confirmed by grep). User config `~/.gjc/config.yml`; per-project state `.gjc/`. New README content (0.6-0.7, outside claim scope): `gjc rlm` research/REPL mode, notifications SDK + `gjc daemon` Telegram reference daemon, image input, standalone MCP/ACP/Bridge surfaces, an experimental opt-in `computer-use` desktop-control tool surface (0.6.0), and a four-role bundled agent table (executor/architect/planner/critic).",
       "claims": [
         "community MIT project, not a vendor product",
         "binary gjc; install via bun install -g gajae-code",
@@ -1192,7 +1198,7 @@
       "agent": "claude-code",
       "kind": "model-lineup",
       "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
-      "notes": "Current Claude model lineup (ids + reasoning). Mirror: docs/models/claude.md. Verified live 2026-07-05 (docs.anthropic.com 301-redirects to platform.claude.com/docs/en/about-claude/models/overview — same official doc). Current: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (id claude-haiku-4-5-20251001, alias claude-haiku-4-5). Reasoning: adaptive thinking on Fable 5 (always on) / Opus 4.8 / Sonnet 5; Haiku 4.5 uses extended thinking. Also documented but NOT generally available: Claude Mythos 5 (claude-mythos-5) and Claude Mythos Preview (claude-mythos-preview), invitation-only via Project Glasswing. Legacy: Opus 4.7 (→ 4.8), Opus 4.6, Sonnet 4.6 (→ 5), Sonnet 4.5, Opus 4.5; deprecated: claude-opus-4-1-20250805 retiring 2026-08-05.",
+      "notes": "Current Claude model lineup (ids + reasoning). Mirror: docs/models/claude.md. Verified live 2026-07-06 (docs.anthropic.com 301-redirects to platform.claude.com/docs/en/about-claude/models/overview — same official doc). Current: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (id claude-haiku-4-5-20251001, alias claude-haiku-4-5). Reasoning: adaptive thinking on Fable 5 (always on) / Opus 4.8 / Sonnet 5; Haiku 4.5 uses extended thinking. Also documented but NOT generally available: Claude Mythos 5 (claude-mythos-5) and Claude Mythos Preview (claude-mythos-preview), invitation-only via Project Glasswing. Legacy: Opus 4.7 (→ 4.8), Opus 4.6, Sonnet 4.6 (→ 5), Sonnet 4.5, Opus 4.5; deprecated: claude-opus-4-1-20250805 retiring 2026-08-05.",
       "claims": [
         "claude-fable-5 current",
         "claude-opus-4-8 current",
@@ -1211,7 +1217,7 @@
       "agent": "codex",
       "kind": "model-lineup",
       "url": "https://developers.openai.com/codex/models",
-      "notes": "Current Codex model lineup. Mirror: docs/models/codex.md. Verified live 2026-07-05: current models are gpt-5.5, gpt-5.4 (flagship), gpt-5.4-mini, and gpt-5.3-codex-spark (text-only research preview, ChatGPT Pro users); gpt-5.2 and gpt-5.3-codex are deprecated when signing in with ChatGPT (no one-to-one replacement mapping — the page says to update to the latest listed model). The models page shows model selection as codex -m <id> but does NOT document per-model reasoning-effort tiers or service tiers; model_reasoning_effort / service_tier remain config knobs documented in the config docs, not on this page. 2026-07-05: the availability matrix now marks Codex Cloud unavailable for all four models (consistent with 'you can't change the default model for Codex cloud tasks'), and gpt-5.3-codex-spark as CLI & SDK + app & IDE only (no ChatGPT Credits, no API access).",
+      "notes": "Current Codex model lineup. Mirror: docs/models/codex.md. Verified live 2026-07-06: current models are gpt-5.5, gpt-5.4 (flagship), gpt-5.4-mini, and gpt-5.3-codex-spark (text-only research preview, ChatGPT Pro users); gpt-5.2 and gpt-5.3-codex are deprecated when signing in with ChatGPT (no one-to-one replacement mapping — the page says to update to the latest listed model). The models page shows model selection as codex -m <id> but does NOT document per-model reasoning-effort tiers or service tiers; model_reasoning_effort / service_tier remain config knobs documented in the config docs, not on this page. 2026-07-05: the availability matrix now marks Codex Cloud unavailable for all four models (consistent with 'you can't change the default model for Codex cloud tasks'), and gpt-5.3-codex-spark as CLI & SDK + app & IDE only (no ChatGPT Credits, no API access).",
       "claims": [
         "gpt-5.5 current",
         "gpt-5.4 current",
@@ -1227,8 +1233,8 @@
       "id": "xai-grok-model-lineup",
       "agent": "grok",
       "kind": "model-lineup",
-      "url": "https://docs.x.ai/docs/models",
-      "notes": "Current Grok/xAI model lineup. Mirror: docs/models/grok.md. Verified live 2026-07-05 (unchanged; the sidebar adds a 'Model Retirement on May 15' migration-guide page for the REST API — still no retired/deprecated section on the models page itself): chat/coding models are grok-4.3 (1M context), grok-4.20-0309-reasoning / grok-4.20-0309-non-reasoning (1M), grok-4.20-multi-agent-0309 (1M), and grok-build-0.1 (256k); specialized models are grok-imagine-image / grok-imagine-image-quality / grok-imagine-video / grok-imagine-video-1.5 plus the Grok Voice API. The Kuma-catalog id grok-composer-2.5-fast does NOT appear on this page, and grok-build appears only as grok-build-0.1. The page has no retired/deprecated section — record absences as not-documented, not retirements.",
+      "url": "https://docs.x.ai/developers/models",
+      "notes": "Current Grok/xAI model lineup. Mirror: docs/models/grok.md. 2026-07-06: the page moved — docs.x.ai/docs/models now 308-redirects to docs.x.ai/developers/models (single hop; model detail links under /developers/models/<id>); URL updated here, all model claims unchanged. Rendering caveat: the SSR HTML shows only summary cards — verify tables via the official .md rendition (/developers/models.md). Verified live 2026-07-06 (the sidebar adds a 'Model Retirement on May 15' migration-guide page for the REST API — still no retired/deprecated section on the models page itself): chat/coding models are grok-4.3 (1M context), grok-4.20-0309-reasoning / grok-4.20-0309-non-reasoning (1M), grok-4.20-multi-agent-0309 (1M), and grok-build-0.1 (256k); specialized models are grok-imagine-image / grok-imagine-image-quality / grok-imagine-video / grok-imagine-video-1.5 plus the Grok Voice API. The Kuma-catalog id grok-composer-2.5-fast does NOT appear on this page, and grok-build appears only as grok-build-0.1. The page has no retired/deprecated section — record absences as not-documented, not retirements.",
       "claims": [
         "grok-4.3 current 1M context",
         "grok-4.20-0309-reasoning and grok-4.20-0309-non-reasoning current",

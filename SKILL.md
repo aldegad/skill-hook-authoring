@@ -48,7 +48,7 @@ When one agent **spawns another** from a script, hook, or orchestrator, use the 
 
 | Runtime | Interactive launch | Headless run |
 |---|---|---|
-| Codex | `codex` (seed-prompt arg no longer stated on the CLI overview — verify before scripting) | `codex exec "<p>"` |
+| Codex | `codex` / `codex "<p>"` (optional `PROMPT` positional, per the CLI reference) | `codex exec "<p>"` |
 | Claude Code | `claude` / `claude "<q>"` | `claude -p "<q>"` |
 | Grok / xAI | `grok` | `grok -p "<p>"` |
 | Hermes | `hermes chat` | `hermes chat -q "<q>"` |
