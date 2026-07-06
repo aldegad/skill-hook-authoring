@@ -5,6 +5,66 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.30 — 2026-07-07
+
+Daily refresh: all 56 manifest sources re-verified live. Billing still paused
+(banner verbatim-unchanged); the Hermes plugin-build guide moved to
+`/docs/developer-guide/plugins`; the Codex plugin `hooks` manifest field now
+also accepts inline hooks objects, and Codex documents marketplace file
+locations (including a legacy `.claude-plugin/marketplace.json` compat path);
+`codex fork` lands as a CLI session-fork subcommand; Claude's PreToolUse hook
+documents a fourth `defer` outcome.
+
+### Changed
+
+- **Billing status re-verified live 2026-07-07, still paused.** The support-page
+  banner is verbatim-unchanged from 07-06 (change paused; monthly credit not
+  available; any update announced before taking effect; API-key accounts stay
+  pay-as-you-go); the manifest now also records the line under the banner ("The
+  content below reflects the page before June 15…"). Advanced the billing
+  time-sensitive stamps 07-06 → 07-07 (`cli-invocation.md`,
+  `cloud-automation.md`, `official-sources.json`).
+- **Hermes plugin-build guide URL moved** to
+  `hermes-agent.nousresearch.com/docs/developer-guide/plugins`. The old
+  `/docs/guides/build-a-hermes-plugin` now serves an HTTP-200 meta-refresh stub
+  (no server-side redirect, so plain `curl -L` does not follow it); all claims
+  verified at the new location (title still "Build a Hermes Plugin"). Manifest
+  URL updated.
+- **Codex plugin `hooks` manifest field widened** (plugins/build page): a single
+  path, an array of paths, an inline hooks object, or an array of inline hooks
+  objects (previously recorded as path-or-array). The page also documents
+  marketplace file locations — repo `.agents/plugins/marketplace.json`, a
+  legacy-compatible `.claude-plugin/marketplace.json`, personal
+  `~/.agents/plugins/marketplace.json` — the
+  `codex plugin marketplace add/list/upgrade/remove` CLI, and the
+  `~/.codex/plugins/cache/<marketplace>/<plugin>/<version>/` install cache.
+  Updated `plugin-packaging.md`, `compatibility-matrix.md`, and the manifest.
+- **`codex fork` documented on the CLI reference** — forks a previous
+  interactive session into a **new** thread (the CLI analogue of app-server
+  `thread/fork`), alongside `codex archive` / `codex delete` /
+  `codex unarchive` and remote-mode support. Session Resume mirrors updated
+  (`SKILL.md`, `compatibility-matrix.md`). Caveat recorded: `~/.codex/sessions`
+  now appears once inside a user-example prompt on the automations page — an
+  example, not normative path documentation, so the not-documented discipline
+  stands.
+- **Claude PreToolUse documents a fourth decision outcome, `defer`** ("exits
+  gracefully so the tool can be resumed later"; single tool calls only), plus a
+  10,000-character cap on hook output strings (`additionalContext`,
+  `systemMessage`, stdout). Claims added; `SKILL.md` already recorded `defer`
+  in the shared decision schema.
+- **Model lineups re-verified live, unchanged** (Claude / Codex / Grok pages
+  match the `docs/models/` mirrors) — advanced the three `Last reviewed:`
+  stamps to 07-07.
+- **Note-level refreshes:** Antigravity pages re-verified by dynamic render
+  07-07 — fenced code blocks hydrated empty on *every* docs page this run
+  (code-block-only literals held via prose/tables), a CMD install option now
+  appears alongside PowerShell on Windows, and the plugin subcommand documents
+  a plural `plugins` alias; gajae-code README no longer mentions MCP (external
+  control is stated as RPC/ACP/Bridge) nor any 0.x version marker; Claude
+  sessions' "same session id reused" re-anchored to the two-terminals
+  interleave sentence; Claude settings' v2.1.119 parenthetical corrected (it
+  also renders on two notification-setting rows).
+
 ## v1.29 — 2026-07-06
 
 Daily refresh: all 56 manifest sources re-verified live. Billing still paused

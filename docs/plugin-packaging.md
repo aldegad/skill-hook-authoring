@@ -1,6 +1,6 @@
 # Plugin And Extension Packaging
 
-Last reviewed: 2026-07-06
+Last reviewed: 2026-07-07
 
 ## Shared Rule
 
@@ -22,7 +22,7 @@ For cross-agent repos, prefer one canonical repo instruction source plus thin ru
 
 ## Codex Plugins
 
-Official Codex plugins have `.codex-plugin/plugin.json` at the plugin root. A plugin can point to bundled `skills`, `mcpServers`, `apps`, and `hooks` (the `hooks` field accepts a single path or an array; the default hook file is `hooks/hooks.json`, and `${PLUGIN_ROOT}` substitution is available in hook commands). Plugin hook commands receive the Codex-specific environment variables `PLUGIN_ROOT` (installed plugin root) and `PLUGIN_DATA` (writable data directory); Codex also sets `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA` "for compatibility with existing plugin hooks". Plugin hooks are not automatically trusted; users must review and trust hook definitions.
+Official Codex plugins have `.codex-plugin/plugin.json` at the plugin root. A plugin can point to bundled `skills`, `mcpServers`, `apps`, and `hooks` (the `hooks` field accepts a single path, an array of paths, an inline hooks object, or an array of inline hooks objects; the default hook file is `hooks/hooks.json`, and `${PLUGIN_ROOT}` substitution is available in hook commands). Plugin hook commands receive the Codex-specific environment variables `PLUGIN_ROOT` (installed plugin root) and `PLUGIN_DATA` (writable data directory); Codex also sets `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA` "for compatibility with existing plugin hooks". Plugin hooks are not automatically trusted; users must review and trust hook definitions. Marketplace files are read from repo `$REPO_ROOT/.agents/plugins/marketplace.json`, a legacy-compatible `$REPO_ROOT/.claude-plugin/marketplace.json`, and personal `~/.agents/plugins/marketplace.json`; `codex plugin marketplace add/list/upgrade/remove` manages tracked sources, and installs land in `~/.codex/plugins/cache/<marketplace>/<plugin>/<version>/` (`local` as the version for local plugins).
 
 Do not migrate this repo into a Codex plugin layout until there is an explicit packaging plan. Moving `SKILL.md` into `skills/<id>/SKILL.md` would change the current root-level skill entrypoint, so it must be done atomically with installer and docs updates.
 
