@@ -5,6 +5,33 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.31 — 2026-07-09
+
+Daily refresh: all 56 manifest source URLs fetched successfully. Billing still
+paused; Claude/Codex model lineups unchanged with fresh `Last reviewed` stamps;
+xAI's official models overview now centers Grok 4.5. Antigravity SPA pages still
+return an empty static shell here, and no browser backend was available in this
+worker, so no Antigravity claim changes were made this run.
+
+### Changed
+
+- **Billing status re-verified live 2026-07-09, still paused.** The support-page
+  banner remains unchanged: Agent SDK, `claude -p`, and third-party Agent SDK app
+  usage still draw from subscription usage limits; the previously announced
+  separate monthly credit remains unavailable. Advanced the time-sensitive
+  billing stamps in `cli-invocation.md`, `cloud-automation.md`, and the manifest.
+- **Model lineup stamps advanced for Claude and Codex** after live verification
+  against their official model pages; no lineup/content drift found.
+- **Grok model lineup drift recorded.** xAI's official models overview now
+  highlights `grok-4.5` (500k context, configurable reasoning) for code/chat,
+  plus the Voice and Imagine APIs. The previous `grok-4.3` / `grok-4.20-*` /
+  `grok-build-0.1` lineup is no longer shown on the overview; the docs record
+  absence as `not documented`, not as a retirement claim.
+- **Antigravity dynamic render unavailable in this worker.** The seven
+  `antigravity.google` URLs remained reachable but returned an empty SPA shell to
+  static fetch; the in-app browser and Chrome control surfaces were unavailable,
+  so this run did not update Antigravity claims.
+
 ## v1.30 — 2026-07-07
 
 Daily refresh: all 56 manifest sources re-verified live. Billing still paused
