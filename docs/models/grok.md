@@ -3,7 +3,7 @@
 Official source: https://docs.x.ai/developers/models
 (moved from `docs.x.ai/docs/models`, which now 308-redirects here; model detail
 links live under `/developers/models/<id>`)
-Last reviewed: 2026-07-09 (verified live against the official xAI models page)
+Last reviewed: 2026-07-10 (verified live against the official xAI models page)
 
 ## Current shipping models
 
