@@ -1,27 +1,31 @@
 # OpenAI Codex — model lineup
 
 Official source: https://developers.openai.com/codex/models
-Last reviewed: 2026-07-09 (verified live against the official Codex models page)
+Last reviewed: 2026-07-10 (verified live against the official Codex models page)
 
 ## Current shipping models
 
 | Model id | Selection | Notes |
 |---|---|---|
-| `gpt-5.5` | `codex -m gpt-5.5` | OpenAI's newest frontier model for complex coding, computer use, knowledge work, and research workflows in Codex. |
-| `gpt-5.4` | `codex -m gpt-5.4` | Flagship frontier model for professional work with strong coding, reasoning, tool use, and agentic workflows. |
-| `gpt-5.4-mini` | `codex -m gpt-5.4-mini` | Fast, efficient mini model for responsive coding tasks and subagents. |
+| `gpt-5.6` | `codex --model gpt-5.6`; `model = "gpt-5.6"` | Current recommended family/default selector shown by the Codex models page. |
+| `gpt-5.6-sol` | `codex -m gpt-5.6-sol` | Flagship GPT-5.6 model for complex coding, computer use, research, and cybersecurity; default Power uses Sol with medium reasoning. |
+| `gpt-5.6-terra` | `codex -m gpt-5.6-terra` | Balanced GPT-5.6 model for everyday work; the page says it is a natural starting point for work previously given to GPT-5.5. |
+| `gpt-5.6-luna` | `codex -m gpt-5.6-luna` | Fast, affordable GPT-5.6 model for clear, repeatable tasks such as extraction, classification, transformation, and structured summaries. |
+| `gpt-5.5` | `codex -m gpt-5.5` | Previous-generation frontier model for complex coding, computer use, knowledge work, and research workflows. |
 | `gpt-5.3-codex-spark` | `codex -m gpt-5.3-codex-spark` | Text-only **research preview** optimized for near-instant, real-time coding iteration; available to ChatGPT Pro users. |
+| `gpt-5.4` | `codex -m gpt-5.4` | Other model: frontier model for professional work with strong coding, reasoning, tool use, and agentic workflow capabilities. |
+| `gpt-5.4-mini` | `codex -m gpt-5.4-mini` | Other model: fast, efficient mini model for responsive coding tasks and subagents. |
 
-- Availability matrix: `gpt-5.5`, `gpt-5.4`, and `gpt-5.4-mini` are listed for
-  Codex CLI & SDK, the Codex app & IDE extension, ChatGPT Credits, and API
-  access — **Codex Cloud is marked unavailable for all four models** (the page
-  notes you can't change the default model for Codex cloud tasks).
-  `gpt-5.3-codex-spark` is CLI & SDK + app & IDE only (no Codex Cloud, ChatGPT
-  Credits, or API access).
-- The models page does **not** document per-model reasoning-effort values or
-  service tiers. `model_reasoning_effort` and `service_tier` remain config knobs
-  (see the Codex config docs) — config values on a model, not distinct model
-  ids; per-model tier tables are `not documented` on the models page.
+- Availability is shown per surface on the models page. Static text extraction
+  lists the same surface labels for each model but does not preserve icon state,
+  so do not infer an availability matrix from text-only fetches. The page still
+  says you cannot change the default model for Codex cloud tasks.
+- Reasoning effort is documented as a selector: Low, Medium (default), High,
+  Extra High, Max, and Ultra. The page says there is no exact mapping from GPT-5.5
+  reasoning efforts to GPT-5.6; try familiar tasks at a lower setting and adjust.
+- `model_reasoning_effort` and `service_tier` remain config knobs documented in
+  the Codex config docs; service-tier tables are `not documented` on the models
+  page.
 - The **headless** launch is `codex exec` (see `docs/cli-invocation.md`); model
   selection is `-m <model>` / `codex exec --model` (shown on the models page).
 

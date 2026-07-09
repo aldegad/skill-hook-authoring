@@ -5,6 +5,28 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.32 — 2026-07-10
+
+Daily refresh: all 56 manifest source URLs fetched successfully. Billing still
+paused; Claude/Grok model lineups re-verified unchanged; Codex model lineup
+drifted to GPT-5.6 Sol/Terra/Luna.
+
+### Changed
+
+- **Codex model lineup drift recorded.** The official Codex models page now
+  recommends the GPT-5.6 family/default selector (`gpt-5.6`) with explicit
+  `gpt-5.6-sol`, `gpt-5.6-terra`, and `gpt-5.6-luna` ids. `gpt-5.5` is now
+  previous-generation, while `gpt-5.4` and `gpt-5.4-mini` remain under Other
+  models. Updated `docs/models/codex.md`, `SKILL.md`, and manifest claims.
+- **Billing status re-verified live 2026-07-10, still paused.** Advanced the
+  time-sensitive billing stamps in `cli-invocation.md`, `cloud-automation.md`,
+  and the manifest.
+- **Model lineup stamps advanced for Claude and Grok** after live verification
+  against their official model pages; no content drift found.
+- **Antigravity dynamic render unavailable in this worker.** The static source
+  check passed for the seven `antigravity.google` URLs, but no in-app/Chrome
+  browser backend was available, so Antigravity content claims were not changed.
+
 ## v1.31 — 2026-07-09
 
 Daily refresh: all 56 manifest source URLs fetched successfully. Billing still
