@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-07-10",
+  "updated": "2026-07-11",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "nonVendorRule": "A small number of non-vendor runtimes (e.g. gajae-code, a community/MIT project) are tracked from their own project README rather than vendor docs. They must be explicitly flagged as community/non-vendor in the docs, held to the same not-documented discipline, and never presented as official vendor guarantees.",
@@ -1169,11 +1169,11 @@
       "agent": "claude-code",
       "kind": "billing",
       "url": "https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan",
-      "notes": "Re-verified 2026-07-10: the billing change originally planned for 2026-06-15 is still PAUSED (banner verbatim-unchanged). The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits. The previously announced monthly credit, which would have been available to eligible claimants in connection with these changes, isn't available. We're working to update the plan to better support how users build with Claude subscriptions. When we have an update, we'll share it before anything takes effect.' A line under the banner adds: 'The content below reflects the page before June 15. It's preserved for reference but is no longer taking effect on June 15.' Accounts using an API key continue on pay-as-you-go API billing. The original (paused, not-in-effect) plan described separate monthly credits per plan tier: Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise usage-based $20, Enterprise seat-based Premium seats $200 (Standard seats not eligible).",
+      "notes": "Re-verified 2026-07-11: the billing change originally planned for 2026-06-15 is still PAUSED (banner verbatim-unchanged). The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits. The previously announced monthly credit, which would have been available to eligible claimants in connection with these changes, isn't available. We're working to update the plan to better support how users build with Claude subscriptions. When we have an update, we'll share it before anything takes effect.' A line under the banner adds: 'The content below reflects the page before June 15. It's preserved for reference but is no longer taking effect on June 15.' Accounts using an API key continue on pay-as-you-go API billing. The original (paused, not-in-effect) plan described separate monthly credits per plan tier: Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise usage-based $20, Enterprise seat-based Premium seats $200 (Standard seats not eligible).",
       "claims": [
         "Agent SDK with Claude plan",
         "claude -p headless",
-        "2026-06-15 Agent SDK billing change still paused as of 2026-07-10",
+        "2026-06-15 Agent SDK billing change still paused as of 2026-07-11",
         "Agent SDK and claude -p currently draw from regular subscription usage limits same as interactive use",
         "API key accounts remain pay-as-you-go API billing",
         "original plan described separate monthly credits per plan tier but change is paused"
@@ -1205,7 +1205,7 @@
       "agent": "claude-code",
       "kind": "model-lineup",
       "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
-      "notes": "Current Claude model lineup (ids + reasoning). Mirror: docs/models/claude.md. Verified live 2026-07-10 (docs.anthropic.com 301-redirects to platform.claude.com/docs/en/about-claude/models/overview — same official doc). Current: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (id claude-haiku-4-5-20251001, alias claude-haiku-4-5). Reasoning: adaptive thinking on Fable 5 (always on) / Opus 4.8 / Sonnet 5; Haiku 4.5 uses extended thinking. Also documented but NOT generally available: Claude Mythos 5 (claude-mythos-5) and Claude Mythos Preview (claude-mythos-preview), invitation-only via Project Glasswing. Legacy: Opus 4.7 (→ 4.8), Opus 4.6, Sonnet 4.6 (→ 5), Sonnet 4.5, Opus 4.5; deprecated: claude-opus-4-1-20250805 retiring 2026-08-05.",
+      "notes": "Current Claude model lineup (ids + reasoning). Mirror: docs/models/claude.md. Verified live 2026-07-11 (docs.anthropic.com 301-redirects to platform.claude.com/docs/en/about-claude/models/overview — same official doc). Current: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (id claude-haiku-4-5-20251001, alias claude-haiku-4-5). Reasoning: adaptive thinking on Fable 5 (always on) / Opus 4.8 / Sonnet 5; Haiku 4.5 uses extended thinking. Also documented but NOT generally available: Claude Mythos 5 (claude-mythos-5) and Claude Mythos Preview (claude-mythos-preview), invitation-only via Project Glasswing. Legacy: Opus 4.7 (→ 4.8), Opus 4.6, Sonnet 4.6 (→ 5), Sonnet 4.5, Opus 4.5; deprecated: claude-opus-4-1-20250805 retiring 2026-08-05.",
       "claims": [
         "claude-fable-5 current",
         "claude-opus-4-8 current",
@@ -1224,7 +1224,7 @@
       "agent": "codex",
       "kind": "model-lineup",
       "url": "https://developers.openai.com/codex/models",
-      "notes": "Current Codex model lineup. Mirror: docs/models/codex.md. Verified live 2026-07-10: the page now recommends the GPT-5.6 family/default selector gpt-5.6 and explicit model ids gpt-5.6-sol, gpt-5.6-terra, and gpt-5.6-luna. gpt-5.5 is now described as previous-generation; gpt-5.4 and gpt-5.4-mini remain under Other models; gpt-5.3-codex-spark remains a text-only research preview for ChatGPT Pro users. gpt-5.2 and gpt-5.3-codex are deprecated when signing in with ChatGPT (no one-to-one replacement mapping — the page says to update to the latest model listed above). The models page documents reasoning effort choices Low, Medium (default), High, Extra High, Max, and Ultra, and says there is no exact mapping from GPT-5.5 reasoning efforts to GPT-5.6. Service tiers remain not documented on this page.",
+      "notes": "Current Codex model lineup. Mirror: docs/models/codex.md. Verified live 2026-07-11: the page recommends the GPT-5.6 family/default selector gpt-5.6 and explicit model ids gpt-5.6-sol, gpt-5.6-terra, and gpt-5.6-luna. gpt-5.5 is described as previous-generation; gpt-5.4 and gpt-5.4-mini remain under Other models; gpt-5.3-codex-spark remains a text-only research preview for ChatGPT Pro users. gpt-5.2 and gpt-5.3-codex are deprecated when signing in with ChatGPT (no one-to-one replacement mapping — the page says to update to the latest model listed above). The models page documents reasoning effort choices Low, Medium (default), High, Extra High, Max, and Ultra, and says there is no exact mapping from GPT-5.5 reasoning efforts to GPT-5.6. Service tiers remain not documented on this page.",
       "claims": [
         "gpt-5.6 current recommended family/default selector",
         "gpt-5.6-sol current recommended",
@@ -1294,7 +1294,7 @@
       "agent": "grok",
       "kind": "model-lineup",
       "url": "https://docs.x.ai/developers/models",
-      "notes": "Current Grok/xAI model lineup. Mirror: docs/models/grok.md. 2026-07-06: the page moved — docs.x.ai/docs/models now 308-redirects to docs.x.ai/developers/models (single hop; model detail links under /developers/models/<id>); URL updated here. Verified live 2026-07-10: the overview still highlights Grok 4.5 (grok-4.5) as the flagship model for code and chat, with 500k context and configurable reasoning, plus the Grok Voice API and Imagine API. The previous grok-4.3 / grok-4.20-* / grok-build-0.1 lineup is no longer shown on the overview page; do not infer retirement from absence unless a dedicated xAI retirement/deprecation page names the ids.",
+      "notes": "Current Grok/xAI model lineup. Mirror: docs/models/grok.md. 2026-07-06: the page moved — docs.x.ai/docs/models now 308-redirects to docs.x.ai/developers/models (single hop; model detail links under /developers/models/<id>); URL updated here. Verified live 2026-07-11: the overview still highlights Grok 4.5 (grok-4.5) as the flagship model for code and chat, with 500k context and configurable reasoning, plus the Grok Voice API and Imagine API. The previous grok-4.3 / grok-4.20-* / grok-build-0.1 lineup is no longer shown on the overview page; do not infer retirement from absence unless a dedicated xAI retirement/deprecation page names the ids.",
       "claims": [
         "grok-4.5 current 500k context",
         "grok-4.5 configurable reasoning",

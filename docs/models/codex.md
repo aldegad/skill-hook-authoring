@@ -1,7 +1,7 @@
 # OpenAI Codex — model lineup
 
 Official source: https://developers.openai.com/codex/models
-Last reviewed: 2026-07-10 (verified live against the official Codex models page)
+Last reviewed: 2026-07-11 (verified live against the official Codex models page)
 
 ## Current shipping models
 
