@@ -52,6 +52,7 @@ Kuma Studio のスキル/フック切替システム（1つのGUIからClaude、
 - `docs/plugin-packaging.md` — プラットフォームごとのプラグイン/拡張のパッケージング差分。  
 - `docs/official-sources.json` — 日次更新が再検証するソースマニフェスト。  
 - `docs/cloud-automation.md` — 日次更新の自動化、およびクラウド実行理由。  
+- `docs/completion-stack.md` — ネイティブ完了/検証スタック（Claude Code `/goal`・Stop hook・`/verify`、Codex Goals・Stop hook・`/review`）と検証済みの訂正。  
 - `docs/kuma-studio-patterns.md` — 公開されているKuma Studio運用パターン。  
 - `CHANGELOG.md`とgitタグ — 版数記録。履歴は本文ではなくここに残る。
 

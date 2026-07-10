@@ -49,6 +49,7 @@ Des questions auxquelles on peut passer une après-midi, avec références :
 - `docs/plugin-packaging.md` — la manière dont le packaging plugin/extension diffère selon la plateforme.
 - `docs/official-sources.json` — le manifeste de sources que le rafraîchissement quotidien re-vérifie.
 - `docs/cloud-automation.md` — l’automatisation de mise à jour quotidienne, et pourquoi elle s’exécute dans le cloud.
+- `docs/completion-stack.md` — les stacks natifs d'achèvement/vérification (Claude Code `/goal`·Stop hook·`/verify` ; Codex Goals·Stop hook·`/review`) avec les corrections vérifiées.
 - `docs/kuma-studio-patterns.md` — les patterns opérationnels publics de Kuma Studio.
 - `CHANGELOG.md` plus le tag git — le registre des versions. L’historique reste ici, pas dans les corps de docs.
 

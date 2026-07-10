@@ -185,6 +185,7 @@ Use these repo documents before changing compatibility claims:
 - `docs/compatibility-matrix.md` — current cross-agent support matrix (includes the Session Resume table).
 - `docs/cli-invocation.md` — per-runtime CLI spawn (interactive vs headless) and resume invocation syntax.
 - `docs/plugin-packaging.md` — plugin/extension packaging boundaries.
+- `docs/completion-stack.md` — native completion/verification stacks (Claude Code `/goal` · Stop hook · `/verify`; Codex Goals · Stop hook · `/review`), enforcement grades, and verified misreading corrections.
 - `docs/kuma-studio-patterns.md` — public Kuma Studio operating patterns that can be reused by other agents.
 - `docs/cloud-automation.md` — daily cloud automation setup (Claude Routines, with a Codex App alternative).
 

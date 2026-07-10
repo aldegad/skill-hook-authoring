@@ -18,8 +18,9 @@ CLI itself retires for individual users 2026-06-18), Cursor, Hermes Agent, Kuma
 Studio, and gajae-code (`gjc`, community/non-vendor — see the NON-VENDOR note
 below). For each, review: supported-agent docs, plugin/extension docs,
 project-instruction / context-file docs, CLI spawn (interactive vs headless
-launch) docs, session-resume docs, compatibility matrix, and Kuma Studio pattern
-docs. If an official doc confirms a feature difference or that something is
+launch) docs, session-resume docs, completion/goal-gate docs (manifest
+`"kind": "completion-stack"`, mirror `docs/completion-stack.md`), compatibility
+matrix, and Kuma Studio pattern docs. If an official doc confirms a feature difference or that something is
 unavailable, state that explicitly in the docs.
 
 **NON-VENDOR RUNTIME — gajae-code.** One tracked runtime, **gajae-code** (`gjc`, a

@@ -30,6 +30,11 @@ package manifest, so the **git tag plus this file are the version record**
   goal contract, evidence-based completion verbatim). Hooks pages were
   already registered (`anthropic-claude-hooks`, `openai-codex-hooks`).
   `node scripts/check-official-sources.mjs` passes (59 sources).
+- **Navigation surfaces updated for the new doc** (blast-radius review):
+  `docs/completion-stack.md` added to the doc lists in `SKILL.md`
+  (Multi-Agent Compatibility Docs), `README.md` and all six README
+  translations, and the daily prompt's WHAT-TO-CHECK category list now names
+  completion/goal-gate docs (`kind: "completion-stack"`).
 
 ## v1.32 — 2026-07-10
 

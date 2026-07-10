@@ -49,6 +49,7 @@
 - `docs/plugin-packaging.md` —— 不同平台下插件/扩展打包方式的差异。
 - `docs/official-sources.json` —— 每日刷新复核的来源清单。
 - `docs/cloud-automation.md` —— 每日更新自动化，以及为何在云端运行。
+- `docs/completion-stack.md` —— 原生完成/验证栈（Claude Code `/goal`·Stop hook·`/verify`，Codex Goals·Stop hook·`/review`）及经验证的勘误。
 - `docs/kuma-studio-patterns.md` —— Kuma Studio 的公开运行模式。
 - `CHANGELOG.md` 及 git tag —— 版本记录。历史保存在这里，而不是散落在文档正文中。
 

@@ -49,6 +49,7 @@
 - `docs/plugin-packaging.md` — 플랫폼별 플러그인/확장 패키징 차이.
 - `docs/official-sources.json` — 일일 갱신이 재검증하는 출처 매니페스트.
 - `docs/cloud-automation.md` — 일일 업데이트 자동화 및 클라우드 실행 사유.
+- `docs/completion-stack.md` — 네이티브 완료/검증 스택(Claude Code `/goal`·Stop hook·`/verify`, Codex Goals·Stop hook·`/review`)과 검증된 정정.
 - `docs/kuma-studio-patterns.md` — 공개 Kuma Studio 운영 패턴.
 - `CHANGELOG.md`와 git tag — 버전 기록. 변경 이력은 문서 본문이 아니라 이곳에 남깁니다.
 
