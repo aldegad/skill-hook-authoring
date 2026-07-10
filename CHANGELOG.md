@@ -5,6 +5,24 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.33 — 2026-07-10
+
+### Added
+
+- **`docs/completion-stack.md`** — native completion/verification stacks for
+  Claude Code (`/goal` · Stop hook · `/verify`) and Codex (Goals · Stop hook ·
+  `/review`), the cross-engine judgment-independence vs
+  verification-activeness asymmetry, enforcement-grade tables, and a
+  **Misreading traps** section preserving source-verified corrections that
+  official docs alone don't state (ZCode is a separate Z.AI product with no
+  independently verified `/goal`; Codex Goals is an active edit·run·test loop,
+  not a soft checker; Codex `/goal edit` preserves usage via
+  `ThreadGoalSetMode::UpdateExisting`; Claude's `/goal` evaluator is
+  transcript-only). Migrated from operator vault research pages (verified
+  2026-06-15) so this skill is the single owner of cross-engine completion
+  knowledge. Goal/hooks source URLs will be registered in
+  `docs/official-sources.json` in a follow-up.
+
 ## v1.32 — 2026-07-10
 
 Daily refresh: all 56 manifest source URLs fetched successfully. Billing still
