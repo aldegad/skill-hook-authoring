@@ -1242,6 +1242,54 @@
       ]
     },
     {
+      "id": "anthropic-claude-goal",
+      "agent": "claude-code",
+      "kind": "completion-stack",
+      "url": "https://code.claude.com/docs/en/goal",
+      "notes": "Claude Code /goal session-scoped completion gate. Mirror: docs/completion-stack.md. Added 2026-07-10 (claims verified 2026-06-15). Key limitation to re-verify each run: the evaluator judges the condition against what Claude has surfaced in the conversation and 'doesn't run commands or read files independently' (transcript-only, tool-less) — if this changes, the cross-engine asymmetry section in the mirror doc must be redrawn.",
+      "claims": [
+        "/goal built-in slash command v2.1.139+",
+        "after each turn a small fast model checks whether the condition holds",
+        "completion decided by a fresh model rather than the one doing the work default Haiku",
+        "/goal is a wrapper around a session-scoped prompt-based Stop hook",
+        "evaluator doesn't run commands or read files independently transcript-based",
+        "one goal per session new /goal replaces no edit verb",
+        "/goal clear aliases stop off reset none cancel",
+        "--resume --continue restore active goal turn timer token baselines reset",
+        "condition max 4000 chars turn/time bound clauses",
+        "headless -p desktop and Remote Control support",
+        "/goal vs /loop vs Stop hook vs auto mode comparison table",
+        "requires workspace trust and hooks enabled disableAllHooks allowManagedHooksOnly disable with reason"
+      ]
+    },
+    {
+      "id": "openai-codex-follow-goals",
+      "agent": "codex",
+      "kind": "completion-stack",
+      "url": "https://developers.openai.com/codex/use-cases/follow-goals",
+      "notes": "Codex Goals (/goal, features.goals) active completion loop. Mirror: docs/completion-stack.md. Added 2026-07-10 (claims verified 2026-06-15). Key contrast to re-verify each run: the goal loop itself can 'inspect the code, run the relevant commands, make changes, test the result, and continue' (active verification), while completion is declared by the working model itself (no independent evaluator) — the opposite weakness of Claude's /goal.",
+      "claims": [
+        "once the Goal is active Codex can inspect the code run the relevant commands make changes test the result and continue",
+        "goal states active paused complete",
+        "features.goals flag codex features enable goals",
+        "/goal set /goal edit /goal pause /goal resume /goal clear",
+        "no separate independent completion evaluator working model declares complete"
+      ]
+    },
+    {
+      "id": "openai-codex-goals-cookbook",
+      "agent": "codex",
+      "kind": "completion-stack",
+      "url": "https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex",
+      "notes": "Official Codex goals cookbook. Mirror: docs/completion-stack.md. Added 2026-07-10 (claims verified 2026-06-15). Anchor for the 6-element goal contract and the evidence-based completion discipline verbatim.",
+      "claims": [
+        "goal contract outcome verification surface constraints boundaries iteration policy blocked stop",
+        "a Goal should not be marked complete because the model believes it is probably done",
+        "complete only after the objective is checked against relevant files tests logs benchmark output generated artifacts or other concrete evidence",
+        "tighten the goal mid-flight"
+      ]
+    },
+    {
       "id": "xai-grok-model-lineup",
       "agent": "grok",
       "kind": "model-lineup",

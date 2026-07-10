@@ -20,8 +20,16 @@ package manifest, so the **git tag plus this file are the version record**
   `ThreadGoalSetMode::UpdateExisting`; Claude's `/goal` evaluator is
   transcript-only). Migrated from operator vault research pages (verified
   2026-06-15) so this skill is the single owner of cross-engine completion
-  knowledge. Goal/hooks source URLs will be registered in
-  `docs/official-sources.json` in a follow-up.
+  knowledge.
+- **Three goal sources registered in `docs/official-sources.json`** under a
+  new `completion-stack` kind, so the daily refresh re-verifies the mirror
+  doc's load-bearing claims: `anthropic-claude-goal`
+  (code.claude.com/docs/en/goal — transcript-only evaluator),
+  `openai-codex-follow-goals` (active inspect·run·change·test loop,
+  self-declared completion), and `openai-codex-goals-cookbook` (6-element
+  goal contract, evidence-based completion verbatim). Hooks pages were
+  already registered (`anthropic-claude-hooks`, `openai-codex-hooks`).
+  `node scripts/check-official-sources.mjs` passes (59 sources).
 
 ## v1.32 — 2026-07-10
 
