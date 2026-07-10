@@ -5,6 +5,29 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.34 — 2026-07-11
+
+Daily refresh: all 59 manifest source URLs fetched successfully. Billing still
+paused; Claude/Codex/Grok model lineups and the three completion-stack sources
+re-verified unchanged.
+
+### Changed
+
+- **Billing status re-verified live 2026-07-11, still paused.** The official
+  support banner still says Agent SDK, `claude -p`, and third-party Agent SDK
+  app usage draw from subscription usage limits, while the separate monthly
+  credit remains unavailable. Advanced the time-sensitive billing stamps in
+  `cli-invocation.md`, `cloud-automation.md`, and the manifest.
+- **Model lineup stamps advanced for Claude, Codex, and Grok** after live
+  verification against their official model pages; no lineup/content drift was
+  found.
+- **Completion-stack sources re-verified unchanged.** Claude `/goal` remains a
+  transcript-only independent evaluator, while Codex Goals remains an active
+  inspect/run/change/test loop with self-declared completion.
+- **Antigravity dynamic render unavailable in this worker.** The static source
+  check passed for the seven `antigravity.google` URLs, but no Chrome browser
+  backend was available, so Antigravity content claims were not changed.
+
 ## v1.33 — 2026-07-10
 
 ### Added
