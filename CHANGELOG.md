@@ -5,6 +5,69 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.35 — 2026-07-16
+
+Daily refresh: 61 manifest sources (2 added this run) fetched successfully; all
+200. Antigravity re-rendered dynamically (code blocks hydrated correctly this
+run). Billing still paused. The big one: **the entire Codex doc set moved host**.
+
+### Changed
+
+- **Codex docs moved to `learn.chatgpt.com`.** 14 of 16 `developers.openai.com/codex/*`
+  sources now 308-redirect to `learn.chatgpt.com` (the Agent-Skills API guide and
+  the goals cookbook did not move). Rewrote every affected manifest URL and every
+  citation in `SKILL.md`, `cli-invocation.md`, `compatibility-matrix.md`,
+  `completion-stack.md`, `models/codex.md`, and `models/README.md`, and added
+  `learn.chatgpt.com` to `policy.allowedHosts` — the manifest's own policy had
+  begun contradicting its URLs. Two slug renames beyond the host swap:
+  `/codex/cli/reference` → `/docs/developer-commands?surface=cli`, and
+  follow-goals sits at `/use-cases/`, not `/docs/use-cases/`. Content survived
+  the move intact; this was citation rot, not knowledge loss.
+- **Codex "Automations" is now "scheduled tasks".** The page is retitled and
+  broadened to ChatGPT-wide (`?surface=app`); the Thread / Standalone /
+  Project-Scoped category names are gone. Recurrence is RRULE-based.
+- **Codex plugin components: 3 → 6.** The plugins overview now lists browser
+  extensions, hooks, and scheduled task templates alongside skills, apps, and MCP
+  servers. The build page still documents only the first four as `plugin.json`
+  fields, so `plugin-packaging.md` was left as-is.
+- **Antigravity documents a session store for the first time.** A new dedicated
+  Resume Command Guide (`/docs/cli/commands/resume`) — registered as a new
+  `session-resume` source — documents the `agy -c` short flag and a workspace-keyed
+  cache at `~/.gemini/antigravity-cli/cache/last_conversations.json` mapping
+  absolute workspace path → conversation id. The conversations page was slimmed to
+  workspace scoping and `/fork` and now defers picker/`--conversation` detail
+  there; `F2` rename is back (documented on the new page) and `Ctrl+Delete` delete
+  is new.
+- **Cursor cloud agents gained four hooks.** `beforeSubmitPrompt`,
+  `afterAgentResponse`, `afterAgentThought`, and `stop` are now supported in cloud
+  agents (previously "Not yet wired"). The unavailable list is down to
+  `sessionStart`, `sessionEnd`, `beforeMCPExecution`/`afterMCPExecution`, Tab
+  hooks, and `workspaceOpen`.
+- **Cursor ships its own models — the "pure router" claim was wrong.** Registered a
+  new `cursor-model-lineup` source (`cursor.com/docs/models-and-pricing`);
+  `models/cursor.md` had no manifest entry at all, which is why its stale
+  "no Cursor-owned model" claim survived outside the verification loop. Cursor
+  documents Composer 2.5 ("Cursor's own model"), Composer 1, and Grok 4.5 (jointly
+  trained with SpaceXAI), with `Auto` as default.
+- **gajae-code dropped `--mode rpc`.** The community README documents no headless
+  one-shot mode at all now; external control is the SDK loopback WebSocket, a
+  Coordinator MCP server (MCP is back after its 2026-07-07 absence), or
+  `gjc daemon session`.
+- **Grok's older ids are shown again.** `grok-4.3`, the `grok-4.20-0309-reasoning`
+  / `-non-reasoning` / `-multi-agent-0309` trio (1M), and `grok-build-0.1` (256k)
+  are back in the pricing table — which is now the page's only model list. Removed
+  the unsupported "configurable reasoning" claim (the detail page says only
+  `Reasoning: Yes`; the reasoning/non-reasoning split is pre-built variants, not an
+  effort knob) and the retirement-guide link, which no longer exists.
+- **Claude session store is a sanitized path, not a hash.** The sessions page
+  defines `<project>` in `~/.claude/projects/<project>/<session-id>.jsonl` as the
+  working-directory path with non-alphanumeric characters replaced by `-`.
+  `<cwd-hash>` was wrong and would misdirect anyone locating a transcript.
+- **Billing re-verified live 2026-07-16, still paused.** Banner unchanged; advanced
+  the time-sensitive stamps in `cli-invocation.md` and `cloud-automation.md`.
+- Softened the Codex `gpt-5.6` "default selector" claim (the page shows the bare id
+  only as a CLI example) and widened the `--effort` claim to include `ultracode`.
+
 ## v1.34 — 2026-07-11
 
 Daily refresh: all 59 manifest source URLs fetched successfully. Billing still

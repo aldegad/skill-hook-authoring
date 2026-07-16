@@ -1,12 +1,13 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-07-11",
+  "updated": "2026-07-16",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "nonVendorRule": "A small number of non-vendor runtimes (e.g. gajae-code, a community/MIT project) are tracked from their own project README rather than vendor docs. They must be explicitly flagged as community/non-vendor in the docs, held to the same not-documented discipline, and never presented as official vendor guarantees.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
     "allowedHosts": [
       "developers.openai.com",
+      "learn.chatgpt.com",
       "docs.anthropic.com",
       "code.claude.com",
       "platform.claude.com",
@@ -27,7 +28,7 @@
       "id": "openai-codex-agents-md",
       "agent": "codex",
       "kind": "project-instructions",
-      "url": "https://developers.openai.com/codex/guides/agents-md",
+      "url": "https://learn.chatgpt.com/docs/agent-configuration/agents-md",
       "claims": [
         "AGENTS.override.md",
         "AGENTS.md",
@@ -47,21 +48,24 @@
       "id": "openai-codex-automations",
       "agent": "codex",
       "kind": "automation",
-      "url": "https://developers.openai.com/codex/app/automations",
+      "url": "https://learn.chatgpt.com/docs/automations?surface=app",
       "claims": [
-        "recurring tasks",
-        "skills in automations",
+        "scheduled tasks",
+        "recurring tasks RRULE",
+        "skills in scheduled tasks",
         "worktrees",
-        "Thread Automations",
-        "Standalone Automations",
-        "Project-Scoped Automations"
-      ]
+        "manage scheduled tasks on the web",
+        "schedule work from a task",
+        "worktree cleanup for scheduled tasks",
+        "permissions and security model"
+      ],
+      "notes": "2026-07-16: the page is now titled \"Scheduled tasks\" and uses lowercase \"scheduled tasks\" throughout — the Thread / Standalone / Project-Scoped \"Automations\" category names are gone, and the page broadened from Codex-specific to ChatGPT-wide (?surface=app). Recurring schedules are RRULE-based."
     },
     {
       "id": "openai-codex-github-action",
       "agent": "codex",
       "kind": "automation",
-      "url": "https://developers.openai.com/codex/github-action",
+      "url": "https://learn.chatgpt.com/docs/github-action",
       "claims": [
         "openai/codex-action@v1",
         "prompt-file",
@@ -86,7 +90,7 @@
       "id": "openai-codex-skills",
       "agent": "codex",
       "kind": "skills",
-      "url": "https://developers.openai.com/codex/skills",
+      "url": "https://learn.chatgpt.com/docs/build-skills",
       "claims": [
         "Agent Skills",
         "SKILL.md",
@@ -106,7 +110,7 @@
       "id": "openai-codex-config-advanced",
       "agent": "codex",
       "kind": "configuration",
-      "url": "https://developers.openai.com/codex/config-advanced",
+      "url": "https://learn.chatgpt.com/docs/config-file/config-advanced",
       "notes": "2026-07-05: this page documents Codex state locations — CODEX_HOME (defaults to ~/.codex, holding config.toml, auth.json, history.jsonl) and history persistence ('By default, Codex saves local session transcripts under CODEX_HOME (for example, ~/.codex/history.jsonl)', disable via [history] persistence = \"none\", cap via history.max_bytes). This makes it the anchor for the history-file path after the CLI reference dropped it (see openai-codex-cli-reference).",
       "claims": [
         ".codex/config.toml",
@@ -126,7 +130,7 @@
       "id": "openai-codex-hooks",
       "agent": "codex",
       "kind": "hooks",
-      "url": "https://developers.openai.com/codex/hooks",
+      "url": "https://learn.chatgpt.com/docs/hooks",
       "claims": [
         "lifecycle hooks",
         "hook payloads",
@@ -142,19 +146,24 @@
       "id": "openai-codex-plugins",
       "agent": "codex",
       "kind": "plugins",
-      "url": "https://developers.openai.com/codex/plugins",
-      "notes": "The plugins overview page lists only the three components a plugin can contain (skills, apps, MCP servers). Bundled hooks and marketplace/interface metadata are documented on the plugins/build page, not this overview.",
+      "url": "https://learn.chatgpt.com/docs/plugins",
+      "notes": "The plugins overview page lists the six components a plugin can contain: skills, apps, MCP servers, browser extensions, hooks, and scheduled task templates (2026-07-16: widened from three — hooks are now named on the overview, not only on the plugins/build page). The build page still documents only skills, apps, MCP servers, and hooks as plugin.json manifest fields; browser extensions and scheduled task templates appear as overview concepts with no stated manifest field.",
       "claims": [
         "skills",
         "apps",
-        "MCP servers"
+        "MCP servers",
+        "browser extensions",
+        "hooks",
+        "scheduled task templates",
+        "overview lists six plugin components",
+        "build page manifest fields cover skills apps MCP servers hooks only"
       ]
     },
     {
       "id": "openai-codex-plugin-build",
       "agent": "codex",
       "kind": "plugins",
-      "url": "https://developers.openai.com/codex/plugins/build",
+      "url": "https://learn.chatgpt.com/docs/build-plugins",
       "notes": "2026-07-06: the page now documents plugin-hook environment variables — 'Plugin hook commands receive the Codex-specific environment variables PLUGIN_ROOT and PLUGIN_DATA. ... Codex also sets CLAUDE_PLUGIN_ROOT and CLAUDE_PLUGIN_DATA for compatibility with existing plugin hooks.' The plugin.json hooks field accepts a single path or an array (default hooks/hooks.json), with ${PLUGIN_ROOT} substitution in commands. 2026-07-07: the hooks manifest field is broader — 'The manifest field can be a single path, an array of paths, an inline hooks object, or an array of inline hooks objects.' Also documented: marketplace file locations (repo $REPO_ROOT/.agents/plugins/marketplace.json, legacy-compatible $REPO_ROOT/.claude-plugin/marketplace.json, personal ~/.agents/plugins/marketplace.json), the codex plugin marketplace add/list/upgrade/remove CLI, and the install cache ~/.codex/plugins/cache/$MARKETPLACE_NAME/$PLUGIN_NAME/$VERSION/ ($VERSION is 'local' for local plugins).",
       "claims": [
         ".codex-plugin/plugin.json",
@@ -712,10 +721,10 @@
         "loop_limit",
         "loop_limit default 5 cursor null claude-code",
         "Enterprise hooks /Library/Application Support/Cursor/hooks.json macOS /etc/cursor/hooks.json Linux C:/ProgramData/Cursor/hooks.json Windows",
-        "cloud agent supports shell file tool subagent lifecycle hooks plus preCompact",
-        "cloud agent does not support sessionStart sessionEnd beforeSubmitPrompt beforeMCPExecution afterMCPExecution afterAgentResponse afterAgentThought stop Tab hooks workspaceOpen"
+        "cloud agent supports beforeSubmitPrompt afterAgentResponse afterAgentThought stop plus shell file tool subagent lifecycle hooks and preCompact",
+        "cloud agent does not support sessionStart sessionEnd beforeMCPExecution afterMCPExecution Tab hooks workspaceOpen"
       ],
-      "notes": "2026-07-06: stop is back in the cloud-unavailable table as 'Not yet wired for cloud agents.' (on 2026-07-05 it had briefly disappeared from both cloud-agent tables). The unavailable list is sessionStart/sessionEnd, beforeSubmitPrompt, Tab hooks, workspaceOpen, plus beforeMCPExecution/afterMCPExecution, afterAgentResponse/afterAgentThought, and stop ('Not yet wired for cloud agents'). The supported table lists beforeShellExecution, afterShellExecution, beforeReadFile, afterFileEdit, preToolUse, postToolUse, postToolUseFailure, subagentStart, subagentStop, preCompact."
+      "notes": "2026-07-16: beforeSubmitPrompt, afterAgentResponse, afterAgentThought, and stop are now marked Yes for cloud-agent support and no longer appear in the unavailable list (they were previously \"Not yet wired for cloud agents\"). The unavailable list is now only sessionStart, sessionEnd, beforeMCPExecution/afterMCPExecution, Tab hooks (beforeTabFileRead/afterTabFileEdit), and workspaceOpen — attributed to \"differences in the execution environment\"."
     },
     {
       "id": "cursor-cli-parameters",
@@ -772,7 +781,7 @@
       "id": "openai-codex-cli-reference",
       "agent": "codex",
       "kind": "session-resume",
-      "url": "https://developers.openai.com/codex/cli/reference",
+      "url": "https://learn.chatgpt.com/docs/developer-commands?surface=cli",
       "notes": "2026-07-04: the page no longer documents the session-store paths ~/.codex/sessions or ~/.codex/history.jsonl (both previously stated here). Rollout files survive only indirectly via --ephemeral ('run without persisting session rollout files to disk'); the app-server doc still describes thread logs persisted as JSONL files. 2026-07-05: ~/.codex/history.jsonl is documented again — on the config-advanced page ('Codex saves local session transcripts under CODEX_HOME (for example, ~/.codex/history.jsonl)'), so openai-codex-config-advanced is now the anchor for that path; the rollout/sessions directory (~/.codex/sessions) remains not documented on any official page. 2026-07-07: caveat — ~/.codex/sessions now appears verbatim on the automations page, but only inside a user-example automation prompt, not as normative path documentation; the not-documented discipline stands. Newly documented session management on this page: codex fork [SESSION_ID] (picker by default; --last forks the most recent; --all widens past cwd) forks a previous interactive session into a new thread — the CLI analogue of app-server thread/fork — plus codex archive / codex delete / codex unarchive, with remote-mode support for codex, resume, fork, archive, delete, and unarchive.",
       "claims": [
         "codex resume",
@@ -791,7 +800,7 @@
       "id": "openai-codex-app-server",
       "agent": "codex",
       "kind": "session-resume",
-      "url": "https://developers.openai.com/codex/app-server",
+      "url": "https://learn.chatgpt.com/docs/app-server",
       "claims": [
         "thread/start",
         "thread/resume",
@@ -870,7 +879,7 @@
       "id": "openai-codex-cli",
       "agent": "codex",
       "kind": "cli-invocation",
-      "url": "https://developers.openai.com/codex/cli",
+      "url": "https://learn.chatgpt.com/docs/codex/cli",
       "notes": "2026-07-04: the optional PROMPT argument that seeds an interactive session is no longer stated on this page (not contradicted, just absent). 2026-07-06: still absent here, but the seed-prompt syntax is re-anchored — the CLI reference (openai-codex-cli-reference) documents a top-level optional PROMPT positional: 'Optional text instruction to start the session. Omit to launch the TUI without a pre-filled message.'",
       "claims": [
         "codex launches interactive TUI",
@@ -883,7 +892,7 @@
       "id": "openai-codex-noninteractive",
       "agent": "codex",
       "kind": "cli-invocation",
-      "url": "https://developers.openai.com/codex/noninteractive",
+      "url": "https://learn.chatgpt.com/docs/non-interactive-mode",
       "notes": "2026-07-04: --model/-m is no longer listed on this page (it defers flag docs to /codex/cli/reference#codex-exec); the flag itself is still official — the models page shows codex -m <id> and codex exec --model usage. 2026-07-05: --cd/-C and the -s short alias are no longer stated on this page either (only the long --sandbox form remains); both stay documented on /codex/cli/reference under codex exec ('--cd, -C | path | Set the workspace root before executing the task', '--sandbox, -s') — the page keeps deferring flag docs to the CLI reference.",
       "claims": [
         "non-interactive mode",
@@ -934,7 +943,7 @@
         "--safe-mode disable all customizations for troubleshooting v2.1.169",
         "--tools restrict built-in tools",
         "--disallowedTools deny rules",
-        "--effort level low medium high xhigh max",
+        "--effort level low medium high xhigh max ultracode",
         "--worktree -w isolated git worktree",
         "--from-pr PR number or GitHub GitLab Bitbucket PR URL"
       ]
@@ -1020,15 +1029,30 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli/conversations",
-      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome; fenced code blocks hydrated empty this run, so code-block-only literals were held via surrounding prose). Page moved from /docs/cli-conversations to /docs/cli/conversations (old URL redirects). 2026-07-06: the picker's F2-rename mention is no longer on the page (picker steps show keyword filter, arrow/page navigation, Enter/Esc only). The on-close resume-command printout is stated on the cli/using page (Auto-Save Resume).",
+      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-16, Playwright real Chrome — fenced code blocks hydrated correctly this run, unlike 2026-07-07). Page moved from /docs/cli-conversations to /docs/cli/conversations (old URL redirects). 2026-07-16: the page was slimmed to workspace scoping and /fork — the picker walkthrough, --conversation, and the session cache now live on the dedicated Resume Command Guide (antigravity-cli-resume), which this page links to. The on-close resume-command printout is stated on the cli/using page (Auto-Save Resume).",
       "claims": [
-        "agy --continue resumes most recent in workspace",
-        "agy --conversation <uuid>",
-        "/resume picker filter by description or id",
         "workspace-scoped conversations",
-        "import Antigravity 2.0 desktop threads via Tab confirm with y",
+        "agy -c / agy --continue resumes most recent in workspace",
         "/fork branch clones conversation thread not git checkout",
-        "on CLI close it prints the exact command to resume that session"
+        "picker walkthrough and directory-scoped session cache deferred to the Resume Command Guide"
+      ]
+    },
+    {
+      "id": "antigravity-cli-resume",
+      "agent": "antigravity-cli",
+      "kind": "session-resume",
+      "url": "https://antigravity.google/docs/cli/commands/resume",
+      "notes": "JS-rendered SPA; render dynamically to verify (first captured 2026-07-16 by dynamic render, Playwright real Chrome). New dedicated Resume Command Guide — the conversations page now defers its picker / --conversation / session-cache detail here. This is the first Antigravity page to document a session store: a workspace-keyed cache map at ~/.gemini/antigravity-cli/cache/last_conversations.json. Still TUI-only: no headless resume is documented.",
+      "claims": [
+        "/resume opens the Session Picker with aliases /switch and /conversation",
+        "picker filters by title preview text or unique id",
+        "picker F2 renames a conversation",
+        "picker Ctrl+Delete deletes a conversation with confirmation",
+        "Tab switches to the Antigravity tab to import 2.0 desktop threads confirmed with y",
+        "agy -c short flag and agy --continue resume the most recent workspace conversation",
+        "agy --conversation <conversation-id> pins a specific conversation",
+        "session cache ~/.gemini/antigravity-cli/cache/last_conversations.json maps absolute workspace path to conversation id",
+        "cache id is verified against the backend and a fresh session starts if the conversation was deleted"
       ]
     },
     {
@@ -1184,12 +1208,12 @@
       "agent": "gajae-code",
       "kind": "community-runtime",
       "url": "https://github.com/Yeachan-Heo/gajae-code",
-      "notes": "NON-VENDOR community project (MIT, beta) by Yeachan-Heo; this README is the only source, not vendor docs. Flagged the same way Kuma Studio is. Verified 2026-07-07. A coding-agent harness (binary `gjc`) that runs adjacent to other CLIs; install with `bun install -g gajae-code` (scoped `@gajae-code/coding-agent`). Interactive `gjc` / `gjc --tmux` / `gjc --tmux --worktree <branch>`; headless `gjc --mode rpc` (no JSON/output-format flag). Skills are the only documented extension surface: SKILL.md-format bundled skills installed by `gjc setup defaults` into the user `.gjc` directory (2026-07-05: the exact `~/.gjc/skills/` path is no longer literally stated in the README), listed/read with `gjc skills list` / `gjc skills read <name>`, invoked as `/skill:<name>` (colon form), defaults deep-interview/ralplan/ultragoal/team. Hooks, plugins, session-id resume, and project-instruction-file loading are all NOT documented (re-confirmed by grep). User config `~/.gjc/config.yml`; per-project state `.gjc/`. New README content (0.6-0.7, outside claim scope): `gjc rlm` research/REPL mode, notifications SDK + `gjc daemon` Telegram reference daemon, image input, standalone RPC/ACP/Bridge external-control surfaces (2026-07-07: 'MCP' no longer appears in the README — the external-control pointer names RPC, ACP, and Bridge/HTTPS via docs/external-control-readiness.md), an experimental opt-in `computer-use` desktop-control tool surface (2026-07-07: the README no longer states any 0.x version marker in its text, so the earlier 0.6.0 tie is gone), and a four-role bundled agent table (executor/architect/planner/critic).",
+      "notes": "NON-VENDOR community project (MIT, beta) by Yeachan-Heo; this README is the only source, not vendor docs. Flagged the same way Kuma Studio is. Verified 2026-07-16. A coding-agent harness (binary `gjc`) that runs adjacent to other CLIs; install with `bun install -g gajae-code` (scoped `@gajae-code/coding-agent`). Interactive `gjc` / `gjc --tmux` / `gjc --tmux --worktree <branch>`; 2026-07-16: `--mode rpc` is gone from the README — no headless one-shot mode is documented at all. External control is now the SDK loopback WebSocket (docs/sdk.md), a Coordinator MCP server (`gjc mcp-serve coordinator` — MCP is back in the README after its 2026-07-07 absence), and `gjc daemon session`. Skills are the only documented extension surface: SKILL.md-format bundled skills installed by `gjc setup defaults` into the user `.gjc` directory (the exact `~/.gjc/skills/` path is no longer literally stated), listed/read with `gjc skills list` / `gjc skills read <name>`, invoked as `/skill:<name>` (colon form), defaults deep-interview/ralplan/ultragoal/team. Hooks, plugins, session-id resume, and project-instruction-file loading are all NOT documented (re-confirmed by grep). User config `~/.gjc/config.yml`; per-project state `.gjc/`. Other README content outside claim scope: `gjc rlm` research/REPL mode, notifications SDK + `gjc daemon`, image input, an experimental opt-in `computer-use` surface, `gjc update`, and a four-role bundled agent table (executor/architect/planner/critic).",
       "claims": [
         "community MIT project, not a vendor product",
         "binary gjc; install via bun install -g gajae-code",
         "interactive gjc / gjc --tmux / --worktree",
-        "headless gjc --mode rpc with no JSON output flag",
+        "headless one-shot mode not documented",
         "bundled skills installed into user .gjc directory via gjc setup defaults; gjc skills list/read",
         "skill invocation token /skill:<name> colon form",
         "default skills deep-interview ralplan ultragoal team",
@@ -1223,7 +1247,7 @@
       "id": "openai-codex-model-lineup",
       "agent": "codex",
       "kind": "model-lineup",
-      "url": "https://developers.openai.com/codex/models",
+      "url": "https://learn.chatgpt.com/docs/models",
       "notes": "Current Codex model lineup. Mirror: docs/models/codex.md. Verified live 2026-07-11: the page recommends the GPT-5.6 family/default selector gpt-5.6 and explicit model ids gpt-5.6-sol, gpt-5.6-terra, and gpt-5.6-luna. gpt-5.5 is described as previous-generation; gpt-5.4 and gpt-5.4-mini remain under Other models; gpt-5.3-codex-spark remains a text-only research preview for ChatGPT Pro users. gpt-5.2 and gpt-5.3-codex are deprecated when signing in with ChatGPT (no one-to-one replacement mapping — the page says to update to the latest model listed above). The models page documents reasoning effort choices Low, Medium (default), High, Extra High, Max, and Ultra, and says there is no exact mapping from GPT-5.5 reasoning efforts to GPT-5.6. Service tiers remain not documented on this page.",
       "claims": [
         "gpt-5.6 current recommended family/default selector",
@@ -1266,7 +1290,7 @@
       "id": "openai-codex-follow-goals",
       "agent": "codex",
       "kind": "completion-stack",
-      "url": "https://developers.openai.com/codex/use-cases/follow-goals",
+      "url": "https://learn.chatgpt.com/use-cases/follow-goals",
       "notes": "Codex Goals (/goal, features.goals) active completion loop. Mirror: docs/completion-stack.md. Added 2026-07-10 (claims verified 2026-06-15). Key contrast to re-verify each run: the goal loop itself can 'inspect the code, run the relevant commands, make changes, test the result, and continue' (active verification), while completion is declared by the working model itself (no independent evaluator) — the opposite weakness of Claude's /goal.",
       "claims": [
         "once the Goal is active Codex can inspect the code run the relevant commands make changes test the result and continue",
@@ -1294,14 +1318,31 @@
       "agent": "grok",
       "kind": "model-lineup",
       "url": "https://docs.x.ai/developers/models",
-      "notes": "Current Grok/xAI model lineup. Mirror: docs/models/grok.md. 2026-07-06: the page moved — docs.x.ai/docs/models now 308-redirects to docs.x.ai/developers/models (single hop; model detail links under /developers/models/<id>); URL updated here. Verified live 2026-07-11: the overview still highlights Grok 4.5 (grok-4.5) as the flagship model for code and chat, with 500k context and configurable reasoning, plus the Grok Voice API and Imagine API. The previous grok-4.3 / grok-4.20-* / grok-build-0.1 lineup is no longer shown on the overview page; do not infer retirement from absence unless a dedicated xAI retirement/deprecation page names the ids.",
+      "notes": "Current Grok/xAI model lineup. Mirror: docs/models/grok.md. The page moved 2026-07-06 — docs.x.ai/docs/models 308-redirects to docs.x.ai/developers/models (model detail links under /developers/models/<id>). Verified live 2026-07-16: the overview still recommends Grok 4.5 (grok-4.5, 500k context) as the flagship for code and chat, plus the Grok Voice API and Imagine API. 2026-07-16: the older ids are shown again — grok-4.3, grok-4.20-0309-reasoning, grok-4.20-0309-non-reasoning, grok-4.20-multi-agent-0309 (all 1M context) and grok-build-0.1 (256k) appear in the pricing table; the page has no separate model-list section, so these ids are stated via pricing plus recommendation prose. \"Configurable reasoning\" is NOT stated for grok-4.5 (its detail page says only \"Reasoning: Yes\"); the only documented reasoning split is the pre-built grok-4.20 reasoning / non-reasoning variants. No retirement or deprecation page is linked from the overview.",
       "claims": [
-        "grok-4.5 current 500k context",
-        "grok-4.5 configurable reasoning",
+        "grok-4.5 current 500k context flagship for code",
+        "grok-4.5 reasoning yes with no documented effort configuration",
+        "grok-4.3 and grok-4.20-0309-reasoning and grok-4.20-0309-non-reasoning and grok-4.20-multi-agent-0309 1M context in pricing table",
+        "grok-build-0.1 256k context in pricing table",
+        "grok-4.20 reasoning and non-reasoning are pre-built variants not an effort setting",
         "Grok Voice API current",
         "Imagine API image and video generation current",
-        "previous grok-4.3 grok-4.20 and grok-build ids not shown on the current overview",
         "do not infer retirement from absence without a dedicated xAI retirement or deprecation source"
+      ]
+    },
+    {
+      "id": "cursor-model-lineup",
+      "agent": "cursor-cli",
+      "kind": "model-lineup",
+      "url": "https://cursor.com/docs/models-and-pricing",
+      "notes": "Registered 2026-07-16 — docs/models/cursor.md previously had no manifest source, so it sat outside the daily verification loop and its \"Cursor ships no model of its own\" claim went stale unchallenged. cursor.com/docs/models 308-redirects here. Cursor now documents first-party models (Composer 2.5, and Grok 4.5 jointly trained with SpaceXAI) alongside third-party families.",
+      "claims": [
+        "Auto default selects models balancing intelligence cost efficiency and reliability",
+        "Composer 2.5 is Cursor's own model trained to be highly capable for agentic coding",
+        "Composer 1 earlier Cursor model",
+        "Grok 4.5 jointly trained by Cursor and SpaceXAI",
+        "third-party families Anthropic OpenAI Google plus GLM 5.2 and Kimi K2.7 Code",
+        "the pricing table is the model list"
       ]
     }
   ]

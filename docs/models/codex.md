@@ -1,13 +1,15 @@
 # OpenAI Codex — model lineup
 
-Official source: https://developers.openai.com/codex/models
-Last reviewed: 2026-07-11 (verified live against the official Codex models page)
+Official source: https://learn.chatgpt.com/docs/models
+(moved 2026-07-16 — `developers.openai.com/codex/models` now 308-redirects here,
+along with the rest of the Codex doc set)
+Last reviewed: 2026-07-16 (verified live against the official Codex models page)
 
 ## Current shipping models
 
 | Model id | Selection | Notes |
 |---|---|---|
-| `gpt-5.6` | `codex --model gpt-5.6`; `model = "gpt-5.6"` | Current recommended family/default selector shown by the Codex models page. |
+| `gpt-5.6` | `codex --model gpt-5.6`; `model = "gpt-5.6"` | The bare family id. Shown by the models page only as a CLI example (`codex -m gpt-5.6`) — the page does not label it a default selector, so do not assert that. |
 | `gpt-5.6-sol` | `codex -m gpt-5.6-sol` | Flagship GPT-5.6 model for complex coding, computer use, research, and cybersecurity; default Power uses Sol with medium reasoning. |
 | `gpt-5.6-terra` | `codex -m gpt-5.6-terra` | Balanced GPT-5.6 model for everyday work; the page says it is a natural starting point for work previously given to GPT-5.5. |
 | `gpt-5.6-luna` | `codex -m gpt-5.6-luna` | Fast, affordable GPT-5.6 model for clear, repeatable tasks such as extraction, classification, transformation, and structured summaries. |
