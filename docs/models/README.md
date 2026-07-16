@@ -53,7 +53,7 @@ documentation (`kind: "model-lineup"` sources in `docs/official-sources.json`).
 | File | Runtime | Source of truth |
 |---|---|---|
 | `claude.md` | Claude / Claude Code | `docs.anthropic.com` models overview |
-| `codex.md` | OpenAI Codex | `developers.openai.com/codex/models` |
+| `codex.md` | OpenAI Codex | `learn.chatgpt.com/docs/models` |
 | `grok.md` | Grok / xAI | `docs.x.ai` models |
 | `gemini-antigravity.md` | Google Antigravity CLI (`agy`) / Gemini | official Google docs |
 | `cursor.md` | Cursor CLI | `docs.cursor.com` |

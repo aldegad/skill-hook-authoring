@@ -19,11 +19,11 @@ Sources: [Claude Code /goal](https://code.claude.com/docs/en/goal) ·
 [Claude Code commands](https://code.claude.com/docs/en/commands) ·
 [Claude Code checkpointing](https://code.claude.com/docs/en/checkpointing) ·
 [Claude Code subagents](https://code.claude.com/docs/en/sub-agents) ·
-[Codex follow-goals](https://developers.openai.com/codex/use-cases/follow-goals) ·
+[Codex follow-goals](https://learn.chatgpt.com/use-cases/follow-goals) ·
 [Codex goals cookbook](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex) ·
-[Codex hooks](https://developers.openai.com/codex/hooks) ·
-[Codex config reference](https://developers.openai.com/codex/config-reference) ·
-[Codex CLI features](https://developers.openai.com/codex/cli/features) ·
+[Codex hooks](https://learn.chatgpt.com/docs/hooks) ·
+[Codex config reference](https://learn.chatgpt.com/docs/config-file/config-reference) ·
+[Codex CLI](https://learn.chatgpt.com/docs/codex/cli) ·
 [openai/codex source](https://github.com/openai/codex)
 
 ## Claude Code
@@ -134,7 +134,7 @@ native to **both** major runtimes — not the property of any single product.
 
 ### Goals (`/goal`) — active edit·run·verify completion loop (built-in, feature-flagged)
 
-[use-cases/follow-goals](https://developers.openai.com/codex/use-cases/follow-goals) ·
+[use-cases/follow-goals](https://learn.chatgpt.com/use-cases/follow-goals) ·
 [cookbook](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex)
 
 **Codex Goals is not a passive checker — it is an active agentic loop.**
@@ -165,7 +165,7 @@ commands, and tests — the decisive contrast with Claude's `/goal` evaluator
   (openai/codex `codex-rs/tui/src/goal_display.rs`):
   `Usage: /goal [<objective>|clear|edit|pause|resume]`. The progress row's
   buttons also expose edit/pause/resume/clear
-  ([app/commands](https://developers.openai.com/codex/app/commands)).
+  ([reference/commands](https://learn.chatgpt.com/docs/reference/commands)).
 - **`/goal edit` — in-place edit of a running goal (source-verified in
   openai/codex):** loads the current objective into the editor
   (`objective_text_for_edit`), then applies it via
@@ -201,7 +201,7 @@ commands, and tests — the decisive contrast with Claude's `/goal` evaluator
 
 ### Hooks — Stop / SubagentStop (HARD)
 
-[codex/hooks](https://developers.openai.com/codex/hooks)
+[codex hooks](https://learn.chatgpt.com/docs/hooks)
 
 - Codex has a **full lifecycle hooks system** (modeled on Claude Code's).
   Events: `SessionStart` · `SubagentStart` · `PreToolUse` ·
@@ -223,19 +223,19 @@ commands, and tests — the decisive contrast with Claude's `/goal` evaluator
 - **`/review`** (in-session): *"a dedicated reviewer that reads the diff you
   select and reports prioritized, actionable findings without touching your
   working tree."* Report-shaped — **not a pass/fail gate**.
-  [cli/features](https://developers.openai.com/codex/cli/features)
+  [codex/cli](https://learn.chatgpt.com/docs/codex/cli)
 - **`update_plan`** (plan tool) — display/tracking surface, not a gate.
 - **AGENTS.md** — soft instructions (e.g. "Always run `npm test` after
   modifying JS"); merged into the prompt, not an enforced checkpoint.
-  [guides/agents-md](https://developers.openai.com/codex/guides/agents-md)
+  [agent-configuration/agents-md](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
 - **Approval/sandbox modes** (read-only / workspace-write /
   danger-full-access; on-request/never/untrusted/granular) — **safety and
   permission** gates, not completion gates.
-  [agent-approvals-security](https://developers.openai.com/codex/agent-approvals-security)
+  [agent-approvals-security](https://learn.chatgpt.com/docs/agent-approvals-security)
 - **`notify`** — fire-and-forget JSON side channel to an external program
   (`agent-turn-complete`); not a gate.
 - `codex exec` (non-interactive/CI, JSONL), `codex apply`, `codex mcp`
-  (MCP client + server). [cli/reference](https://developers.openai.com/codex/cli/reference)
+  (MCP client + server). [developer-commands](https://learn.chatgpt.com/docs/developer-commands?surface=cli)
 
 ### Enforcement grades (per official docs)
 
