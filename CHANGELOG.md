@@ -5,6 +5,93 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.36 — 2026-07-17
+
+Daily refresh: 63 manifest sources (2 added this run) fetched successfully; all
+200. Antigravity re-rendered dynamically (code blocks hydrated correctly again).
+Billing still paused. The big one: **Grok's two mandatory categories had no
+source at all**, and closing that gap corrected a factual error we had been
+carrying.
+
+### Added
+
+- **Grok project-instructions source — `docs.x.ai/build/features/project-rules`.**
+  Grok was the only tracked runtime with **no `project-instructions` source**, a
+  category the daily prompt marks mandatory. Its instruction-file claims had been
+  riding on a one-line "Agents.md compatibility" aside on the skills/plugins page.
+  A dedicated official page exists and was simply never registered.
+- **Grok cli-invocation source — `docs.x.ai/build/cli/reference`.** Grok also had
+  **no `cli-invocation` source**; its launch/headless claims rode on
+  `headless-scripting`, which is registered under `session-resume`, so the
+  mandatory CLI-spawn category had no anchor of the right kind for this runtime.
+  Adds the subcommand surface: `grok sessions|export|import|worktree|mcp|dashboard|wrap`,
+  `--allow`/`--deny`, `--sandbox <PROFILE>`. Same failure mode as the
+  `cursor-model-lineup` gap caught 2026-07-16 — an official page outside the loop.
+
+### Changed
+
+- **Grok reads six instruction filenames, not three (correction).** We recorded
+  `AGENTS.md`, `Agents.md`, `AGENT.md`. The official project-rules page states
+  Grok also reads **`CLAUDE.md`, `Claude.md`, and `CLAUDE.local.md`** as
+  first-class project rules, plus `*.md` in `.grok/rules/` (`.claude/rules/`,
+  `.cursor/rules/` for compat). Fixed in `SKILL.md` and `compatibility-matrix.md`.
+- **Grok's tree/merge semantics are documented — retired "unknown, verify live".**
+  The matrix told readers to verify against the live engine before depending on
+  ancestor behavior. It is now officially documented: global `~/.grok/` rules,
+  then every directory from repo root down to cwd (cwd only outside a git repo),
+  **every** matching file loads (no first-match-wins, unlike Hermes), deeper files
+  take precedence on conflicts. Grok is also the one runtime that **honors
+  `.gitignore` for rules** — the stated reason `CLAUDE.local.md` stays personal.
+- **Codex plugin overview renamed `apps` → `connectors`.** Vocabulary change on
+  the overview only: *"They can include skills, connectors, or both."* `apps`
+  survives there as a cross-reference and the `plugin.json` manifest **field** is
+  still literally `apps` on the build page — so `plugin-packaging.md` and the
+  matrix stay correct for the field name. Still six components.
+- **Codex `follow-goals` was slimmed to a use-case walkthrough; 3 claims
+  re-anchored, not deleted.** The active-verification sentence and the goal-state
+  list are now verbatim on the goals cookbook, which becomes their anchor. The
+  cookbook also documents a **4th goal state, `budget-limited`** ("Reaching a
+  budget limit is not the same as completing the objective").
+- **`/goal set` never existed.** Setting is the bare `/goal <objective>`;
+  `/goal edit` is anchored on developer-commands. Claim corrected.
+- **"Tighten the goal mid-flight" was mis-anchored to the cookbook.** The cookbook
+  only tightens a *draft before activation*; the mid-flight advice is on
+  follow-goals. Fixed the attribution in `completion-stack.md`.
+- **Codex automations: "schedule work from a task" is gone** (zero hits). The
+  capability survives re-framed around the chat: *"You can create and update
+  scheduled tasks from a ChatGPT or Codex chat."* Vocabulary moved task → chat.
+- **`antigravity-cli-reference` no longer names `keybindings.json`** (zero hits).
+  Its keybinding content is a *default-keybindings* reference (Key → TUI command),
+  not a config-key table for the file. Claim split; `keybindings.json` stays
+  anchored on `cli/using`, which already anchors `settings.json` for the same reason.
+- **`completion-stack.md` cited an unregistered URL.** `learn.chatgpt.com/docs/reference/commands`
+  was outside the verification loop; re-anchored onto the registered
+  developer-commands source, which documents `/goal edit` today.
+
+### Verified (stamps advanced, status unchanged)
+
+- **Agent SDK billing still paused.** The 2026-06-15 change remains paused; the
+  live banner is a verbatim match against the recorded quote. Per the
+  freshness-stamp rule the date advanced 2026-07-11 → 2026-07-17 across the
+  manifest claim, `cli-invocation.md`, and `cloud-automation.md`.
+- **Claude model lineup unchanged** — Fable 5 / Opus 4.8 / Sonnet 5 / Haiku 4.5;
+  Mythos still invitation-only; `claude-opus-4-1-20250805` retiring 2026-08-05.
+  `models/claude.md` stamp advanced 2026-07-11 → 2026-07-17.
+- **Zero drift** across all Grok (docs.x.ai), Hermes, gajae-code, GitHub, and
+  Cursor sources, and 9 of 10 Antigravity sources.
+
+### Notes
+
+- **Grok Build was open-sourced (2026-07-14, Apache-2.0, `github.com/xai-org/grok-build`)
+  — but `docs.x.ai` does not mention it.** A full-corpus check of xAI's own
+  `llms.txt` (1.29 MB) returns **zero** hits for "open source", "Apache", or "MIT";
+  every `github.com` link in the corpus points to `xai-sdk-python`,
+  `xai-cookbook`, or `xai-proto`. Recording the OSS status therefore requires the
+  repo itself as a source — deferred pending an explicit policy call, since it is
+  a source-tier question, not drift. Note the repo also ships 24 official
+  user-guide docs, and this skill already has a "vendor source" evidence tier
+  (`completion-stack.md` source-verifies against `openai/codex`).
+
 ## v1.35 — 2026-07-16
 
 Daily refresh: 61 manifest sources (2 added this run) fetched successfully; all

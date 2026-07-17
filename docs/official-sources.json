@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-07-16",
+  "updated": "2026-07-17",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "nonVendorRule": "A small number of non-vendor runtimes (e.g. gajae-code, a community/MIT project) are tracked from their own project README rather than vendor docs. They must be explicitly flagged as community/non-vendor in the docs, held to the same not-documented discipline, and never presented as official vendor guarantees.",
@@ -55,11 +55,12 @@
         "skills in scheduled tasks",
         "worktrees",
         "manage scheduled tasks on the web",
-        "schedule work from a task",
+        "create and update scheduled tasks from a ChatGPT or Codex chat",
+        "schedule a task inside a chat",
         "worktree cleanup for scheduled tasks",
         "permissions and security model"
       ],
-      "notes": "2026-07-16: the page is now titled \"Scheduled tasks\" and uses lowercase \"scheduled tasks\" throughout — the Thread / Standalone / Project-Scoped \"Automations\" category names are gone, and the page broadened from Codex-specific to ChatGPT-wide (?surface=app). Recurring schedules are RRULE-based."
+      "notes": "2026-07-16: the page is now titled \"Scheduled tasks\" and uses lowercase \"scheduled tasks\" throughout — the Thread / Standalone / Project-Scoped \"Automations\" category names are gone, and the page broadened from Codex-specific to ChatGPT-wide (?surface=app). Recurring schedules are RRULE-based. 2026-07-17: the \"schedule work from a task\" framing is gone (zero hits for \"from a task\"); the capability survives re-framed around the chat — \"You can create and update scheduled tasks from a ChatGPT or Codex chat\" — plus a \"Schedule a task inside a chat\" section. Capability unchanged, vocabulary moved task -> chat."
     },
     {
       "id": "openai-codex-github-action",
@@ -147,10 +148,11 @@
       "agent": "codex",
       "kind": "plugins",
       "url": "https://learn.chatgpt.com/docs/plugins",
-      "notes": "The plugins overview page lists the six components a plugin can contain: skills, apps, MCP servers, browser extensions, hooks, and scheduled task templates (2026-07-16: widened from three — hooks are now named on the overview, not only on the plugins/build page). The build page still documents only skills, apps, MCP servers, and hooks as plugin.json manifest fields; browser extensions and scheduled task templates appear as overview concepts with no stated manifest field.",
+      "notes": "The plugins overview page lists the six components a plugin can contain: skills, connectors, MCP servers, browser extensions, hooks, and scheduled task templates (2026-07-16: widened from three — hooks are now named on the overview, not only on the plugins/build page). The build page still documents only skills, apps, MCP servers, and hooks as plugin.json manifest fields; browser extensions and scheduled task templates appear as overview concepts with no stated manifest field. 2026-07-17: the overview renamed its second component apps -> connectors (\"They can include skills, connectors, or both.\"; \"Connectors: connections to tools like GitHub, Slack, or Google Drive\"). This is a vocabulary change on the overview only — apps survives there as a cross-reference (\"If your plugin includes an app, see Build an app. Apps are MCP-backed integrations.\") and the plugin.json manifest field is still literally apps on the build page, so plugin-packaging.md and the matrix stay correct for the field name.",
       "claims": [
         "skills",
-        "apps",
+        "connectors",
+        "apps remain MCP-backed integrations cross-referenced from the overview",
         "MCP servers",
         "browser extensions",
         "hooks",
@@ -489,6 +491,45 @@
         "GROK_HOOK_NAME",
         "GROK_SESSION_ID",
         "GROK_WORKSPACE_ROOT"
+      ]
+    },
+    {
+      "id": "xai-grok-project-rules",
+      "agent": "grok",
+      "kind": "project-instructions",
+      "url": "https://docs.x.ai/build/features/project-rules",
+      "notes": "Registered 2026-07-17 — Grok was the only tracked runtime with NO project-instructions source, so its instruction-file claims rode on the skills-plugins-marketplaces page's one-line 'Agents.md compatibility' aside and its tree/merge semantics were recorded as unknown/verify-live. This dedicated page (titled 'AGENTS.md') documents the whole surface and retires that unknown. Two corrections it forces: (1) the filename family is SIX names, not three — Grok also reads CLAUDE.md, Claude.md, and CLAUDE.local.md as first-class project rules, so the previously recorded AGENTS.md/Agents.md/AGENT.md list was incomplete; (2) the walk is documented, not unknown. Note the .gitignore behavior is the opposite of Grok's skill discovery: rules honor .gitignore, which is what keeps CLAUDE.local.md out of shared context.",
+      "claims": [
+        "reads AGENTS.md Agents.md AGENT.md CLAUDE.md Claude.md CLAUDE.local.md in each directory",
+        "rules directories .grok/rules/ plus .claude/rules/ and .cursor/rules/ for compatibility",
+        "global rules in ~/.grok/",
+        "walk is global rules then every directory from repo root down to the working directory",
+        "outside a git repo only the working directory is scanned",
+        "deeper files take precedence on conflicts",
+        "nested AGENTS.md scopes to its subtree",
+        "files ignored by .gitignore are skipped keeping CLAUDE.local.md out of shared context",
+        "grok inspect shows discovered rules files paths and token counts"
+      ]
+    },
+    {
+      "id": "xai-grok-cli-reference",
+      "agent": "grok",
+      "kind": "cli-invocation",
+      "url": "https://docs.x.ai/build/cli/reference",
+      "notes": "Registered 2026-07-17 — Grok had no cli-invocation source at all; its launch/headless claims rode on the headless-scripting page, which is registered under kind session-resume, so the CLI-spawn category the daily prompt marks mandatory had no anchor of the right kind for this runtime. Same coverage gap as cursor-model-lineup (caught 2026-07-16) and openai-codex reference/commands. This page keeps deferring the headless flag table (-p, --output-format) to headless-scripting, which stays the anchor for those; what it uniquely documents is the subcommand surface below.",
+      "claims": [
+        "bare grok with no arguments starts the interactive TUI",
+        "grok agent stdio runs as an ACP agent over stdin/stdout",
+        "grok sessions <list|search|delete>",
+        "grok export <session-id> [output] exports a transcript",
+        "grok import [targets...] imports from Claude Code",
+        "grok worktree <list|show|rm|gc> manages git worktrees created for sessions",
+        "grok mcp <list|add|remove|doctor>",
+        "grok dashboard",
+        "grok wrap",
+        "--allow <RULE> and --deny <RULE> permission rules",
+        "--sandbox <PROFILE>",
+        "headless flags -p and --output-format deferred to the headless-scripting page"
       ]
     },
     {
@@ -1001,7 +1042,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli/reference",
-      "notes": "JS-rendered SPA; static fetch returns an empty shell — render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome). Page moved from /docs/cli-reference to /docs/cli/reference (old URL redirects). No headless one-shot flag documented; programmatic use is the Antigravity SDK. The --sandbox / --dangerously-skip-permissions launch overrides and the settings.json path are documented on the cli/using page (antigravity-cli-using), not here. New commands in the core table as of 2026-07-04: /add-dir, /btw, /clear, /diff, /exit, /fast, /logout, /open, /planning, /rename, /statusline, /title, /usage.",
+      "notes": "JS-rendered SPA; static fetch returns an empty shell — render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome). Page moved from /docs/cli-reference to /docs/cli/reference (old URL redirects). No headless one-shot flag documented; programmatic use is the Antigravity SDK. The --sandbox / --dangerously-skip-permissions launch overrides and the settings.json path are documented on the cli/using page (antigravity-cli-using), not here. New commands in the core table as of 2026-07-04: /add-dir, /btw, /clear, /diff, /exit, /fast, /logout, /open, /planning, /rename, /statusline, /title, /usage. 2026-07-17: keybindings.json is not named on this page (zero hits) — its keybinding content is a default-keybindings reference (Key -> TUI command -> behavior, e.g. Esc / cli.escape), not a config-key table for the file. The keybindings.json filename and its path stay anchored on antigravity-cli-using ('File Location: ~/.gemini/antigravity-cli/keybindings.json'), which already anchors the settings.json path for the same reason; the claim was split accordingly.",
       "claims": [
         "interactive TUI launch",
         "core slash commands",
@@ -1018,7 +1059,8 @@
         "/agents subagent manager",
         "/tasks",
         "/statusline /fast /planning /rename /title /usage",
-        "settings.json keybindings.json config key tables",
+        "settings.json config key table",
+        "default keybindings reference table key to TUI command",
         "settings.json toolPermission request-review proceed-in-sandbox always-proceed strict",
         "settings.json artifactReviewPolicy",
         "settings.json enableTerminalSandbox"
@@ -1193,11 +1235,11 @@
       "agent": "claude-code",
       "kind": "billing",
       "url": "https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan",
-      "notes": "Re-verified 2026-07-11: the billing change originally planned for 2026-06-15 is still PAUSED (banner verbatim-unchanged). The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits. The previously announced monthly credit, which would have been available to eligible claimants in connection with these changes, isn't available. We're working to update the plan to better support how users build with Claude subscriptions. When we have an update, we'll share it before anything takes effect.' A line under the banner adds: 'The content below reflects the page before June 15. It's preserved for reference but is no longer taking effect on June 15.' Accounts using an API key continue on pay-as-you-go API billing. The original (paused, not-in-effect) plan described separate monthly credits per plan tier: Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise usage-based $20, Enterprise seat-based Premium seats $200 (Standard seats not eligible).",
+      "notes": "Re-verified 2026-07-17: the billing change originally planned for 2026-06-15 is still PAUSED (banner verbatim-unchanged). The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits. The previously announced monthly credit, which would have been available to eligible claimants in connection with these changes, isn't available. We're working to update the plan to better support how users build with Claude subscriptions. When we have an update, we'll share it before anything takes effect.' A line under the banner adds: 'The content below reflects the page before June 15. It's preserved for reference but is no longer taking effect on June 15.' Accounts using an API key continue on pay-as-you-go API billing. The original (paused, not-in-effect) plan described separate monthly credits per plan tier: Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise usage-based $20, Enterprise seat-based Premium seats $200 (Standard seats not eligible).",
       "claims": [
         "Agent SDK with Claude plan",
         "claude -p headless",
-        "2026-06-15 Agent SDK billing change still paused as of 2026-07-11",
+        "2026-06-15 Agent SDK billing change still paused as of 2026-07-17",
         "Agent SDK and claude -p currently draw from regular subscription usage limits same as interactive use",
         "API key accounts remain pay-as-you-go API billing",
         "original plan described separate monthly credits per plan tier but change is paused"
@@ -1229,7 +1271,7 @@
       "agent": "claude-code",
       "kind": "model-lineup",
       "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
-      "notes": "Current Claude model lineup (ids + reasoning). Mirror: docs/models/claude.md. Verified live 2026-07-11 (docs.anthropic.com 301-redirects to platform.claude.com/docs/en/about-claude/models/overview — same official doc). Current: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (id claude-haiku-4-5-20251001, alias claude-haiku-4-5). Reasoning: adaptive thinking on Fable 5 (always on) / Opus 4.8 / Sonnet 5; Haiku 4.5 uses extended thinking. Also documented but NOT generally available: Claude Mythos 5 (claude-mythos-5) and Claude Mythos Preview (claude-mythos-preview), invitation-only via Project Glasswing. Legacy: Opus 4.7 (→ 4.8), Opus 4.6, Sonnet 4.6 (→ 5), Sonnet 4.5, Opus 4.5; deprecated: claude-opus-4-1-20250805 retiring 2026-08-05.",
+      "notes": "Current Claude model lineup (ids + reasoning). Mirror: docs/models/claude.md. Verified live 2026-07-17 (docs.anthropic.com 301-redirects to platform.claude.com/docs/en/about-claude/models/overview — same official doc). Current: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (id claude-haiku-4-5-20251001, alias claude-haiku-4-5). Reasoning: adaptive thinking on Fable 5 (always on) / Opus 4.8 / Sonnet 5; Haiku 4.5 uses extended thinking. Also documented but NOT generally available: Claude Mythos 5 (claude-mythos-5) and Claude Mythos Preview (claude-mythos-preview), invitation-only via Project Glasswing. Legacy: Opus 4.7 (→ 4.8), Opus 4.6, Sonnet 4.6 (→ 5), Sonnet 4.5, Opus 4.5; deprecated: claude-opus-4-1-20250805 retiring 2026-08-05.",
       "claims": [
         "claude-fable-5 current",
         "claude-opus-4-8 current",
@@ -1291,12 +1333,13 @@
       "agent": "codex",
       "kind": "completion-stack",
       "url": "https://learn.chatgpt.com/use-cases/follow-goals",
-      "notes": "Codex Goals (/goal, features.goals) active completion loop. Mirror: docs/completion-stack.md. Added 2026-07-10 (claims verified 2026-06-15). Key contrast to re-verify each run: the goal loop itself can 'inspect the code, run the relevant commands, make changes, test the result, and continue' (active verification), while completion is declared by the working model itself (no independent evaluator) — the opposite weakness of Claude's /goal.",
+      "notes": "Codex Goals (/goal, features.goals) active completion loop. Mirror: docs/completion-stack.md. Added 2026-07-10 (claims verified 2026-06-15). 2026-07-17: the page was slimmed to a use-case walkthrough and three claims moved off it — the active-verification sentence ('Once the Goal is active, Codex can inspect the code, run the relevant commands, make changes, test the result, and continue until it reaches a stopping condition.') and the goal-state list are now verbatim on the cookbook (openai-codex-goals-cookbook), which becomes their anchor; the cookbook also documents a 4th state, budget-limited. The control surface stated here is now 'Set a goal with /goal <objective>, check the current goal with /goal, and use /goal pause, /goal resume, or /goal clear' — there is no /goal set subcommand anywhere (setting is the bare /goal <objective>), and /goal edit is anchored on the CLI reference (openai-codex-cli-reference: 'Use /goal edit to revise the objective.'). The mid-flight tightening advice lives here, not on the cookbook: 'If the status becomes vague, tighten the goal rather than adding more one-off instructions.'",
       "claims": [
-        "once the Goal is active Codex can inspect the code run the relevant commands make changes test the result and continue",
-        "goal states active paused complete",
+        "set a goal with /goal <objective> bare /goal checks the current goal",
+        "/goal pause /goal resume /goal clear",
+        "no /goal set subcommand setting is the bare /goal <objective>",
         "features.goals flag codex features enable goals",
-        "/goal set /goal edit /goal pause /goal resume /goal clear",
+        "tighten the goal mid-flight when the status becomes vague",
         "no separate independent completion evaluator working model declares complete"
       ]
     },
@@ -1305,12 +1348,15 @@
       "agent": "codex",
       "kind": "completion-stack",
       "url": "https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex",
-      "notes": "Official Codex goals cookbook. Mirror: docs/completion-stack.md. Added 2026-07-10 (claims verified 2026-06-15). Anchor for the 6-element goal contract and the evidence-based completion discipline verbatim.",
+      "notes": "Official Codex goals cookbook. Mirror: docs/completion-stack.md. Added 2026-07-10 (claims verified 2026-06-15). Anchor for the 6-element goal contract and the evidence-based completion discipline verbatim. 2026-07-17: now also the anchor for the active-verification sentence and the goal-state list, both of which moved off the slimmed follow-goals page. Correction — the cookbook only tightens a draft BEFORE activation ('review that draft and tighten the success condition, verification surface, constraints, and blocked stop condition before activating it'); the mid-flight tightening advice is on follow-goals, so the 'tighten the goal mid-flight' claim was mis-anchored here and has moved. Documents a 4th goal state beyond active/paused/complete: 'A Goal can be active, paused, complete, or budget-limited.' plus 'Reaching a budget limit is not the same as completing the objective.'",
       "claims": [
         "goal contract outcome verification surface constraints boundaries iteration policy blocked stop",
         "a Goal should not be marked complete because the model believes it is probably done",
         "complete only after the objective is checked against relevant files tests logs benchmark output generated artifacts or other concrete evidence",
-        "tighten the goal mid-flight"
+        "tighten the draft success condition before activating it",
+        "once the Goal is active Codex can inspect the code run the relevant commands make changes test the result and continue",
+        "goal states active paused complete budget-limited",
+        "reaching a budget limit is not the same as completing the objective"
       ]
     },
     {

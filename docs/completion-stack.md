@@ -1,8 +1,9 @@
 # Native Completion & Verification Stacks (Claude Code · Codex)
 
-Last reviewed: 2026-07-10 (claims verified against official docs and vendor
+Last reviewed: 2026-07-17 (claims verified against official docs and vendor
 source 2026-06-15; migrated into this skill from operator research pages
-2026-07-10)
+2026-07-10; Codex goal claims re-anchored 2026-07-17 after the follow-goals
+page was slimmed to a use-case walkthrough)
 
 How Claude Code and Codex natively force work to finish **with evidence** —
 the built-in goal gates, Stop hooks, and verification skills — and where each
@@ -165,7 +166,10 @@ commands, and tests — the decisive contrast with Claude's `/goal` evaluator
   (openai/codex `codex-rs/tui/src/goal_display.rs`):
   `Usage: /goal [<objective>|clear|edit|pause|resume]`. The progress row's
   buttons also expose edit/pause/resume/clear
-  ([reference/commands](https://learn.chatgpt.com/docs/reference/commands)).
+  ([developer-commands](https://learn.chatgpt.com/docs/developer-commands?surface=cli),
+  the registered source — it states *"Use `/goal edit` to revise the objective."*
+  and *"`/goal` | Set, edit, pause, resume, view, or clear a task goal."*).
+  There is no `/goal set` subcommand — setting is the bare `/goal <objective>`.
 - **`/goal edit` — in-place edit of a running goal (source-verified in
   openai/codex):** loads the current objective into the editor
   (`objective_text_for_edit`), then applies it via
@@ -180,7 +184,9 @@ commands, and tests — the decisive contrast with Claude's `/goal` evaluator
   Adjust the current turn to pursue the updated objective. Avoid continuing
   work that only served the previous objective..."* plus the remaining token
   budget. Net effect: **re-aim a goal mid-flight without resetting
-  progress** (the cookbook's "tighten the goal" without losing usage).
+  progress** (the follow-goals page's "tighten the goal rather than adding more
+  one-off instructions" without losing usage; the cookbook's own tightening
+  advice applies to a *draft before activation*, not mid-flight).
   Typing a fresh `/goal <objective>` over an active goal is the *other* path:
   `ReplaceExisting` (reset, with a "replace" confirmation).
 - **vs Claude**: Claude's `/goal` is **replace-only** (a new `/goal` swaps the
