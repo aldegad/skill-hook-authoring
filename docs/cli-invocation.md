@@ -169,6 +169,23 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
   (JSONL); Claude/Cursor `--output-format json|stream-json`; Grok
   `--output-format json`. Hermes and Antigravity document **no** headless JSON
   output flag.
+- **Source availability — Grok Build is the one tracked vendor CLI whose source
+  is published.** SpaceXAI open-sourced the Grok Build harness and TUI on
+  2026-07-14 under **Apache-2.0** at `github.com/xai-org/grok-build`; external
+  contributions are not accepted and issues are disabled, so it is readable, not
+  participatory. Practical effect: behavior you cannot get a doc answer for can be
+  read from the implementation — but that is **implementation, not a vendor
+  contract**, so label any such finding `source-verified` with its path and expect
+  it to move without notice (`policy.vendorSourceRule`). Note the licence is
+  attested **only by the repo**: xAI's own docs never mention it (a full-corpus
+  check of `docs.x.ai/llms.txt` returns zero hits for "open source"/"Apache"/"MIT"),
+  which is why `xai-grok-build-repo` exists as a narrow `source-availability`
+  source while `docs.x.ai` stays canonical for every behavior claim. Every other
+  tracked vendor CLI (Codex, Claude Code, `agy`, `cursor-agent`, Hermes) ships as a
+  distributed binary with no published source — and for Antigravity specifically,
+  the transition blog does **not** state the OSS repo's licence, so no Apache-2.0
+  claim is made for it. (The Codex *goal internals* in `completion-stack.md` are
+  source-verified against `openai/codex` under the same rule.)
 - **Claude Code Agent SDK billing (status as of 2026-07-17):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token, requires a subscription) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-07-17.)
 - Session resume identifiers differ (UUID session id vs. human name vs.
   `--last` / `-1` vs. `--conversation <uuid>`). Store a resume handle in the form
