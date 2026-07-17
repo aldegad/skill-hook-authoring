@@ -91,7 +91,7 @@ Do not assume every non-Claude runtime reads `AGENTS.md`. Use the officially doc
 |---|---|
 | Codex | `AGENTS.override.md`, `AGENTS.md`, then configured `project_doc_fallback_filenames` |
 | Claude Code | `CLAUDE.md`, `.claude/CLAUDE.md`, `CLAUDE.local.md`, and `.claude/rules/`; Claude docs explicitly say Claude reads `CLAUDE.md`, not `AGENTS.md` |
-| Grok / xAI | `AGENTS.md`, `Agents.md`, `AGENT.md` |
+| Grok / xAI | `AGENTS.md`, `Agents.md`, `AGENT.md`, `CLAUDE.md`, `Claude.md`, `CLAUDE.local.md`, plus `.grok/rules/` (and `.claude/rules/`, `.cursor/rules/` for compatibility); global rules in `~/.grok/`, then repo root down to cwd, deeper wins; `.gitignore`d files are skipped |
 | Hermes Agent | `.hermes.md` / `HERMES.md`, then `AGENTS.md`, then `CLAUDE.md`, then `.cursorrules`, then `.cursor/rules/*.mdc`; `SOUL.md` is global identity, not project instructions |
 | Antigravity CLI (was Gemini CLI) | Reads `GEMINI.md` and `AGENTS.md` (global `~/.gemini/GEMINI.md`); Gemini CLI's `GEMINI.md` hierarchical memory is the legacy form |
 | Cursor CLI | `.cursor/rules`, plus project-root `AGENTS.md` and `CLAUDE.md` |
@@ -106,7 +106,8 @@ For cross-agent repo rules, maintain the smallest set of files that each runtime
 - **Codex** walks *root → down to cwd*, ≤ 1 file per dir, concatenated with closer files overriding, built **once per run** under a 32 KiB cap — and has **no subdirectory lookahead** (never reads below cwd).
 - **Gemini / Antigravity** concatenates global + ancestor + the **entire subtree below cwd** into the prompt sent with **every request** (`.gitignore`-aware) — always in context, not lazy like Claude.
 - **Hermes** loads a **single** project file (first match: `.hermes.md` → `AGENTS.md` → `CLAUDE.md` → `.cursorrules` → `.cursor/rules/*.mdc`, no merge) but does on-demand discovery of the dir + 5 parents (each checked at most once per session) during file ops.
-- **Cursor** documents project-root `AGENTS.md`/`CLAUDE.md` only; tree-walk/merge is **not documented**. **Grok** claims Claude-compat but its tree semantics are **unknown** — verify live.
+- **Grok** loads global `~/.grok/` rules, then **every** directory from the repo root down to cwd (cwd only outside a git repo), with **deeper files taking precedence on conflicts**. Unlike Hermes it does *not* stop at the first match — it reads **every** matching name in a directory, across a six-name family (`AGENTS.md`, `Agents.md`, `AGENT.md`, `CLAUDE.md`, `Claude.md`, `CLAUDE.local.md`) plus `.grok/rules/` (`.claude/rules/`, `.cursor/rules/` for compat). It is the one runtime that **honors `.gitignore` for rules**, which is what keeps `CLAUDE.local.md` personal and out of shared context. `grok inspect` lists what was discovered, with token counts.
+- **Cursor** documents project-root `AGENTS.md`/`CLAUDE.md` only; tree-walk/merge is **not documented**.
 
 Implication for cross-engine repos: a module-specific instruction placed in a deep subdirectory is seen eagerly by Gemini, lazily by Claude/Hermes, and **never** by Codex (below cwd) — keep anything Codex must obey at or above the launch directory.
 
