@@ -5,7 +5,35 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
-## v1.36 — 2026-07-17
+## v1.37 — 2026-07-18
+
+Daily refresh: low-noise, freshness-stamps only. Re-verified the two
+time-sensitive claim classes against their official pages and advanced their
+stamps to today; no structural fact changed, nothing added or retired.
+
+### Changed
+
+- **Billing (Claude Agent SDK / `claude -p`) — still paused, stamp advanced to
+  2026-07-18.** Re-fetched the support page; the "Update June 15" pause banner is
+  verbatim-unchanged (Agent SDK, `claude -p`, and third-party app usage still
+  draw from the subscription usage limits; the announced monthly credit remains
+  unavailable). Bumped the `as of`/`verified` dates in `cli-invocation.md`,
+  `cloud-automation.md`, and the manifest billing note + claim.
+- **Model lineups — re-verified, `Last reviewed:` advanced to 2026-07-18.**
+  Claude (`platform.claude.com`), Codex (`learn.chatgpt.com/docs/models`), Grok
+  (`docs.x.ai/developers/models`), and Cursor (`cursor.com/docs/models-and-pricing`)
+  all match the recorded ids/tiers/retirement status with no drift (Fable 5 /
+  Opus 4.8 / Sonnet 5 / Haiku 4.5; GPT-5.6 sol/terra/luna; Grok 4.5; Composer 2.5).
+  Advanced the four `docs/models/*.md` stamps and the matching manifest
+  `Verified live` dates per the time-sensitive freshness-stamp rule.
+
+### Verified unchanged (no edit)
+
+- Spot-checked the highest-churn mandatory-category pages — Codex `AGENTS.md`
+  discovery, Grok project-rules (six-name family + walk), Claude memory
+  (`CLAUDE.md` loading mechanics) — all match baseline. Structural stamps
+  (e.g. `completion-stack.md`) left as-is, since re-confirming a stable fact does
+  not advance its stamp. `check-official-sources.mjs` PASS (64 sources, all 200).
 
 Daily refresh: 63 manifest sources (2 added this run) fetched successfully; all
 200. Antigravity re-rendered dynamically (code blocks hydrated correctly again).
