@@ -3,6 +3,7 @@
   "updated": "2026-07-17",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
+    "vendorSourceRule": "Narrow exception to sourceRule, for facts a vendor's docs structurally cannot attest — not a general licence to read code. A vendor-owned artifact (its public source repo) may anchor ONLY: (a) source availability and licence, and (b) implementation internals explicitly labelled source-verified with the file path, where no doc states them. It may never anchor a capability/compatibility claim that a vendor doc already covers — that claim keeps its doc owner, so the two never split. Source-verified facts are implementation, not a vendor contract: they can change without notice and must be re-verified like any other claim. Current holders: xai-grok-build-repo (kind source-availability; Grok Build is Apache-2.0 but docs.x.ai never says so) and docs/completion-stack.md (Codex /goal internals verified against openai/codex).",
     "nonVendorRule": "A small number of non-vendor runtimes (e.g. gajae-code, a community/MIT project) are tracked from their own project README rather than vendor docs. They must be explicitly flagged as community/non-vendor in the docs, held to the same not-documented discipline, and never presented as official vendor guarantees.",
     "mainBranchRule": "Daily automation must create a PR; it must not push directly to main.",
     "allowedHosts": [
@@ -491,6 +492,22 @@
         "GROK_HOOK_NAME",
         "GROK_SESSION_ID",
         "GROK_WORKSPACE_ROOT"
+      ]
+    },
+    {
+      "id": "xai-grok-build-repo",
+      "agent": "grok",
+      "kind": "source-availability",
+      "url": "https://github.com/xai-org/grok-build",
+      "notes": "Registered 2026-07-17. SCOPE IS DELIBERATELY NARROW — this source owns ONLY the source-availability/licensing fact, which no docs.x.ai page attests. It does NOT own behavior claims: docs.x.ai remains canonical for how Grok behaves (rules discovery, skills, plugins, hooks, headless, sessions, models), and this repo must not be cited for them, or the same claim would have two owners. Why it needs its own source at all: SpaceXAI open-sourced the Grok Build CLI on 2026-07-14 under Apache-2.0, but xAI's documentation never says so — a full-corpus check of xAI's own machine-readable export (docs.x.ai/llms.txt, 1.29 MB) returns ZERO hits for 'open source', 'open-source', 'Apache', 'MIT License', 'BSD', 'GPL', or 'self-host', and every github.com link in that corpus points to xai-sdk-python, xai-cookbook, or xai-proto — never to a CLI source repo. Every 'licen*' hit in the docs is about Grok Business seat licenses, not software licensing. So the docs-only discipline structurally cannot record this fact, and the vendor's own repo is the primary attestation. Precedent for a vendor-source tier already exists in this skill: docs/completion-stack.md source-verifies Codex goal internals against openai/codex. NOTE the repo also ships 24 official user-guide docs under crates/codegen/xai-grok-pager/docs/user-guide/ (skills, plugins, hooks, project-rules, headless-mode, sessions...). They are deliberately NOT registered: docs.x.ai covers the same ground and is canonical, so registering them would split the SSoT. Revisit only if docs.x.ai drops a category the repo still documents.",
+      "claims": [
+        "SpaceXAI's coding agent harness and TUI published at github.com/xai-org/grok-build",
+        "Apache License 2.0",
+        "repository created 2026-07-14",
+        "external contributions are not accepted",
+        "GitHub issues are disabled on the repository",
+        "ships official user-guide docs under crates/codegen/xai-grok-pager/docs/user-guide/ (not registered — docs.x.ai is canonical for behavior)",
+        "docs.x.ai makes no open-source, license, or source-availability claim about Grok Build (llms.txt full-corpus check, zero hits)"
       ]
     },
     {

@@ -83,14 +83,21 @@ carrying.
 ### Notes
 
 - **Grok Build was open-sourced (2026-07-14, Apache-2.0, `github.com/xai-org/grok-build`)
-  — but `docs.x.ai` does not mention it.** A full-corpus check of xAI's own
-  `llms.txt` (1.29 MB) returns **zero** hits for "open source", "Apache", or "MIT";
-  every `github.com` link in the corpus points to `xai-sdk-python`,
-  `xai-cookbook`, or `xai-proto`. Recording the OSS status therefore requires the
-  repo itself as a source — deferred pending an explicit policy call, since it is
-  a source-tier question, not drift. Note the repo also ships 24 official
-  user-guide docs, and this skill already has a "vendor source" evidence tier
-  (`completion-stack.md` source-verifies against `openai/codex`).
+  — recorded, with a deliberately narrow scope.** xAI's docs never say so: a
+  full-corpus check of their own `llms.txt` (1.29 MB) returns **zero** hits for
+  "open source", "Apache", or "MIT", and every `github.com` link in the corpus
+  points to `xai-sdk-python`, `xai-cookbook`, or `xai-proto`. The docs-only rule
+  therefore *structurally cannot* record this fact, so `xai-grok-build-repo` was
+  registered under a new `source-availability` kind and a new
+  `policy.vendorSourceRule` was added to name the exception — the manifest's own
+  `sourceRule` would otherwise contradict the source sitting under it.
+  **Scope guard:** the repo owns only licensing/source-availability;
+  `docs.x.ai` stays canonical for every behavior claim, so no claim gets two
+  owners. The repo's 24 bundled user-guide docs were **deliberately not
+  registered** for the same reason — `docs.x.ai` already covers that ground, and
+  registering them would split the SSoT. The precedent for a vendor-source tier
+  already existed (`completion-stack.md` source-verifies Codex goal internals
+  against `openai/codex`); this run just made the rule explicit.
 
 ## v1.35 — 2026-07-16
 
