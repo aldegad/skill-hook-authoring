@@ -1,18 +1,21 @@
 # Google Antigravity CLI (`agy`) / Gemini — model lineup
 
-Official source: https://antigravity.google (JS-rendered SPA — a static fetch
-returns an empty shell; render dynamically before claiming a change) plus the
-Google Gemini model docs.
-Last reviewed: 2026-07-02 (**`unverified this run`** — Antigravity's site is a
-SPA and the Gemini model ids below are seeded from the Nous router catalog, not
-confirmed against an official Google model page this run.)
+Official source: https://ai.google.dev/gemini-api/docs/models (the official Google
+Gemini model page; render dynamically — page last-updated 2026-07-16), plus
+https://antigravity.google (JS-rendered SPA — a static fetch returns an empty
+shell; render dynamically before claiming a change).
+Last reviewed: 2026-07-19 (verified live against the official Google Gemini model
+page)
 
-## Current shipping models (seed — verify against official docs)
+## Current shipping models
 
-| Model id (seed) | Notes |
-|---|---|
-| `gemini-3.1-pro` | Available via the Hermes/Nous router as `google/gemini-3.1-pro-preview`; confirm the native Gemini id, `-preview` status, and tier. |
-| `gemini-3.5-flash` | Router id `google/gemini-3.5-flash`; low-latency flash tier. |
+| Model | Status | Notes |
+|---|---|---|
+| `gemini-3.5-flash` | GA | Google's **most intelligent model** — "sustained frontier performance on agentic and coding tasks". The frontier tier, and the doc's own canonical example of a stable model id. |
+| `gemini-3.1-pro` | **Preview** | Advanced intelligence for complex problem-solving and agentic + vibe coding. |
+| `gemini-3.1-flash-lite` | GA | "frontier-class performance rivaling larger models at a fraction of the cost". |
+| Gemini 3 Flash | **Preview** | current Flash-generation preview. |
+| Antigravity Agent | **Preview** | managed general-purpose agent model that plans, reasons, and executes code in an isolated Linux sandbox. |
 
 - **Antigravity CLI** (`agy`) is the Gemini CLI successor; Gemini CLI itself
   stopped serving individual Pro/Ultra/free users as of **2026-06-18** (enterprise
@@ -24,7 +27,10 @@ confirmed against an official Google model page this run.)
 ## Retired / superseded
 
 - Gemini CLI (individual users) retired 2026-06-18, replaced by Antigravity CLI
-  (`agy`). Specific Gemini model retirements are `unverified this run`.
+  (`agy`).
+- **Shut down:** Gemini 2.0 Flash, Gemini 2.0 Flash-Lite, Gemini 3.1 Flash-Lite
+  Preview, Gemini 3 Pro Preview.
+- **Deprecated:** Imagen 4.
 
 ## Boundaries
 
