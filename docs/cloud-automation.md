@@ -1,6 +1,6 @@
 # Cloud Automation
 
-Last reviewed: 2026-07-18
+Last reviewed: 2026-07-19
 
 Keep this repo's compatibility docs current by running a daily agent that reads
 `docs/official-sources.json`, fetches the official vendor URLs, and opens a pull
@@ -26,7 +26,7 @@ against the subscription usage pool, and a present API key suppresses the
 `launchd`/`cron` job calling `claude -p` look tempting, but the primary
 drawback is **reliability**: a local job fires only when the machine is awake
 at the scheduled time, while a cloud Routine runs regardless of laptop state.
-Note: as of 2026-07-18 the billing difference described here previously (a
+Note: as of 2026-07-19 the billing difference described here previously (a
 separate monthly Agent SDK credit) remains **paused** — `claude -p` and
 Agent SDK usage on subscription plans draw from the same usage pool as
 interactive sessions (no separate per-run credit). For `ANTHROPIC_API_KEY` users billing remains
@@ -89,11 +89,22 @@ always waits for a human. This is the lightweight path — the agent triggers th
 gate, the gate's exit code decides — and it needs no GitHub Actions or
 branch-protection setup.
 
+When the gate declines and leaves a PR open, the reviewer learns about it by
+watching the repository with a custom notification setting for pull requests;
+GitHub delivers those notifications to the web inbox, GitHub Mobile, and
+verified email addresses.
+
 For manual edits, run `node scripts/check-official-sources.mjs --write-report`
-locally before pushing. Native GitHub auto-merge (`gh pr merge --auto` gated on
-branch protection + required checks) remains a valid alternative — the `github`
-sources in `docs/official-sources.json` cover it — but it is not required for the
-gate above.
+locally before pushing. Native GitHub auto-merge remains a valid alternative — the
+`github-auto-merge` source in `docs/official-sources.json` covers it — but it is
+not required for the gate above, and it has its own prerequisites: auto-merge
+must be **enabled for the repository** before it can be used on a pull request
+(a repo-level setting, not just branch protection), the option to enable it is
+**shown only on pull requests that cannot be merged immediately**, and write
+permission is required. GitHub disables auto-merge again if someone without
+write permission pushes to the head branch, or if the base branch is switched.
+The `gh pr merge --auto` invocation is a GitHub CLI surface, not something the
+`github-auto-merge` docs page documents.
 
 ## Keeping Local Checkouts In Sync
 

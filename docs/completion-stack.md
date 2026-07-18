@@ -1,6 +1,6 @@
 # Native Completion & Verification Stacks (Claude Code · Codex)
 
-Last reviewed: 2026-07-17 (claims verified against official docs and vendor
+Last reviewed: 2026-07-19 (claims verified against official docs and vendor
 source 2026-06-15; migrated into this skill from operator research pages
 2026-07-10; Codex goal claims re-anchored 2026-07-17 after the follow-goals
 page was slimmed to a use-case walkthrough)
@@ -87,6 +87,10 @@ installed" — it is there.
   model for an `{"ok":true|false}` verdict — this is exactly the primitive
   `/goal` wraps.
 - **SubagentStop hook**: same block/continue at subagent termination.
+- Both Stop and SubagentStop also support
+  `hookSpecificOutput.additionalContext` — non-error feedback injected for
+  Claude while the conversation **continues** (as opposed to `decision:"block"`
+  / exit 2, which forces continuation).
 - Completion-relevant events: `Stop` · `SubagentStop` (blockable) /
   `PostToolUse` (e.g. lint-after-edit verification triggers) /
   `UserPromptSubmit` · `PreToolUse` (policy enforcement) / `SessionStart` ·
@@ -167,8 +171,9 @@ commands, and tests — the decisive contrast with Claude's `/goal` evaluator
   `Usage: /goal [<objective>|clear|edit|pause|resume]`. The progress row's
   buttons also expose edit/pause/resume/clear
   ([developer-commands](https://learn.chatgpt.com/docs/developer-commands?surface=cli),
-  the registered source — it states *"Use `/goal edit` to revise the objective."*
-  and *"`/goal` | Set, edit, pause, resume, view, or clear a task goal."*).
+  the registered source — it states *"`/goal` | Set, edit, pause, resume, view,
+  or clear a task goal."*; the narrower sentence *"Use `/goal edit` to revise the
+  objective."* is `unverified this run`).
   There is no `/goal set` subcommand — setting is the bare `/goal <objective>`.
 - **`/goal edit` — in-place edit of a running goal (source-verified in
   openai/codex):** loads the current objective into the editor
@@ -240,7 +245,8 @@ commands, and tests — the decisive contrast with Claude's `/goal` evaluator
   [agent-approvals-security](https://learn.chatgpt.com/docs/agent-approvals-security)
 - **`notify`** — fire-and-forget JSON side channel to an external program
   (`agent-turn-complete`); not a gate.
-- `codex exec` (non-interactive/CI, JSONL), `codex apply`, `codex mcp`
+- `codex exec` (non-interactive/CI, JSONL), `codex apply` (`unverified this
+  run`), `codex mcp`
   (MCP client + server). [developer-commands](https://learn.chatgpt.com/docs/developer-commands?surface=cli)
 
 ### Enforcement grades (per official docs)

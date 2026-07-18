@@ -1,8 +1,8 @@
 # Claude / Claude Code — model lineup
 
 Official source: https://docs.anthropic.com/en/docs/about-claude/models/overview
-(301-redirects to `platform.claude.com/docs/en/about-claude/models/overview` — same official doc)
-Last reviewed: 2026-07-18 (verified live against the official models overview)
+(301-redirects to `platform.claude.com/docs/en/docs/about-claude/models/overview` — same official doc)
+Last reviewed: 2026-07-19 (verified live against the official models overview)
 
 ## Current shipping models
 
@@ -14,10 +14,10 @@ Last reviewed: 2026-07-18 (verified live against the official models overview)
 | Claude Haiku 4.5 | `claude-haiku-4-5-20251001` (alias `claude-haiku-4-5`) | extended thinking | Low-latency / low-cost tier. 200k context. |
 
 - The current generation uses **adaptive thinking** (Fable 5: always on); Haiku
-  4.5 is the one current model still on **extended thinking**. The numeric
+  4.5 is the one current model still on **extended thinking**. The
   `effort` / `ultracode` labels remain a **Claude Code / caller-layer** selector,
-  not distinct vendor model ids — describe effort tiers as "as the CLI exposes
-  them".
+  not distinct vendor model ids — the CLI reference documents `--effort` with the
+  named options `low`, `medium`, `high`, `xhigh`, `max`, `ultracode`.
 - **Documented but not generally available:** Claude Mythos 5 (`claude-mythos-5`)
   and Claude Mythos Preview (`claude-mythos-preview`) — invitation-only, limited
   availability to approved customers in Project Glasswing (defensive cybersecurity

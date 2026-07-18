@@ -3,13 +3,12 @@
 Official source: https://learn.chatgpt.com/docs/models
 (moved 2026-07-16 — `developers.openai.com/codex/models` now 308-redirects here,
 along with the rest of the Codex doc set)
-Last reviewed: 2026-07-18 (verified live against the official Codex models page)
+Last reviewed: 2026-07-19 (verified live against the official Codex models page)
 
 ## Current shipping models
 
 | Model id | Selection | Notes |
 |---|---|---|
-| `gpt-5.6` | `codex --model gpt-5.6`; `model = "gpt-5.6"` | The bare family id. Shown by the models page only as a CLI example (`codex -m gpt-5.6`) — the page does not label it a default selector, so do not assert that. |
 | `gpt-5.6-sol` | `codex -m gpt-5.6-sol` | Flagship GPT-5.6 model for complex coding, computer use, research, and cybersecurity; default Power uses Sol with medium reasoning. |
 | `gpt-5.6-terra` | `codex -m gpt-5.6-terra` | Balanced GPT-5.6 model for everyday work; the page says it is a natural starting point for work previously given to GPT-5.5. |
 | `gpt-5.6-luna` | `codex -m gpt-5.6-luna` | Fast, affordable GPT-5.6 model for clear, repeatable tasks such as extraction, classification, transformation, and structured summaries. |
@@ -18,10 +17,13 @@ Last reviewed: 2026-07-18 (verified live against the official Codex models page)
 | `gpt-5.4` | `codex -m gpt-5.4` | Other model: frontier model for professional work with strong coding, reasoning, tool use, and agentic workflow capabilities. |
 | `gpt-5.4-mini` | `codex -m gpt-5.4-mini` | Other model: fast, efficient mini model for responsive coding tasks and subagents. |
 
+- The models page lists exactly the seven ids above. The bare family id `gpt-5.6`
+  appears only as CLI-example shorthand (`codex -m gpt-5.6`), not as a listed
+  model id — do not treat it as a documented selector.
 - Availability is shown per surface on the models page. Static text extraction
   lists the same surface labels for each model but does not preserve icon state,
   so do not infer an availability matrix from text-only fetches. The page still
-  says you cannot change the default model for Codex cloud tasks.
+  says you can't change the default model for Codex cloud chats.
 - Reasoning effort is documented as a selector: Low, Medium (default), High,
   Extra High, Max, and Ultra. The page says there is no exact mapping from GPT-5.5
   reasoning efforts to GPT-5.6; try familiar tasks at a lower setting and adjust.

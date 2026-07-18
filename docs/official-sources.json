@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-07-18",
+  "updated": "2026-07-19",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "vendorSourceRule": "Narrow exception to sourceRule, for facts a vendor's docs structurally cannot attest — not a general licence to read code. A vendor-owned artifact (its public source repo) may anchor ONLY: (a) source availability and licence, and (b) implementation internals explicitly labelled source-verified with the file path, where no doc states them. It may never anchor a capability/compatibility claim that a vendor doc already covers — that claim keeps its doc owner, so the two never split. Source-verified facts are implementation, not a vendor contract: they can change without notice and must be re-verified like any other claim. Current holders: xai-grok-build-repo (kind source-availability; Grok Build is Apache-2.0 but docs.x.ai never says so) and docs/completion-stack.md (Codex /goal internals verified against openai/codex).",
@@ -15,6 +15,7 @@
       "docs.x.ai",
       "developers.googleblog.com",
       "google-gemini.github.io",
+      "ai.google.dev",
       "antigravity.google",
       "hermes-agent.nousresearch.com",
       "docs.cursor.com",
@@ -93,12 +94,13 @@
       "agent": "codex",
       "kind": "skills",
       "url": "https://learn.chatgpt.com/docs/build-skills",
+      "notes": "Verified live 2026-07-19: skill roots are a flat four-level hierarchy, not a cwd-upward walk — $REPO_ROOT/.agents/skills, then $HOME/.agents/skills, then /etc/codex/skills, then built-in.",
       "claims": [
         "Agent Skills",
         "SKILL.md",
-        "repo .agents/skills",
-        "cwd to repo root scan",
-        "user ~/.agents/skills",
+        "repo $REPO_ROOT/.agents/skills",
+        "flat four-level skill root hierarchy repo then home then /etc/codex/skills then built-in, not a cwd-upward walk",
+        "user $HOME/.agents/skills",
         "admin /etc/codex/skills",
         "system skills",
         "symlinked skill folders",
@@ -133,15 +135,21 @@
       "agent": "codex",
       "kind": "hooks",
       "url": "https://learn.chatgpt.com/docs/hooks",
+      "notes": "Verified live 2026-07-19. MAJOR REVERSAL of the previously recorded matcher behavior: the page now carries a \"Matcher patterns\" section stating 'The `matcher` field is a regex string that filters when hooks fire. Use \"*\", \"\", or omit `matcher` entirely to match every occurrence of a supported event.' — so a literal \"*\" is match-all, NOT an invalid regex that silently matches nothing. Codex and Claude therefore agree on \"*\"/\"\"/omitted match-all semantics. Two events ignore the field outright: UserPromptSubmit and Stop ('Any configured matcher is ignored for this event'). Parsed-but-unsupported fields split into two distinct failure modes: (1) hook run marked failed while the tool call continues — PreToolUse permissionDecision \"ask\", legacy decision \"approve\", continue: false, stopReason, suppressOutput; and PostToolUse updatedMCPToolOutput plus suppressOutput; (2) FAIL CLOSED — PermissionRequest updatedInput / updatedPermissions / interrupt are reserved. Handler types: only type \"command\" runs; prompt and agent handlers are parsed but skipped, and `async` is parsed but async command hooks are unsupported so those handlers are skipped.",
       "claims": [
         "lifecycle hooks",
         "hook payloads",
         "permission decisions",
-        "async hooks not yet implemented",
-        "prompt handler type not yet implemented",
-        "agent handler type not yet implemented",
-        "updatedMCPToolOutput not yet implemented",
-        "suppressOutput not yet implemented"
+        "matcher is a regex string; \"*\", \"\", or omitted matches every occurrence of a supported event",
+        "UserPromptSubmit ignores any configured matcher",
+        "Stop ignores any configured matcher",
+        "PreToolUse permissionDecision ask, legacy decision approve, continue false, stopReason, suppressOutput are parsed but unsupported — hook run marked failed and the tool call continues",
+        "PostToolUse updatedMCPToolOutput and suppressOutput parsed but unsupported — hook run marked failed and the tool call continues",
+        "PermissionRequest updatedInput updatedPermissions interrupt are reserved and fail closed",
+        "async parsed but async command hooks unsupported so handlers are skipped",
+        "only type command handlers run",
+        "prompt handler type parsed but skipped",
+        "agent handler type parsed but skipped"
       ]
     },
     {
@@ -167,7 +175,7 @@
       "agent": "codex",
       "kind": "plugins",
       "url": "https://learn.chatgpt.com/docs/build-plugins",
-      "notes": "2026-07-06: the page now documents plugin-hook environment variables — 'Plugin hook commands receive the Codex-specific environment variables PLUGIN_ROOT and PLUGIN_DATA. ... Codex also sets CLAUDE_PLUGIN_ROOT and CLAUDE_PLUGIN_DATA for compatibility with existing plugin hooks.' The plugin.json hooks field accepts a single path or an array (default hooks/hooks.json), with ${PLUGIN_ROOT} substitution in commands. 2026-07-07: the hooks manifest field is broader — 'The manifest field can be a single path, an array of paths, an inline hooks object, or an array of inline hooks objects.' Also documented: marketplace file locations (repo $REPO_ROOT/.agents/plugins/marketplace.json, legacy-compatible $REPO_ROOT/.claude-plugin/marketplace.json, personal ~/.agents/plugins/marketplace.json), the codex plugin marketplace add/list/upgrade/remove CLI, and the install cache ~/.codex/plugins/cache/$MARKETPLACE_NAME/$PLUGIN_NAME/$VERSION/ ($VERSION is 'local' for local plugins).",
+      "notes": "2026-07-06: the page now documents plugin-hook environment variables — 'Plugin hook commands receive the Codex-specific environment variables PLUGIN_ROOT and PLUGIN_DATA. ... Codex also sets CLAUDE_PLUGIN_ROOT and CLAUDE_PLUGIN_DATA for compatibility with existing plugin hooks.' The plugin.json hooks field accepts a single path or an array (default hooks/hooks.json), with ${PLUGIN_ROOT} substitution in commands. 2026-07-07: the hooks manifest field is broader — 'The manifest field can be a single path, an array of paths, an inline hooks object, or an array of inline hooks objects.' Also documented: the codex plugin marketplace add/list/upgrade/remove CLI, and the install cache ~/.codex/plugins/cache/$MARKETPLACE_NAME/$PLUGIN_NAME/$VERSION/ ($VERSION is 'local' for local plugins). Verified live 2026-07-19: the marketplace file locations are now only the repo $REPO_ROOT/.agents/plugins/marketplace.json and the personal ~/.agents/plugins/marketplace.json — the legacy-compatible $REPO_ROOT/.claude-plugin/marketplace.json path is no longer documented. The CLAUDE_PLUGIN_ROOT / CLAUDE_PLUGIN_DATA env vars remain documented as legacy compatibility aliases. The ${PLUGIN_ROOT} hook-command substitution did not reproduce this run — retained as unverified this run, not deleted.",
       "claims": [
         ".codex-plugin/plugin.json",
         "bundled skills",
@@ -178,8 +186,10 @@
         "hook trust gating",
         "plugin hook env vars PLUGIN_ROOT PLUGIN_DATA",
         "CLAUDE_PLUGIN_ROOT CLAUDE_PLUGIN_DATA set for compatibility",
-        "hooks field single path array of paths or inline hooks objects default hooks/hooks.json with PLUGIN_ROOT substitution",
-        "marketplace files repo .agents/plugins/marketplace.json legacy .claude-plugin/marketplace.json personal ~/.agents/plugins/marketplace.json",
+        "hooks field single path array of paths or inline hooks objects default hooks/hooks.json",
+        "${PLUGIN_ROOT} hook-command substitution unverified this run",
+        "marketplace files repo .agents/plugins/marketplace.json and personal ~/.agents/plugins/marketplace.json only",
+        "legacy .claude-plugin/marketplace.json path not documented",
         "codex plugin marketplace add list upgrade remove"
       ]
     },
@@ -225,7 +235,7 @@
       "agent": "claude-code",
       "kind": "hooks",
       "url": "https://code.claude.com/docs/en/hooks",
-      "notes": "docs.anthropic.com/en/docs/claude-code/hooks permanently redirects here as of 2026-05-27. 2026-07-07: PreToolUse documents four decision outcomes — allow, deny, ask, defer ('defer exits gracefully so the tool can be resumed later'; single tool calls only, resumed session subject to cleanupPeriodDays); hook output strings (additionalContext, systemMessage, plain stdout) are capped at 10,000 characters.",
+      "notes": "docs.anthropic.com/en/docs/claude-code/hooks permanently redirects here as of 2026-05-27. 2026-07-07: PreToolUse documents four decision outcomes — allow, deny, ask, defer ('defer exits gracefully so the tool can be resumed later'; single tool calls only, resumed session subject to cleanupPeriodDays); hook output strings (additionalContext, systemMessage, plain stdout) are capped at 10,000 characters. Verified live 2026-07-19: hook commands have TWO documented forms, not one — exec form when `args` is set ('spawned directly as an executable with no shell') and shell form when `args` is omitted ('passed to shell (`sh -c`, Git Bash on Windows, or PowerShell)'), so the flat 'runs through /bin/sh' framing is wrong. The common-input payload now includes prompt_id alongside session_id. Stop and SubagentStop support hookSpecificOutput.additionalContext for non-error feedback that continues the conversation. Claude's \"*\" / \"\" / omitted match-all matcher semantics re-confirmed unchanged (Codex now agrees — see openai-codex-hooks).",
       "claims": [
         "PreToolUse",
         "PostToolUse",
@@ -276,6 +286,11 @@
         "ElicitationResult",
         "PreToolUse defer decision",
         "hook output strings capped at 10000 characters",
+        "exec form when args is set spawned directly as an executable with no shell",
+        "shell form when args is omitted passed to shell sh -c Git Bash on Windows or PowerShell",
+        "common input payload includes prompt_id alongside session_id",
+        "Stop and SubagentStop hookSpecificOutput.additionalContext gives non-error feedback that continues the conversation",
+        "matcher \"*\" \"\" or omitted matches all",
         "additionalContext context injection for PostToolUse Stop SubagentStart SessionStart Setup UserPromptSubmit",
         "sessionTitle in SessionStart hookSpecificOutput",
         "initialUserMessage in SessionStart hookSpecificOutput",
@@ -393,9 +408,12 @@
       "agent": "claude-code",
       "kind": "plugins",
       "url": "https://code.claude.com/docs/en/plugins",
-      "notes": "2026-07-04: CLAUDE_CODE_SYNC_PLUGIN_INSTALL is no longer documented on this page; it remains documented on the headless page (anthropic-claude-headless), which stays the anchor for that claim.",
+      "notes": "2026-07-04: CLAUDE_CODE_SYNC_PLUGIN_INSTALL is no longer documented on this page; it remains documented on the headless page (anthropic-claude-headless), which stays the anchor for that claim. Verified live 2026-07-19: the .claude-plugin/plugin.json manifest is now OPTIONAL — plugins are 'self-contained directories with skills, agents, hooks, or a `.claude-plugin/plugin.json` manifest', the structure table marks .claude-plugin/ '(optional if components use default locations)', and a single-skill plugin may put SKILL.md at the plugin root. Footgun documented alongside it: <name>@skills-dir project-scope plugins do NOT walk up to the repo root, unlike plain skills.",
       "claims": [
-        ".claude-plugin/plugin.json",
+        ".claude-plugin/plugin.json optional when components use default locations",
+        "plugins are self-contained directories with skills agents hooks or a .claude-plugin/plugin.json manifest",
+        "single-skill plugin may put SKILL.md at the plugin root",
+        "<name>@skills-dir project-scope plugins do not walk up to the repo root unlike plain skills",
         "standalone .claude directory",
         "plugins bundle skills agents hooks MCP servers LSP servers monitors",
         "hooks/hooks.json",
@@ -466,10 +484,11 @@
       "agent": "grok",
       "kind": "plugins",
       "url": "https://docs.x.ai/build/features/skills-plugins-marketplaces",
-      "notes": "2026-07-05: the page now states only the plugin-hook env vars ('Plugin hooks additionally receive GROK_PLUGIN_ROOT and GROK_PLUGIN_DATA in their environment') and defers hook events, JSON format, and the script contract to the dedicated hooks page; GROK_HOOK_EVENT, GROK_HOOK_NAME, GROK_SESSION_ID, GROK_WORKSPACE_ROOT moved to that page (xai-grok-hooks, added this run as their anchor).",
+      "notes": "2026-07-05: the page now states only the plugin-hook env vars ('Plugin hooks additionally receive GROK_PLUGIN_ROOT and GROK_PLUGIN_DATA in their environment') and defers hook events, JSON format, and the script contract to the dedicated hooks page; GROK_HOOK_EVENT, GROK_HOOK_NAME, GROK_SESSION_ID, GROK_WORKSPACE_ROOT moved to that page (xai-grok-hooks, added this run as their anchor). Verified live 2026-07-19: user-level discovery reads from both ~/.agents/skills/ and ~/.agents/commands/.",
       "claims": [
         "skills",
         "plugins",
+        "user-level discovery from ~/.agents/skills/ and ~/.agents/commands/",
         "hooks",
         "/hooks-trust",
         "marketplaces",
@@ -486,12 +505,15 @@
       "agent": "grok",
       "kind": "hooks",
       "url": "https://docs.x.ai/build/features/hooks",
-      "notes": "Added 2026-07-05 as the anchor for the hook env vars that moved off the skills-plugins-marketplaces page (which now documents only the plugin-hook additions GROK_PLUGIN_ROOT/GROK_PLUGIN_DATA and defers events/JSON/script contract here).",
+      "notes": "Added 2026-07-05 as the anchor for the hook env vars that moved off the skills-plugins-marketplaces page (which now documents only the plugin-hook additions GROK_PLUGIN_ROOT/GROK_PLUGIN_DATA and defers events/JSON/script contract here). Verified live 2026-07-19: trust is granted either by the /hooks-trust command or by launching with --trust, 'the decision is stored in ~/.grok/trusted_folders.toml', and the same trust decision also covers project MCP and LSP servers — not hooks alone.",
       "claims": [
         "GROK_HOOK_EVENT",
         "GROK_HOOK_NAME",
         "GROK_SESSION_ID",
-        "GROK_WORKSPACE_ROOT"
+        "GROK_WORKSPACE_ROOT",
+        "trust granted by /hooks-trust or by launching with --trust",
+        "trust decision stored in ~/.grok/trusted_folders.toml",
+        "trust decision also covers project MCP and LSP servers"
       ]
     },
     {
@@ -533,7 +555,7 @@
       "agent": "grok",
       "kind": "cli-invocation",
       "url": "https://docs.x.ai/build/cli/reference",
-      "notes": "Registered 2026-07-17 — Grok had no cli-invocation source at all; its launch/headless claims rode on the headless-scripting page, which is registered under kind session-resume, so the CLI-spawn category the daily prompt marks mandatory had no anchor of the right kind for this runtime. Same coverage gap as cursor-model-lineup (caught 2026-07-16) and openai-codex reference/commands. This page keeps deferring the headless flag table (-p, --output-format) to headless-scripting, which stays the anchor for those; what it uniquely documents is the subcommand surface below.",
+      "notes": "Registered 2026-07-17 — Grok had no cli-invocation source at all; its launch/headless claims rode on the headless-scripting page, which is registered under kind session-resume, so the CLI-spawn category the daily prompt marks mandatory had no anchor of the right kind for this runtime. Same coverage gap as cursor-model-lineup (caught 2026-07-16) and openai-codex reference/commands. This page keeps deferring the headless flag table (-p, --output-format) to headless-scripting, which stays the anchor for those; what it uniquely documents is the subcommand surface below. Verified live 2026-07-19: --effort <LEVEL> ('Reasoning effort') is now documented as a CLI flag here — this does NOT change the models page, which still documents no effort/reasoning_effort API parameter (see xai-grok-model-lineup); keep the CLI-flag vs API-parameter distinction. Newly documented this run: --fork-session, -s/--session-id <UUID> (the headless-scripting page still uses the looser <ID>), -w/--worktree, --ref, --rules, --system-prompt-override, --tools/--disallowed-tools, --max-turns, --no-plan, --no-subagents, --no-memory, --disable-web-search, --experimental-memory, --oauth, --yolo, plus the login/logout/inspect/models/plugin/memory/update/version/completions/setup subcommands, and Claude Code flag names accepted as aliases where they overlap. NOT documented on this page or the headless page: --no-auto-update (removed from this entry). --no-alt-screen is documented on the HEADLESS page only, not here.",
       "claims": [
         "bare grok with no arguments starts the interactive TUI",
         "grok agent stdio runs as an ACP agent over stdin/stdout",
@@ -546,6 +568,34 @@
         "grok wrap",
         "--allow <RULE> and --deny <RULE> permission rules",
         "--sandbox <PROFILE>",
+        "--effort <LEVEL> reasoning effort documented as a CLI flag while the models page documents no effort API parameter",
+        "--fork-session forks into a new session ID when resuming",
+        "-s --session-id <UUID> uses a specific UUID for a new session; headless-scripting page uses the looser <ID>",
+        "-w --worktree [<NAME>]",
+        "--ref",
+        "--rules",
+        "--system-prompt-override",
+        "--tools and --disallowed-tools",
+        "--max-turns",
+        "--no-plan",
+        "--no-subagents",
+        "--no-memory",
+        "--disable-web-search",
+        "--experimental-memory",
+        "--oauth",
+        "--yolo alias for --always-approve",
+        "grok login with --device-auth and grok logout",
+        "grok inspect [--json]",
+        "grok models",
+        "grok plugin <...> and grok plugin marketplace <...>",
+        "grok memory clear [--workspace|--global|--all]",
+        "grok update",
+        "grok version",
+        "grok completions <shell>",
+        "grok setup",
+        "Claude Code flag names accepted as aliases where they overlap --allowedTools --disallowedTools --append-system-prompt --system-prompt and the skip-permissions flag",
+        "--no-auto-update not documented on the reference or headless page",
+        "--no-alt-screen documented on the headless page only not the reference",
         "headless flags -p and --output-format deferred to the headless-scripting page"
       ]
     },
@@ -554,7 +604,9 @@
       "agent": "hermes-agent",
       "kind": "project-instructions",
       "url": "https://hermes-agent.nousresearch.com/docs/user-guide/features/context-files",
+      "notes": "Verified live 2026-07-19: context files larger than 20,000 chars (config key context_file_max_chars) are truncated rather than dropped — 70% head, 20% tail, 10% marker.",
       "claims": [
+        "context files over 20000 chars context_file_max_chars truncated 70% head 20% tail 10% marker",
         ".hermes.md",
         "HERMES.md",
         "AGENTS.md",
@@ -584,11 +636,13 @@
       "agent": "hermes-agent",
       "kind": "overview",
       "url": "https://hermes-agent.nousresearch.com/docs/",
+      "notes": "Verified live 2026-07-19: the docs index states it plainly — 'Scheduled Automations: Built-in cron with delivery to any platform' — so this page alone anchors the built-in-cron claim and no hedge about needing a deeper source is warranted. Per-field cron syntax is still not documented anywhere in the docs.",
       "claims": [
         "skills system",
         "MCP integration",
         "memory system",
-        "scheduled automations built-in cron"
+        "Scheduled Automations: Built-in cron with delivery to any platform",
+        "per-field cron syntax not documented"
       ]
     },
     {
@@ -636,9 +690,14 @@
       "agent": "hermes-agent",
       "kind": "plugins",
       "url": "https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins",
+      "notes": "Verified live 2026-07-19: FOUR documented plugin roots now, one of them project-local — ~/.hermes/plugins/ (user), ./.hermes/plugins/ (project-local, requires HERMES_ENABLE_PROJECT_PLUGINS=true), <repo>/plugins/ (bundled), and pip distribution via hermes_agent.plugins entry points. Because plugin hooks register through ctx.register_hook(), project-local hooks now have a documented path — the previous 'Hermes documents no project-local hook directory' verdict is retired.",
       "claims": [
         "plugin.yaml",
-        "~/.hermes/plugins",
+        "~/.hermes/plugins/ user plugin root",
+        "./.hermes/plugins/ project-local plugin root requires HERMES_ENABLE_PROJECT_PLUGINS=true",
+        "<repo>/plugins/ bundled plugin root",
+        "pip distribution via hermes_agent.plugins entry points",
+        "project-local hooks have a documented path via project-local plugins registering ctx.register_hook()",
         "plugins.enabled",
         "register tools",
         "register hooks",
@@ -653,15 +712,28 @@
       "agent": "hermes-agent",
       "kind": "plugins",
       "url": "https://hermes-agent.nousresearch.com/docs/developer-guide/plugins",
-      "notes": "2026-07-07: page moved from /docs/guides/build-a-hermes-plugin to /docs/developer-guide/plugins (title still 'Build a Hermes Plugin'; all claims verified at the new location). The old URL serves an HTTP-200 meta-refresh stub (<meta http-equiv=\"refresh\" content=\"0; url=/docs/developer-guide/plugins\">) — no server-side redirect, so naive fetchers (curl -L) do not follow it.",
+      "notes": "2026-07-07: page moved from /docs/guides/build-a-hermes-plugin to /docs/developer-guide/plugins (title still 'Build a Hermes Plugin'; all claims verified at the new location). The old URL serves an HTTP-200 meta-refresh stub (<meta http-equiv=\"refresh\" content=\"0; url=/docs/developer-guide/plugins\">) — no server-side redirect, so naive fetchers (curl -L) do not follow it. Verified live 2026-07-19: four documented plugin roots — ~/.hermes/plugins/ (user), ./.hermes/plugins/ (project-local, requires HERMES_ENABLE_PROJECT_PLUGINS=true), <repo>/plugins/ (bundled), plus pip distribution via hermes_agent.plugins entry points; project-local hooks therefore have a documented path through ctx.register_hook(). plugin.yaml requires name/version/description and optionally accepts provides_tools, provides_hooks, author, requires_env, optional_env, and kind. Additional registration APIs documented: ctx.register_memory_provider(), ctx.register_context_engine(), ctx.dispatch_tool(), ctx.register_platform(), ctx.register_image_gen_provider(), ctx.register_slack_action_handler(). Kanban hook events kanban_task_claimed, kanban_task_completed, kanban_task_blocked. VENDOR INCONSISTENCY to keep in view: this developer guide categorizes pre_llm_call/post_llm_call as per-turn lifecycle and pre_tool_call/post_tool_call as per-invocation control flow, which is a different axis from the one the plugins page uses.",
       "claims": [
         "build a Hermes plugin",
-        "plugin.yaml",
-        "~/.hermes/plugins",
+        "plugin.yaml requires name version description",
+        "plugin.yaml optional provides_tools provides_hooks author requires_env optional_env kind",
+        "~/.hermes/plugins/ user plugin root",
+        "./.hermes/plugins/ project-local plugin root requires HERMES_ENABLE_PROJECT_PLUGINS=true",
+        "<repo>/plugins/ bundled plugin root",
+        "pip distribution via hermes_agent.plugins entry points",
+        "project-local hooks have a documented path via project-local plugins registering ctx.register_hook()",
         "lifecycle hooks",
         "bundled skill",
         "ctx.register_hook",
         "ctx.register_skill",
+        "ctx.register_memory_provider",
+        "ctx.register_context_engine",
+        "ctx.dispatch_tool",
+        "ctx.register_platform",
+        "ctx.register_image_gen_provider",
+        "ctx.register_slack_action_handler",
+        "kanban hook events kanban_task_claimed kanban_task_completed kanban_task_blocked",
+        "developer guide categorizes pre_llm_call/post_llm_call as per-turn lifecycle and pre_tool_call/post_tool_call as per-invocation control flow, a different axis from the plugins page",
         "requires_env"
       ]
     },
@@ -670,6 +742,7 @@
       "agent": "hermes-agent",
       "kind": "cli-invocation",
       "url": "https://hermes-agent.nousresearch.com/docs/user-guide/cli/",
+      "notes": "Verified live 2026-07-19: `hermes -w` launches interactively inside an isolated git worktree, and `hermes -w -z \"<query>\"` runs a single query there — so -z is a second single-query entry point alongside -q, not worktree-only sugar.",
       "claims": [
         "CLI",
         "skills preloading",
@@ -680,8 +753,9 @@
         "--provider nous openrouter",
         "--toolsets",
         "no documented JSON output format",
-        "-w isolated worktree interactive mode",
-        "-z single query within worktree"
+        "hermes -w isolated git worktree interactive",
+        "hermes -w -z \"<query>\" single query in a worktree",
+        "-z is a second single-query entry point alongside -q"
       ]
     },
     {
@@ -689,9 +763,10 @@
       "agent": "cursor-cli",
       "kind": "cli",
       "url": "https://cursor.com/docs/cli/overview",
-      "notes": "docs.cursor.com/en/cli/overview permanently redirects to cursor.com/docs as of 2026-05-27; specific CLI docs verified at cursor.com/docs/cli/overview. 2026-07-04: the overview page no longer mentions the worktree flag; worktree stays documented on cli/using and cli/reference/parameters (cursor-cli-using / cursor-cli-parameters remain the anchors).",
+      "notes": "docs.cursor.com/en/cli/overview permanently redirects to cursor.com/docs as of 2026-05-27; specific CLI docs verified at cursor.com/docs/cli/overview. 2026-07-04: the overview page no longer mentions the worktree flag; worktree stays documented on cli/using and cli/reference/parameters (cursor-cli-using / cursor-cli-parameters remain the anchors). Verified live 2026-07-19: the docs now document the CLI binary as `agent`, not `cursor-agent` — the string cursor-agent does not appear on the overview or parameters pages. Recorded as what the docs currently document; the docs do not state that the old binary was removed.",
       "claims": [
         "Cursor CLI",
+        "docs document the CLI binary as agent; the string cursor-agent does not appear on the overview or parameters pages",
         "terminal agent",
         "Agent mode",
         "Plan mode",
@@ -705,8 +780,13 @@
       "agent": "cursor-cli",
       "kind": "cli",
       "url": "https://cursor.com/docs/cli/using",
-      "notes": "docs.cursor.com/en/cli/using permanently redirects to cursor.com/docs as of 2026-05-27; specific CLI docs verified at cursor.com/docs/cli/using",
+      "notes": "docs.cursor.com/en/cli/using permanently redirects to cursor.com/docs as of 2026-05-27; specific CLI docs verified at cursor.com/docs/cli/using. Verified live 2026-07-19: the docs document the CLI binary as `agent`, not `cursor-agent` (recorded as what the docs document — they do not state the old binary was removed). Resume surface documented here: agent --resume [chatId], --continue (alias for --resume=-1), agent resume, agent ls, agent create-chat (returns a new id), and in-session /resume. Worktrees are created at ~/.cursor/worktrees/<reponame>/<name>. The session store path and the chatId format remain not documented.",
       "claims": [
+        "docs document the CLI binary as agent, not cursor-agent",
+        "resume surface agent --resume [chatId], --continue alias for --resume=-1, agent resume, agent ls, agent create-chat returns a new id, in-session /resume",
+        "worktrees created at ~/.cursor/worktrees/<reponame>/<name>",
+        "session store path not documented",
+        "chatId format not documented",
         "AGENTS.md",
         "CLAUDE.md",
         ".cursor/rules",
@@ -721,7 +801,9 @@
       "agent": "cursor-cli",
       "kind": "skills",
       "url": "https://cursor.com/docs/skills",
+      "notes": "Verified live 2026-07-19: the optional frontmatter set is now three fields — alongside paths and disable-model-invocation the page documents metadata ('arbitrary key-value pairs').",
       "claims": [
+        "metadata optional frontmatter field for arbitrary key-value pairs",
         "Agent Skills",
         "SKILL.md",
         ".agents/skills",
@@ -789,8 +871,16 @@
       "agent": "cursor-cli",
       "kind": "cli-invocation",
       "url": "https://cursor.com/docs/cli/reference/parameters",
-      "notes": "docs.cursor.com/en/cli/reference/parameters permanently redirects to cursor.com/docs as of 2026-05-27; specific CLI docs verified at cursor.com/docs/cli/reference/parameters",
+      "notes": "docs.cursor.com/en/cli/reference/parameters permanently redirects to cursor.com/docs as of 2026-05-27; specific CLI docs verified at cursor.com/docs/cli/reference/parameters. Verified live 2026-07-19: the page documents the CLI binary as `agent` — the string cursor-agent does not appear on it (recorded as what the docs document; they do not state the old binary was removed). Newly documented flags --mode <plan|ask>, --plan, -w/--worktree [name], --worktree-base <branch>, --skip-worktree-setup, --sandbox, and the subcommand surface login, logout, status|whoami, about, models, mcp, sandbox, worker, acp, update, ls, resume, create-chat, generate-rule|rule, install-shell-integration, uninstall-shell-integration.",
       "claims": [
+        "docs document the CLI binary as agent; the string cursor-agent does not appear on this page",
+        "--mode <plan|ask>",
+        "--plan",
+        "-w --worktree [name]",
+        "--worktree-base <branch>",
+        "--skip-worktree-setup",
+        "--sandbox",
+        "subcommands login logout status|whoami about models mcp sandbox worker acp update ls resume create-chat generate-rule|rule install-shell-integration uninstall-shell-integration",
         "parameters",
         "-p --print",
         "output-format",
@@ -817,10 +907,17 @@
       "agent": "github",
       "kind": "pull-request",
       "url": "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request",
+      "notes": "Verified live 2026-07-19: the page documents more than branch protection. Repo-level gate first — 'Before you can use auto-merge with a pull request, auto-merge must be enabled for the repository' — then 'The option to enable auto-merge is shown only on pull requests that cannot be merged immediately', and write permission on the repository is required. Auto-merge is disabled again if someone without write permission pushes to the head branch, or if the base branch is switched. IMPORTANT scope limit: this page never mentions `gh pr merge --auto` or the GitHub CLI at all, so that CLI form must not be attributed to this source (no manifest entry currently does).",
       "claims": [
         "auto-merge",
         "required checks",
-        "required reviews"
+        "required reviews",
+        "auto-merge must be enabled for the repository before it can be used on a pull request",
+        "the option to enable auto-merge is shown only on pull requests that cannot be merged immediately",
+        "write permission required to enable auto-merge",
+        "auto-merge is disabled if someone without write permission pushes to the head branch",
+        "auto-merge is disabled if the base branch is switched",
+        "gh pr merge --auto and the GitHub CLI are not mentioned on this page"
       ]
     },
     {
@@ -840,7 +937,7 @@
       "agent": "codex",
       "kind": "session-resume",
       "url": "https://learn.chatgpt.com/docs/developer-commands?surface=cli",
-      "notes": "2026-07-04: the page no longer documents the session-store paths ~/.codex/sessions or ~/.codex/history.jsonl (both previously stated here). Rollout files survive only indirectly via --ephemeral ('run without persisting session rollout files to disk'); the app-server doc still describes thread logs persisted as JSONL files. 2026-07-05: ~/.codex/history.jsonl is documented again — on the config-advanced page ('Codex saves local session transcripts under CODEX_HOME (for example, ~/.codex/history.jsonl)'), so openai-codex-config-advanced is now the anchor for that path; the rollout/sessions directory (~/.codex/sessions) remains not documented on any official page. 2026-07-07: caveat — ~/.codex/sessions now appears verbatim on the automations page, but only inside a user-example automation prompt, not as normative path documentation; the not-documented discipline stands. Newly documented session management on this page: codex fork [SESSION_ID] (picker by default; --last forks the most recent; --all widens past cwd) forks a previous interactive session into a new thread — the CLI analogue of app-server thread/fork — plus codex archive / codex delete / codex unarchive, with remote-mode support for codex, resume, fork, archive, delete, and unarchive.",
+      "notes": "2026-07-04: the page no longer documents the session-store paths ~/.codex/sessions or ~/.codex/history.jsonl (both previously stated here). Rollout files survive only indirectly via --ephemeral ('run without persisting session rollout files to disk'); the app-server doc still describes thread logs persisted as JSONL files. 2026-07-05: ~/.codex/history.jsonl is documented again — on the config-advanced page ('Codex saves local session transcripts under CODEX_HOME (for example, ~/.codex/history.jsonl)'), so openai-codex-config-advanced is now the anchor for that path; the rollout/sessions directory (~/.codex/sessions) remains not documented on any official page. 2026-07-07: caveat — ~/.codex/sessions now appears verbatim on the automations page, but only inside a user-example automation prompt, not as normative path documentation; the not-documented discipline stands. Newly documented session management on this page: codex fork [SESSION_ID] (picker by default; --last forks the most recent; --all widens past cwd) forks a previous interactive session into a new thread — the CLI analogue of app-server thread/fork — plus codex archive / codex delete / codex unarchive, with remote-mode support for codex, resume, fork, archive, delete, and unarchive. Verified live 2026-07-19: resume, fork, archive, unarchive, and delete accept a session ID (UUID) or a session name, and 'Session IDs take precedence over session names'; 'codex delete --force' 'bypasses confirmation for UUIDs only.' The interactive PROMPT positional is now typed 'PROMPT: string | - (read stdin)'. /goal caveat: the narrower sentence 'Use /goal edit to revise the objective.' did NOT reproduce this run — only the summary line 'Set, edit, pause, resume, view, or clear a task goal.' verified, and neither the follow-goals page nor the goals cookbook lists edit among the /goal subcommands, so the claim is re-anchored to the sentence that verified and the narrower quote is held as unverified this run.",
       "claims": [
         "codex resume",
         "codex resume --last",
@@ -849,9 +946,14 @@
         "rollout jsonl via --ephemeral",
         "rollout sessions directory not documented",
         "~/.codex/history.jsonl anchored on config-advanced",
-        "optional PROMPT positional seeds the interactive session",
+        "optional PROMPT positional seeds the interactive session typed string or - to read stdin",
         "codex fork forks a previous session into a new thread",
-        "codex archive delete unarchive session management"
+        "codex archive delete unarchive session management",
+        "resume fork archive unarchive delete accept a session ID (UUID) or a session name",
+        "session IDs take precedence over session names",
+        "codex delete --force bypasses confirmation for UUIDs only",
+        "/goal summary line: set, edit, pause, resume, view, or clear a task goal",
+        "narrower sentence 'Use /goal edit to revise the objective.' unverified this run"
       ]
     },
     {
@@ -874,7 +976,7 @@
       "agent": "claude-code",
       "kind": "session-resume",
       "url": "https://code.claude.com/docs/en/sessions",
-      "notes": "2026-07-05: the -c short form and the URL-accepting --from-pr forms are no longer stated on this page (it shows claude --continue and 'claude --from-pr <number>' only); both full forms remain on the CLI reference (anthropic-claude-cli-reference: '--continue, -c'; '--from-pr accepts a PR number, a GitHub or GitHub Enterprise PR URL, a GitLab merge request URL, or a Bitbucket pull request URL'), which is the anchor. URL pasting survives here as a session-picker search feature ('Paste a GitHub, GitHub Enterprise, GitLab, or Bitbucket pull or merge request URL to find the session that created it'). 2026-07-07: 'same session id reused' is no longer stated in those words — the anchor is now fork semantics plus 'If you resume the same session in two terminals without forking, messages from both interleave into one transcript.'",
+      "notes": "2026-07-05: the -c short form and the URL-accepting --from-pr forms are no longer stated on this page (it shows claude --continue and 'claude --from-pr <number>' only); both full forms remain on the CLI reference (anthropic-claude-cli-reference: '--continue, -c'; '--from-pr accepts a PR number, a GitHub or GitHub Enterprise PR URL, a GitLab merge request URL, or a Bitbucket pull request URL'), which is the anchor. URL pasting survives here as a session-picker search feature ('Paste a GitHub, GitHub Enterprise, GitLab, or Bitbucket pull or merge request URL to find the session that created it'). 2026-07-07: 'same session id reused' is no longer stated in those words — the anchor is now fork semantics plus 'If you resume the same session in two terminals without forking, messages from both interleave into one transcript.' 2026-07-19: newly documented scoping footgun — passing a session ID to -r/--resume 'searches only the current project directory and its git worktrees', so resuming from the wrong cwd fails.",
       "claims": [
         "--resume",
         "--continue",
@@ -898,7 +1000,8 @@
         "session picker search accepts pasted GitHub GitHub Enterprise GitLab Bitbucket pull or merge request URLs",
         "Ctrl+R in session picker renames session",
         "Space in session picker previews session content",
-        "session auto-named on plan accept if name not set"
+        "session auto-named on plan accept if name not set",
+        "session ID passed to -r/--resume searches only the current project directory and its git worktrees"
       ]
     },
     {
@@ -923,6 +1026,7 @@
       "agent": "hermes-agent",
       "kind": "session-resume",
       "url": "https://hermes-agent.nousresearch.com/docs/user-guide/cli/",
+      "notes": "Verified live 2026-07-19: the same page documents two worktree-scoped entry points alongside the resume flags — `hermes -w` (isolated git worktree, interactive) and `hermes -w -z \"<query>\"` (single query in that worktree), making -z a second single-query entry point alongside -q.",
       "claims": [
         "--resume",
         "-r",
@@ -930,7 +1034,10 @@
         "-c",
         "resume by title",
         "~/.hermes/state.db sqlite",
-        "session id YYYYMMDD_HHMMSS_suffix"
+        "session id YYYYMMDD_HHMMSS_suffix",
+        "hermes -w isolated git worktree interactive",
+        "hermes -w -z \"<query>\" single query in a worktree",
+        "-z is a second single-query entry point alongside -q"
       ]
     },
     {
@@ -951,7 +1058,7 @@
       "agent": "codex",
       "kind": "cli-invocation",
       "url": "https://learn.chatgpt.com/docs/non-interactive-mode",
-      "notes": "2026-07-04: --model/-m is no longer listed on this page (it defers flag docs to /codex/cli/reference#codex-exec); the flag itself is still official — the models page shows codex -m <id> and codex exec --model usage. 2026-07-05: --cd/-C and the -s short alias are no longer stated on this page either (only the long --sandbox form remains); both stay documented on /codex/cli/reference under codex exec ('--cd, -C | path | Set the workspace root before executing the task', '--sandbox, -s') — the page keeps deferring flag docs to the CLI reference.",
+      "notes": "2026-07-04: --model/-m is no longer listed on this page (it defers flag docs to /codex/cli/reference#codex-exec); the flag itself is still official — the models page shows codex -m <id> and codex exec --model usage. 2026-07-05: --cd/-C and the -s short alias are no longer stated on this page either (only the long --sandbox form remains); both stay documented on /codex/cli/reference under codex exec ('--cd, -C | path | Set the workspace root before executing the task', '--sandbox, -s') — the page keeps deferring flag docs to the CLI reference. Verified live 2026-07-19: --skip-git-repo-check is documented as 'overrides Git repository requirement check', and --full-auto is documented as deprecated with the docs advising --sandbox workspace-write instead.",
       "claims": [
         "non-interactive mode",
         "codex exec",
@@ -962,7 +1069,8 @@
         "stdin dash prompt",
         "--output-schema",
         "--ephemeral",
-        "--skip-git-repo-check",
+        "--skip-git-repo-check overrides Git repository requirement check",
+        "--full-auto deprecated prefer --sandbox workspace-write",
         "--ignore-user-config",
         "--ignore-rules",
         "CODEX_API_KEY"
@@ -973,6 +1081,7 @@
       "agent": "claude-code",
       "kind": "cli-invocation",
       "url": "https://code.claude.com/docs/en/cli-reference",
+      "notes": "Verified live 2026-07-19: --effort takes NAMED levels, not numbers — low, medium, high, xhigh, max, ultracode. --advisor <model> accepts a model alias (opus or sonnet) or a full model ID. --from-pr does NOT resume a session: it 'Open[s] the session picker filtered to sessions linked to a specific pull request', accepting a PR number, a GitHub or GitHub Enterprise PR URL, a GitLab merge request URL, or a Bitbucket pull request URL.",
       "claims": [
         "claude -p --print",
         "cat file pipe claude -p",
@@ -1001,9 +1110,11 @@
         "--safe-mode disable all customizations for troubleshooting v2.1.169",
         "--tools restrict built-in tools",
         "--disallowedTools deny rules",
-        "--effort level low medium high xhigh max ultracode",
+        "--effort named levels low medium high xhigh max ultracode not numeric",
+        "--advisor <model> accepts model alias opus or sonnet or a full model ID",
         "--worktree -w isolated git worktree",
-        "--from-pr PR number or GitHub GitLab Bitbucket PR URL"
+        "--from-pr opens the session picker filtered to sessions linked to a specific pull request",
+        "--from-pr accepts a PR number or GitHub GitHub Enterprise GitLab or Bitbucket PR/MR URL"
       ]
     },
     {
@@ -1059,9 +1170,11 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli/reference",
-      "notes": "JS-rendered SPA; static fetch returns an empty shell — render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome). Page moved from /docs/cli-reference to /docs/cli/reference (old URL redirects). No headless one-shot flag documented; programmatic use is the Antigravity SDK. The --sandbox / --dangerously-skip-permissions launch overrides and the settings.json path are documented on the cli/using page (antigravity-cli-using), not here. New commands in the core table as of 2026-07-04: /add-dir, /btw, /clear, /diff, /exit, /fast, /logout, /open, /planning, /rename, /statusline, /title, /usage. 2026-07-17: keybindings.json is not named on this page (zero hits) — its keybinding content is a default-keybindings reference (Key -> TUI command -> behavior, e.g. Esc / cli.escape), not a config-key table for the file. The keybindings.json filename and its path stay anchored on antigravity-cli-using ('File Location: ~/.gemini/antigravity-cli/keybindings.json'), which already anchors the settings.json path for the same reason; the claim was split accordingly.",
+      "notes": "JS-rendered SPA; static fetch returns an empty shell — render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome). Page moved from /docs/cli-reference to /docs/cli/reference (old URL redirects). No headless one-shot flag documented; programmatic use is the Antigravity SDK. The --sandbox / --dangerously-skip-permissions launch overrides and the settings.json path are documented on the cli/using page (antigravity-cli-using), not here. New commands in the core table as of 2026-07-04: /add-dir, /btw, /clear, /diff, /exit, /fast, /logout, /open, /planning, /rename, /statusline, /title, /usage. 2026-07-17: keybindings.json is not named on this page (zero hits) — its keybinding content is a default-keybindings reference (Key -> TUI command -> behavior, e.g. Esc / cli.escape), not a config-key table for the file. The keybindings.json filename and its path stay anchored on antigravity-cli-using ('File Location: ~/.gemini/antigravity-cli/keybindings.json'), which already anchors the settings.json path for the same reason; the claim was split accordingly. 2026-07-19: /memory (and /memory show, /memory refresh) has ZERO hits across the Antigravity CLI docs and is absent from this page's complete agy slash-command table — it is a retired-Gemini-CLI command only (see gemini-cli-gemini-md), not an agy command. Re-confirmed unchanged this run: no headless flag and no --output-format, and --sandbox plus the skip-permissions flag remain the only documented launch flags (both stated on cli/using).",
       "claims": [
         "interactive TUI launch",
+        "/memory /memory show /memory refresh are not agy commands — zero hits across the Antigravity CLI docs and absent from the complete slash-command table",
+        "no headless flag and no --output-format documented",
         "core slash commands",
         "/resume /switch /conversation",
         "/fork /branch",
@@ -1119,10 +1232,13 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli/gcli-migration",
-      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome; this run the fenced code blocks hydrated empty under automation — on every docs page, not just this one — so code-block-only literals were held via surrounding prose/tables; all prose, table, and inline-code claims verified). Page moved from /docs/gcli-migration to /docs/cli/gcli-migration (old URL redirects). GEMINI_API_KEY->AV_API_KEY env swap is NOT stated here (third-party claim); auth is via OS keyring. The earlier global-MCP-path inconsistency is resolved: the cli/plugins page no longer states MCP paths (it defers to a dedicated MCP docs page), so this page's ~/.gemini/config/mcp_config.json (global) / .agents/mcp_config.json (workspace) is the only stated path pair. 2026-07-05: the ~/.local/bin/agy install path is no longer stated on this page — the install page (antigravity-cli-install) remains the anchor; the page now also states the global skills path pair (Gemini ~/.gemini/skills/ -> Antigravity ~/.gemini/antigravity-cli/skills/).",
+      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome; this run the fenced code blocks hydrated empty under automation — on every docs page, not just this one — so code-block-only literals were held via surrounding prose/tables; all prose, table, and inline-code claims verified). Page moved from /docs/gcli-migration to /docs/cli/gcli-migration (old URL redirects). GEMINI_API_KEY->AV_API_KEY env swap is NOT stated here (third-party claim); auth is via OS keyring. The earlier global-MCP-path inconsistency is resolved: the cli/plugins page no longer states MCP paths (it defers to a dedicated MCP docs page), so this page's ~/.gemini/config/mcp_config.json (global) / .agents/mcp_config.json (workspace) is the only stated path pair. 2026-07-05: the ~/.local/bin/agy install path is no longer stated on this page — the install page (antigravity-cli-install) remains the anchor; the page now also states the global skills path pair (Gemini ~/.gemini/skills/ -> Antigravity ~/.gemini/antigravity-cli/skills/). Verified live 2026-07-19: first launch is documented as legacy-config detection followed by an interactive migration checklist — auto-conversion of extensions and global configs, keyring token migration, and settings alignment. There is no documented 'color/rendering/trust setup' step. The global MCP path ~/.gemini/config/mcp_config.json stands alongside the workspace .agents/mcp_config.json.",
       "claims": [
         "agy plugin import gemini",
-        "first-launch auto-conversion checklist",
+        "first launch detects legacy config then runs an interactive migration checklist",
+        "migration checklist covers extension and global config auto-conversion keyring token migration and settings alignment",
+        "no color/rendering/trust setup step documented",
+        "global MCP path ~/.gemini/config/mcp_config.json and workspace .agents/mcp_config.json",
         "legacy commands converted to skills on import",
         "reads GEMINI.md and AGENTS.md",
         "global ~/.gemini/GEMINI.md",
@@ -1154,12 +1270,15 @@
       "agent": "antigravity-cli",
       "kind": "plugins",
       "url": "https://antigravity.google/docs/cli/plugins",
-      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome; fenced code blocks hydrated empty this run, so code-block-only literals — the staged path, the agy plugin command lines, the $schema URL — were held via surrounding prose and cross-page anchors; the plugin subcommand is also documented with a plural alias, plugins). Page moved from /docs/cli-plugins to /docs/cli/plugins (old URL redirects). Documents the native plugin layout, hook config, and skill->slash-command behavior. As of 2026-07-04 the page no longer states MCP config paths — its MCP section defers to a dedicated MCP docs page; the migration page (antigravity-gcli-migration) remains the stated-path anchor (~/.gemini/config/mcp_config.json global, .agents/mcp_config.json workspace, serverUrl key). New: plugin.json documents a $schema URL (https://antigravity.google/schemas/v1/plugin.json) and a full JSON Schema with only name required.",
+      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome; fenced code blocks hydrated empty this run, so code-block-only literals — the staged path, the agy plugin command lines, the $schema URL — were held via surrounding prose and cross-page anchors; the plugin subcommand is also documented with a plural alias, plugins). Page moved from /docs/cli-plugins to /docs/cli/plugins (old URL redirects). Documents the native plugin layout, hook config, and skill->slash-command behavior. As of 2026-07-04 the page no longer states MCP config paths — its MCP section defers to a dedicated MCP docs page; the migration page (antigravity-gcli-migration) remains the stated-path anchor (~/.gemini/config/mcp_config.json global, .agents/mcp_config.json workspace, serverUrl key). New: plugin.json documents a $schema URL (https://antigravity.google/schemas/v1/plugin.json) and a full JSON Schema with only name required. Verified live 2026-07-19: the schema is stricter than previously recorded — it sets \"additionalProperties\": false, constrains name with the pattern ^[a-zA-Z0-9-_]+$, and permits exactly one other field, description.",
       "claims": [
         "plugins are namespaced bundles",
         "plugins staged at ~/.gemini/antigravity-cli/plugins/<name>/",
         "plugin.json required package marker",
         "plugin.json $schema and JSON Schema name required",
+        "plugin.json schema sets additionalProperties false",
+        "plugin.json name pattern ^[a-zA-Z0-9-_]+$",
+        "description is the only other permitted plugin.json field",
         "hooks.json optional pre/post tool event hooks",
         "mcp_config.json optional in plugin",
         "skills/ agents/ rules/ optional plugin dirs",
@@ -1182,8 +1301,9 @@
       "agent": "antigravity-cli",
       "kind": "configuration",
       "url": "https://antigravity.google/docs/cli/using",
-      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome). Page moved from /docs/cli-using to /docs/cli/using (old URL redirects).",
+      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome). Page moved from /docs/cli-using to /docs/cli/using (old URL redirects). Verified live 2026-07-19: the on-close printout is documented as a named Auto-Save Resume feature — 'When you close the CLI, it automatically prints the exact command needed to resume that specific session.'",
       "claims": [
+        "Auto-Save Resume: on close the CLI automatically prints the exact command needed to resume that specific session",
         "settings.json at ~/.gemini/antigravity-cli/settings.json",
         "/config or /settings opens the settings overlay",
         "--sandbox and --dangerously-skip-permissions are launch overrides over settings.json",
@@ -1202,13 +1322,15 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli/install",
-      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome; fenced code blocks hydrated empty this run, so the exact curl/irm installer command literals were held via surrounding prose). Page moved from /docs/cli-install to /docs/cli/install (old URL redirects). 2026-07-07: a CMD install option now appears alongside PowerShell on Windows.",
+      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome; fenced code blocks hydrated empty this run, so the exact curl/irm installer command literals were held via surrounding prose). Page moved from /docs/cli-install to /docs/cli/install (old URL redirects). 2026-07-07: a CMD install option now appears alongside PowerShell on Windows. Verified live 2026-07-19: the CMD path is stated in full — 'curl -fsSL https://antigravity.google/cli/install.cmd -o install.cmd && install.cmd && del install.cmd' — and the two installation flags are documented with their effects: --skip-aliases skips purging/updating shell aliases, --skip-path skips appending to PATH.",
       "claims": [
         "macOS/Linux install curl -fsSL https://antigravity.google/cli/install.sh | bash",
         "installs the binary to ~/.local/bin/agy",
         "Windows PowerShell irm https://antigravity.google/cli/install.ps1 | iex",
+        "Windows CMD install curl -fsSL https://antigravity.google/cli/install.cmd -o install.cmd && install.cmd && del install.cmd",
         "Windows installs to AppData\\Local\\agy\\bin",
-        "--skip-aliases --skip-path install flags",
+        "--skip-aliases skips purging and updating shell aliases",
+        "--skip-path skips appending to PATH",
         "auth via OS keyring Apple Keychain/Secret Service/Windows Credential Manager",
         "browser OAuth fallback when no saved session",
         "SSH manual URL-plus-code OAuth loop",
@@ -1237,7 +1359,7 @@
       "agent": "claude-code",
       "kind": "billing",
       "url": "https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan",
-      "notes": "Subscription covers interactive Claude Code; a present ANTHROPIC_API_KEY switches Claude Code to pay-as-you-go API billing. The page references /status only for monitoring remaining plan allocation, not for revealing which auth method is active.",
+      "notes": "Subscription covers interactive Claude Code; a present ANTHROPIC_API_KEY switches Claude Code to pay-as-you-go API billing. The page references /status only for monitoring remaining plan allocation, not for revealing which auth method is active. Verified live 2026-07-19, verbatim unchanged: 'If you have an ANTHROPIC_API_KEY environment variable set on your system, Claude Code will use this API key for authentication instead of your Claude subscription ... resulting in API usage charges rather than using your subscription's included usage.'",
       "claims": [
         "Pro plan",
         "Max plan",
@@ -1252,11 +1374,11 @@
       "agent": "claude-code",
       "kind": "billing",
       "url": "https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan",
-      "notes": "Re-verified 2026-07-18: the billing change originally planned for 2026-06-15 is still PAUSED (banner verbatim-unchanged). The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits. The previously announced monthly credit, which would have been available to eligible claimants in connection with these changes, isn't available. We're working to update the plan to better support how users build with Claude subscriptions. When we have an update, we'll share it before anything takes effect.' A line under the banner adds: 'The content below reflects the page before June 15. It's preserved for reference but is no longer taking effect on June 15.' Accounts using an API key continue on pay-as-you-go API billing. The original (paused, not-in-effect) plan described separate monthly credits per plan tier: Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise usage-based $20, Enterprise seat-based Premium seats $200 (Standard seats not eligible).",
+      "notes": "Re-verified 2026-07-19: the billing change originally planned for 2026-06-15 is still PAUSED (banner verbatim-unchanged). The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits. The previously announced monthly credit, which would have been available to eligible claimants in connection with these changes, isn't available. We're working to update the plan to better support how users build with Claude subscriptions. When we have an update, we'll share it before anything takes effect.' A line under the banner adds: 'The content below reflects the page before June 15. It's preserved for reference but is no longer taking effect on June 15.' Accounts using an API key continue on pay-as-you-go API billing. The original (paused, not-in-effect) plan described separate monthly credits per plan tier: Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise usage-based $20, Enterprise seat-based Premium seats $200 (Standard seats not eligible).",
       "claims": [
         "Agent SDK with Claude plan",
         "claude -p headless",
-        "2026-06-15 Agent SDK billing change still paused as of 2026-07-18",
+        "2026-06-15 Agent SDK billing change still paused as of 2026-07-19",
         "Agent SDK and claude -p currently draw from regular subscription usage limits same as interactive use",
         "API key accounts remain pay-as-you-go API billing",
         "original plan described separate monthly credits per plan tier but change is paused"
@@ -1267,11 +1389,15 @@
       "agent": "gajae-code",
       "kind": "community-runtime",
       "url": "https://github.com/Yeachan-Heo/gajae-code",
-      "notes": "NON-VENDOR community project (MIT, beta) by Yeachan-Heo; this README is the only source, not vendor docs. Flagged the same way Kuma Studio is. Verified 2026-07-16. A coding-agent harness (binary `gjc`) that runs adjacent to other CLIs; install with `bun install -g gajae-code` (scoped `@gajae-code/coding-agent`). Interactive `gjc` / `gjc --tmux` / `gjc --tmux --worktree <branch>`; 2026-07-16: `--mode rpc` is gone from the README — no headless one-shot mode is documented at all. External control is now the SDK loopback WebSocket (docs/sdk.md), a Coordinator MCP server (`gjc mcp-serve coordinator` — MCP is back in the README after its 2026-07-07 absence), and `gjc daemon session`. Skills are the only documented extension surface: SKILL.md-format bundled skills installed by `gjc setup defaults` into the user `.gjc` directory (the exact `~/.gjc/skills/` path is no longer literally stated), listed/read with `gjc skills list` / `gjc skills read <name>`, invoked as `/skill:<name>` (colon form), defaults deep-interview/ralplan/ultragoal/team. Hooks, plugins, session-id resume, and project-instruction-file loading are all NOT documented (re-confirmed by grep). User config `~/.gjc/config.yml`; per-project state `.gjc/`. Other README content outside claim scope: `gjc rlm` research/REPL mode, notifications SDK + `gjc daemon`, image input, an experimental opt-in `computer-use` surface, `gjc update`, and a four-role bundled agent table (executor/architect/planner/critic).",
+      "notes": "NON-VENDOR community project (MIT, beta) by Yeachan-Heo; this README is the only source, not vendor docs. Flagged the same way Kuma Studio is. Re-verified 2026-07-19 — MIT, `gjc`, beta, and every not-documented verdict below (hooks, plugins, project-instruction-file loading, session-id resume) still hold. A coding-agent harness (binary `gjc`) that runs adjacent to other CLIs; install with `bun install -g gajae-code` (scoped `@gajae-code/coding-agent`). Interactive `gjc` / `gjc --tmux` / `gjc --tmux --worktree <name>` — `--worktree` takes 'an optional branch-like name, not a filesystem path', with the documented alternative `cd ../my-task-worktree && gjc --tmux`. The README's 'Workflow surface' section documents four bundled role agents — `executor` (bounded implementation/fixes/refactors) plus read-only `architect`, `planner`, and `critic` — as a role table only: no agent file format, install path, or authoring interface is given, so authoring a custom agent stays not documented. 2026-07-16: `--mode rpc` is gone from the README — no headless one-shot mode is documented at all. External control is now the SDK loopback WebSocket (docs/sdk.md), a Coordinator MCP server (`gjc mcp-serve coordinator` — MCP is back in the README after its 2026-07-07 absence), and `gjc daemon session`. Skills are the only documented extension surface: SKILL.md-format bundled skills installed by `gjc setup defaults` into the user `.gjc` directory (the exact `~/.gjc/skills/` path is no longer literally stated), listed/read with `gjc skills list` / `gjc skills read <name>`, invoked as `/skill:<name>` (colon form), defaults deep-interview/ralplan/ultragoal/team. Hooks, plugins, session-id resume, and project-instruction-file loading are all NOT documented (re-confirmed by grep). User config `~/.gjc/config.yml`; per-project state `.gjc/`. Other README content outside claim scope: `gjc rlm` research/REPL mode, notifications SDK + `gjc daemon`, image input, an experimental opt-in `computer-use` surface, `gjc update`, and a four-role bundled agent table (executor/architect/planner/critic).",
       "claims": [
         "community MIT project, not a vendor product",
         "binary gjc; install via bun install -g gajae-code",
-        "interactive gjc / gjc --tmux / --worktree",
+        "interactive gjc / gjc --tmux / --worktree <name>",
+        "--worktree takes an optional branch-like name not a filesystem path",
+        "documented alternative cd ../my-task-worktree && gjc --tmux",
+        "four bundled role agents executor architect planner critic; architect planner critic are read-only",
+        "authoring a custom agent not documented — role table only, no file format install path or authoring interface",
         "headless one-shot mode not documented",
         "bundled skills installed into user .gjc directory via gjc setup defaults; gjc skills list/read",
         "skill invocation token /skill:<name> colon form",
@@ -1288,7 +1414,7 @@
       "agent": "claude-code",
       "kind": "model-lineup",
       "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
-      "notes": "Current Claude model lineup (ids + reasoning). Mirror: docs/models/claude.md. Verified live 2026-07-18 (docs.anthropic.com 301-redirects to platform.claude.com/docs/en/about-claude/models/overview — same official doc). Current: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (id claude-haiku-4-5-20251001, alias claude-haiku-4-5). Reasoning: adaptive thinking on Fable 5 (always on) / Opus 4.8 / Sonnet 5; Haiku 4.5 uses extended thinking. Also documented but NOT generally available: Claude Mythos 5 (claude-mythos-5) and Claude Mythos Preview (claude-mythos-preview), invitation-only via Project Glasswing. Legacy: Opus 4.7 (→ 4.8), Opus 4.6, Sonnet 4.6 (→ 5), Sonnet 4.5, Opus 4.5; deprecated: claude-opus-4-1-20250805 retiring 2026-08-05.",
+      "notes": "Current Claude model lineup (ids + reasoning). Mirror: docs/models/claude.md. Verified live 2026-07-19 (docs.anthropic.com 301-redirects to platform.claude.com/docs/en/docs/about-claude/models/overview — same official doc). Current: Fable 5 (claude-fable-5), Opus 4.8 (claude-opus-4-8), Sonnet 5 (claude-sonnet-5), Haiku 4.5 (id claude-haiku-4-5-20251001, alias claude-haiku-4-5). Reasoning: adaptive thinking on Fable 5 (always on) / Opus 4.8 / Sonnet 5; Haiku 4.5 uses extended thinking. Also documented but NOT generally available: Claude Mythos 5 (claude-mythos-5) and Claude Mythos Preview (claude-mythos-preview), invitation-only via Project Glasswing. Legacy: Opus 4.7 (→ 4.8), Opus 4.6, Sonnet 4.6 (→ 5), Sonnet 4.5, Opus 4.5; deprecated: claude-opus-4-1-20250805 retiring 2026-08-05.",
       "claims": [
         "claude-fable-5 current",
         "claude-opus-4-8 current",
@@ -1307,9 +1433,10 @@
       "agent": "codex",
       "kind": "model-lineup",
       "url": "https://learn.chatgpt.com/docs/models",
-      "notes": "Current Codex model lineup. Mirror: docs/models/codex.md. Verified live 2026-07-18: the page recommends the GPT-5.6 family/default selector gpt-5.6 and explicit model ids gpt-5.6-sol, gpt-5.6-terra, and gpt-5.6-luna. gpt-5.5 is described as previous-generation; gpt-5.4 and gpt-5.4-mini remain under Other models; gpt-5.3-codex-spark remains a text-only research preview for ChatGPT Pro users. gpt-5.2 and gpt-5.3-codex are deprecated when signing in with ChatGPT (no one-to-one replacement mapping — the page says to update to the latest model listed above). The models page documents reasoning effort choices Low, Medium (default), High, Extra High, Max, and Ultra, and says there is no exact mapping from GPT-5.5 reasoning efforts to GPT-5.6. Service tiers remain not documented on this page.",
+      "notes": "Current Codex model lineup. Mirror: docs/models/codex.md. Verified live 2026-07-19: the page lists exactly seven model ids — gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gpt-5.5, gpt-5.3-codex-spark, gpt-5.4, and gpt-5.4-mini. Bare gpt-5.6 is NOT a listed id: it appears only as CLI-example shorthand in 'codex -m gpt-5.6'. gpt-5.5 is described as previous-generation; gpt-5.4 and gpt-5.4-mini remain under Other models; gpt-5.3-codex-spark remains a text-only research preview for ChatGPT Pro users. gpt-5.2 and gpt-5.3-codex are deprecated when signing in with ChatGPT (no one-to-one replacement mapping — the page says to update to the latest model listed above). The models page documents reasoning effort choices Low, Medium (default), High, Extra High, Max, and Ultra, and says there is no exact mapping from GPT-5.5 reasoning efforts to GPT-5.6. Cloud wording: you can't change the default model for Codex cloud chats. Service tiers remain not documented on this page.",
       "claims": [
-        "gpt-5.6 current recommended family/default selector",
+        "models page lists exactly seven ids gpt-5.6-sol gpt-5.6-terra gpt-5.6-luna gpt-5.5 gpt-5.3-codex-spark gpt-5.4 gpt-5.4-mini",
+        "bare gpt-5.6 is not a listed id — it appears only as CLI-example shorthand in codex -m gpt-5.6",
         "gpt-5.6-sol current recommended",
         "gpt-5.6-terra current recommended",
         "gpt-5.6-luna current recommended",
@@ -1321,6 +1448,7 @@
         "reasoning choices Low Medium High Extra High Max Ultra",
         "gpt-5.2 deprecated",
         "gpt-5.3-codex deprecated",
+        "you can't change the default model for Codex cloud chats",
         "service tiers not documented on the models page"
       ]
     },
@@ -1350,7 +1478,7 @@
       "agent": "codex",
       "kind": "completion-stack",
       "url": "https://learn.chatgpt.com/use-cases/follow-goals",
-      "notes": "Codex Goals (/goal, features.goals) active completion loop. Mirror: docs/completion-stack.md. Added 2026-07-10 (claims verified 2026-06-15). 2026-07-17: the page was slimmed to a use-case walkthrough and three claims moved off it — the active-verification sentence ('Once the Goal is active, Codex can inspect the code, run the relevant commands, make changes, test the result, and continue until it reaches a stopping condition.') and the goal-state list are now verbatim on the cookbook (openai-codex-goals-cookbook), which becomes their anchor; the cookbook also documents a 4th state, budget-limited. The control surface stated here is now 'Set a goal with /goal <objective>, check the current goal with /goal, and use /goal pause, /goal resume, or /goal clear' — there is no /goal set subcommand anywhere (setting is the bare /goal <objective>), and /goal edit is anchored on the CLI reference (openai-codex-cli-reference: 'Use /goal edit to revise the objective.'). The mid-flight tightening advice lives here, not on the cookbook: 'If the status becomes vague, tighten the goal rather than adding more one-off instructions.'",
+      "notes": "Codex Goals (/goal, features.goals) active completion loop. Mirror: docs/completion-stack.md. Added 2026-07-10 (claims verified 2026-06-15). 2026-07-17: the page was slimmed to a use-case walkthrough and three claims moved off it — the active-verification sentence ('Once the Goal is active, Codex can inspect the code, run the relevant commands, make changes, test the result, and continue until it reaches a stopping condition.') and the goal-state list are now verbatim on the cookbook (openai-codex-goals-cookbook), which becomes their anchor; the cookbook also documents a 4th state, budget-limited. The control surface stated here is now 'Set a goal with /goal <objective>, check the current goal with /goal, and use /goal pause, /goal resume, or /goal clear' — there is no /goal set subcommand anywhere (setting is the bare /goal <objective>), and /goal edit is anchored on the CLI reference. The mid-flight tightening advice lives here, not on the cookbook: 'If the status becomes vague, tighten the goal rather than adding more one-off instructions.' 2026-07-19: this page still does not list edit among the /goal subcommands (nor does the goals cookbook); on the CLI reference the narrower sentence 'Use /goal edit to revise the objective.' did not reproduce this run, so the edit verb now rests only on that page's summary line 'Set, edit, pause, resume, view, or clear a task goal.'",
       "claims": [
         "set a goal with /goal <objective> bare /goal checks the current goal",
         "/goal pause /goal resume /goal clear",
@@ -1381,15 +1509,17 @@
       "agent": "grok",
       "kind": "model-lineup",
       "url": "https://docs.x.ai/developers/models",
-      "notes": "Current Grok/xAI model lineup. Mirror: docs/models/grok.md. The page moved 2026-07-06 — docs.x.ai/docs/models 308-redirects to docs.x.ai/developers/models (model detail links under /developers/models/<id>). Verified live 2026-07-18: the overview still recommends Grok 4.5 (grok-4.5, 500k context) as the flagship for code and chat, plus the Grok Voice API and Imagine API. 2026-07-16: the older ids are shown again — grok-4.3, grok-4.20-0309-reasoning, grok-4.20-0309-non-reasoning, grok-4.20-multi-agent-0309 (all 1M context) and grok-build-0.1 (256k) appear in the pricing table; the page has no separate model-list section, so these ids are stated via pricing plus recommendation prose. \"Configurable reasoning\" is NOT stated for grok-4.5 (its detail page says only \"Reasoning: Yes\"); the only documented reasoning split is the pre-built grok-4.20 reasoning / non-reasoning variants. No retirement or deprecation page is linked from the overview.",
+      "notes": "Current Grok/xAI model lineup. Mirror: docs/models/grok.md. The page moved 2026-07-06 — docs.x.ai/docs/models 308-redirects to docs.x.ai/developers/models (model detail links under /developers/models/<id>). Verified live 2026-07-19: the overview still recommends Grok 4.5 (grok-4.5, 500k context) as the flagship for code and chat, plus the Grok Voice API and Imagine API. The Imagine API is now pinned to four ids — grok-imagine-image, grok-imagine-image-quality, grok-imagine-video, grok-imagine-video-1.5 — while Voice remains id-less, priced by realtime-minute / TTS-characters / STT-hour. The page states the alias rule verbatim: '`<modelname>` is aliased to the latest stable version. `<modelname>-latest` is aliased to the latest version. `<modelname>-<date>` refers directly to a specific model release.' 2026-07-16: the older ids are shown again — grok-4.3, grok-4.20-0309-reasoning, grok-4.20-0309-non-reasoning, grok-4.20-multi-agent-0309 (all 1M context) and grok-build-0.1 (256k) appear in the pricing table; the page has no separate model-list section, so these ids are stated via pricing plus recommendation prose. \"Configurable reasoning\" is NOT stated for grok-4.5 (its detail page says only \"Reasoning: Yes\"); the only documented reasoning split is the pre-built grok-4.20 reasoning / non-reasoning variants. No retirement or deprecation page is linked from the overview.",
       "claims": [
         "grok-4.5 current 500k context flagship for code",
         "grok-4.5 reasoning yes with no documented effort configuration",
         "grok-4.3 and grok-4.20-0309-reasoning and grok-4.20-0309-non-reasoning and grok-4.20-multi-agent-0309 1M context in pricing table",
         "grok-build-0.1 256k context in pricing table",
         "grok-4.20 reasoning and non-reasoning are pre-built variants not an effort setting",
-        "Grok Voice API current",
+        "Grok Voice API current and id-less priced by realtime-minute TTS-characters and STT-hour",
         "Imagine API image and video generation current",
+        "Imagine ids grok-imagine-image grok-imagine-image-quality grok-imagine-video grok-imagine-video-1.5",
+        "<modelname> aliased to the latest stable version, <modelname>-latest to the latest version, <modelname>-<date> to a specific release",
         "do not infer retirement from absence without a dedicated xAI retirement or deprecation source"
       ]
     },
@@ -1398,14 +1528,35 @@
       "agent": "cursor-cli",
       "kind": "model-lineup",
       "url": "https://cursor.com/docs/models-and-pricing",
-      "notes": "Registered 2026-07-16 — docs/models/cursor.md previously had no manifest source, so it sat outside the daily verification loop and its \"Cursor ships no model of its own\" claim went stale unchallenged. cursor.com/docs/models 308-redirects here. Cursor now documents first-party models (Composer 2.5, and Grok 4.5 jointly trained with SpaceXAI) alongside third-party families.",
+      "notes": "Registered 2026-07-16 — docs/models/cursor.md previously had no manifest source, so it sat outside the daily verification loop and its \"Cursor ships no model of its own\" claim went stale unchallenged. cursor.com/docs/models 308-redirects here. Cursor now documents first-party models (Composer 2.5, and Grok 4.5 jointly trained with SpaceXAI) alongside third-party families. Verified live 2026-07-19: Auto is described in the page prose only — it is NOT a row of the pricing table (earlier reading corrected). Confirmed unchanged: Composer 1 and Composer 2.5 are Cursor's own models, 'Grok 4.5 is jointly trained by Cursor and SpaceXAI', and no deprecation or retirement page exists, so retirement stays not documented. The third-party lineup now reaches GPT-5.6 Luna/Sol/Terra.",
       "claims": [
-        "Auto default selects models balancing intelligence cost efficiency and reliability",
+        "Auto is described in page prose and is not a row of the pricing table",
+        "Auto selects models balancing intelligence cost efficiency and reliability",
         "Composer 2.5 is Cursor's own model trained to be highly capable for agentic coding",
         "Composer 1 earlier Cursor model",
         "Grok 4.5 jointly trained by Cursor and SpaceXAI",
         "third-party families Anthropic OpenAI Google plus GLM 5.2 and Kimi K2.7 Code",
+        "third-party lineup reaches GPT-5.6 Luna Sol Terra",
+        "no deprecation or retirement page exists so retirement is not documented",
         "the pricing table is the model list"
+      ]
+    },
+    {
+      "id": "google-gemini-model-lineup",
+      "agent": "antigravity-cli",
+      "kind": "model-lineup",
+      "url": "https://ai.google.dev/gemini-api/docs/models",
+      "notes": "Google's official Gemini API model page (page states last-updated 2026-07-16). Mirror: docs/models/gemini-antigravity.md. Registered 2026-07-19 — that mirror previously had no manifest source, so it sat outside the daily verification loop and carried an \"unverified this run\" / router-catalog-seeded status; registering this page LIFTS that status. JS-rendered; required dynamic rendering to verify. Verified live 2026-07-19: gemini-3.5-flash is GA and named Google's most intelligent model; gemini-3.1-pro and Gemini 3 Flash are Preview; gemini-3.1-flash-lite is GA; Antigravity Agent is Preview. Shut down: Gemini 2.0 Flash, Gemini 2.0 Flash-Lite, Gemini 3.1 Flash-Lite Preview, Gemini 3 Pro Preview. Imagen 4 is deprecated.",
+      "claims": [
+        "gemini-3.5-flash GA and Google's most intelligent model frontier tier",
+        "gemini-3.5-flash sustained frontier performance on agentic and coding tasks",
+        "gemini-3.1-pro Preview advanced intelligence complex problem-solving agentic and vibe coding",
+        "gemini-3.1-flash-lite GA frontier-class performance at a fraction of the cost",
+        "Gemini 3 Flash Preview",
+        "Antigravity Agent Preview managed general-purpose agent model that plans reasons and executes code in an isolated Linux sandbox",
+        "shut down Gemini 2.0 Flash and Gemini 2.0 Flash-Lite",
+        "shut down Gemini 3.1 Flash-Lite Preview and Gemini 3 Pro Preview",
+        "Imagen 4 deprecated"
       ]
     }
   ]

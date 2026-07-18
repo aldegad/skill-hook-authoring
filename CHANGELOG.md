@@ -5,6 +5,121 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.38 — 2026-07-19
+
+Daily refresh: 65 manifest sources (1 added this run), all fetched successfully.
+The opposite of yesterday's stamps-only pass — a heavy drift day across every
+runtime. The headline is a **reversal we had been carrying as a hard rule**:
+Codex now special-cases the `"*"` matcher exactly like Claude, so the
+matcher-syntax divergence that used to silently break a ported hook is gone.
+Antigravity's model lineup also came off `unverified this run` for the first
+time, and Cursor's CLI binary is now documented under a different name.
+
+### Added
+
+- **Google Gemini model-lineup source — `ai.google.dev/gemini-api/docs/models`.**
+  `docs/models/gemini-antigravity.md` had been stamped `unverified this run` with
+  ids seeded from a downstream router catalog, because no official Google model
+  page was registered. One exists (page last-updated 2026-07-16); registering it
+  lifted the unverified status and immediately corrected the file. Same failure
+  mode as the Grok gaps closed 2026-07-17 and the `cursor-model-lineup` gap
+  caught 2026-07-16 — an official page sitting outside the loop.
+- **Cursor row in the Session Resume table.** Cursor resume is fully documented
+  (`agent --resume [chatId]`, `--continue` as an alias for `--resume=-1`,
+  `agent resume|ls|create-chat`, in-session `/resume`) but the table had no
+  Cursor row at all. Store path and chatId format remain `not documented`.
+- **A consumer for the orphaned `github-notifications` source.** It was verified
+  live every run while no prose in the repo cited it. `cloud-automation.md` now
+  uses it for how a reviewer learns the gate left a PR open.
+
+### Changed
+
+- **Codex hook matchers — `"*"` now matches everything (reversal).** The docs
+  state verbatim: "Use `"*"`, `""`, or omit `matcher` entirely to match every
+  occurrence of a supported event." We had documented the opposite — that a
+  literal `"*"` is an invalid regex on Codex that silently matches nothing, so a
+  Claude-style hook never fires and you must write `".*"`. That advice and its
+  dated 2026-06-09 trial-and-error note are retired. The still-live divergence is
+  narrower: `UserPromptSubmit` and `Stop` ignore `matcher` entirely on Codex.
+- **Codex hook gap list — two distinct failure modes, not one.** PreToolUse
+  `permissionDecision: "ask"` (plus legacy `approve`, `continue: false`,
+  `stopReason`, `suppressOutput`) and PostToolUse `updatedMCPToolOutput` mark the
+  hook run failed and continue; PermissionRequest's reserved `updatedInput` /
+  `updatedPermissions` / `interrupt` **fail closed**. Both were collapsed before.
+- **Cursor CLI binary is documented as `agent`, not `cursor-agent`.** The string
+  `cursor-agent` no longer appears on the overview or parameters pages. Recorded
+  as what the docs document — the rename does not prove the old binary was
+  removed. Added `--mode`, `--plan`, worktree flags, `--sandbox`, and the
+  `agent acp` / `agent worker` subcommands.
+- **Antigravity Gemini lineup — `unverified this run` lifted.** `gemini-3.5-flash`
+  was recorded as a low-latency flash tier; it is GA and Google's most intelligent
+  model (frontier tier). `gemini-3.1-pro` confirmed Preview. Added
+  `gemini-3.1-flash-lite` (GA), Gemini 3 Flash (Preview), and Antigravity Agent
+  (Preview). Retirements are now verifiable: Gemini 2.0 Flash, 2.0 Flash-Lite,
+  3.1 Flash-Lite Preview, 3 Pro Preview shut down; Imagen 4 deprecated.
+- **Grok documents a reasoning-effort flag.** We claimed Grok had no
+  caller-configurable effort setting and that the reasoning split was pre-built
+  variants only. The CLI reference now lists `--effort <LEVEL>`. The distinction
+  that survives: it is a **CLI-layer flag** (levels not enumerated), not a
+  model/API parameter — the models page still documents no `reasoning_effort`.
+  Also added `--fork-session`, the UUID session-id form, and the cross-runtime
+  fact that Grok accepts Claude Code flag names as aliases where they overlap.
+  Removed `--no-auto-update`, which no official page documents.
+- **Claude `--effort` is named, not numeric** (`low`/`medium`/`high`/`xhigh`/
+  `max`/`ultracode`), and **`--from-pr` does not resume** — it opens the session
+  picker filtered to PR-linked sessions. Also: hook commands have an exec form
+  (`args` set, no shell) and a shell form (`args` omitted), so the flat
+  "runs through `/bin/sh`" claim was wrong on Windows; payloads carry `prompt_id`;
+  `.claude-plugin/plugin.json` is now optional; resume-by-id searches only the
+  current project directory and its git worktrees.
+- **Hermes documents a project-local plugin root.** `./.hermes/plugins/` (gated by
+  `HERMES_ENABLE_PROJECT_PLUGINS=true`) joins the user, bundled, and pip-entry-point
+  roots. Since plugin hooks register via `ctx.register_hook()`, project-local hooks
+  now have a documented path — the matrix cell moves off `Partial`. Also added the
+  kanban hook events, the `plugin.yaml` field set, six further `ctx.register_*`
+  APIs, and the 20,000-char context-file truncation rule.
+- **Codex corrections.** Skill roots are a flat four-level hierarchy, not a
+  cwd-upward walk. The legacy `.claude-plugin/marketplace.json` path is no longer
+  documented (the `CLAUDE_PLUGIN_*` env aliases remain). Sessions resolve by ID
+  **or name**, IDs winning. Bare `gpt-5.6` is CLI-example shorthand, not a listed
+  model id. Cloud default-model wording is "chats", not "tasks".
+- **GitHub auto-merge prerequisites were understated.** Auto-merge must be enabled
+  at the **repository** level, the option appears only on PRs that cannot merge
+  immediately, and it is disabled if a non-write user pushes to the head branch or
+  the base branch is switched. `gh pr merge --auto` is not on that page at all —
+  reattributed to `gh` CLI surface rather than to the `github-auto-merge` source.
+- **Billing — still paused, stamp advanced to 2026-07-19.** The pause banner is
+  verbatim-unchanged (Agent SDK, `claude -p`, and third-party app usage still draw
+  from subscription usage limits; the announced monthly credit remains
+  unavailable), as is the `ANTHROPIC_API_KEY` caveat. Stamps bumped per the
+  time-sensitive freshness rule.
+- **`docs/models/kuma-studio.md` reconciled against first-party `team.json`.** The
+  file recorded Opus 4.7's removal but never whether `claude-opus-4-8` landed in
+  the spawnable catalog — a 17-day gap. It is present (12 entries across the effort
+  tiers and `[1m]`). Replaced the dated change-narrative section, which also
+  violated the no-history-in-doc-bodies rule, with a catalog-vs-lineup
+  reconciliation.
+
+### Verified unchanged (no edit)
+
+- **Every mandatory category re-fetched.** Project-instruction files (Codex
+  `AGENTS.md` precedence and 32 KiB cap, Claude `CLAUDE.md` layering, Grok's
+  six-name family, Hermes first-match-wins, Cursor's no-walk-up), session resume,
+  CLI spawn, billing, and model lineups all re-verified against their own
+  runtime's page. Claude's lineup matches the official table exactly.
+- **Antigravity has no headless flag.** Re-confirmed by grep across all eight
+  dynamically-rendered pages: zero hits for `headless`, `--print`, `-p`, or
+  `--output-format`. The SDK remains the documented programmatic path.
+- **gajae-code stays community/non-vendor** with every `not documented` verdict
+  intact (hooks, plugins, project-instruction loading, session-id resume). Added
+  only what the README actually documents: four bundled role agents, and that
+  `--worktree` takes a branch-like name rather than a filesystem path.
+- **Hermes model lineup stays `unverified this run`** — the official docs name no
+  model ids at all, so the router-seeded table cannot be vendor-verified. The stamp
+  now says "reviewed, not verified" and records why, so a bare date bump can never
+  read as verification.
+- `check-official-sources.mjs` PASS (65 sources, all 200).
+
 ## v1.37 — 2026-07-18
 
 Daily refresh: low-noise, freshness-stamps only. Re-verified the two

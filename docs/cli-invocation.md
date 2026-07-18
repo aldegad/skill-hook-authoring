@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-07-18
+Last reviewed: 2026-07-19
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or
@@ -51,29 +51,29 @@ the same idea, but they are reached differently:
 
 | Runtime | Launch interactive TUI | Seed with an initial prompt |
 |---|---|---|
-| Codex | `codex` — "launches the interactive terminal UI (TUI)" | `codex "<prompt>"` — the CLI reference documents an optional `PROMPT` positional: "Optional text instruction to start the session. Omit to launch the TUI without a pre-filled message." (anchored on the CLI reference; the CLI overview page does not state it) |
+| Codex | `codex` — "launches the interactive terminal UI (TUI)" | `codex "<prompt>"` — the CLI reference documents an optional positional as `PROMPT: string \| - (read stdin)`, so the interactive command also accepts `-` to read the seed prompt from stdin; omitting it launches the TUI with no pre-filled message (anchored on the CLI reference; the CLI overview page does not state it) |
 | Claude Code | `claude` — start interactive session | `claude "<query>"` — start interactive session with an initial prompt |
 | Grok / xAI | `grok` — interactive TUI | type after launch (no separate seed-prompt form documented; `-p`/`--single` switches to headless) |
 | Hermes Agent | `hermes chat` — interactive chat | type after launch (`-q` switches to a single non-interactive query) |
-| Antigravity CLI | `agy` — launches the TUI (first run does color/rendering/trust setup) | type in the prompt box after launch (no documented seed-prompt or headless `-p` flag) |
-| Cursor CLI | `cursor-agent` — interactive agent | type after launch (`-p`/`--print` switches to headless) |
-| gajae-code (community) | `gjc` — interactive TUI; `gjc --tmux` runs it inside tmux, `gjc --tmux --worktree <branch>` adds a git-worktree per task | `gjc @screenshot.png "<prompt>"` (image + prompt arg); interactive clipboard image paste with Ctrl+V |
+| Antigravity CLI | `agy` — launches the TUI (first launch detects a legacy Gemini CLI config and runs an interactive migration checklist: auto-converting extensions and global configs, migrating keyring tokens, and aligning settings) | type in the prompt box after launch (no documented seed-prompt or headless `-p` flag) |
+| Cursor CLI | `agent` — interactive agent (all three official Cursor CLI pages now document the binary as `agent`) | type after launch (`-p`/`--print` switches to headless) |
+| gajae-code (community) | `gjc` — interactive TUI; `gjc --tmux` runs it inside tmux, `gjc --tmux --worktree <name>` adds a git-worktree per task — the README notes "`--worktree` takes an optional branch-like name, not a filesystem path"; to use an existing worktree directory, `cd ../my-task-worktree && gjc --tmux` | `gjc @screenshot.png "<prompt>"` (image + prompt arg); interactive clipboard image paste with Ctrl+V |
 
 ## B. Headless run (non-interactive / print / one-shot)
 
 | Runtime | Headless command | Prompt / stdin | Output format | Useful scripting flags |
 |---|---|---|---|---|
-| Codex | `codex exec "<prompt>"` (alias `codex e`) | prompt arg; `-` reads prompt from stdin | `--json` / `--experimental-json` (JSONL); else final message to stdout, progress to stderr | `--model`/`-m`, `--output-last-message`/`-o <file>`, `--sandbox`/`-s`, `--cd`/`-C`, `--output-schema <file>` (JSON-Schema-constrained final message), `--ephemeral` (don't persist rollout files), `--ignore-user-config`, `--ignore-rules`; `CODEX_API_KEY` for inline auth. (Aside: `-p` is `--profile`, a config-profile selector — **not** a print/headless flag.) |
-| Claude Code | `claude -p "<query>"` (`--print`) | `cat file \| claude -p "<query>"` | `--output-format text\|json\|stream-json` (+ `--input-format`) | `--model`, `--bare` (skip auto-discovery; recommended for scripts, will become default for `-p`), `--allowedTools`, `--permission-mode default\|manual\|acceptEdits\|plan\|auto\|dontAsk\|bypassPermissions` (`manual` = alias of `default`, v2.1.200), `--max-turns`, `--max-budget-usd`, `--json-schema`, `--system-prompt[-file]`, `--append-system-prompt[-file]`, `--permission-prompt-tool`, `--bg`, `--no-session-persistence`, `--plugin-url <url>` (fetch plugin zip for session), `--agents <json>` (inline subagent definitions), `--settings <file-or-json>` |
-| Grok / xAI | `grok -p "<prompt>"` (`--single`) | `grok agent stdio` = ACP agent over JSON-RPC on stdin/stdout | `--output-format plain\|json\|streaming-json` | `--model`/`-m`, `--cwd`, `--always-approve`, `--no-alt-screen`, `--no-auto-update`; `--allow <RULE>` / `--deny <RULE>` permission rules and `--sandbox <PROFILE>` (per the CLI reference page). Subcommands: `grok sessions <list\|search\|delete>`, `grok export <session-id> [output]`, `grok import [targets...]` (imports from Claude Code), `grok worktree <list\|show\|rm\|gc>`, `grok mcp <list\|add\|remove\|doctor>`, `grok dashboard`, `grok wrap` |
-| Hermes Agent | `hermes chat -q "<query>"` (single query) | not documented (no stdin/JSON piping flag) | not documented (no JSON output-format flag) | `--model`, `--provider nous\|openrouter`, `--toolsets`, `-s <skill>`, `--verbose` |
+| Codex | `codex exec "<prompt>"` (alias `codex e`) | prompt arg; `-` reads prompt from stdin | `--json` / `--experimental-json` (JSONL); else final message to stdout, progress to stderr | `--model`/`-m`, `--output-last-message`/`-o <file>`, `--sandbox`/`-s`, `--cd`/`-C`, `--output-schema <file>` (JSON-Schema-constrained final message), `--ephemeral` (don't persist rollout files), `--ignore-user-config`, `--ignore-rules`, `--skip-git-repo-check` ("overrides Git repository requirement check"), `--full-auto` (deprecated — the docs say prefer `--sandbox workspace-write`); `CODEX_API_KEY` for inline auth. (Aside: `-p` is `--profile`, a config-profile selector — **not** a print/headless flag.) |
+| Claude Code | `claude -p "<query>"` (`--print`) | `cat file \| claude -p "<query>"` | `--output-format text\|json\|stream-json` (+ `--input-format`) | `--model`, `--bare` (skip auto-discovery; recommended for scripts, will become default for `-p`), `--allowedTools`, `--permission-mode default\|manual\|acceptEdits\|plan\|auto\|dontAsk\|bypassPermissions` (`manual` = alias of `default`, v2.1.200), `--max-turns`, `--max-budget-usd`, `--json-schema`, `--system-prompt[-file]`, `--append-system-prompt[-file]`, `--permission-prompt-tool`, `--bg`, `--no-session-persistence`, `--plugin-url <url>` (fetch plugin zip for session), `--agents <json>` (inline subagent definitions), `--settings <file-or-json>`, `--effort low\|medium\|high\|xhigh\|max\|ultracode`, `--advisor <model>` ("model alias (`opus` or `sonnet`) or full model ID") |
+| Grok / xAI | `grok -p "<prompt>"` (`--single`) | `grok agent stdio` = ACP agent over JSON-RPC on stdin/stdout | `--output-format plain\|json\|streaming-json` | `--model`/`-m`, `--cwd`, `--always-approve` (alias `--yolo`); `--allow <RULE>` / `--deny <RULE>` permission rules and `--sandbox <PROFILE>` (per the CLI reference page); `--no-alt-screen` (documented on the headless-scripting page only, **not** the reference). Also on the reference flag table: `--effort <LEVEL>` (a CLI-layer reasoning-effort flag — the models page still documents no effort/`reasoning_effort` API parameter), `--fork-session` ("When resuming, fork into a new session ID"), `-w, --worktree [<NAME>]`, `--ref <REF>`, `--rules <TEXT>`, `--system-prompt-override <TEXT>`, `--tools <LIST>` / `--disallowed-tools <LIST>`, `--max-turns <N>`, `--no-plan`, `--no-subagents`, `--no-memory`, `--disable-web-search`, `--experimental-memory`, `--oauth`. The reference also states Claude Code flag names are accepted as aliases where they overlap — `--allowedTools`, `--disallowedTools`, `--append-system-prompt`, `--system-prompt`, and the skip-permissions flag. Subcommands: `grok sessions <list\|search\|delete>`, `grok export <session-id> [output]`, `grok import [targets...]` (imports from Claude Code), `grok worktree <list\|show\|rm\|gc>`, `grok mcp <list\|add\|remove\|doctor>`, `grok dashboard`, `grok wrap`, `grok login [--device-auth]`, `grok logout`, `grok inspect [--json]`, `grok models`, `grok plugin <list\|install\|uninstall\|update\|enable\|disable\|details\|validate>`, `grok plugin marketplace <list\|add\|remove\|update>`, `grok memory clear [--workspace\|--global\|--all]`, `grok update`, `grok version`, `grok completions <shell>`, `grok setup` |
+| Hermes Agent | `hermes chat -q "<query>"` (single query); `hermes -w -z "<query>"` runs a single query inside an isolated git worktree | not documented (no stdin/JSON piping flag) | not documented (no JSON output-format flag) | `--model`, `--provider nous\|openrouter`, `--toolsets`, `-s <skill>`, `--verbose`, `-w` (isolated git worktree; `hermes -w` alone is the interactive form), `-z "<query>"` (single-query entry point alongside `-q`) |
 | Antigravity CLI | not documented — no `agy -p` one-shot in official docs | — | the TUI can pipe JSON status-line metadata to a shell script, but that is not a one-shot run | use the **Antigravity SDK** (`pip install google-antigravity`; Python `Agent` + `LocalAgentConfig`) for programmatic/unattended runs; `--sandbox`, `--dangerously-skip-permissions` are launch overrides, not a headless mode |
-| Cursor CLI | `cursor-agent -p "<prompt>"` (`--print`) | print mode for scripts | `--output-format text\|json\|stream-json` (only with `--print`); `--stream-partial-output` | `--model`, `-f`/`--force` (`--yolo`), `--trust` (headless only) |
+| Cursor CLI | `agent -p "<prompt>"` (`--print`) | print mode for scripts | `--output-format text\|json\|stream-json` (only with `--print`); `--stream-partial-output` | `--model`, `-f`/`--force` (`--yolo`), `--trust` (headless only), `--mode <plan\|ask>`, `--plan`, `-w, --worktree [name]` (worktrees land in `~/.cursor/worktrees/<reponame>/<name>`), `--worktree-base <branch>`, `--skip-worktree-setup`, `--sandbox`. Subcommands relevant to orchestration: `agent acp` (ACP agent) and `agent worker` |
 | gajae-code (community) | **not documented** — the README dropped `--mode rpc`; no headless one-shot mode is documented | — | not documented (no `--output-format`/`--json` flag) | external control is the SDK loopback WebSocket, a Coordinator MCP server (`gjc mcp-serve coordinator`), or `gjc daemon session` — none is a one-shot run. Provider retry budgets in `~/.gjc/config.yml`; BYO provider credentials (Anthropic/OpenAI/Google etc.), MIT/free harness with no billing of its own |
 
 > **Billing caveat (Claude Code).** On a subscription, `claude -p` and Agent SDK
 > runs draw from your plan's usage limits — the same pool as interactive use, with
-> no separate per-run credit. As of 2026-07-18, the Agent SDK billing
+> no separate per-run credit. As of 2026-07-19, the Agent SDK billing
 > change announced for 2026-06-15 remains **paused**. The official support page
 > opens with a dated banner: *"Update June 15: We're pausing the changes to Claude
 > Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK,
@@ -86,7 +86,8 @@ the same idea, but they are reached differently:
 > `claude -p` cron; the reliability advantage (Routine runs regardless of laptop
 > state) still applies. See `docs/cloud-automation.md`. (Source:
 > https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan,
-> verified 2026-07-18.)
+> verified 2026-07-19; the `ANTHROPIC_API_KEY` caveat re-confirmed 2026-07-19 on
+> https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan.)
 
 ## C. Resume invocation (command syntax)
 
@@ -99,19 +100,25 @@ command to type.
 
 | Runtime | Continue most recent | Pin a specific session | Headless resume |
 |---|---|---|---|
-| Codex | `codex resume` (picker) | `codex resume <SESSION_ID>` | `codex exec resume --last` / `codex exec resume <SESSION_ID>` (`--all` widens past cwd) |
-| Claude Code | `claude -c` (latest in cwd) | `claude -r "<id-or-name>"` (set a name with `-n`); `claude --from-pr <number>` (resume by PR number or URL) | add `-p`: `claude -c -p` / `claude -r "<s>" -p` |
-| Grok / xAI | `grok -c` | `grok -r <ID>` / `grok -s <ID>` (named) | add `-p` to the same flags |
+| Codex | `codex resume` (picker) | `codex resume <SESSION_ID>` — resume/fork/archive/unarchive/delete accept a session ID (UUID) **or a session name**, and "Session IDs take precedence over session names"; `codex delete --force` "bypasses confirmation for UUIDs only" | `codex exec resume --last` / `codex exec resume <SESSION_ID>` (`--all` widens past cwd) |
+| Claude Code | `claude -c` (latest in cwd) | `claude -r "<id-or-name>"` (set a name with `-n`) | add `-p`: `claude -c -p` / `claude -r "<s>" -p` |
+| Grok / xAI | `grok -c` | `grok -r <ID>` / `grok -s <ID>` (named) — the reference documents this as `-s, --session-id <UUID>` ("Use a specific UUID for a new session"); the headless-scripting page still shows the looser `<ID>`, so the two pages differ | add `-p` to the same flags |
 | Hermes Agent | `hermes -c` | `hermes -r <session_id>` (or by title) | not separately documented |
-| Antigravity CLI | `agy -c` / `agy --continue` (latest in workspace) | `agy --conversation <conversation-id>`; in-TUI `/resume` (`/switch`, `/conversation`) picker, Tab imports Antigravity 2.0 desktop threads; `/fork` (`/branch`) | not documented (no headless one-shot) |
-| Cursor CLI | `--continue` (alias `--resume=-1`) / `agent resume` | `cursor-agent --resume <chatId>` (list via `agent ls`) | same flags plus `-p`; `agent create-chat` returns a new id |
-| gajae-code (community) | not documented | not documented (worktree isolation via `--worktree <branch>` is not id-keyed resume) | not documented |
+| Antigravity CLI | `agy -c` / `agy --continue` (latest in workspace); "When you close the CLI, it automatically prints the exact command needed to resume that specific session" | `agy --conversation <conversation-id>`; in-TUI `/resume` (`/switch`, `/conversation`) picker, Tab imports Antigravity 2.0 desktop threads; `/fork` (`/branch`) | not documented (no headless one-shot) |
+| Cursor CLI | `--continue` (documented as an alias for `--resume=-1`) / `agent resume`; in-session `/resume` slash command | `agent --resume [chatId]` (list via `agent ls`) | same flags plus `-p`; `agent create-chat` returns a new id |
+| gajae-code (community) | not documented | not documented (worktree isolation via `--worktree <name>` is not id-keyed resume) | not documented |
 
 **Pinning a specific session** is shell-level on every runtime: `codex resume <id>`,
 `claude -r "<id-or-name>"`, `grok -r <id>`, `hermes -r <id>`,
-`agy --conversation <conversation-id>`, `cursor-agent --resume <chatId>`.
+`agy --conversation <conversation-id>`, `agent --resume [chatId]`.
 Identifiers differ (UUID vs. human name vs. `--conversation`), so store the handle
-in the form that runtime's resume command accepts. Antigravity conversations are
+in the form that runtime's resume command accepts. For Claude Code, "passing a
+session ID searches only the current project directory and its git worktrees", so
+a resume issued from the wrong cwd fails. `claude --from-pr` is **not** a pin: it
+"open[s] the session picker filtered to sessions linked to a specific pull
+request. Accepts a PR number, a GitHub or GitHub Enterprise PR URL, a GitLab merge
+request URL, or a Bitbucket pull request URL" — it filters a picker rather than
+resuming a session directly. Antigravity conversations are
 **workspace-scoped** — `agy` only lists sessions started in the current directory;
 `agy -c` resolves the workspace through a documented cache map at
 `~/.gemini/antigravity-cli/cache/last_conversations.json`.
@@ -130,8 +137,11 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
   Antigravity 2.0 desktop app and the **Antigravity SDK**
   (`pip install google-antigravity`) — the documented programmatic/headless path,
   since `agy` itself has no one-shot flag. Install `agy` to `~/.local/bin/agy` via
-  `curl -fsSL https://antigravity.google/cli/install.sh | bash` (Windows:
-  `irm https://antigravity.google/cli/install.ps1 | iex`); auth is via the OS
+  `curl -fsSL https://antigravity.google/cli/install.sh | bash` (Windows
+  PowerShell: `irm https://antigravity.google/cli/install.ps1 | iex`; Windows CMD:
+  `curl -fsSL https://antigravity.google/cli/install.cmd -o install.cmd && install.cmd && del install.cmd`).
+  Documented installation flags: `--skip-aliases` (skip purging/updating shell
+  aliases) and `--skip-path` (skip appending to PATH). Auth is via the OS
   keyring (browser/SSH OAuth on first sign-in).
 - **Migration:** `agy plugin import gemini` converts legacy Gemini extensions to
   native plugins; first launch auto-detects and offers to convert existing
@@ -181,12 +191,12 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
   check of `docs.x.ai/llms.txt` returns zero hits for "open source"/"Apache"/"MIT"),
   which is why `xai-grok-build-repo` exists as a narrow `source-availability`
   source while `docs.x.ai` stays canonical for every behavior claim. Every other
-  tracked vendor CLI (Codex, Claude Code, `agy`, `cursor-agent`, Hermes) ships as a
+  tracked vendor CLI (Codex, Claude Code, `agy`, Cursor `agent`, Hermes) ships as a
   distributed binary with no published source — and for Antigravity specifically,
   the transition blog does **not** state the OSS repo's licence, so no Apache-2.0
   claim is made for it. (The Codex *goal internals* in `completion-stack.md` are
   source-verified against `openai/codex` under the same rule.)
-- **Claude Code Agent SDK billing (status as of 2026-07-18):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token, requires a subscription) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-07-18.)
+- **Claude Code Agent SDK billing (status as of 2026-07-19):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token, requires a subscription — *unverified this run*: not found on the cli-reference or headless pages, and not contradicted) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-07-19.)
 - Session resume identifiers differ (UUID session id vs. human name vs.
   `--last` / `-1` vs. `--conversation <uuid>`). Store a resume handle in the form
   that runtime's resume command accepts, and remember whether you need the
@@ -201,6 +211,7 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
 - Claude Code CLI reference — <https://code.claude.com/docs/en/cli-reference>
 - Claude Code headless mode — <https://code.claude.com/docs/en/headless>
 - Grok CLI headless & scripting — <https://docs.x.ai/build/cli/headless-scripting>
+- Grok CLI reference (flag table, subcommands) — <https://docs.x.ai/build/cli/reference>
 - Hermes Agent CLI — <https://hermes-agent.nousresearch.com/docs/user-guide/cli/>
 - Gemini CLI → Antigravity CLI transition (official blog) — <https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/>
 - Antigravity CLI reference — <https://antigravity.google/docs/cli/reference>
@@ -211,6 +222,8 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
 - Antigravity CLI install & auth — <https://antigravity.google/docs/cli/install>
 - Antigravity SDK (programmatic/headless path) — <https://antigravity.google/docs/sdk/overview>
 - Cursor CLI parameters — <https://cursor.com/docs/cli/reference/parameters>
+- Cursor CLI overview — <https://cursor.com/docs/cli/overview>
+- Cursor CLI using (in-session `/resume`, `--continue`) — <https://cursor.com/docs/cli/using>
 - gajae-code (community project, README — not vendor docs) — <https://github.com/Yeachan-Heo/gajae-code>
 - Claude Code with Pro/Max plan (billing) — <https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan>
-- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-07-18) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
+- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-07-19) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>

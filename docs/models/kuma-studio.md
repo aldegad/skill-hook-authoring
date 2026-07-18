@@ -4,7 +4,8 @@ Official source: the Kuma Studio repo `packages/shared/team.json` (`modelCatalog
 — this is a **downstream consumer**, not a vendor. It syncs the ids that the
 vendor lineups (`claude.md`, `codex.md`, `grok.md`, `hermes.md`,
 `gemini-antigravity.md`) establish as current.
-Last reviewed: 2026-07-02
+Last reviewed: 2026-07-19 (reconciled first-party against
+`packages/shared/team.json`)
 
 ## What Kuma Studio ships as spawnable
 
@@ -25,13 +26,22 @@ vendor official docs → this `docs/models/*` record → kuma-studio `team.json`
 (downstream). Never the reverse: do not treat team.json as evidence of what a
 vendor ships.
 
-## Recent catalog change
+## Catalog state vs. the vendor lineups
 
-- **2026-07-02:** Claude Opus 4.7 (`claude-opus-4-7`, 9 catalog entries) removed
-  and Sonnet 4.6 (`claude-sonnet-4-6`) bumped to Sonnet 5 (`claude-sonnet-5`) in
-  the kuma-studio catalog. Fable 5 was already present. See `claude.md` for the
-  vendor lineup; the change narrative lives in the kuma-studio repo history, not
-  here.
+Reconciled against `packages/shared/team.json` directly:
+
+- **Claude:** `claude-fable-5`, `claude-opus-4-8`, `claude-sonnet-5` (each in
+  low / medium / high / xhigh / max / ultracode × plain and `[1m]` entries) and
+  `claude-haiku-4-5` (plain and `[1m]`). No `claude-opus-4-7` or
+  `claude-sonnet-4-6` entry remains — the catalog matches `claude.md`.
+- **Codex:** `gpt-5.6-sol` / `-terra` / `-luna`, `gpt-5.5`, `gpt-5.4-mini`,
+  `gpt-5.3-codex-spark`. Bare `gpt-5.4` from the vendor lineup is **not** carried.
+- **Grok:** `grok-4.5` (low/medium/high) plus a Kuma-local
+  `grok-composer-2.5-fast` entry not owned by `grok.md`.
+- **Hermes:** the seven `provider/model` router entries mirrored in `hermes.md`.
+
+Catalog edits happen in the kuma-studio repo; this file records the reconciled
+state, not the edit history.
 
 ## Boundaries
 
