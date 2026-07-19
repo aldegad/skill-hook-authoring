@@ -4,7 +4,7 @@ Official source: the Kuma Studio repo `packages/shared/team.json` (`modelCatalog
 — this is a **downstream consumer**, not a vendor. It syncs the ids that the
 vendor lineups (`claude.md`, `codex.md`, `grok.md`, `hermes.md`,
 `gemini-antigravity.md`) establish as current.
-Last reviewed: 2026-07-19 (reconciled first-party against
+Last reviewed: 2026-07-20 (reconciled first-party against
 `packages/shared/team.json`)
 
 ## What Kuma Studio ships as spawnable

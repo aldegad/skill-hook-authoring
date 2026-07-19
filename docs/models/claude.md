@@ -2,7 +2,7 @@
 
 Official source: https://docs.anthropic.com/en/docs/about-claude/models/overview
 (301-redirects to `platform.claude.com/docs/en/docs/about-claude/models/overview` — same official doc)
-Last reviewed: 2026-07-19 (verified live against the official models overview)
+Last reviewed: 2026-07-20 (verified live against the official models overview)
 
 ## Current shipping models
 
