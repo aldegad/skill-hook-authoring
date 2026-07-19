@@ -1,12 +1,17 @@
 # Hermes Agent (Nous Research) — model lineup
 
 Official source: https://hermes-agent.nousresearch.com
-Last reviewed: 2026-07-19 — **reviewed, not verified.** The lineup below stays
-**`unverified this run`**: the official Hermes docs name **no model ids at all**,
-only "Works with Nous Portal, OpenRouter, OpenAI, or any endpoint" plus
-unversioned references to Nous models (Hermes, Nomos, Psyche). The router ids
-here are therefore Kuma-catalog-seeded and **vendor-unverifiable** — re-checking
-the vendor doc cannot promote them to verified.
+Last reviewed: 2026-07-20 — **reviewed, not verified.** The lineup below stays
+**`unverified this run`**: the official Hermes docs document **no model lineup**.
+Concrete ids appear only as illustrative config examples (e.g.
+`anthropic/claude-opus-4.6`, `openai/gpt-5`, `google/gemini-3-flash-preview`
+under `auxiliary:` / `reasoning_overrides:` on the configuration page), never as
+a Hermes-owned catalog, and none of the router ids below appear in the docs —
+the surrounding prose is "Works with Nous Portal, OpenRouter, OpenAI, or any
+endpoint" plus unversioned references to Nous models (Hermes, Nomos, Psyche).
+The router ids here are therefore Kuma-catalog-seeded and
+**vendor-unverifiable** — re-checking the vendor doc cannot promote them to
+verified.
 
 ## Current router models (seed — verify against official docs)
 

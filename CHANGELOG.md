@@ -5,6 +5,73 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## v1.39 — 2026-07-20
+
+Daily refresh: 65 manifest sources, all fetched successfully — no source went
+`unverified this run`, including the Antigravity SPA pages (Playwright
+real-Chrome render) and the JS-heavy Cursor docs. Four of six runtimes were
+clean; the drift is concentrated in Codex, which **reversed two facts we had
+recorded only yesterday**, plus a batch of Hermes mirror corrections that were
+our own errors rather than vendor movement.
+
+### Changed
+
+- **Codex skill roots are a cwd-upward walk again (reversal of v1.38).** The
+  build-skills page states: "For repositories, Codex scans `.agents/skills` in
+  every directory from your current working directory up to the repository
+  root." The location list is six entries — `$CWD/.agents/skills`,
+  `$CWD/../.agents/skills`, `$REPO_ROOT/.agents/skills`, `$HOME/.agents/skills`,
+  `/etc/codex/skills`, built-in. v1.38 recorded the opposite ("flat four-level
+  hierarchy, not a cwd-upward walk"). This claim has now flipped twice, so the
+  manifest note tells the next run to re-read the live sentence rather than
+  trust either shape.
+- **Codex documents the legacy `.claude-plugin/marketplace.json` again
+  (reversal).** "The app can read marketplace files from:" now lists four
+  locations including "a legacy-compatible marketplace at
+  `$REPO_ROOT/.claude-plugin/marketplace.json`" and the curated marketplace
+  behind the official Plugins Directory. v1.38 had it as `not documented`.
+- **`${PLUGIN_ROOT}` hook-command substitution lost its `unverified this run`
+  hedge** — reproduced live on the Codex plugin-build page.
+- **Hermes has no control-flow-vs-lifecycle hook taxonomy.** All three Hermes
+  pages now present one flat `Hook | Fires when` table, and the plugins page
+  calls the whole set "lifecycle events". The "vendor's own two pages disagree"
+  caveat we carried is stale — they no longer disagree, because neither
+  categorizes. Replaced with the per-invocation vs. once-per-turn reading.
+- **`.cursor/rules/*.mdc` removed from the Hermes priority chain (our error).**
+  The docs state the chain twice, verbatim: "`.hermes.md` → `AGENTS.md` →
+  `CLAUDE.md` → `.cursorrules`". `.mdc` files are recognized (CWD only) but sit
+  outside the first-match chain. The compatibility matrix already had this
+  right; `SKILL.md` and `docs/plugin-packaging.md` did not.
+- **Grok's instruction-file family corrected to six names in
+  `plugin-packaging.md` (our error).** That line still carried the old
+  three-name list from the skills-plugins aside while every other mirror was
+  fixed on 2026-07-17; the dedicated project-rules page is canonical.
+- **gajae-code's Coordinator MCP server is undocumented again.** `grep -ci mcp`
+  over the README returns 0. It has now appeared and vanished twice (absent
+  2026-07-07, present 2026-07-16, absent 2026-07-20).
+- **`docs/models/hermes.md` justification corrected.** It claimed the docs "name
+  no model ids at all"; the configuration page does name ids, but only as
+  illustrative `auxiliary:` / `reasoning_overrides:` config examples, never as a
+  Hermes-owned catalog. The `unverified this run` status is unchanged — only the
+  reasoning was overstated.
+
+### Added
+
+- **Antigravity billing (G1 credits).** The skill claims billing coverage across
+  runtimes but had nothing for Antigravity. `docs/cli-invocation.md` now records
+  the `useG1Credits` setting ("Uses personal AI credits for model calls once
+  plan quotas are exhausted") and in-session `/credits`, and notes that with no
+  headless flag there is no per-run cost capture equivalent to
+  `claude --output-format json`.
+
+### Verified unchanged
+
+Claude Code (14 sources), Cursor (6), Grok (7), Antigravity/Gemini (11), and
+GitHub (2) produced zero drift. The **2026-06-15 Agent SDK billing change is
+still paused** — banner verbatim-unchanged, no newer date on the page — and the
+Claude, Codex, Grok, Cursor, and Gemini model lineups all match their mirrors
+exactly. Freshness stamps advanced to 2026-07-20 accordingly.
+
 ## v1.38 — 2026-07-19
 
 Daily refresh: 65 manifest sources (1 added this run), all fetched successfully.

@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-07-19
+Last reviewed: 2026-07-20
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or
@@ -9,7 +9,7 @@ own official docs; where a runtime does not document a capability, the cell says
 `not documented`, never an inferred flag.
 
 One row — **gajae-code** (`gjc`) — is a community/MIT beta, not a vendor product;
-its rows cite the project's GitHub README (verified 2026-07-16), not vendor docs.
+its rows cite the project's GitHub README (verified 2026-07-20), not vendor docs.
 
 This doc owns the **command syntax** (launch / headless / resume invocation).
 For the deeper resume **semantics** — session stores, id form, capture-before-exit,
@@ -69,11 +69,11 @@ the same idea, but they are reached differently:
 | Hermes Agent | `hermes chat -q "<query>"` (single query); `hermes -w -z "<query>"` runs a single query inside an isolated git worktree | not documented (no stdin/JSON piping flag) | not documented (no JSON output-format flag) | `--model`, `--provider nous\|openrouter`, `--toolsets`, `-s <skill>`, `--verbose`, `-w` (isolated git worktree; `hermes -w` alone is the interactive form), `-z "<query>"` (single-query entry point alongside `-q`) |
 | Antigravity CLI | not documented — no `agy -p` one-shot in official docs | — | the TUI can pipe JSON status-line metadata to a shell script, but that is not a one-shot run | use the **Antigravity SDK** (`pip install google-antigravity`; Python `Agent` + `LocalAgentConfig`) for programmatic/unattended runs; `--sandbox`, `--dangerously-skip-permissions` are launch overrides, not a headless mode |
 | Cursor CLI | `agent -p "<prompt>"` (`--print`) | print mode for scripts | `--output-format text\|json\|stream-json` (only with `--print`); `--stream-partial-output` | `--model`, `-f`/`--force` (`--yolo`), `--trust` (headless only), `--mode <plan\|ask>`, `--plan`, `-w, --worktree [name]` (worktrees land in `~/.cursor/worktrees/<reponame>/<name>`), `--worktree-base <branch>`, `--skip-worktree-setup`, `--sandbox`. Subcommands relevant to orchestration: `agent acp` (ACP agent) and `agent worker` |
-| gajae-code (community) | **not documented** — the README dropped `--mode rpc`; no headless one-shot mode is documented | — | not documented (no `--output-format`/`--json` flag) | external control is the SDK loopback WebSocket, a Coordinator MCP server (`gjc mcp-serve coordinator`), or `gjc daemon session` — none is a one-shot run. Provider retry budgets in `~/.gjc/config.yml`; BYO provider credentials (Anthropic/OpenAI/Google etc.), MIT/free harness with no billing of its own |
+| gajae-code (community) | **not documented** — the README dropped `--mode rpc`; no headless one-shot mode is documented | — | not documented (no `--output-format`/`--json` flag) | external control is the SDK loopback WebSocket (`docs/sdk.md`) or `gjc daemon session` — none is a one-shot run; the Coordinator MCP server is `not documented` (every `mcp` mention is absent from the README again as of 2026-07-20). Provider retry budgets in `~/.gjc/config.yml`; BYO provider credentials (Anthropic/OpenAI/Google etc.), MIT/free harness with no billing of its own |
 
 > **Billing caveat (Claude Code).** On a subscription, `claude -p` and Agent SDK
 > runs draw from your plan's usage limits — the same pool as interactive use, with
-> no separate per-run credit. As of 2026-07-19, the Agent SDK billing
+> no separate per-run credit. As of 2026-07-20, the Agent SDK billing
 > change announced for 2026-06-15 remains **paused**. The official support page
 > opens with a dated banner: *"Update June 15: We're pausing the changes to Claude
 > Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK,
@@ -86,7 +86,7 @@ the same idea, but they are reached differently:
 > `claude -p` cron; the reliability advantage (Routine runs regardless of laptop
 > state) still applies. See `docs/cloud-automation.md`. (Source:
 > https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan,
-> verified 2026-07-19; the `ANTHROPIC_API_KEY` caveat re-confirmed 2026-07-19 on
+> verified 2026-07-20; the `ANTHROPIC_API_KEY` caveat re-confirmed 2026-07-20 on
 > https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan.)
 
 ## C. Resume invocation (command syntax)
@@ -196,7 +196,15 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
   the transition blog does **not** state the OSS repo's licence, so no Apache-2.0
   claim is made for it. (The Codex *goal internals* in `completion-stack.md` are
   source-verified against `openai/codex` under the same rule.)
-- **Claude Code Agent SDK billing (status as of 2026-07-19):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token, requires a subscription — *unverified this run*: not found on the cli-reference or headless pages, and not contradicted) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-07-19.)
+- **Claude Code Agent SDK billing (status as of 2026-07-20):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token, requires a subscription — *unverified this run*: not found on the cli-reference or headless pages, and not contradicted) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-07-20.)
+- **Antigravity CLI billing (G1 credits, verified 2026-07-20):** `agy` model calls
+  run against plan quota; the `useG1Credits` setting ("External builds only. Uses
+  personal AI credits for model calls once plan quotas are exhausted.") is the
+  documented overflow path, and in-session `/credits` "View remaining G1 credits
+  and purchase links" is the only documented balance surface. There is no
+  headless invocation, so per-run cost cannot be captured from a CLI flag the way
+  `claude --output-format json` reports `total_cost_usd` — budget through the SDK
+  or the quota display instead. (Source: <https://antigravity.google/docs/cli/reference>.)
 - Session resume identifiers differ (UUID session id vs. human name vs.
   `--last` / `-1` vs. `--conversation <uuid>`). Store a resume handle in the form
   that runtime's resume command accepts, and remember whether you need the
@@ -226,4 +234,4 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
 - Cursor CLI using (in-session `/resume`, `--continue`) — <https://cursor.com/docs/cli/using>
 - gajae-code (community project, README — not vendor docs) — <https://github.com/Yeachan-Heo/gajae-code>
 - Claude Code with Pro/Max plan (billing) — <https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan>
-- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-07-19) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
+- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-07-20) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
