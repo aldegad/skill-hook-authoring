@@ -116,7 +116,7 @@ Implication for cross-engine repos: a module-specific instruction placed in a de
 
 ## Core Rules
 
-- Pick one canonical repo path first. Installed copies under `~/.claude` and `~/.codex` must be symlinks or generated config entries.
+- Pick one canonical repo path first. Installed copies under `~/.claude/skills` and `~/.agents/skills` must be symlinks or generated config entries.
 - Do not edit home-directory installed copies directly.
 - Do not keep separate Claude and Codex versions unless a difference is explicitly documented and tested.
 - Name the package layer explicitly before editing: skill-only, hook-only, plugin-like package, or generated runtime plugin. Do not let a `SKILL.md` entrypoint hide installer, hook, or trust-boundary changes.
@@ -278,7 +278,7 @@ For `PostToolUse` block (prevent normal post-processing), use `{"decision": "blo
       {
         "matcher": "^Bash$",
         "hooks": [
-          { "type": "command", "command": "~/.codex/skills/<id>/scripts/<hook>.sh", "timeout": 30 }
+          { "type": "command", "command": "~/.agents/skills/<id>/scripts/<hook>.sh", "timeout": 30 }
         ]
       }
     ],
@@ -286,7 +286,7 @@ For `PostToolUse` block (prevent normal post-processing), use `{"decision": "blo
       {
         "matcher": "^Bash$",
         "hooks": [
-          { "type": "command", "command": "~/.codex/skills/<id>/scripts/<hook>.sh", "timeout": 30 }
+          { "type": "command", "command": "~/.agents/skills/<id>/scripts/<hook>.sh", "timeout": 30 }
         ]
       }
     ]
