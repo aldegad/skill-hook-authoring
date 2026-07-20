@@ -5,9 +5,62 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
-## v1.39 — 2026-07-20
+## v1.40 — 2026-07-21
 
-Daily refresh: 65 manifest sources, all fetched successfully — no source went
+Daily refresh: low-noise, freshness-stamps only. All 65 manifest sources
+re-fetched (all 200, no source went `unverified this run`) across six runtimes;
+re-verified the two time-sensitive claim classes and advanced their stamps. No
+structural fact changed, nothing added or retired.
+
+### Changed
+
+- **Billing (Claude Agent SDK / `claude -p`) — still paused, stamp advanced to
+  2026-07-21.** Re-fetched the support page; the "Update June 15" pause banner is
+  verbatim-unchanged (Agent SDK, `claude -p`, and third-party app usage still
+  draw from the subscription usage limits; the announced monthly credit remains
+  unavailable). Also re-confirmed verbatim that a present `ANTHROPIC_API_KEY`
+  switches Claude Code to API billing. Bumped the `as of`/`verified` dates in
+  `cli-invocation.md` (billing caveat, status line, footer, Antigravity G1
+  billing), `cloud-automation.md`, and the manifest billing note + claim + Pro/Max
+  note.
+- **Model lineups — re-verified clean, `Last reviewed:` advanced to 2026-07-21.**
+  Claude (`platform.claude.com`), Codex (`learn.chatgpt.com/docs/models`), Grok
+  (`docs.x.ai/developers/models`), and Cursor (`cursor.com/docs/models-and-pricing`)
+  all match the recorded ids/tiers/retirement status with no drift (Fable 5 /
+  Opus 4.8 / Sonnet 5 / Haiku 4.5; GPT-5.6 sol/terra/luna + 5.5/5.4/5.4-mini/
+  5.3-codex-spark; Grok 4.5; Composer 2.5). Advanced those four `docs/models/*.md`
+  stamps and their matching manifest `Verified live` dates per the time-sensitive
+  freshness-stamp rule.
+
+### Verified unchanged (no edit)
+
+- Spot-checked the highest-churn mandatory-category pages across all six runtimes
+  — Codex `AGENTS.md` discovery + CWD-first skill-root walk + 10 hook events, the
+  `.claude-plugin/marketplace.json` legacy path, Claude memory (`CLAUDE.md`
+  loading) + expanded hook taxonomy, Grok project-rules (six-name family + walk)
+  + `grok` binary (not renamed), Cursor `agent` binary + `-p`/`--print` headless,
+  Hermes three-system hook taxonomy + `.hermes.md → AGENTS.md → CLAUDE.md →
+  .cursorrules` chain, and gajae-code (community/non-vendor — `--mode rpc` still
+  gone, no headless one-shot, no MCP). All match baseline; structural stamps left
+  as-is.
+
+### Flagged for next pass (unverified this run — no edit made)
+
+- **Gemini model page discrepancy.** A dynamic render of
+  `ai.google.dev/gemini-api/docs/models` this run surfaced the 2.5 family
+  (`gemini-2.5-pro`/`-flash`/`-flash-lite`) as current and showed no non-preview
+  GA `gemini-3-pro`/`gemini-3.5-pro` id — conflicting with the recorded
+  `docs/models/gemini-antigravity.md` lineup (`gemini-3.1-pro` Preview, Gemini 3
+  Flash Preview, Antigravity Agent Preview). Single ambiguous extraction; per the
+  model-lineup rule (never substitute a guess) the lineup is **left unchanged**
+  and its `Last reviewed:` stamp is **not** advanced, pending a clean confirming
+  re-verify next pass.
+- **Antigravity docs prerendered this run.** `antigravity.google/docs/*` returned
+  full crawlable content (static + Playwright-confirmed) rather than an empty JS
+  shell. The defensive SPA-caution baseline is **retained** — one run of
+  prerendered content is not enough to retire a safety discipline.
+
+
 `unverified this run`, including the Antigravity SPA pages (Playwright
 real-Chrome render) and the JS-heavy Cursor docs. Four of six runtimes were
 clean; the drift is concentrated in Codex, which **reversed two facts we had

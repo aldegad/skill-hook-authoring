@@ -2,7 +2,7 @@
 
 Official source: https://cursor.com/docs/models-and-pricing
 (`cursor.com/docs/models` 308-redirects here)
-Last reviewed: 2026-07-20 (verified live against the official models & pricing page)
+Last reviewed: 2026-07-21 (verified live against the official models & pricing page)
 
 ## Current shipping models
 
