@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-07-20
+Last reviewed: 2026-07-21
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or
@@ -73,7 +73,7 @@ the same idea, but they are reached differently:
 
 > **Billing caveat (Claude Code).** On a subscription, `claude -p` and Agent SDK
 > runs draw from your plan's usage limits — the same pool as interactive use, with
-> no separate per-run credit. As of 2026-07-20, the Agent SDK billing
+> no separate per-run credit. As of 2026-07-21, the Agent SDK billing
 > change announced for 2026-06-15 remains **paused**. The official support page
 > opens with a dated banner: *"Update June 15: We're pausing the changes to Claude
 > Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK,
@@ -86,7 +86,7 @@ the same idea, but they are reached differently:
 > `claude -p` cron; the reliability advantage (Routine runs regardless of laptop
 > state) still applies. See `docs/cloud-automation.md`. (Source:
 > https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan,
-> verified 2026-07-20; the `ANTHROPIC_API_KEY` caveat re-confirmed 2026-07-20 on
+> verified 2026-07-21; the `ANTHROPIC_API_KEY` caveat re-confirmed 2026-07-21 on
 > https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan.)
 
 ## C. Resume invocation (command syntax)
@@ -196,8 +196,8 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
   the transition blog does **not** state the OSS repo's licence, so no Apache-2.0
   claim is made for it. (The Codex *goal internals* in `completion-stack.md` are
   source-verified against `openai/codex` under the same rule.)
-- **Claude Code Agent SDK billing (status as of 2026-07-20):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token, requires a subscription — *unverified this run*: not found on the cli-reference or headless pages, and not contradicted) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-07-20.)
-- **Antigravity CLI billing (G1 credits, verified 2026-07-20):** `agy` model calls
+- **Claude Code Agent SDK billing (status as of 2026-07-21):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token, requires a subscription — *unverified this run*: not found on the cli-reference or headless pages, and not contradicted) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-07-21.)
+- **Antigravity CLI billing (G1 credits, verified 2026-07-21):** `agy` model calls
   run against plan quota; the `useG1Credits` setting ("External builds only. Uses
   personal AI credits for model calls once plan quotas are exhausted.") is the
   documented overflow path, and in-session `/credits` "View remaining G1 credits
@@ -234,4 +234,4 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
 - Cursor CLI using (in-session `/resume`, `--continue`) — <https://cursor.com/docs/cli/using>
 - gajae-code (community project, README — not vendor docs) — <https://github.com/Yeachan-Heo/gajae-code>
 - Claude Code with Pro/Max plan (billing) — <https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan>
-- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-07-20) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
+- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-07-21) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
