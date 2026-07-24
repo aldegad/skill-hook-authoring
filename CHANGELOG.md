@@ -5,6 +5,29 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## Unreleased — 2026-07-24
+
+Umbrella-convention edit (not a vendor-doc refresh): the doc governed skill
+registration but never named where the registration data lives, which let two
+readers lose the thread three times in one session.
+
+### Added
+
+- **Named the three-layer topology explicitly:** conventions (this skill) →
+  manifest (`skills.json`) → installer (`install-local.mjs`) → generated
+  symlinks. `skills.json` now appears in Recommended Layout and Core Rules as
+  *the* single registration record; hand-symlinking or engine-config entries are
+  called out as a second channel that drifts.
+- **New Core Rule for build-producing skill repos:** point the manifest `path`
+  at the skill subfolder (`<repo>/skills/<name>/`), not the repo root, so a
+  build cache (`target/`, `node_modules/`, `dist/`) stays out of the runtime
+  skill-scan root. Codex aborts with `skills scan reached its traversal limit`
+  when a skill folder is oversized; `kordoc` is the standing precedent, `katok`
+  the case that surfaced it.
+- Refreshed the Recommended Layout tree examples (dropped retired
+  `content-pipeline` / `npm-reorg-guard`, added `safedeps` / `sprite-gen` /
+  `katok` / a `../` sibling-repo entry).
+
 ## v1.40 — 2026-07-21
 
 Daily refresh: low-noise, freshness-stamps only. All 65 manifest sources
@@ -60,6 +83,7 @@ structural fact changed, nothing added or retired.
   shell. The defensive SPA-caution baseline is **retained** — one run of
   prerendered content is not enough to retire a safety discipline.
 
+## v1.39 — 2026-07-20
 
 `unverified this run`, including the Antigravity SPA pages (Playwright
 real-Chrome render) and the JS-heavy Cursor docs. Four of six runtimes were

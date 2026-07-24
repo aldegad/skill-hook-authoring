@@ -117,6 +117,8 @@ Implication for cross-engine repos: a module-specific instruction placed in a de
 ## Core Rules
 
 - Pick one canonical repo path first. Installed copies under `~/.claude/skills` and `~/.agents/skills` must be symlinks or generated config entries.
+- **Registration goes through the umbrella manifest, `skills.json`, and nothing else.** In the `agent-extensions` umbrella, `skills.json` is the single record of *which* skill installs from *which* canonical path; `scripts/install/install-local.mjs` reads it and generates the symlinks into every engine's skill root. Adding a skill = adding one entry there, then re-running the installer. Do **not** register a skill by hand-symlinking it into an engine root or by adding an engine-config entry (e.g. Codex `~/.codex/config.toml` `[[skills.config]]`) — that is a second registration channel and it drifts. This skill states the *conventions*; `skills.json` is the *data* that applies them; the installer is what *executes* them. (2026-07-24: 14 hand-registered skills plus 21 `[[skills.config]]` entries had accumulated as exactly this second channel and were folded back into `skills.json`.)
+- **A skill whose repo also builds artifacts must point its manifest `path` at the skill subfolder, not the repo root.** Runtimes scan the whole skill root recursively — Codex walks `~/.agents/skills` under a traversal budget and aborts with `skills scan reached its traversal limit` when one folder is oversized — so a repo root that carries a build cache (`target/`, `node_modules/`, `dist/`) gets swept into the scan and can starve discovery of *other* skills. Link the minimal skill folder inside the repo (`<repo>/skills/<name>/` or the runtime-native subpath) so the build tree stays outside the scan root; the repo itself, its build, and its upstream remote are untouched. Precedent: `kordoc` links `kordoc/plugins/kordoc/skills/kordoc/`, not its repo root. (This is a refinement of "one canonical repo path", not a `skills/` index in the umbrella root — that remains banned below.)
 - Do not edit home-directory installed copies directly.
 - Do not keep separate Claude and Codex versions unless a difference is explicitly documented and tested.
 - Name the package layer explicitly before editing: skill-only, hook-only, plugin-like package, or generated runtime plugin. Do not let a `SKILL.md` entrypoint hide installer, hook, or trust-boundary changes.
@@ -134,25 +136,31 @@ Implication for cross-engine repos: a module-specific instruction placed in a de
 
 ```text
 agent-extensions/
-  alex-core-invariants/       # standalone repo, own remote
-  cmux/                       # standalone repo, cmux skills and hooks
-  content-pipeline/           # root-owned skill
-  npm-reorg-guard/            # standalone repo, own remote
-  skill-hook-authoring/       # root-owned skill
-  scripts/install/install-local.mjs
+  skills.json                        # the manifest: each skill's id -> canonical path (single registration record)
+  scripts/install/install-local.mjs  # reads skills.json, generates the engine-root symlinks
   scripts/test/*
+  alex-core-invariants/       # standalone repo, own remote
+  safedeps/                   # standalone repo, own remote
+  sprite-gen/                 # standalone repo, own remote
+  skill-hook-authoring/       # root-owned skill (these conventions)
+  katok/                      # standalone repo that ALSO builds a binary
+    skills/katok/SKILL.md     #   skills.json path -> this subfolder, so target/ stays out of the scan root
+    target/                   #   build cache (gitignored); never the link target
+  ../my-agent-girlfriend/     # sibling repo installed via a `../` path (source owned by its own remote)
 ```
 
-Keep the umbrella flat. Do not add a repo-local `skills/` or `hooks/` index unless there is a specific migration plan, because that creates a second source of truth. If a hook belongs to a standalone repo, reference that repo path directly from the installer and agent config.
+Three layers, one direction: **conventions** (this skill) → **manifest** (`skills.json`) → **installer** (`install-local.mjs`) → generated symlinks. A canonical source may live outside the umbrella (a sibling repo); register it with a `../` path so `skills.json` stays the one registration record.
+
+Keep the umbrella flat. Do not add a repo-local `skills/` or `hooks/` index **in the umbrella root** unless there is a specific migration plan, because that creates a second registration source competing with `skills.json`. This is separate from a standalone repo's *own* internal `skills/` layout (e.g. `katok/skills/katok/`), which is that repo's upstream structure and a valid link target. If a hook belongs to a standalone repo, reference that repo path directly from the installer and agent config.
 
 ## Authoring Flow
 
 Before adding or changing a package:
 
 1. Classify the change: skill instruction, hook guard, plugin/extension package, installer/config, or docs-only compatibility claim.
-2. Pick the canonical package root and the generated install paths.
+2. Pick the canonical package root and the generated install paths. For a repo that also builds artifacts, the registered `path` is the skill subfolder, not the repo root (see Core Rules).
 3. Decide whether each installed artifact is a symlink, generated config entry, copied file, or runtime-native plugin package.
-4. Update the canonical source first, then the installer/config generator, then docs.
+4. Update the canonical source first, then its entry in the umbrella manifest `skills.json` (which `install-local.mjs` reads), then docs. Do not add a second registration channel alongside it.
 5. Validate discovery in every claimed runtime. For undocumented runtimes, mark support as unknown until live verification exists.
 
 Do not move a root-level `SKILL.md` into a plugin subdirectory, or convert a skill folder into a runtime plugin, unless the installer, docs, validation, and rollback path change in the same commit.
