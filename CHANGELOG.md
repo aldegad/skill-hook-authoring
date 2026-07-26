@@ -7,6 +7,22 @@ package manifest, so the **git tag plus this file are the version record**
 
 ## Unreleased — 2026-07-26
 
+- **New `SKILL.md` section: Skill Document Topology.** The package already banned *history*
+  in doc bodies ("Keep history out of doc bodies", Core Rules) but never said what a body
+  should be *instead*, so skills grew monolithic — measured 2026-07-26 across the kuma-studio
+  repo: `kuma-plan` at `SKILL.md` 70 lines + 5 sub-documents (the intended shape) against
+  `kuma-spawn` 232 / `kuma-validate` 175 / `kuma-plan-run` 153 with zero sub-documents. The
+  new section states the body is a routing topology (purpose, command surface, one pointer per
+  concern), bans architecture/rationale and per-feature procedure alongside history, sets the
+  split trigger at a *second* concern rather than a line count, and requires the body to
+  shrink by what the new file gained — a split that leaves a condensed restatement behind is a
+  copy with two sources of truth.
+- **Sub-document folder is `docs/`, not `references/`.** A reference is lookup material;
+  instruction prose telling an agent what to do is not, and the name was lying about the
+  contents. Recorded in the new section, and the Core Rules 500-line bullet now points at
+  `docs/*.md` (noting that Anthropic's best-practices page names the folder `reference/`), as
+  does the Taxonomy line describing a skill's optional folders.
+
 - **New `docs/skill-lifecycle.md`: Disable / Scope / Retire.** The methodology documented
   *registration* (`skills.json`) and *retirement* (full removal) but never **enablement** —
   so "stop showing me this skill" had no documented mechanism and got improvised as
