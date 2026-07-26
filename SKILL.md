@@ -236,6 +236,28 @@ Daily refresh automation must read the source manifest, fetch only official URLs
 4. Backup mutated JSON config files before writing.
 5. `chmod +x` every hook script before registering it (Claude either spawns the executable directly (`args` form) or passes `command` to a shell; either way no exec bit = `Permission denied` everywhere).
 6. Validate by feeding representative JSON payloads into the hook scripts — and run the script **directly** (`./hook.cjs ...`, no `node` prefix) to catch a missing exec bit the way Claude would.
+7. **Land the change on EVERY engine AND every routed home, then prove it with a machine.** See the contract below — this step is not satisfied by remembering.
+
+## Engine × Home Is A Product, And It Must Be Enumerated By A Machine
+
+A hook policy change is never done on one engine. It is also never done on one *home*: an engine's registration surface is `engine × home`, and the second factor is the one people drop.
+
+> 훅 작업할 때 엔진 빼먹으면 안 돼, skill-hook-authoring 으로 관리함에도 드리프트 계속 발생 (수홍, 2026-07-23)
+
+That sentence is the reason this section exists. **This skill already said "cover every engine" and the drift kept happening anyway**, so the rule is no longer a rule an author follows — it is a check a machine runs. Prose cannot enumerate a product that changes when an account is added.
+
+**The contract.**
+
+- **Enumerate homes by DERIVATION, never by a hand-kept list.** A written list rots the moment an account is registered, and the failure is silent. Derive from the routing contract — a home is a hook surface **iff the spawner points the engine at it**. In Kuma Studio that source is `ENGINE_ACCOUNT_ENV` (`packages/shared/engine-resume-provider.mjs`): Codex → `CODEX_HOME`, Grok → `GROK_HOME`.
+- **An engine's absence from that map is itself a claim, and it must be read.** Claude is deliberately absent: its account switch swaps the *global* credential and `CLAUDE_CONFIG_DIR` is stripped from the spawn env, so every Claude session reads the default home and the per-account directories are **credential stores, not hook surfaces**. Scanning the filesystem instead of the routing contract would invent ten phantom Claude homes and train everyone to ignore the guard.
+- **An isolated account home IS the config root.** `CODEX_HOME`/`GROK_HOME` hold `hooks.json` directly — there is no `.codex`/`.grok` segment to join. Addressing them with a `$HOME`-shaped joiner is exactly how a profile home kept a stale registration (2026-07-23: a Codex profile home pinned to a worktree path with bare `node`).
+- **The same policy means different things per engine — write down which, do not assume parity of semantics.** Grok's Stop hook is passive ("Only PreToolUse can block"), so a Stop-based guard that blocks on Claude/Codex only *observes* on Grok. Registration parity and enforcement parity are two different claims.
+- **A home you could not read is `unknown`, never "matches."** Not measured is not equal. A corrupt or unreadable config must surface as its own verdict and must not be summarised away by a drifted-but-readable sibling.
+- **Drift fails loudly.** A parity check that passes quietly on a surface it skipped is worse than no check.
+
+**The machine (Kuma Studio).** `npm run hooks:parity` (`scripts/check-hook-parity.mjs`) judges every discovered `engine × home` against the canonical policy, and `npm run skill:doctor` runs it on every sweep. A commit touching `scripts/hooks/` or `scripts/install/` is gated on it by the repo pre-commit hook. Its oracle is the installer itself — the canonical policy is applied to a throwaway copy and the config is canonical iff nothing moved — so there is no second description of "canonical" to drift from.
+
+Other runtimes should copy the *shape*, not the paths: derive the home set from whatever routes sessions, judge each home with the installer's own logic, and never let an unmeasured surface report green.
 
 ## Hook Payload Pattern
 
