@@ -1,6 +1,6 @@
 ---
 name: skill-hook-authoring
-description: 'Cross-runtime agent-platform interoperability wiki and authoring methodology, refreshed daily from official vendor docs: how Codex, Claude Code, Grok, Hermes, Antigravity CLI, Cursor, and Kuma Studio compare across skills, hooks, plugins/extensions, project-instruction files, CLI spawn, session resume, and billing, plus the rules to ship one source of truth without drifting between runtimes. Use when authoring, editing, retiring, renaming, or debugging a skill / hook / slash-command / plugin, or when a skill is not triggering and its description needs fixing. Triggers (KR/EN): 스킬 만들기/작성/수정/폐기/삭제/이름변경, 스킬 폐기, 스킬 발동 안 됨, 트리거 안 걸림, description 고치기, 훅 작성/수정, 슬래시 커맨드 추가, 플러그인 패키징, 크로스런타임 호환; skill authoring/editing/retire/rename, skill not triggering, fix skill description, hook authoring, slash command, plugin packaging, cross-runtime compatibility, Codex/Claude/Grok/Hermes/Antigravity/Cursor/gajae-code (가재, gjc) skill and hook comparison.'
+description: 'Cross-runtime agent-platform interoperability wiki and authoring methodology, refreshed daily from official vendor docs: how Codex, Claude Code, Grok, Hermes, Antigravity CLI, Cursor, and Kuma Studio compare across skills, hooks, plugins, project-instruction files, CLI spawn, session resume, and billing, plus the rules to ship one source of truth without drifting. Use when authoring, editing, retiring, renaming, disabling/enabling, or debugging a skill / hook / slash-command / plugin; when deciding which engines a skill installs to; or when a skill is not triggering and its description needs fixing. Triggers (KR/EN): 스킬 작성/수정/폐기/삭제/이름변경, 스킬 끄기/비활성/다시 켜기, 안 쓰는 스킬 정리, 특정 엔진에서만, 스킬 발동 안 됨, description 고치기, 훅 작성, 슬래시 커맨드, 플러그인 패키징, 크로스런타임 호환; skill authoring/retire/rename/disable/enable, prune unused skills, scope a skill to one engine, skill not triggering, hook authoring, plugin packaging, cross-runtime comparison.'
 ---
 
 # Cross-Runtime Agent-Platform Interoperability
@@ -117,36 +117,36 @@ Implication for cross-engine repos: a module-specific instruction placed in a de
 ## Core Rules
 
 - Pick one canonical repo path first. Installed copies under `~/.claude/skills` and `~/.agents/skills` must be symlinks or generated config entries.
-- **Registration goes through the umbrella manifest, `skills.json`, and nothing else.** In the `agent-extensions` umbrella, `skills.json` is the single record of *which* skill installs from *which* canonical path; `scripts/install/install-local.mjs` reads it and generates the symlinks into every engine's skill root. Adding a skill = adding one entry there, then re-running the installer. Do **not** register a skill by hand-symlinking it into an engine root or by adding an engine-config entry (e.g. Codex `~/.codex/config.toml` `[[skills.config]]`) — that is a second registration channel and it drifts. This skill states the *conventions*; `skills.json` is the *data* that applies them; the installer is what *executes* them. (2026-07-24: 14 hand-registered skills plus 21 `[[skills.config]]` entries had accumulated as exactly this second channel and were folded back into `skills.json`.)
+- **Registration goes through the umbrella manifest, `skills.json`, and nothing else.** In the `agent-extensions` umbrella, `skills.json` is the single record of *which* skill installs from *which* canonical path; `scripts/install/install-local.mjs` reads it and generates the symlinks into every engine's skill root. Adding a skill = adding one entry there, then re-running the installer. Do **not** register a skill by hand-symlinking it into an engine root or by adding an engine-config entry (e.g. Codex `~/.codex/config.toml` `[[skills.config]]`) — that is a second registration channel and it drifts. This skill states the *conventions*; `skills.json` is the *data* that applies them; the installer is what *executes* them.
 - **A skill whose repo also builds artifacts must point its manifest `path` at the skill subfolder, not the repo root.** Runtimes scan the whole skill root recursively — Codex walks `~/.agents/skills` under a traversal budget and aborts with `skills scan reached its traversal limit` when one folder is oversized — so a repo root that carries a build cache (`target/`, `node_modules/`, `dist/`) gets swept into the scan and can starve discovery of *other* skills. Link the minimal skill folder inside the repo (`<repo>/skills/<name>/` or the runtime-native subpath) so the build tree stays outside the scan root; the repo itself, its build, and its upstream remote are untouched. Precedent: `kordoc` links `kordoc/plugins/kordoc/skills/kordoc/`, not its repo root. (This is a refinement of "one canonical repo path", not a `skills/` index in the umbrella root — that remains banned below.)
 - Do not edit home-directory installed copies directly.
 - Do not keep separate Claude and Codex versions unless a difference is explicitly documented and tested.
 - Name the package layer explicitly before editing: skill-only, hook-only, plugin-like package, or generated runtime plugin. Do not let a `SKILL.md` entrypoint hide installer, hook, or trust-boundary changes.
 - Keep `SKILL.md` body under 500 lines — a performance guideline, **not** a hard loading cap. Anthropic's [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) say "Keep SKILL.md body under 500 lines for optimal performance": once loaded, every line competes with conversation history and other context. Put deterministic behavior in scripts; move scenario-specific detail into `reference/*.md` linked **one level deep** from `SKILL.md` (progressive disclosure).
 - `name`: max 64 chars, lowercase/numbers/hyphens only, no XML tags, no reserved words (`anthropic`, `claude`); prefer gerund form (`processing-pdfs`). `description`: max 1024 chars, no XML tags, third person, stating both *what* the skill does and *when* to use it (trigger terms) — not the procedure.
-- **Quote the `description` if it contains a colon-space (`: `), or the skill silently fails to load.** A `: ` in an unquoted YAML scalar is parsed as a nested mapping → `mapping values are not allowed in this context`. Common trap: `description: ... Korean triggers: 원샷, ...`. Wrap the whole value in single quotes (`description: '...'`); double inner single-quotes, double-quotes are fine inside. Validate frontmatter parses before shipping. (Trial-and-error 2026-05-26: an unquoted description with `Korean triggers:` broke skill loading.)
+- **Quote the `description` if it contains a colon-space (`: `), or the skill silently fails to load.** A `: ` in an unquoted YAML scalar is parsed as a nested mapping → `mapping values are not allowed in this context`. Common trap: `description: ... Korean triggers: 원샷, ...`. Wrap the whole value in single quotes (`description: '...'`); double inner single-quotes, double-quotes are fine inside. Validate frontmatter parses before shipping.
 - Hooks are guardrails, not silent fallback paths. They should block clearly, explain why, and require an explicit operator decision for dangerous actions.
-- **Do not re-implement a slash surface in a host layer above the engine.** A GUI/terminal wrapper that intercepts keystrokes to fake `/command` creates a second input path that must re-derive session context (current target resolution, ambiguity handling) the engine-side skill already has, and it standardizes on one invocation token where runtimes differ (Claude/Grok `/name` vs Codex `$name` — see Runtime Coverage above). Forward typed input to the engine verbatim and ship the capability as a skill + CLI; reserve host-level interception for things no engine surface can do. (Trial-and-error 2026-06-10: kuma-studio's WorkspaceTerminal `/kuma-plan` interception + popover — parser, popover UI, server route, i18n in 4 locales, tests — shipped validator-passed and was removed the same day in favor of the engine-native `kuma-plan` skill.)
+- **Do not re-implement a slash surface in a host layer above the engine.** A GUI/terminal wrapper that intercepts keystrokes to fake `/command` creates a second input path that must re-derive session context (current target resolution, ambiguity handling) the engine-side skill already has, and it standardizes on one invocation token where runtimes differ (Claude/Grok `/name` vs Codex `$name` — see Runtime Coverage above). Forward typed input to the engine verbatim and ship the capability as a skill + CLI; reserve host-level interception for things no engine surface can do.
 - Cross-agent guidance must be based on official vendor docs. If a platform does not document a feature, record it as `not documented` or `unknown`; do not infer parity from another agent.
-- **Make hook scripts executable (`chmod +x`) and give them a shebang.** Claude runs a hook in one of two documented forms: with `args` set the `command` is **spawned directly as an executable with no shell**; with `args` omitted the whole `command` string is **passed to a shell** (`sh -c`, Git Bash on Windows, or PowerShell). Either way the executable path itself must be runnable, so a missing exec bit fails with `Permission denied` on *every* matching event (PreToolUse/Stop) in *every* session — one forgotten `chmod +x` silently breaks all agents at once. Codex registers as `node <path>` so it tolerates a missing bit, but always `chmod +x` for parity and **commit the mode** (git stores `100755`). Use the `args` form on Claude when you want to avoid shell quoting entirely. (Trial-and-error 2026-05-26: a new guard hook shipped `644` → `Permission denied` spam across all live sessions until chmod'd.)
-- **Hook scripts must not assume GNU coreutils.** macOS ships neither `timeout` nor `stat -c`; a hook that calls them unguarded fails on *every* macOS agent — and a fail-closed `|| exit 0` turns that into a silent no-op that looks like "working but quiet". Detect and degrade (`command -v timeout || gtimeout || plain`) and use portable forms (`stat -f %m || stat -c %Y`). (Trial-and-error 2026-06-09: a `timeout 5 git fetch` in a SessionStart/PreToolUse hook silently `command not found`-failed on macOS, so the hook never fetched and never fired — it took a probe hook to notice.)
+- **Make hook scripts executable (`chmod +x`) and give them a shebang.** Claude runs a hook in one of two documented forms: with `args` set the `command` is **spawned directly as an executable with no shell**; with `args` omitted the whole `command` string is **passed to a shell** (`sh -c`, Git Bash on Windows, or PowerShell). Either way the executable path itself must be runnable, so a missing exec bit fails with `Permission denied` on *every* matching event (PreToolUse/Stop) in *every* session — one forgotten `chmod +x` silently breaks all agents at once. Codex registers as `node <path>` so it tolerates a missing bit, but always `chmod +x` for parity and **commit the mode** (git stores `100755`). Use the `args` form on Claude when you want to avoid shell quoting entirely.
+- **Hook scripts must not assume GNU coreutils.** macOS ships neither `timeout` nor `stat -c`; a hook that calls them unguarded fails on *every* macOS agent — and a fail-closed `|| exit 0` turns that into a silent no-op that looks like "working but quiet". Detect and degrade (`command -v timeout || gtimeout || plain`) and use portable forms (`stat -f %m || stat -c %Y`).
 - **Keep history out of doc bodies.** Changelog narrative — what was added/changed/removed and when — lives in `CHANGELOG.md` plus the git tag (the version SSoT), never accreting in `SKILL.md` or `docs/*` prose. A doc body states the **current** truth only; when a fact changes, replace it, don't append the old one. The one exception is a *verification* stamp (`Last reviewed: YYYY-MM-DD`, `verified YYYY-MM-DD`): that is provenance for a live claim, not history. This is what keeps a daily-refreshed wiki from turning into a changelog as it is re-verified. **A freshness stamp must advance when the claim is re-verified, even if the wording is unchanged** — for a *time-sensitive status claim* (a status that can flip: billing paused/resumed/cancelled, an announced-but-not-yet-effective cutoff, any "currently X" status), re-confirming it on a new date *is* the update; a still-true status whose stamp is months old reads as wrong. A blanket "no content change → touch nothing" refresh rots exactly these claims, so carve them out.
 
 ## Recommended Layout
 
 ```text
 agent-extensions/
-  skills.json                        # the manifest: each skill's id -> canonical path (single registration record)
-  scripts/install/install-local.mjs  # reads skills.json, generates the engine-root symlinks
-  scripts/test/*
-  alex-core-invariants/       # standalone repo, own remote
-  safedeps/                   # standalone repo, own remote
-  sprite-gen/                 # standalone repo, own remote
-  skill-hook-authoring/       # root-owned skill (these conventions)
-  katok/                      # standalone repo that ALSO builds a binary
-    skills/katok/SKILL.md     #   skills.json path -> this subfolder, so target/ stays out of the scan root
-    target/                   #   build cache (gitignored); never the link target
-  ../my-agent-girlfriend/     # sibling repo installed via a `../` path (source owned by its own remote)
+ skills.json # the manifest: each skill's id -> canonical path (single registration record)
+ scripts/install/install-local.mjs # reads skills.json, generates the engine-root symlinks
+ scripts/test/*
+ alex-core-invariants/ # standalone repo, own remote
+ safedeps/ # standalone repo, own remote
+ sprite-gen/ # standalone repo, own remote
+ skill-hook-authoring/ # root-owned skill (these conventions)
+ katok/ # standalone repo that ALSO builds a binary
+ skills/katok/SKILL.md # skills.json path -> this subfolder, so target/ stays out of the scan root
+ target/ # build cache (gitignored); never the link target
+ ../my-agent-girlfriend/ # sibling repo installed via a `../` path (source owned by its own remote)
 ```
 
 Three layers, one direction: **conventions** (this skill) → **manifest** (`skills.json`) → **installer** (`install-local.mjs`) → generated symlinks. A canonical source may live outside the umbrella (a sibling repo); register it with a `../` path so `skills.json` stays the one registration record.
@@ -165,6 +165,14 @@ Before adding or changing a package:
 
 Do not move a root-level `SKILL.md` into a plugin subdirectory, or convert a skill folder into a runtime plugin, unless the installer, docs, validation, and rollback path change in the same commit.
 
+## Disable / Scope / Retire
+
+Three operations, three mechanisms — disabling is **per engine** (Claude `skillOverrides`,
+Grok `skills-disabled/`) and never touches `skills.json`; scoping to one engine is
+`engines:` in the manifest and is a claim that the skill *cannot run* elsewhere; retiring is
+the checklist below. Full decision table and per-engine mechanics:
+[`docs/skill-lifecycle.md`](docs/skill-lifecycle.md).
+
 ## Retiring Or Renaming Artifacts
 
 Deleting a hook, skill, command, or plugin-like package means removing every active ownership path, not just the visible file:
@@ -178,15 +186,15 @@ Deleting a hook, skill, command, or plugin-like package means removing every act
 7. Search repo and live config for the old id. Remaining hits should be retired lists or historical notes only.
 8. Run syntax/config checks and prove the installer no longer recreates the retired artifact.
 9. Sweep *instructions* that point at the old name, not just code: agent-executed
-   docs (`AGENTS.md`/`CLAUDE.md`-class files, operating doctrine, skill bodies)
-   referencing a renamed/retired CLI verb or moved doc path fail at runtime the
-   moment an agent follows them. Concretely: grep doc corpora for backticked
-   command mentions (e.g. launcher subcommands like `kuma <verb>`) and for
-   relative links to the old path. Prefer a CI guard that re-checks this on
-   every test run (kuma-studio: `docs-reference-integrity.test.mjs` — relative
-   `.md` links must resolve; backticked launcher verbs must map to a real bin).
+ docs (`AGENTS.md`/`CLAUDE.md`-class files, operating doctrine, skill bodies)
+ referencing a renamed/retired CLI verb or moved doc path fail at runtime the
+ moment an agent follows them. Concretely: grep doc corpora for backticked
+ command mentions (e.g. launcher subcommands like `kuma <verb>`) and for
+ relative links to the old path. Prefer a CI guard that re-checks this on
+ every test run (kuma-studio: `docs-reference-integrity.test.mjs` — relative
+ `.md` links must resolve; backticked launcher verbs must map to a real bin).
 
-This rule exists because deleting only `~/.claude/hooks/<id>` or only `scripts/hooks/<id>` can let the artifact reappear on the next setup run — and because instructions pointing at the old name keep *re-teaching* agents the broken path long after the code is gone (trial-and-error 2026-06-10: `kuma read`/`kuma vault`/`kuma spawn-all` doc mentions all outlived their bins).
+This rule exists because deleting only `~/.claude/hooks/<id>` or only `scripts/hooks/<id>` can let the artifact reappear on the next setup run — and because instructions pointing at the old name keep *re-teaching* agents the broken path long after the code is gone.
 
 ## Multi-Agent Compatibility Docs
 
@@ -217,19 +225,19 @@ Claude Code and Codex CLI use the **same input schema** for `PreToolUse` / `Post
 
 ```json
 {
-  "session_id": "abc123",
-  "prompt_id": "prompt_abc123",
-  "transcript_path": "~/.claude/projects/.../transcript.jsonl",
-  "cwd": "/Users/me/project",
-  "permission_mode": "default",
-  "hook_event_name": "PreToolUse",
-  "tool_name": "Bash",
-  "tool_use_id": "toolu_...",
-  "tool_input": {
-    "command": "npm install foo",
-    "description": "Install foo",
-    "timeout": 120000
-  }
+ "session_id": "abc123",
+ "prompt_id": "prompt_abc123",
+ "transcript_path": "~/.claude/projects/.../transcript.jsonl",
+ "cwd": "/Users/me/project",
+ "permission_mode": "default",
+ "hook_event_name": "PreToolUse",
+ "tool_name": "Bash",
+ "tool_use_id": "toolu_...",
+ "tool_input": {
+ "command": "npm install foo",
+ "description": "Install foo",
+ "timeout": 120000
+ }
 }
 ```
 
@@ -248,11 +256,11 @@ Modern (recommended):
 
 ```json
 {
-  "hookSpecificOutput": {
-    "hookEventName": "PreToolUse",
-    "permissionDecision": "deny",
-    "permissionDecisionReason": "safedeps: install not approved — run `safedeps check ...` first"
-  }
+ "hookSpecificOutput": {
+ "hookEventName": "PreToolUse",
+ "permissionDecision": "deny",
+ "permissionDecisionReason": "safedeps: install not approved — run `safedeps check ...` first"
+ }
 }
 ```
 
@@ -281,24 +289,24 @@ For `PostToolUse` block (prevent normal post-processing), use `{"decision": "blo
 
 ```json
 {
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "^Bash$",
-        "hooks": [
-          { "type": "command", "command": "~/.agents/skills/<id>/scripts/<hook>.sh", "timeout": 30 }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "^Bash$",
-        "hooks": [
-          { "type": "command", "command": "~/.agents/skills/<id>/scripts/<hook>.sh", "timeout": 30 }
-        ]
-      }
-    ]
-  }
+ "hooks": {
+ "PreToolUse": [
+ {
+ "matcher": "^Bash$",
+ "hooks": [
+ { "type": "command", "command": "~/.agents/skills/<id>/scripts/<hook>.sh", "timeout": 30 }
+ ]
+ }
+ ],
+ "PostToolUse": [
+ {
+ "matcher": "^Bash$",
+ "hooks": [
+ { "type": "command", "command": "~/.agents/skills/<id>/scripts/<hook>.sh", "timeout": 30 }
+ ]
+ }
+ ]
+ }
 }
 ```
 

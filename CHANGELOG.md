@@ -5,6 +5,35 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## Unreleased — 2026-07-26
+
+- **New `docs/skill-lifecycle.md`: Disable / Scope / Retire.** The methodology documented
+  *registration* (`skills.json`) and *retirement* (full removal) but never **enablement** —
+  so "stop showing me this skill" had no documented mechanism and got improvised as
+  `engines: {}`, which asserts in the manifest that the skill has no valid runtime. The new
+  doc separates the three operations, states the per-engine disable mechanics (Claude
+  `skillOverrides: off`, Grok `skills-disabled/`, Codex/Hermes none documented), and records
+  that hand-deleting a symlink is not a disable because the installer recreates it.
+  `SKILL.md` carries a four-line pointer, not the table.
+- **`description` now routes on disable/enable/scope.** Added triggers (스킬 끄기/비활성,
+  안 쓰는 스킬 정리, 특정 엔진에서만 / prune unused skills, scope a skill to one engine) and
+  trimmed the description from 1176 to 926 chars — it had exceeded the documented 1024 cap,
+  which is itself a load failure this package warns about.
+- **Stripped six incident narratives from `SKILL.md` bodies** (`Trial-and-error <date>: …`
+  parentheticals) per this package's own "Keep history out of doc bodies" rule. The rules
+  they annotated are unchanged; the incidents live here.
+
+  Removed narratives, for the record: 2026-07-24 fourteen hand-registered skills plus 21
+  Codex `[[skills.config]]` entries had become a second registration channel and were folded
+  back into `skills.json`. 2026-05-26 an unquoted `description` containing `Korean triggers:`
+  broke skill loading. 2026-06-10 kuma-studio's WorkspaceTerminal `/kuma-plan` interception
+  (parser, popover, server route, i18n ×4, tests) shipped validator-passed and was removed the
+  same day for the engine-native skill. 2026-05-26 a guard hook shipped `644` and spammed
+  `Permission denied` across every live session until chmod'd. 2026-06-09 a `timeout 5 git
+  fetch` in a SessionStart/PreToolUse hook silently `command not found`-failed on macOS, so
+  the hook never fired. 2026-06-10 `kuma read` / `kuma vault` / `kuma spawn-all` doc mentions
+  all outlived their bins.
+
 ## Unreleased — 2026-07-24
 
 Umbrella-convention edit (not a vendor-doc refresh): the doc governed skill
