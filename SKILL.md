@@ -148,7 +148,7 @@ What stays in the body: purpose and trigger scope, the command/verb surface, rul
 
 **Split by feature, not by line count.** Splitting on size alone produces `part-1.md` / `part-2.md`, which is a worse index than the un-split original. The trigger is a *second* concern's procedure landing in the body: at that point the body becomes the topology and each concern moves to its own `docs/` file.
 
-**A split must shrink the body.** Moving content out and leaving a condensed restatement behind creates two sources of truth that drift apart on the next edit. What remains is a **one-line pointer**, not a summary. Verify by line count before and after: the body must drop by what the new file gained, minus the pointer. If the total grew, it was a copy, not a split.
+**A split must shrink the body.** Moving content out and leaving a condensed restatement behind creates two sources of truth that drift apart on the next edit. What remains is a **one-line pointer**, not a summary. Verify by line count before and after: **the body must drop**. Do not judge by the total — an honest split grows it by one title-and-provenance header per new file (measured 2026-07-26: eight files, +32 lines of header, +12 of pointer, against a body that fell 325), so a total-grew test fails every correct split. **The discriminator is whether a moved body line now exists in two places.** Check it by diffing the moved lines against what stayed: zero lost, zero duplicated. If a line lives in both, that is a copy, not a split.
 
 ## Recommended Layout
 

@@ -7,6 +7,8 @@ package manifest, so the **git tag plus this file are the version record**
 
 ## Unreleased — 2026-07-26
 
+- Skill Document Topology: replaced the split discriminator. Judging by total line count fails every honest split — one title-and-provenance header per new file grows the total by construction (measured: 8 files, +32 header + 12 pointer, body −325). The test is now whether a moved body line exists in two places, checked by diffing moved-vs-stayed for zero lost and zero duplicated.
+
 - **New `SKILL.md` section: Skill Document Topology.** The package already banned *history*
   in doc bodies ("Keep history out of doc bodies", Core Rules) but never said what a body
   should be *instead*, so skills grew monolithic — measured 2026-07-26 across the kuma-studio
