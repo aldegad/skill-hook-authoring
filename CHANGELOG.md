@@ -5,6 +5,73 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## Unreleased — 2026-07-28
+
+Daily refresh (verification fetched 2026-07-28; first pass since 2026-07-21 — the
+routine's worktree branch had been held by a stale pre-move worktree, removed this
+run). Four major drifts, several minor, plus freshness stamps.
+
+### Changed
+
+- **Claude Opus 5 shipped** (`claude-opus-5`, $5/$25 MTok, adaptive thinking,
+  knowledge cutoff May 2026): replaces Opus 4.8 in the current lineup ("start with
+  Claude Opus 5 for complex agentic coding and enterprise work"); Opus 4.8 → legacy;
+  Opus 4.1's retirement (2026-08-05) now targets Opus 5; Sonnet 5 intro pricing
+  $2/$10 through 2026-08-31. `docs/models/claude.md`, `SKILL.md`, manifest.
+- **Antigravity CLI gained an official headless mode** — new dedicated page
+  `/docs/cli/headless` (registered as `antigravity-cli-headless`): `agy -p/--print/
+  --prompt`, `--output-format text|json|stream-json`, `--json-schema`, `--effort`,
+  `--print-timeout`, headless `-c`/`--conversation` resume, `agy models`/`agy
+  agents`, `permissions.allow` `action(target)` rules, soft-deny semantics. The
+  long-standing "TUI-only, SDK for unattended runs" verdict is retired across
+  `SKILL.md`, `docs/cli-invocation.md`, `docs/compatibility-matrix.md`, and the
+  reference/resume/SDK entry notes. Its `agy models` sample surfaces
+  `gemini-3.6-flash-high/-medium` and `claude-sonnet-4-6` — CLI-surface ids not on
+  the Gemini API models page.
+- **Grok reasoning effort reached the API layer**: the reasoning capability page
+  documents `reasoning_effort` for `grok-4.5` (`low`/`medium`/`high`, default
+  `high`, cannot be disabled) and the overview now says "configurable reasoning" —
+  the old CLI-flag-only distinction is retired. A dedicated retirement page
+  (`/developers/migration/may-15-retirement`) lists eight ids retired 2026-05-15
+  with redirects (`grok-code-fast-1` → `grok-build-0.1`, …). `--no-auto-update` is
+  now documented on the headless-scripting page (flip of the 07-19 removal).
+  `docs/models/grok.md`, `docs/cli-invocation.md`, manifest.
+- **Cursor models page restructured** as "Models & Pricing" with two usage pools;
+  Auto is now three modes (Cost/Balance/Intelligence, Cursor Router on
+  Teams/Enterprise) and its old one-sentence description is gone; **Composer 1 no
+  longer appears**; lineup extended (Claude Fable 5/Opus 5/Sonnet 5, Gemini
+  3.1 Pro/3.5/3.6 Flash, GPT-5.4/5.5, Kimi K3); still no retirement page.
+  `docs/models/cursor.md`, `SKILL.md`, manifest.
+- **Codex plugin-build page stubbed**: `learn.chatgpt.com/docs/build-plugins` now
+  defers to `developers.openai.com/plugins/build/plugins`, where the marketplace
+  paths (legacy `.claude-plugin/marketplace.json` still documented — anchor moved,
+  not a third flip), cache path, `PLUGIN_ROOT`/`PLUGIN_DATA`, and manifest fields
+  (`skills`/`mcpServers`/`hooks` + compatibility `apps`) now live; the plugins
+  overview dropped the apps cross-reference ("MCP servers … are the services
+  behind connectors"). New `@plugin-creator`/`$plugin-creator` skill.
+  `docs/plugin-packaging.md`, manifest.
+- **Codex CLI reference flips**: "Use `/goal edit` to revise the objective."
+  reproduces again (flip #2 — verified 07-17, gone 07-19, back 07-28); interactive
+  `PROMPT` positional typing reverted to plain `string` (stdin `-` only on
+  exec/review); `codex fork` positional now typed `uuid` only.
+- Minor: GitHub auto-merge page rewritten (repo-enable quote reworded; both
+  disable triggers now scoped to a non-write actor in one sentence); Hermes plugin
+  discovery table gained a fifth source (Nix `services.hermes-agent.extraPlugins`);
+  Hermes overview cron line reworded ("Scheduled automations — …"); Claude
+  sessions page dropped `/rewind` (routed to Checkpointing; claim retired);
+  `--safe-mode` lost its v2.1.169 tie; `--advisor fable` documented as an error;
+  the `@skills-dir` no-walk-up footgun moved from the plugins page to
+  plugins-reference (re-anchored); Cursor cli/using resume surface slimmed
+  ("thread id" wording; `create-chat`/`--resume=-1` now parameters-page-only);
+  bare `gpt-5.6` shorthand now appears in three example shapes; Gemini API models
+  page bumped to 2026-07-20 with new Live/TTS/Omni/Nano-Banana/Lyria/Embedding
+  entries.
+- Freshness stamps advanced to 2026-07-28 on the time-sensitive claims: Agent SDK
+  billing change **still paused** (banner verbatim-unchanged; dateline "June 16,
+  2026"), `ANTHROPIC_API_KEY` API-billing caveat re-confirmed, G1-credits note,
+  and the five model-lineup mirrors re-verified (gajae-code README re-verified:
+  MCP absent for the third consecutive reading).
+
 ## Unreleased — 2026-07-26
 
 - **New `docs/skill-lifecycle.md`: Disable / Scope / Retire.** The methodology documented

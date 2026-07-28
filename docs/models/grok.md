@@ -4,8 +4,8 @@ Official source: https://docs.x.ai/developers/models
 (moved from `docs.x.ai/docs/models`, which now 308-redirects here; model detail
 links live under `/developers/models/<id>`) plus the CLI reference at
 https://docs.x.ai/build/cli/reference
-Last reviewed: 2026-07-21 (verified live against the official xAI models page and
-CLI reference)
+Last reviewed: 2026-07-28 (verified live against the official xAI models page,
+the reasoning capability page, and the CLI reference)
 
 ## Current shipping models
 
@@ -13,7 +13,7 @@ Chat / coding models:
 
 | Model id | Context | Notes |
 |---|---|---|
-| `grok-4.5` | 500k | Flagship chat/coding model for code and general agentic work. Its detail page states `Reasoning: Yes`. Knowledge cutoff February 1, 2026. |
+| `grok-4.5` | 500k | Flagship chat/coding model for code and general agentic work. **Configurable reasoning** ("agentic tool calling, minimal hallucinations, configurable reasoning"). Knowledge cutoff February 1, 2026. |
 | `grok-4.3` | 1M | listed in the pricing table |
 | `grok-4.20-0309-reasoning` | 1M | pre-built **reasoning** variant |
 | `grok-4.20-0309-non-reasoning` | 1M | pre-built **non-reasoning** variant |
@@ -37,21 +37,35 @@ stable version. `<modelname>-latest` is aliased to the latest version.
   most intelligent and fastest model we've built."
 - The page has **no model-list section separate from pricing** — the ids above are
   stated via the pricing table plus the recommendation prose.
-- Reasoning effort is documented at the **CLI layer only**: the CLI reference
-  common-flags table lists `--effort <LEVEL>` ("Reasoning effort"), and the docs
-  do not enumerate the levels. It is **not** a model/API parameter — the models
-  page documents no `effort` / `reasoning_effort` API field. At the model level
-  the only documented split remains the pre-built `grok-4.20-0309-reasoning` /
-  `-non-reasoning` variant pair.
+- Reasoning effort is now documented at **both layers**. The CLI reference lists
+  `--effort <LEVEL>` ("Reasoning effort"), and the reasoning capability page
+  (`/developers/model-capabilities/text/reasoning`) documents a `reasoning_effort`
+  **API parameter** for `grok-4.5`: it "controls how much effort the model spends
+  thinking before responding", defaults to `"high"`, and "Reasoning cannot be
+  disabled"; the prose enumerates `low` / `medium` / `high` (default). The
+  pre-built `grok-4.20-0309-reasoning` / `-non-reasoning` variant pair remains a
+  separate, model-id-level split (not an effort setting).
 - **Kuma-catalog note:** downstream Kuma catalog ids such as `grok-build` or
   `grok-composer-2.5-fast` are not owned here. Catalog sync happens in the
   kuma-studio repo, not in this compatibility wiki.
 
 ## Retired / superseded
 
-- **Not documented.** The models overview links no retirement or deprecation guide
-  and marks no id as retired or superseded. Record absences as `not documented`
-  until a vendor retirement/deprecation doc names them.
+A dedicated retirement page now exists:
+`https://docs.x.ai/developers/migration/may-15-retirement` ("Grok Model Retirement
+on May 15, 2026" — not linked from the models overview, but in the docs corpus).
+Retired effective 2026-05-15 12:00 PM PT, with documented redirects:
+
+| Retired id | Redirects to |
+|---|---|
+| `grok-4-1-fast-reasoning`, `grok-4-fast-reasoning` | `grok-4.3` with `low` reasoning effort |
+| `grok-4-1-fast-non-reasoning`, `grok-4-fast-non-reasoning` | `grok-4.3` with `none` reasoning effort |
+| `grok-code-fast-1` | `grok-build-0.1` |
+| `grok-imagine-image-pro` | `grok-imagine-image-quality` |
+| `grok-4-0709`, `grok-3` | retired (no per-id redirect beyond the page's guidance) |
+
+Ids absent from both the models page and this retirement page stay
+`not documented` — do not infer retirement from absence alone.
 
 ## Boundaries
 
