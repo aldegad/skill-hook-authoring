@@ -2,15 +2,15 @@
 
 Official source: https://docs.anthropic.com/en/docs/about-claude/models/overview
 (301-redirects to `platform.claude.com/docs/en/docs/about-claude/models/overview` — same official doc)
-Last reviewed: 2026-07-21 (verified live against the official models overview)
+Last reviewed: 2026-07-28 (verified live against the official models overview)
 
 ## Current shipping models
 
 | Family | Model id | Reasoning | Notes |
 |---|---|---|---|
 | Claude Fable 5 | `claude-fable-5` | adaptive thinking (always on) | Most capable widely released model; next-generation intelligence for long-running agents. 1M context. |
-| Claude Opus 4.8 | `claude-opus-4-8` | adaptive thinking; `effort` defaults to `high` on all surfaces (API, Claude Code, claude.ai) | Complex agentic coding / enterprise tier. 1M context. `[1m]` long-context variant selectable in Claude Code. |
-| Claude Sonnet 5 | `claude-sonnet-5` | adaptive thinking; `effort` defaults to `high` on the API and Claude Code | Balanced tier; supersedes Sonnet 4.6. 1M context. |
+| Claude Opus 5 | `claude-opus-5` | adaptive thinking; `effort` defaults to `high` on the Claude API and Claude Code | "For complex agentic coding and enterprise work" — the page's start-here recommendation for that tier. $5/$25 per MTok; knowledge cutoff May 2026. Supersedes Opus 4.8 (see the page's "Migrating to Claude Opus 5" guide). |
+| Claude Sonnet 5 | `claude-sonnet-5` | adaptive thinking; `effort` defaults to `high` on the Claude API and Claude Code | Balanced tier; supersedes Sonnet 4.6. 1M context. Intro pricing $2/$10 per MTok through 2026-08-31. |
 | Claude Haiku 4.5 | `claude-haiku-4-5-20251001` (alias `claude-haiku-4-5`) | extended thinking | Low-latency / low-cost tier. 200k context. |
 
 - The current generation uses **adaptive thinking** (Fable 5: always on); Haiku
@@ -31,10 +31,11 @@ Last reviewed: 2026-07-21 (verified live against the official models overview)
 
 | Model | Status | Replaced by |
 |---|---|---|
-| `claude-opus-4-7` (Opus 4.7) | legacy (still available, migration recommended) | `claude-opus-4-8`. Fully removed from the Kuma Studio spawnable catalog 2026-07-02. |
+| `claude-opus-4-8` (Opus 4.8) | legacy (still available; `effort` defaults to `high` on all surfaces) | `claude-opus-5` |
+| `claude-opus-4-7` (Opus 4.7) | legacy (still available, migration recommended) | current Opus. Fully removed from the Kuma Studio spawnable catalog 2026-07-02. |
 | `claude-sonnet-4-6` (Sonnet 4.6) | legacy | `claude-sonnet-5` |
 | `claude-opus-4-6`, `claude-sonnet-4-5-20250929`, `claude-opus-4-5-20251101` | legacy | current-generation equivalents |
-| `claude-opus-4-1-20250805` (Opus 4.1) | **deprecated — retires 2026-08-05** | current Opus |
+| `claude-opus-4-1-20250805` (Opus 4.1) | **deprecated — retires 2026-08-05** | `claude-opus-5` (the page's stated migration target) |
 
 ## Boundaries
 

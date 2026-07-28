@@ -3,7 +3,7 @@
 Official source: https://learn.chatgpt.com/docs/models
 (moved 2026-07-16 — `developers.openai.com/codex/models` now 308-redirects here,
 along with the rest of the Codex doc set)
-Last reviewed: 2026-07-21 (verified live against the official Codex models page)
+Last reviewed: 2026-07-28 (verified live against the official Codex models page)
 
 ## Current shipping models
 
@@ -18,7 +18,8 @@ Last reviewed: 2026-07-21 (verified live against the official Codex models page)
 | `gpt-5.4-mini` | `codex -m gpt-5.4-mini` | Other model: fast, efficient mini model for responsive coding tasks and subagents. |
 
 - The models page lists exactly the seven ids above. The bare family id `gpt-5.6`
-  appears only as CLI-example shorthand (`codex -m gpt-5.6`), not as a listed
+  appears only as example shorthand (`codex --model gpt-5.6`,
+  `codex exec -m gpt-5.6`, and config `model = "gpt-5.6"`), not as a listed
   model id — do not treat it as a documented selector.
 - Availability is shown per surface on the models page. Static text extraction
   lists the same surface labels for each model but does not preserve icon state,
@@ -27,6 +28,9 @@ Last reviewed: 2026-07-21 (verified live against the official Codex models page)
 - Reasoning effort is documented as a selector: Low, Medium (default), High,
   Extra High, Max, and Ultra. The page says there is no exact mapping from GPT-5.5
   reasoning efforts to GPT-5.6; try familiar tasks at a lower setting and adjust.
+  The lowest tier is surface-named: "Light" in the ChatGPT desktop app / web /
+  IDE extension, "Low" in the CLI. Max must be enabled in app settings; Ultra
+  "uses subagents" behind a Settings > Configuration toggle.
 - `model_reasoning_effort` and `service_tier` remain config knobs documented in
   the Codex config docs; service-tier tables are `not documented` on the models
   page.
