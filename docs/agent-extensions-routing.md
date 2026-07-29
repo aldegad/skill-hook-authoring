@@ -102,7 +102,6 @@
 | `deep-research-skills/` | nested clone (upstream-tracked) | `Weizhena/Deep-Research-skills` (MIT) | umbrella git only |
 | `content-pipeline` | own (umbrella sub-dir) | - | umbrella git only |
 | `insane-search` | own (umbrella sub-dir) | - | umbrella git only |
-| `security-threat-intel` | own (umbrella sub-dir) | - | umbrella git only |
 | `skill-hook-authoring` | own (umbrella sub-dir) | - | umbrella git only |
 
 `skills.json` 의 entry 가 본 표의 SSoT 다. 본 페이지의 표는 가독성용 미러이며,
