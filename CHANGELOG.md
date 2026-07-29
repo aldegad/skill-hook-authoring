@@ -5,6 +5,16 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## Unreleased — 2026-07-30
+
+Daily refresh (verification fetched 2026-07-30; all 66 sources re-verified, none unverified this run). No structural drift; freshness stamps only.
+
+### Changed
+
+- **Billing status remains paused.** The official Agent SDK support page still opens with the June 15 pause notice, so `claude -p`, Agent SDK, and third-party app usage continue to draw from subscription usage limits; the separate monthly credit remains unavailable. The `ANTHROPIC_API_KEY` API-billing caveat was also re-confirmed. Stamps advanced in `docs/cli-invocation.md` and `docs/cloud-automation.md`.
+- **Model lineups re-verified unchanged.** Claude, Codex, Grok, Cursor, and Gemini/Antigravity still match their official model pages. Hermes still has no official lineup and remains `unverified this run`. `Last reviewed:` stamps advanced across `docs/models/*`.
+- **Antigravity SPA pages re-rendered.** The CLI reference, conversations, resume, migration, plugins, settings, install, headless, and SDK pages retain the documented surfaces mirrored by this repo.
+
 ## Unreleased — 2026-07-29
 
 Daily refresh (verification fetched 2026-07-29; all 66 sources re-verified, none
