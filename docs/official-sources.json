@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-07-28",
+  "updated": "2026-07-29",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "vendorSourceRule": "Narrow exception to sourceRule, for facts a vendor's docs structurally cannot attest — not a general licence to read code. A vendor-owned artifact (its public source repo) may anchor ONLY: (a) source availability and licence, and (b) implementation internals explicitly labelled source-verified with the file path, where no doc states them. It may never anchor a capability/compatibility claim that a vendor doc already covers — that claim keeps its doc owner, so the two never split. Source-verified facts are implementation, not a vendor contract: they can change without notice and must be re-verified like any other claim. Current holders: xai-grok-build-repo (kind source-availability; Grok Build is Apache-2.0 but docs.x.ai never says so) and docs/completion-stack.md (Codex /goal internals verified against openai/codex).",
@@ -94,7 +94,7 @@
       "agent": "codex",
       "kind": "skills",
       "url": "https://learn.chatgpt.com/docs/build-skills",
-      "notes": "Verified live 2026-07-20: REVERSAL of the 2026-07-19 reading. Under \"Where to save skills\" the page states \"Codex reads skills from repository, user, admin, and system locations. For repositories, Codex scans `.agents/skills` in every directory from your current working directory up to the repository root.\" The location list is now six entries: $CWD/.agents/skills, $CWD/../.agents/skills, $REPO_ROOT/.agents/skills, $HOME/.agents/skills, /etc/codex/skills, built-in. So the repository tier IS a cwd-upward walk; the \"flat four-level hierarchy\" recorded 2026-07-19 is false. The page never uses the words \"upward\" or \"walk\" — the semantics come from the quoted sentence. This claim has now flipped twice; re-read the live sentence before re-recording either shape.",
+      "notes": "Verified live 2026-07-20: REVERSAL of the 2026-07-19 reading. Under \"Where to save skills\" the page states \"Codex reads skills from repository, user, admin, and system locations. For repositories, Codex scans `.agents/skills` in every directory from your current working directory up to the repository root.\" The location list is now six entries: $CWD/.agents/skills, $CWD/../.agents/skills, $REPO_ROOT/.agents/skills, $HOME/.agents/skills, /etc/codex/skills, built-in. So the repository tier IS a cwd-upward walk; the \"flat four-level hierarchy\" recorded 2026-07-19 is false. The page never uses the words \"upward\" or \"walk\" — the semantics come from the quoted sentence. This claim has now flipped twice; re-read the live sentence before re-recording either shape. 2026-07-29: the build-skills page now documents a per-skill disable toggle — `[[skills.config]]` in ~/.codex/config.toml with path = \"/path/to/skill/SKILL.md\" and enabled = false (restart Codex to apply); docs/skill-lifecycle.md updated (Codex split out of the no-toggle cell).",
       "claims": [
         "Agent Skills",
         "SKILL.md",
@@ -107,7 +107,8 @@
         "/skills selector",
         "$ skill mention",
         "allow_implicit_invocation",
-        "agents/openai.yaml"
+        "agents/openai.yaml",
+        "[[skills.config]] per-skill enabled = false toggle in ~/.codex/config.toml"
       ]
     },
     {
@@ -135,7 +136,7 @@
       "agent": "codex",
       "kind": "hooks",
       "url": "https://learn.chatgpt.com/docs/hooks",
-      "notes": "Verified live 2026-07-19. MAJOR REVERSAL of the previously recorded matcher behavior: the page now carries a \"Matcher patterns\" section stating 'The `matcher` field is a regex string that filters when hooks fire. Use \"*\", \"\", or omit `matcher` entirely to match every occurrence of a supported event.' — so a literal \"*\" is match-all, NOT an invalid regex that silently matches nothing. Codex and Claude therefore agree on \"*\"/\"\"/omitted match-all semantics. Two events ignore the field outright: UserPromptSubmit and Stop ('Any configured matcher is ignored for this event'). Parsed-but-unsupported fields split into two distinct failure modes: (1) hook run marked failed while the tool call continues — PreToolUse permissionDecision \"ask\", legacy decision \"approve\", continue: false, stopReason, suppressOutput; and PostToolUse updatedMCPToolOutput plus suppressOutput; (2) FAIL CLOSED — PermissionRequest updatedInput / updatedPermissions / interrupt are reserved. Handler types: only type \"command\" runs; prompt and agent handlers are parsed but skipped, and `async` is parsed but async command hooks are unsupported so those handlers are skipped.",
+      "notes": "Verified live 2026-07-19. MAJOR REVERSAL of the previously recorded matcher behavior: the page now carries a \"Matcher patterns\" section stating 'The `matcher` field is a regex string that filters when hooks fire. Use \"*\", \"\", or omit `matcher` entirely to match every occurrence of a supported event.' — so a literal \"*\" is match-all, NOT an invalid regex that silently matches nothing. Codex and Claude therefore agree on \"*\"/\"\"/omitted match-all semantics. Two events ignore the field outright: UserPromptSubmit and Stop ('Any configured matcher is ignored for this event'). Parsed-but-unsupported fields split into two distinct failure modes: (1) hook run marked failed while the tool call continues — PreToolUse permissionDecision \"ask\", legacy decision \"approve\", continue: false, stopReason, suppressOutput; and PostToolUse updatedMCPToolOutput plus suppressOutput; (2) FAIL CLOSED — PermissionRequest updatedInput / updatedPermissions / interrupt are reserved. Handler types: only type \"command\" runs; prompt and agent handlers are parsed but skipped, and `async` is parsed but async command hooks are unsupported so those handlers are skipped. 2026-07-29: the event list gained SessionEnd (now 'SessionStart, SessionEnd, PreToolUse, PermissionRequest, PostToolUse, PreCompact, PostCompact, UserPromptSubmit, SubagentStart, SubagentStop, Stop'), and the page states verbatim 'Hooks are enabled by default,' disable via [features] hooks = false — the opt-in feature-flag framing is retired (it is opt-out).",
       "claims": [
         "lifecycle hooks",
         "hook payloads",
@@ -149,7 +150,9 @@
         "async parsed but async command hooks unsupported so handlers are skipped",
         "only type command handlers run",
         "prompt handler type parsed but skipped",
-        "agent handler type parsed but skipped"
+        "agent handler type parsed but skipped",
+        "SessionEnd event",
+        "hooks are enabled by default, disable via [features] hooks = false"
       ]
     },
     {
@@ -384,7 +387,7 @@
       "agent": "claude-code",
       "kind": "commands",
       "url": "https://code.claude.com/docs/en/skills",
-      "notes": "The old slash-commands page now resolves to the skills surface; Claude Code merges custom commands into skills.",
+      "notes": "The old slash-commands page now resolves to the skills surface; Claude Code merges custom commands into skills. 2026-07-29: skillOverrides now has three states — \"off\" and \"name-only\" (collapses the skill to its name to save listing budget) — cycled via the /skills menu which saves to .claude/settings.local.json; 'Plugin skills are not affected by skillOverrides. Manage those through /plugin instead.' Also new: nested-skill qualified names (/apps/web:deploy), live change detection, skillListingBudgetFraction.",
       "claims": [
         "custom slash commands",
         ".claude/commands",
@@ -402,7 +405,8 @@
         "subagent execution",
         "dynamic context injection",
         ".claude-plugin/plugin.json in a skill folder",
-        "skill lifecycle hooks"
+        "skill lifecycle hooks",
+        "skillOverrides states off and name-only, /skills menu saves to .claude/settings.local.json, plugin skills not affected"
       ]
     },
     {
@@ -653,7 +657,7 @@
       "agent": "hermes-agent",
       "kind": "hooks",
       "url": "https://hermes-agent.nousresearch.com/docs/user-guide/features/hooks",
-      "notes": "2026-07-06: new plugin control-flow hook event pre_verify — 'Fires once per turn when the agent edited code, just before it finishes (after the built-in verify-on-stop guard)'; returns {\"action\": \"continue\", \"message\": str} to keep going; related config agent.verify_guidance: false.",
+      "notes": "2026-07-06: new plugin control-flow hook event pre_verify — 'Fires once per turn when the agent edited code, just before it finishes (after the built-in verify-on-stop guard)'; returns {\"action\": \"continue\", \"message\": str} to keep going; related config agent.verify_guidance: false. 2026-07-29: the gateway-event list gained reaction:added and reaction:removed (verified in raw page HTML); the page also notes shell hooks share the plugin-hook dispatcher/event set.",
       "claims": [
         "gateway hooks",
         "plugin hooks",
@@ -685,7 +689,8 @@
         "command:* wildcard gateway hook",
         "shell hooks approval security model",
         "hooks_auto_accept config",
-        "--accept-hooks flag"
+        "--accept-hooks flag",
+        "reaction:added and reaction:removed gateway events"
       ]
     },
     {
@@ -801,7 +806,7 @@
       "agent": "cursor-cli",
       "kind": "skills",
       "url": "https://cursor.com/docs/skills",
-      "notes": "Verified live 2026-07-19: the optional frontmatter set is now three fields — alongside paths and disable-model-invocation the page documents metadata ('arbitrary key-value pairs').",
+      "notes": "Verified live 2026-07-19: the optional frontmatter set is now three fields — alongside paths and disable-model-invocation the page documents metadata ('arbitrary key-value pairs'). 2026-07-29: the page now carries a ~19-row 'Built-in Cursor skills' table (e.g. /babysit, /canvas, /create-hook, /create-subagent, /loop, /review-bugbot, /sdk, /statusline) including /automate — 'Creates Cursor Automations triggered by schedules, Slack messages, GitHub events, and other sources.' — the first official Cursor Automations reference in the tracked set; the compatibility-matrix automation cell's external-scheduler hedge is retired.",
       "claims": [
         "metadata optional frontmatter field for arbitrary key-value pairs",
         "Agent Skills",
@@ -817,7 +822,8 @@
         "disable-model-invocation",
         "scripts",
         "references",
-        "assets"
+        "assets",
+        "built-in Cursor skills table including /automate creating Cursor Automations with schedule Slack and GitHub triggers"
       ]
     },
     {
@@ -1081,7 +1087,7 @@
       "agent": "claude-code",
       "kind": "cli-invocation",
       "url": "https://code.claude.com/docs/en/cli-reference",
-      "notes": "Verified live 2026-07-28: --effort takes NAMED levels, not numbers — low, medium, high, xhigh, max, ultracode ('ultracode starts the session at xhigh effort... requires v2.1.203'). --advisor <model> accepts a model alias (opus or sonnet) or a full model ID — and the page states 'Claude Code doesn't offer Fable 5 as the advisor: claude --advisor fable exits with an error.' --from-pr does NOT resume a session: it 'Open[s] the session picker filtered to sessions linked to a specific pull request', accepting a PR number, a GitHub or GitHub Enterprise PR URL, a GitLab merge request URL, or a Bitbucket pull request URL. 2026-07-28: --safe-mode remains fully documented ('Start with all customizations disabled to troubleshoot a broken configuration... Sets CLAUDE_CODE_SAFE_MODE') but its v2.1.169 version tie no longer renders anywhere on the page — version annotation dropped from the claim.",
+      "notes": "Verified live 2026-07-28: --effort takes NAMED levels, not numbers — low, medium, high, xhigh, max, ultracode ('ultracode starts the session at xhigh effort... requires v2.1.203'). --advisor <model> accepts a model alias (opus or sonnet) or a full model ID — and the page states 'Claude Code doesn't offer Fable 5 as the advisor: claude --advisor fable exits with an error.' --from-pr does NOT resume a session: it 'Open[s] the session picker filtered to sessions linked to a specific pull request', accepting a PR number, a GitHub or GitHub Enterprise PR URL, a GitLab merge request URL, or a Bitbucket pull request URL. 2026-07-28: --safe-mode remains fully documented ('Start with all customizations disabled to troubleshoot a broken configuration... Sets CLAUDE_CODE_SAFE_MODE') but its v2.1.169 version tie no longer renders anywhere on the page — version annotation dropped from the claim. 2026-07-29: claude setup-token is now documented on this page ('Generate long-lived OAuth token for CI and scripts… Requires Claude subscription') — the 'unverified this run' annotation in docs/cli-invocation.md is cleared. Also newly noted: v2.1.210+ refuses Fable 5 as advisor; --bg incompatible with -p as of v2.1.198+.",
       "claims": [
         "claude -p --print",
         "cat file pipe claude -p",
@@ -1115,7 +1121,8 @@
         "--advisor <model> accepts model alias opus or sonnet or a full model ID",
         "--worktree -w isolated git worktree",
         "--from-pr opens the session picker filtered to sessions linked to a specific pull request",
-        "--from-pr accepts a PR number or GitHub GitHub Enterprise GitLab or Bitbucket PR/MR URL"
+        "--from-pr accepts a PR number or GitHub GitHub Enterprise GitLab or Bitbucket PR/MR URL",
+        "claude setup-token generates a long-lived OAuth token for CI and scripts, requires a Claude subscription"
       ]
     },
     {
@@ -1344,7 +1351,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli/headless",
-      "notes": "JS-rendered SPA; render dynamically to verify. First captured 2026-07-28 (dynamic render, kuma agent-browser) — a NEW dedicated Headless mode page that reverses the long-standing 'agy has no headless one-shot' verdict. 'Headless mode (also called print mode) sends a single prompt to the agent, streams or returns the response, and exits.' The json output envelope carries conversation_id/status/response/usage; stream-json is NDJSON with init/step_update/result events. Headless soft-deny: unapprovable tools are soft-denied, the run exits 0 with a notice to stderr; --dangerously-skip-permissions maps to permission_mode always-proceed. The page's agy models sample output lists gemini-3.6-flash-high/-medium, gemini-3.5-flash-medium, gemini-3.1-pro-high, and claude-sonnet-4-6 ('Claude Sonnet 4.6 (Thinking)') — CLI-surface ids, not Gemini API models-page entries.",
+      "notes": "JS-rendered SPA; render dynamically to verify. First captured 2026-07-28 (dynamic render, kuma agent-browser) — a NEW dedicated Headless mode page that reverses the long-standing 'agy has no headless one-shot' verdict. 'Headless mode (also called print mode) sends a single prompt to the agent, streams or returns the response, and exits.' The json output envelope carries conversation_id/status/response/usage; stream-json is NDJSON with init/step_update/result events. Headless soft-deny: unapprovable tools are soft-denied, the run exits 0 with a notice to stderr; --dangerously-skip-permissions maps to permission_mode always-proceed. The page's agy models sample output lists gemini-3.6-flash-high/-medium, gemini-3.5-flash-medium, gemini-3.1-pro-high, and claude-sonnet-4-6 ('Claude Sonnet 4.6 (Thinking)') — CLI-surface ids, not Gemini API models-page entries. 2026-07-29: flag table gained --sandbox (default false, 'Run with terminal sandbox restrictions enabled') — the launch override of enableTerminalSandbox also referenced on the Using page; all previously recorded headless claims re-verified verbatim (dynamic render, kuma agent-browser; CLI v1.1.8).",
       "claims": [
         "-p --print --prompt run a single prompt non-interactively and print the response",
         "--output-format text json stream-json",
@@ -1358,7 +1365,8 @@
         "permissions.allow action(target) rules in settings.json e.g. command(git) write_file(src/)",
         "headless soft-deny: unapprovable tools soft-denied run exits 0 notice to stderr",
         "--dangerously-skip-permissions equals permission_mode always-proceed",
-        "agy models sample lists gemini-3.6-flash-high gemini-3.6-flash-medium and claude-sonnet-4-6 as CLI-surface ids"
+        "agy models sample lists gemini-3.6-flash-high gemini-3.6-flash-medium and claude-sonnet-4-6 as CLI-surface ids",
+        "--sandbox default false run with terminal sandbox restrictions enabled"
       ]
     },
     {
@@ -1383,7 +1391,7 @@
       "agent": "claude-code",
       "kind": "billing",
       "url": "https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan",
-      "notes": "Subscription covers interactive Claude Code; a present ANTHROPIC_API_KEY switches Claude Code to pay-as-you-go API billing. The page references /status only for monitoring remaining plan allocation, not for revealing which auth method is active. Verified live 2026-07-28, verbatim unchanged: 'If you have an ANTHROPIC_API_KEY environment variable set on your system, Claude Code will use this API key for authentication instead of your Claude subscription ... resulting in API usage charges rather than using your subscription's included usage.'",
+      "notes": "Subscription covers interactive Claude Code; a present ANTHROPIC_API_KEY switches Claude Code to pay-as-you-go API billing. The page references /status only for monitoring remaining plan allocation, not for revealing which auth method is active. Verified live 2026-07-29, verbatim unchanged: 'If you have an ANTHROPIC_API_KEY environment variable set on your system, Claude Code will use this API key for authentication instead of your Claude subscription ... resulting in API usage charges rather than using your subscription's included usage.'",
       "claims": [
         "Pro plan",
         "Max plan",
@@ -1398,11 +1406,11 @@
       "agent": "claude-code",
       "kind": "billing",
       "url": "https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan",
-      "notes": "Re-verified 2026-07-28: the billing change originally planned for 2026-06-15 is still PAUSED (banner verbatim-unchanged; page dateline now reads 'June 16, 2026'). The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits. The previously announced monthly credit, which would have been available to eligible claimants in connection with these changes, isn't available. We're working to update the plan to better support how users build with Claude subscriptions. When we have an update, we'll share it before anything takes effect.' A line under the banner adds: 'The content below reflects the page before June 15. It's preserved for reference but is no longer taking effect on June 15.' Accounts using an API key continue on pay-as-you-go API billing. The original (paused, not-in-effect) plan described separate monthly credits per plan tier: Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise usage-based $20, Enterprise seat-based Premium seats $200 (Standard seats not eligible).",
+      "notes": "Re-verified 2026-07-29: the billing change originally planned for 2026-06-15 is still PAUSED (banner verbatim-unchanged; page dateline now reads 'June 16, 2026'). The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits. The previously announced monthly credit, which would have been available to eligible claimants in connection with these changes, isn't available. We're working to update the plan to better support how users build with Claude subscriptions. When we have an update, we'll share it before anything takes effect.' A line under the banner adds: 'The content below reflects the page before June 15. It's preserved for reference but is no longer taking effect on June 15.' Accounts using an API key continue on pay-as-you-go API billing. The original (paused, not-in-effect) plan described separate monthly credits per plan tier: Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise usage-based $20, Enterprise seat-based Premium seats $200 (Standard seats not eligible).",
       "claims": [
         "Agent SDK with Claude plan",
         "claude -p headless",
-        "2026-06-15 Agent SDK billing change still paused as of 2026-07-28",
+        "2026-06-15 Agent SDK billing change still paused as of 2026-07-29",
         "Agent SDK and claude -p currently draw from regular subscription usage limits same as interactive use",
         "API key accounts remain pay-as-you-go API billing",
         "original plan described separate monthly credits per plan tier but change is paused"
@@ -1438,7 +1446,7 @@
       "agent": "claude-code",
       "kind": "model-lineup",
       "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
-      "notes": "Current Claude model lineup (ids + reasoning). Mirror: docs/models/claude.md. Verified live 2026-07-28 (docs.anthropic.com still 301-redirects to platform.claude.com — same official doc). MAJOR 2026-07-28: Claude Opus 5 (claude-opus-5) has shipped and replaced Opus 4.8 in the current table — 'If you're unsure which model to use, start with Claude Opus 5 for complex agentic coding and enterprise work'; $5/$25 MTok, knowledge cutoff May 2026; the page carries a 'Migrating to Claude Opus 5' guide and Opus 4.8 leads the legacy rows. Current: Fable 5 (claude-fable-5), Opus 5 (claude-opus-5), Sonnet 5 (claude-sonnet-5, intro pricing $2/$10 through 2026-08-31), Haiku 4.5 (id claude-haiku-4-5-20251001, alias claude-haiku-4-5). Reasoning: adaptive thinking on Fable 5 (always on) / Opus 5 / Sonnet 5; Haiku 4.5 uses extended thinking. Effort defaults: Opus 4.8 defaults to high on all surfaces; Opus 5 and Sonnet 5 default to high on the Claude API and Claude Code. Also documented but NOT generally available: Claude Mythos 5 (claude-mythos-5) and Claude Mythos Preview (claude-mythos-preview), invitation-only via Project Glasswing. Legacy: Opus 4.8 (→ 5), Opus 4.7, Opus 4.6, Sonnet 4.6 (→ 5), Sonnet 4.5, Opus 4.5; deprecated: claude-opus-4-1-20250805 retiring 2026-08-05 with Opus 5 as the stated migration target.",
+      "notes": "Current Claude model lineup (ids + reasoning). Mirror: docs/models/claude.md. Verified live 2026-07-28 (docs.anthropic.com still 301-redirects to platform.claude.com — same official doc). MAJOR 2026-07-28: Claude Opus 5 (claude-opus-5) has shipped and replaced Opus 4.8 in the current table — 'If you're unsure which model to use, start with Claude Opus 5 for complex agentic coding and enterprise work'; $5/$25 MTok, knowledge cutoff May 2026; the page carries a 'Migrating to Claude Opus 5' guide and Opus 4.8 leads the legacy rows. Current: Fable 5 (claude-fable-5), Opus 5 (claude-opus-5), Sonnet 5 (claude-sonnet-5, intro pricing $2/$10 through 2026-08-31), Haiku 4.5 (id claude-haiku-4-5-20251001, alias claude-haiku-4-5). Reasoning: adaptive thinking on Fable 5 (always on) / Opus 5 / Sonnet 5; Haiku 4.5 uses extended thinking. Effort defaults: Opus 4.8 defaults to high on all surfaces; Opus 5 and Sonnet 5 default to high on the Claude API and Claude Code. Also documented but NOT generally available: Claude Mythos 5 (claude-mythos-5) and Claude Mythos Preview (claude-mythos-preview), invitation-only via Project Glasswing. Legacy: Opus 4.8 (→ 5), Opus 4.7, Opus 4.6, Sonnet 4.6 (→ 5), Sonnet 4.5, Opus 4.5; deprecated: claude-opus-4-1-20250805 retiring 2026-08-05 with Opus 5 as the stated migration target. Re-verified live 2026-07-29 — lineup unchanged (Fable 5 / Opus 5 / Sonnet 5 / Haiku 4.5; Opus 4.1 retiring 2026-08-05); the page adds that Mythos 5 shares Fable 5's specs and pricing.",
       "claims": [
         "claude-fable-5 current",
         "claude-opus-5 current for complex agentic coding and enterprise work",
@@ -1534,7 +1542,7 @@
       "agent": "grok",
       "kind": "model-lineup",
       "url": "https://docs.x.ai/developers/models",
-      "notes": "Current Grok/xAI model lineup. Mirror: docs/models/grok.md. The page moved 2026-07-06 — docs.x.ai/docs/models 308-redirects to docs.x.ai/developers/models (model detail links under /developers/models/<id>). Verified live 2026-07-21: the overview still recommends Grok 4.5 (grok-4.5, 500k context) as the flagship for code and chat, plus the Grok Voice API and Imagine API. The Imagine API is now pinned to four ids — grok-imagine-image, grok-imagine-image-quality, grok-imagine-video, grok-imagine-video-1.5 — while Voice remains id-less, priced by realtime-minute / TTS-characters / STT-hour. The page states the alias rule verbatim: '`<modelname>` is aliased to the latest stable version. `<modelname>-latest` is aliased to the latest version. `<modelname>-<date>` refers directly to a specific model release.' 2026-07-16: the older ids are shown again — grok-4.3, grok-4.20-0309-reasoning, grok-4.20-0309-non-reasoning, grok-4.20-multi-agent-0309 (all 1M context) and grok-build-0.1 (256k) appear in the pricing table; the page has no separate model-list section, so these ids are stated via pricing plus recommendation prose. 2026-07-28 REVERSAL x2: (1) the overview card now states 'configurable reasoning' for grok-4.5 ('agentic tool calling, minimal hallucinations, configurable reasoning' / 'Reasoning: Configurable'), and the reasoning capability page /developers/model-capabilities/text/reasoning documents a reasoning_effort API parameter — 'grok-4.5 supports the reasoning_effort parameter… If not specified, reasoning_effort defaults to \"high\". Reasoning cannot be disabled.' with prose levels low/medium/high (machine payload additionally shows xhigh for grok-4.5, and none/low/medium/high/xhigh default low for grok-4.3 — payload-only, don't record as prose). (2) a dedicated retirement page now exists at /developers/migration/may-15-retirement ('Grok Model Retirement on May 15, 2026'): grok-4-1-fast-reasoning/-non-reasoning, grok-4-fast-reasoning/-non-reasoning, grok-4-0709, grok-code-fast-1, grok-3, grok-imagine-image-pro retired 2026-05-15 12:00 PM PT with redirects (reasoning slugs → grok-4.3 low effort, non-reasoning → grok-4.3 none effort, grok-code-fast-1 → grok-build-0.1, grok-imagine-image-pro → grok-imagine-image-quality); the page is not linked from the models overview. Also new: 'The knowledge cut-off date of Grok 4.5 is February 1, 2026.'; payload-only grok-voice-think-fast-1.0 carrying alias grok-voice-latest — watch, not prose-documented. The only remaining model-id-level reasoning split is the pre-built grok-4.20 reasoning / non-reasoning variants.",
+      "notes": "Current Grok/xAI model lineup. Mirror: docs/models/grok.md. The page moved 2026-07-06 — docs.x.ai/docs/models 308-redirects to docs.x.ai/developers/models (model detail links under /developers/models/<id>). Verified live 2026-07-21: the overview still recommends Grok 4.5 (grok-4.5, 500k context) as the flagship for code and chat, plus the Grok Voice API and Imagine API. The Imagine API is now pinned to four ids — grok-imagine-image, grok-imagine-image-quality, grok-imagine-video, grok-imagine-video-1.5 — while Voice remains id-less, priced by realtime-minute / TTS-characters / STT-hour. The page states the alias rule verbatim: '`<modelname>` is aliased to the latest stable version. `<modelname>-latest` is aliased to the latest version. `<modelname>-<date>` refers directly to a specific model release.' 2026-07-16: the older ids are shown again — grok-4.3, grok-4.20-0309-reasoning, grok-4.20-0309-non-reasoning, grok-4.20-multi-agent-0309 (all 1M context) and grok-build-0.1 (256k) appear in the pricing table; the page has no separate model-list section, so these ids are stated via pricing plus recommendation prose. 2026-07-28 REVERSAL x2: (1) the overview card now states 'configurable reasoning' for grok-4.5 ('agentic tool calling, minimal hallucinations, configurable reasoning' / 'Reasoning: Configurable'), and the reasoning capability page /developers/model-capabilities/text/reasoning documents a reasoning_effort API parameter — 'grok-4.5 supports the reasoning_effort parameter… If not specified, reasoning_effort defaults to \"high\". Reasoning cannot be disabled.' with prose levels low/medium/high (machine payload additionally shows xhigh for grok-4.5, and none/low/medium/high/xhigh default low for grok-4.3 — payload-only, don't record as prose). (2) a dedicated retirement page now exists at /developers/migration/may-15-retirement ('Grok Model Retirement on May 15, 2026'): grok-4-1-fast-reasoning/-non-reasoning, grok-4-fast-reasoning/-non-reasoning, grok-4-0709, grok-code-fast-1, grok-3, grok-imagine-image-pro retired 2026-05-15 12:00 PM PT with redirects (reasoning slugs → grok-4.3 low effort, non-reasoning → grok-4.3 none effort, grok-code-fast-1 → grok-build-0.1, grok-imagine-image-pro → grok-imagine-image-quality); the page is not linked from the models overview. Also new: 'The knowledge cut-off date of Grok 4.5 is February 1, 2026.'; payload-only grok-voice-think-fast-1.0 carrying alias grok-voice-latest — watch, not prose-documented. The only remaining model-id-level reasoning split is the pre-built grok-4.20 reasoning / non-reasoning variants. 2026-07-29: the may-15-retirement page now lists explicit per-id redirects for the last two ids — grok-4-0709 → grok-4.3 with low reasoning effort, grok-3 → grok-4.3 with none — so all eight retired ids carry redirect targets; the page also notes redirected requests bill at $1.25/M input and $2.50/M output. docs/models/grok.md table updated.",
       "claims": [
         "grok-4.5 current 500k context flagship for code",
         "grok-4.5 configurable reasoning with documented reasoning_effort API parameter default high cannot be disabled",
@@ -1546,7 +1554,8 @@
         "Imagine ids grok-imagine-image grok-imagine-image-quality grok-imagine-video grok-imagine-video-1.5",
         "<modelname> aliased to the latest stable version, <modelname>-latest to the latest version, <modelname>-<date> to a specific release",
         "dedicated retirement page /developers/migration/may-15-retirement lists eight ids retired 2026-05-15 with redirects",
-        "do not infer retirement from absence for ids on neither the models page nor the retirement page"
+        "do not infer retirement from absence for ids on neither the models page nor the retirement page",
+        "grok-4-0709 redirects to grok-4.3 with low reasoning effort and grok-3 to grok-4.3 with none"
       ]
     },
     {
@@ -1573,7 +1582,7 @@
       "agent": "antigravity-cli",
       "kind": "model-lineup",
       "url": "https://ai.google.dev/gemini-api/docs/models",
-      "notes": "Google's official Gemini API model page (page states last-updated 2026-07-20). Mirror: docs/models/gemini-antigravity.md. Registered 2026-07-19. JS-rendered; required dynamic rendering to verify (2026-07-28 run served Korean-localized — same content). Verified live 2026-07-28: gemini-3.5-flash is GA and named Google's most intelligent model; gemini-3.1-pro and Gemini 3 Flash are Preview; gemini-3.1-flash-lite is GA; Antigravity Agent is Preview. Shut down: Gemini 2.0 Flash, Gemini 2.0 Flash-Lite, Gemini 3.1 Flash-Lite Preview, Gemini 3 Pro Preview. Imagen 4 is deprecated. Additions since 07-16: Preview — Gemini 3.5 Live Translate, Gemini 3.1 Flash Live, Gemini 3.1 Flash TTS, Gemini Omni Flash, Lyria 3 Pro/Clip; GA — Nano Banana 2 / 2 Lite, Gemini Embedding 2; Deep Research Max; Interactions API GA banner. NOTE: Gemini 3.6 Flash appears in Antigravity CLI's agy models output (see antigravity-cli-headless) but is NOT on this API models page.",
+      "notes": "Google's official Gemini API model page (page states last-updated 2026-07-20). Mirror: docs/models/gemini-antigravity.md. Registered 2026-07-19. JS-rendered; required dynamic rendering to verify (2026-07-28 run served Korean-localized — same content). Verified live 2026-07-28: gemini-3.5-flash is GA and named Google's most intelligent model; gemini-3.1-pro and Gemini 3 Flash are Preview; gemini-3.1-flash-lite is GA; Antigravity Agent is Preview. Shut down: Gemini 2.0 Flash, Gemini 2.0 Flash-Lite, Gemini 3.1 Flash-Lite Preview, Gemini 3 Pro Preview. Imagen 4 is deprecated. Additions since 07-16: Preview — Gemini 3.5 Live Translate, Gemini 3.1 Flash Live, Gemini 3.1 Flash TTS, Gemini Omni Flash, Lyria 3 Pro/Clip; GA — Nano Banana 2 / 2 Lite, Gemini Embedding 2; Deep Research Max; Interactions API GA banner. NOTE: Gemini 3.6 Flash appears in Antigravity CLI's agy models output (see antigravity-cli-headless) but is NOT on this API models page. 2026-07-29 (page last-updated 2026-07-21): gemini-3.6-flash is now on this API page as a Stable model ('Our latest model that balances speed with intelligence to deliver strong performance in agentic and multimodal tasks.') and is the page's stable-naming example (replacing gemini-3.5-flash in that role); new Stable gemini-3.5-flash-lite; preview ids carry -preview suffixes (gemini-3.1-pro-preview, gemini-3-flash-preview, Antigravity Agent antigravity-preview-05-2026). The 'Gemini 3.6 Flash not on the API page' note is retired for the base id — only the -high/-medium effort slugs remain CLI-surface-only. Beyond-scope additions: Deep Research / Deep Research Max, Computer Use, Robotics-ER 1.6, Nano Banana Pro, Lyria RealTime.",
       "claims": [
         "gemini-3.5-flash GA and Google's most intelligent model frontier tier",
         "gemini-3.5-flash sustained frontier performance on agentic and coding tasks",
@@ -1583,7 +1592,10 @@
         "Antigravity Agent Preview managed general-purpose agent model that plans reasons and executes code in an isolated Linux sandbox",
         "shut down Gemini 2.0 Flash and Gemini 2.0 Flash-Lite",
         "shut down Gemini 3.1 Flash-Lite Preview and Gemini 3 Pro Preview",
-        "Imagen 4 deprecated"
+        "Imagen 4 deprecated",
+        "gemini-3.6-flash Stable on the API page and the stable-id naming example",
+        "gemini-3.5-flash-lite Stable",
+        "preview ids carry -preview suffixes gemini-3.1-pro-preview gemini-3-flash-preview antigravity-preview-05-2026"
       ]
     }
   ]

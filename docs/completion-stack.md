@@ -1,6 +1,6 @@
 # Native Completion & Verification Stacks (Claude Code · Codex)
 
-Last reviewed: 2026-07-20 (claims verified against official docs and vendor
+Last reviewed: 2026-07-29 (claims verified against official docs and vendor
 source 2026-06-15; migrated into this skill from operator research pages
 2026-07-10; Codex goal claims re-anchored 2026-07-17 after the follow-goals
 page was slimmed to a use-case walkthrough)
@@ -215,7 +215,7 @@ commands, and tests — the decisive contrast with Claude's `/goal` evaluator
 [codex hooks](https://learn.chatgpt.com/docs/hooks)
 
 - Codex has a **full lifecycle hooks system** (modeled on Claude Code's).
-  Events: `SessionStart` · `SubagentStart` · `PreToolUse` ·
+  Events: `SessionStart` · `SessionEnd` · `SubagentStart` · `PreToolUse` ·
   `PermissionRequest` · `PostToolUse` · `PreCompact` · `PostCompact` ·
   `UserPromptSubmit` · `SubagentStop` · `Stop`.
 - **The Stop hook is a real hard gate**:
@@ -224,8 +224,8 @@ commands, and tests — the decisive contrast with Claude's `/goal` evaluator
   `stop_hook_active` is the loop guard; a matching Stop hook with
   `continue:false` takes precedence. Functionally identical to Claude Code's
   Stop hook.
-- Config: `[hooks]` in `config.toml` or `hooks.json`, gated by
-  `features.hooks`. Hook trust is enforced (hash-pinned; trust via `/hooks`;
+- Config: `[hooks]` in `config.toml` or `hooks.json`. Hooks are **enabled by
+  default** — disable with `[features] hooks = false`. Hook trust is enforced (hash-pinned; trust via `/hooks`;
   `--dangerously-bypass-hook-trust` to override). Managed restriction:
   `allow_managed_hooks_only`.
 

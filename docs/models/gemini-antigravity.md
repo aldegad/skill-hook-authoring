@@ -1,21 +1,23 @@
 # Google Antigravity CLI (`agy`) / Gemini — model lineup
 
 Official source: https://ai.google.dev/gemini-api/docs/models (the official Google
-Gemini model page; render dynamically — page last-updated 2026-07-20), plus
+Gemini model page; render dynamically — page last-updated 2026-07-21), plus
 https://antigravity.google (JS-rendered SPA — a static fetch returns an empty
 shell; render dynamically before claiming a change).
-Last reviewed: 2026-07-28 (verified live against the official Google Gemini model
+Last reviewed: 2026-07-29 (verified live against the official Google Gemini model
 page, rendered dynamically)
 
 ## Current shipping models
 
 | Model | Status | Notes |
 |---|---|---|
-| `gemini-3.5-flash` | GA | Google's **most intelligent model** — "sustained frontier performance on agentic and coding tasks". The frontier tier, and the doc's own canonical example of a stable model id. |
-| `gemini-3.1-pro` | **Preview** | Advanced intelligence for complex problem-solving and agentic + vibe coding. |
-| `gemini-3.1-flash-lite` | GA | "frontier-class performance rivaling larger models at a fraction of the cost". |
-| Gemini 3 Flash | **Preview** | current Flash-generation preview. |
-| Antigravity Agent | **Preview** | managed general-purpose agent model that plans, reasons, and executes code in an isolated Linux sandbox. |
+| `gemini-3.6-flash` | **Stable** | "Our latest model that balances speed with intelligence to deliver strong performance in agentic and multimodal tasks." Now also the page's canonical naming example of a stable model id. |
+| `gemini-3.5-flash` | Stable | Google's **most intelligent model** — "sustained frontier performance on agentic and coding tasks". The frontier tier. |
+| `gemini-3.5-flash-lite` | Stable | new on the page this pass. |
+| `gemini-3.1-flash-lite` | Stable | "frontier-class performance rivaling larger models at a fraction of the cost". |
+| `gemini-3.1-pro-preview` | **Preview** | Advanced intelligence for complex problem-solving and agentic + vibe coding. Preview ids carry an explicit `-preview` suffix. |
+| `gemini-3-flash-preview` | **Preview** | current Flash-generation preview. |
+| Antigravity Agent (`antigravity-preview-05-2026`) | **Preview** | managed general-purpose agent model that plans, reasons, and executes code in an isolated Linux sandbox. |
 
 - **Antigravity CLI** (`agy`) is the Gemini CLI successor; Gemini CLI itself
   stopped serving individual Pro/Ultra/free users as of **2026-06-18** (enterprise
@@ -25,12 +27,15 @@ page, rendered dynamically)
   change.
 - The Antigravity CLI's own `agy models` sample output (headless-mode page) lists
   `gemini-3.6-flash-high` / `gemini-3.6-flash-medium` and `claude-sonnet-4-6`
-  ("Claude Sonnet 4.6 (Thinking)") — a Gemini 3.6 Flash generation and Claude
-  models surfacing in the CLI that are **not** on this API models page; track
-  them as CLI-surface ids, not API lineup entries.
+  ("Claude Sonnet 4.6 (Thinking)") — effort-suffixed CLI slugs and Claude models
+  that are still **not** on this API models page. The base `gemini-3.6-flash` id
+  itself is now on the API page (Stable, above); only the `-high`/`-medium`
+  variants remain CLI-surface ids, not API lineup entries.
 - The API page also lists (beyond this table's scope): Preview — Gemini 3.5 Live
   Translate, Gemini 3.1 Flash Live, Gemini 3.1 Flash TTS, Gemini Omni Flash,
-  Lyria 3 Pro/Clip; GA — Nano Banana 2 / 2 Lite, Gemini Embedding 2.
+  Lyria 3 Pro/Clip; GA — Nano Banana 2 / 2 Lite, Gemini Embedding 2; plus Deep
+  Research / Deep Research Max, Computer Use, Robotics-ER 1.6, Nano Banana Pro,
+  and Lyria RealTime.
 
 ## Retired / superseded
 

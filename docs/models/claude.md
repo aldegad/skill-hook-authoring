@@ -2,7 +2,7 @@
 
 Official source: https://docs.anthropic.com/en/docs/about-claude/models/overview
 (301-redirects to `platform.claude.com/docs/en/docs/about-claude/models/overview` — same official doc)
-Last reviewed: 2026-07-28 (verified live against the official models overview)
+Last reviewed: 2026-07-29 (verified live against the official models overview)
 
 ## Current shipping models
 
@@ -21,7 +21,7 @@ Last reviewed: 2026-07-28 (verified live against the official models overview)
 - **Documented but not generally available:** Claude Mythos 5 (`claude-mythos-5`)
   and Claude Mythos Preview (`claude-mythos-preview`) — invitation-only, limited
   availability to approved customers in Project Glasswing (defensive cybersecurity
-  workflows; no self-serve sign-up). Mythos 5 shares Fable 5's specs. Do not list
+  workflows; no self-serve sign-up). Mythos 5 shares Fable 5's specs and pricing. Do not list
   these as spawnable ids in downstream catalogs.
 - Every current model id is a **pinned snapshot**: from the 4.6 generation onward
   the ids use a dateless format that is still a pinned snapshot, not an evergreen

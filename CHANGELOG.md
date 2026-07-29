@@ -5,6 +5,52 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## Unreleased — 2026-07-29
+
+Daily refresh (verification fetched 2026-07-29; all 66 sources re-verified, none
+unverified this run). No major drifts; a cluster of minor additive ones plus
+freshness stamps.
+
+### Changed
+
+- **Gemini 3.6 Flash reached the API models page as a Stable model**
+  (`gemini-3.6-flash`, now also the page's stable-id naming example, replacing
+  `gemini-3.5-flash` in that role); new Stable `gemini-3.5-flash-lite`; preview
+  ids now carry explicit `-preview` suffixes (`gemini-3.1-pro-preview`,
+  `gemini-3-flash-preview`, Antigravity Agent `antigravity-preview-05-2026`) —
+  this resolves the CLI-vs-API lineup discrepancy flagged 2026-07-21/28: only the
+  `-high`/`-medium` effort slugs remain CLI-surface-only. Page last-updated
+  2026-07-21. `docs/models/gemini-antigravity.md`, `SKILL.md`, manifest.
+- **Codex skills gained a documented per-skill disable toggle**: `[[skills.config]]`
+  in `~/.codex/config.toml` with `enabled = false` — Codex split out of the
+  no-toggle cell in `docs/skill-lifecycle.md` (Hermes stays).
+- **Codex hooks**: event list gained `SessionEnd`, and the page now states "Hooks
+  are enabled by default" (disable via `[features] hooks = false`) — the opt-in
+  framing is retired. `docs/compatibility-matrix.md`, `docs/completion-stack.md`.
+- **Grok May-15 retirement page completed its redirect table**: `grok-4-0709` →
+  `grok-4.3` (low effort) and `grok-3` → `grok-4.3` (none) — all eight retired ids
+  now have explicit per-id redirects; redirected requests bill $1.25/$2.50 per
+  MTok. `docs/models/grok.md`, manifest.
+- **Cursor Automations are now officially referenced**: the skills page carries a
+  ~19-row built-in-skills table including `/automate` ("Creates Cursor Automations
+  triggered by schedules, Slack messages, GitHub events, and other sources") —
+  the matrix automation cell's external-scheduler hedge is retired.
+- **Claude Code**: `claude setup-token` is now documented on the CLI reference
+  (the "unverified this run" caveat in `docs/cli-invocation.md` is cleared);
+  `skillOverrides` now has three states (`"off"`, `"name-only"`), cycled via the
+  `/skills` menu into `.claude/settings.local.json`, with plugin skills excluded
+  (`docs/skill-lifecycle.md`); the models page adds that Mythos 5 shares Fable 5's
+  pricing as well as specs.
+- **Antigravity headless page** gained `--sandbox` (default false; launch override
+  of `enableTerminalSandbox`). `docs/cli-invocation.md`, `SKILL.md`, manifest.
+- Minor: Hermes gateway hooks gained `reaction:added`/`reaction:removed`;
+  `docs/cloud-automation.md` section retitled to "Codex scheduled tasks" to match
+  the vendor's dropped "Automations" name.
+- Freshness stamps: billing still **paused** (banner verbatim-unchanged,
+  re-verified 2026-07-29); Codex/Claude/Cursor model lineups unchanged — stamps
+  advanced across `docs/cli-invocation.md`, `docs/cloud-automation.md`,
+  `docs/compatibility-matrix.md`, `docs/completion-stack.md`, `docs/models/*`.
+
 ## Unreleased — 2026-07-28
 
 Daily refresh (verification fetched 2026-07-28; first pass since 2026-07-21 — the

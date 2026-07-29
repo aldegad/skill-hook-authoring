@@ -14,9 +14,10 @@ Decide by asking **why** it should stop.
 
 | Engine | Mechanism |
 |---|---|
-| Claude Code | `skillOverrides: { "<id>": "off" }` in `~/.claude/settings.json` |
+| Claude Code | `skillOverrides: { "<id>": "off" \| "name-only" }` — `"off"` hides the skill, `"name-only"` collapses it to its name to save listing budget; the `/skills` menu cycles the states and saves to `.claude/settings.local.json` (a hand-written override in `~/.claude/settings.json` also works). Plugin skills are **not** affected by `skillOverrides` — manage those through `/plugin`. |
 | Grok | move `~/.grok/skills/<id>` → `~/.grok/skills-disabled/<id>` |
-| Codex / Hermes | no documented per-skill toggle — scope via `engines`, or retire |
+| Codex | `[[skills.config]]` in `~/.codex/config.toml` with `path = "/path/to/skill/SKILL.md"` and `enabled = false` (restart Codex to apply) |
+| Hermes | no documented per-skill toggle — scope via `engines`, or retire |
 
 - **Disable is not `engines: {}`.** Emptying `engines` deregisters the skill from every
   engine, which asserts in the manifest that the skill has **no valid runtime** — a false
