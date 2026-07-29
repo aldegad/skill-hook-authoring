@@ -1,6 +1,6 @@
 # Cloud Automation
 
-Last reviewed: 2026-07-28
+Last reviewed: 2026-07-29
 
 Keep this repo's compatibility docs current by running a daily agent that reads
 `docs/official-sources.json`, fetches the official vendor URLs, and opens a pull
@@ -26,7 +26,7 @@ against the subscription usage pool, and a present API key suppresses the
 `launchd`/`cron` job calling `claude -p` look tempting, but the primary
 drawback is **reliability**: a local job fires only when the machine is awake
 at the scheduled time, while a cloud Routine runs regardless of laptop state.
-Note: as of 2026-07-28 the billing difference described here previously (a
+Note: as of 2026-07-29 the billing difference described here previously (a
 separate monthly Agent SDK credit) remains **paused** — `claude -p` and
 Agent SDK usage on subscription plans draw from the same usage pool as
 interactive sessions (no separate per-run credit). For `ANTHROPIC_API_KEY` users billing remains
@@ -68,11 +68,12 @@ for them. To stay consistent with the local guard, enable **Allow unrestricted
 branch pushes** in that repository's routine Permissions and push an
 `aldegad/`-prefixed branch (for example `aldegad/daily-doc-refresh-YYYY-MM-DD`).
 
-## Alternative: Codex App Automations
+## Alternative: Codex scheduled tasks
 
-Codex users can run the same daily flow with a Codex App Automation instead. It
-can schedule recurring tasks, combine automations with skills, and run repo work
-in a dedicated worktree. Project-scoped automations require the Codex app to be
+Codex users can run the same daily flow with a Codex scheduled task instead (the
+docs no longer use the "Automations" product name). It can schedule recurring
+tasks (RRULE recurrence), combine them with skills, and run repo work in a
+dedicated worktree. Project-scoped scheduled tasks require the Codex app to be
 running and the project to exist on disk, so they do not match the laptop-off
 behavior of a cloud routine.
 

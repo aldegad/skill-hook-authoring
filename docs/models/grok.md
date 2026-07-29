@@ -4,8 +4,8 @@ Official source: https://docs.x.ai/developers/models
 (moved from `docs.x.ai/docs/models`, which now 308-redirects here; model detail
 links live under `/developers/models/<id>`) plus the CLI reference at
 https://docs.x.ai/build/cli/reference
-Last reviewed: 2026-07-28 (verified live against the official xAI models page,
-the reasoning capability page, and the CLI reference)
+Last reviewed: 2026-07-29 (verified live against the official xAI models page,
+the reasoning capability page, the may-15-retirement page, and the CLI reference)
 
 ## Current shipping models
 
@@ -62,7 +62,12 @@ Retired effective 2026-05-15 12:00 PM PT, with documented redirects:
 | `grok-4-1-fast-non-reasoning`, `grok-4-fast-non-reasoning` | `grok-4.3` with `none` reasoning effort |
 | `grok-code-fast-1` | `grok-build-0.1` |
 | `grok-imagine-image-pro` | `grok-imagine-image-quality` |
-| `grok-4-0709`, `grok-3` | retired (no per-id redirect beyond the page's guidance) |
+| `grok-4-0709` | `grok-4.3` with `low` reasoning effort |
+| `grok-3` | `grok-4.3` with `none` reasoning effort |
+
+All eight retired ids now carry an explicit per-id redirect target. The page also
+notes that redirected requests bill at $1.25 per 1M input tokens and $2.50 per 1M
+output tokens.
 
 Ids absent from both the models page and this retirement page stay
 `not documented` — do not infer retirement from absence alone.
