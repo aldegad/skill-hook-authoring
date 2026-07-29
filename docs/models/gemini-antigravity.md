@@ -4,7 +4,7 @@ Official source: https://ai.google.dev/gemini-api/docs/models (the official Goog
 Gemini model page; render dynamically — page last-updated 2026-07-21), plus
 https://antigravity.google (JS-rendered SPA — a static fetch returns an empty
 shell; render dynamically before claiming a change).
-Last reviewed: 2026-07-29 (verified live against the official Google Gemini model
+Last reviewed: 2026-07-30 (verified live against the official Google Gemini model
 page, rendered dynamically)
 
 ## Current shipping models
