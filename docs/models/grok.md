@@ -4,7 +4,7 @@ Official source: https://docs.x.ai/developers/models
 (moved from `docs.x.ai/docs/models`, which now 308-redirects here; model detail
 links live under `/developers/models/<id>`) plus the CLI reference at
 https://docs.x.ai/build/cli/reference
-Last reviewed: 2026-07-30 (verified live against the official xAI models page,
+Last reviewed: 2026-07-31 (verified live against the official xAI models page,
 the reasoning capability page, the may-15-retirement page, and the CLI reference)
 
 ## Current shipping models
