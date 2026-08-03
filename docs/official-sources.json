@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-07-29",
+  "updated": "2026-08-03",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "vendorSourceRule": "Narrow exception to sourceRule, for facts a vendor's docs structurally cannot attest — not a general licence to read code. A vendor-owned artifact (its public source repo) may anchor ONLY: (a) source availability and licence, and (b) implementation internals explicitly labelled source-verified with the file path, where no doc states them. It may never anchor a capability/compatibility claim that a vendor doc already covers — that claim keeps its doc owner, so the two never split. Source-verified facts are implementation, not a vendor contract: they can change without notice and must be re-verified like any other claim. Current holders: xai-grok-build-repo (kind source-availability; Grok Build is Apache-2.0 but docs.x.ai never says so) and docs/completion-stack.md (Codex /goal internals verified against openai/codex).",
@@ -1466,7 +1466,7 @@
       "agent": "codex",
       "kind": "model-lineup",
       "url": "https://learn.chatgpt.com/docs/models",
-      "notes": "Current Codex model lineup. Mirror: docs/models/codex.md. Verified live 2026-07-28: the page lists exactly seven model ids — gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gpt-5.5, gpt-5.3-codex-spark, gpt-5.4, and gpt-5.4-mini. Bare gpt-5.6 is NOT a listed id: it appears only as example shorthand, now in three shapes — 'codex --model gpt-5.6', 'codex exec -m gpt-5.6', and config 'model = \"gpt-5.6\"'. New: per-surface effort naming ('Light' in the ChatGPT desktop app / web / IDE extension, 'Low' in the CLI); desktop 'Power' slider defaults gpt-5.6-sol medium; Max must be enabled in app settings; Ultra 'uses subagents' behind a Settings > Configuration toggle; 'Support for the Chat Completions API is deprecated and will be removed in future releases of Codex.' gpt-5.5 is described as previous-generation; gpt-5.4 and gpt-5.4-mini remain under Other models; gpt-5.3-codex-spark remains a text-only research preview for ChatGPT Pro users. gpt-5.2 and gpt-5.3-codex are deprecated when signing in with ChatGPT (no one-to-one replacement mapping — the page says to update to the latest model listed above). The models page documents reasoning effort choices Low, Medium (default), High, Extra High, Max, and Ultra, and says there is no exact mapping from GPT-5.5 reasoning efforts to GPT-5.6. Cloud wording: you can't change the default model for Codex cloud chats. Service tiers remain not documented on this page.",
+      "notes": "Current Codex model lineup. Mirror: docs/models/codex.md. Verified live 2026-08-03: the page lists exactly seven model ids — gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gpt-5.5, gpt-5.3-codex-spark, gpt-5.4, and gpt-5.4-mini. Bare gpt-5.6 is NOT a listed id: it appears only as example shorthand — 'codex --model gpt-5.6', 'codex exec -m gpt-5.6', and config 'model = \"gpt-5.6\"'. NEW this run: 'GPT-5.4 and GPT-5.4 mini retire from Codex on August 31, 2026' when signing in with ChatGPT; replace gpt-5.4 with gpt-5.6-terra and gpt-5.4-mini with gpt-5.6-luna in saved configurations, custom agents, and scheduled tasks; the OpenAI API and Codex with an API key are not affected. gpt-5.2 and gpt-5.3-codex remain already deprecated when signing in with ChatGPT. Reasoning effort choices Low, Medium (default), High, Extra High, Max, Ultra; surface naming Light (app/web/IDE) vs Low (CLI); desktop Power defaults gpt-5.6-sol medium; Max app-settings toggle; Ultra uses subagents. Cloud wording: you can't change the default model for Codex cloud chats. Service tiers not documented on this page.",
       "claims": [
         "models page lists exactly seven ids gpt-5.6-sol gpt-5.6-terra gpt-5.6-luna gpt-5.5 gpt-5.3-codex-spark gpt-5.4 gpt-5.4-mini",
         "bare gpt-5.6 is not a listed id — it appears only as example shorthand (codex --model gpt-5.6, codex exec -m gpt-5.6, config model = \"gpt-5.6\")",
@@ -1482,7 +1482,10 @@
         "gpt-5.2 deprecated",
         "gpt-5.3-codex deprecated",
         "you can't change the default model for Codex cloud chats",
-        "service tiers not documented on the models page"
+        "service tiers not documented on the models page",
+        "gpt-5.4 and gpt-5.4-mini retire from Codex on August 31, 2026 when signing in with ChatGPT",
+        "replace gpt-5.4 with gpt-5.6-terra and gpt-5.4-mini with gpt-5.6-luna before the retirement",
+        "OpenAI API and Codex with an API key are not affected by the GPT-5.4 Codex retirement"
       ]
     },
     {

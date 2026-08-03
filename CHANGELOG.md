@@ -5,6 +5,19 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## Unreleased — 2026-08-03
+
+Daily refresh (verification fetched 2026-08-03; all 66 sources reachable, none unverified this run). One announced Codex retirement recorded; remaining claims re-verified.
+
+### Changed
+
+- **Codex: GPT-5.4 / GPT-5.4 mini retire from Codex on 2026-08-31.** When signing in with ChatGPT, replace `gpt-5.4` with `gpt-5.6-terra` and `gpt-5.4-mini` with `gpt-5.6-luna` in saved configurations, custom agents, and scheduled tasks. The OpenAI API and Codex authenticated with an API key are not affected. Mirrored in `docs/models/codex.md`, `SKILL.md`, and the `openai-codex-model-lineup` source claims.
+- **Billing status remains paused.** The June 15 Agent SDK support banner still says Agent SDK, `claude -p`, and third-party app usage draw from subscription limits; the separate monthly credit remains unavailable. The `ANTHROPIC_API_KEY` API-billing caveat was re-confirmed. Stamps advanced in `docs/cli-invocation.md` and `docs/cloud-automation.md`.
+- **Model lineups re-verified.** Claude, Grok, Cursor, and Gemini/Antigravity remain otherwise unchanged. Hermes still has no official lineup and remains `unverified this run`. `Last reviewed:` stamps advanced across `docs/models/*`.
+- **Cursor skills page re-verified** (built-in `/automate` table and frontmatter fields still match).
+- **Antigravity SPA pages re-rendered** via `kuma agent-browser` (headless, reference, resume). Sidebar now shows Antigravity CLI **v1.1.9** (was v1.1.8 on 2026-07-31); documented headless flags (`-p`, `--output-format`, `--json-schema`, `--effort`, `--print-timeout`, `--sandbox`, `-c`/`--conversation`, soft-deny, etc.) remain unchanged.
+- **Claude Opus 4.1** remains deprecated, retiring 2026-08-05 (unchanged; two days out as of this run).
+
 ## Unreleased — 2026-07-31
 
 Daily refresh (verification fetched 2026-07-31; all 66 sources reachable, none unverified this run). One model-summary omission corrected; remaining claims unchanged.
