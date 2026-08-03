@@ -26,7 +26,7 @@ against the subscription usage pool, and a present API key suppresses the
 `launchd`/`cron` job calling `claude -p` look tempting, but the primary
 drawback is **reliability**: a local job fires only when the machine is awake
 at the scheduled time, while a cloud Routine runs regardless of laptop state.
-Note: as of 2026-07-31 the billing difference described here previously (a
+Note: as of 2026-08-03 the billing difference described here previously (a
 separate monthly Agent SDK credit) remains **paused** — `claude -p` and
 Agent SDK usage on subscription plans draw from the same usage pool as
 interactive sessions (no separate per-run credit). For `ANTHROPIC_API_KEY` users billing remains

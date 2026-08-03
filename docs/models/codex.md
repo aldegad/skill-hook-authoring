@@ -3,7 +3,7 @@
 Official source: https://learn.chatgpt.com/docs/models
 (moved 2026-07-16 — `developers.openai.com/codex/models` now 308-redirects here,
 along with the rest of the Codex doc set)
-Last reviewed: 2026-07-31 (verified live against the official Codex models page)
+Last reviewed: 2026-08-03 (verified live against the official Codex models page)
 
 ## Current shipping models
 
@@ -14,8 +14,8 @@ Last reviewed: 2026-07-31 (verified live against the official Codex models page)
 | `gpt-5.6-luna` | `codex -m gpt-5.6-luna` | Fast, affordable GPT-5.6 model for clear, repeatable tasks such as extraction, classification, transformation, and structured summaries. |
 | `gpt-5.5` | `codex -m gpt-5.5` | Previous-generation frontier model for complex coding, computer use, knowledge work, and research workflows. |
 | `gpt-5.3-codex-spark` | `codex -m gpt-5.3-codex-spark` | Text-only **research preview** optimized for near-instant, real-time coding iteration; available to ChatGPT Pro users. |
-| `gpt-5.4` | `codex -m gpt-5.4` | Other model: frontier model for professional work with strong coding, reasoning, tool use, and agentic workflow capabilities. |
-| `gpt-5.4-mini` | `codex -m gpt-5.4-mini` | Other model: fast, efficient mini model for responsive coding tasks and subagents. |
+| `gpt-5.4` | `codex -m gpt-5.4` | Other model: frontier model for professional work with strong coding, reasoning, tool use, and agentic workflow capabilities. **Retires from Codex on 2026-08-31** when signing in with ChatGPT. |
+| `gpt-5.4-mini` | `codex -m gpt-5.4-mini` | Other model: fast, efficient mini model for responsive coding tasks and subagents. **Retires from Codex on 2026-08-31** when signing in with ChatGPT. |
 
 - The models page lists exactly the seven ids above. The bare family id `gpt-5.6`
   appears only as example shorthand (`codex --model gpt-5.6`,
@@ -39,14 +39,18 @@ Last reviewed: 2026-07-31 (verified live against the official Codex models page)
 
 ## Retired / superseded
 
-- `gpt-5.2` and `gpt-5.3-codex` are **deprecated** in Codex when signing in with
-  ChatGPT. The page gives no one-to-one replacement mapping — its guidance is to
-  update scripts, config files, and `codex exec --model` commands to the latest
-  models listed above.
+- **`gpt-5.4` and `gpt-5.4-mini` retire from Codex on August 31, 2026** when
+  signing in with ChatGPT. Replace `gpt-5.4` with `gpt-5.6-terra` and
+  `gpt-5.4-mini` with `gpt-5.6-luna` in saved configurations, custom agents, and
+  scheduled tasks. The OpenAI API and Codex authenticated with an API key are
+  not affected by this Codex-with-ChatGPT retirement.
+- `gpt-5.2` and `gpt-5.3-codex` are **already deprecated** in Codex when signing
+  in with ChatGPT. The page gives no one-to-one replacement mapping for those —
+  its guidance is to update scripts, config files, and `codex exec --model`
+  commands to the latest models listed above.
 
 ## Boundaries
 
 - **Pricing / rate limits:** OpenAI pricing docs — not duplicated here.
 - **Spawnable catalog:** kuma-studio `team.json` `modelCatalog` is the downstream
-  consumer; note it does not yet carry `gpt-5.4` (new in the vendor lineup) —
-  catalog sync happens in the kuma-studio repo, not here.
+  consumer; catalog sync happens in the kuma-studio repo, not here.

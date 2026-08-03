@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-07-31
+Last reviewed: 2026-08-03
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or
@@ -75,7 +75,7 @@ the same idea, but they are reached differently:
 
 > **Billing caveat (Claude Code).** On a subscription, `claude -p` and Agent SDK
 > runs draw from your plan's usage limits — the same pool as interactive use, with
-> no separate per-run credit. As of 2026-07-31, the Agent SDK billing
+> no separate per-run credit. As of 2026-08-03, the Agent SDK billing
 > change announced for 2026-06-15 remains **paused**. The official support page
 > opens with a dated banner: *"Update June 15: We're pausing the changes to Claude
 > Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK,
@@ -88,7 +88,7 @@ the same idea, but they are reached differently:
 > `claude -p` cron; the reliability advantage (Routine runs regardless of laptop
 > state) still applies. See `docs/cloud-automation.md`. (Source:
 > https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan,
-> verified 2026-07-30; the `ANTHROPIC_API_KEY` caveat re-confirmed 2026-07-30 on
+> verified 2026-08-03; the `ANTHROPIC_API_KEY` caveat re-confirmed 2026-08-03 on
 > https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan.)
 
 ## C. Resume invocation (command syntax)
