@@ -1,10 +1,10 @@
 # Google Antigravity CLI (`agy`) / Gemini — model lineup
 
 Official source: https://ai.google.dev/gemini-api/docs/models (the official Google
-Gemini model page; render dynamically — page last-updated 2026-07-30), plus
+Gemini model page; render dynamically — page last-updated 2026-08-05), plus
 https://antigravity.google (JS-rendered SPA — a static fetch returns an empty
 shell; render dynamically before claiming a change).
-Last reviewed: 2026-08-04 (verified live against the official Google Gemini model
+Last reviewed: 2026-08-11 (verified live against the official Google Gemini model
 page; Antigravity SPA re-rendered this run)
 
 ## Current shipping models
@@ -34,8 +34,8 @@ page; Antigravity SPA re-rendered this run)
 - The API page also lists (beyond this table's scope): Preview — Gemini 3.5 Live
   Translate, Gemini 3.1 Flash Live, Gemini 3.1 Flash TTS, Gemini Omni Flash,
   Lyria 3 Pro/Clip; GA — Nano Banana 2 / 2 Lite, Gemini Embedding 2; plus Deep
-  Research / Deep Research Max, Computer Use, Robotics-ER 1.6, Nano Banana Pro,
-  and Lyria RealTime.
+  Research / Deep Research Max, Computer Use, Robotics-ER 2 / 1.6, Nano Banana
+  Pro, and Lyria RealTime.
 
 ## Retired / superseded
 
