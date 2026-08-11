@@ -1,7 +1,7 @@
 # Hermes Agent (Nous Research) — model lineup
 
 Official source: https://hermes-agent.nousresearch.com
-Last reviewed: 2026-08-11 — **reviewed, not verified.** The lineup below stays
+Last reviewed: 2026-08-12 — **reviewed, not verified.** The lineup below stays
 **`unverified this run`**: the official Hermes docs document **no model lineup**.
 Concrete ids appear only as illustrative config examples (e.g.
 `anthropic/claude-opus-4.6`, `openai/gpt-5`, `google/gemini-3-flash-preview`
