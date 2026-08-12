@@ -2,19 +2,19 @@
 
 Official source: https://cursor.com/docs/models-and-pricing
 (`cursor.com/docs/models` 308-redirects here)
-Last reviewed: 2026-08-12 (verified live against the official models & pricing page)
+Last reviewed: 2026-08-13 (verified live against the official models & pricing page)
 
 ## Current shipping models
 
 The page (now titled "Models & Pricing") documents two usage pools — **Cursor
-Models** ("Significantly more included usage for Cursor Grok 4.5 and Composer
-2.5") and **Other Models** (third-party, "charged at the model's API price") —
+Models** (Cursor Grok 4.6, Grok 4.5, and Composer 2.5) and **Other Models** (third-party, "charged at the model's API price") —
 plus an `Auto` default. The pricing table **is** the model list — the page has no
 separate lineup section.
 
 | Model | Owner | Notes |
 |---|---|---|
 | Composer 2.5 | **Cursor** | "Composer 2.5 is Cursor's own model, trained to be highly capable for agentic coding." (Composer 1 no longer appears on the page.) |
+| Grok 4.6 (standard / Fast) | Cursor + SpaceXAI | Frontier model for complex coding and knowledge work; improves instruction following and long-horizon agentic work over 4.5. Supports `low`, `medium`, `high` (default), and `xhigh` effort. |
 | Grok 4.5 ("Cursor Grok 4.5") | Cursor + SpaceXAI | "Grok 4.5 is jointly trained by Cursor and SpaceXAI for long-running coding and knowledge work." |
 | Anthropic Claude family (Claude Fable 5 / Opus 5 / Opus 4.8 / Opus 4.7 / Sonnet 5) | third-party | Sonnet 5 launch promo "$2/M input and $10/M output through August 31, 2026"; Fable 5 $10/$50 — "Requests that trip a security guardrail are automatically routed to Claude Opus" |
 | OpenAI GPT-5 family (GPT-5.6 Luna / Sol / Terra, GPT-5.5, GPT-5.4/Mini/Nano, plus the Codex line) | third-party | GPT-5.6 rows carry cache-write columns ("Cache writes are billed at 1.25x the uncached input rate") |
