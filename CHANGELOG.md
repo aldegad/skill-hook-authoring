@@ -5,6 +5,19 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## Unreleased — 2026-08-15
+
+Daily refresh (verification fetched 2026-08-15; all 68 sources reachable, none unverified this run). Gemini 3.7 Flash landed across Google and Cursor documentation; time-sensitive stamps advanced.
+
+### Changed
+
+- **Gemini 3.7 Flash is Stable.** Google's model page, last updated 2026-08-14, now lists `gemini-3.7-flash` as the latest and most capable Flash model for complex coding, agentic workflows, and reliable multi-step execution. Gemini 3.6 Flash remains Stable as the previous generation, and Gemini 3.5 Flash remains Stable but is now labelled legacy.
+- **Cursor added Gemini 3.7 Flash.** The expanded third-party model table includes Gemini 3.7 Flash alongside the existing Gemini 3.6/3.5 rows, GLM 5.2, and Kimi K2.7 Code/K3.
+- **Claude Code added configuration import.** The official memory page now documents `/import` as a one-time conversion of supported coding-agent instructions and related MCP servers, commands, subagents, and skills into Claude Code; it requires v2.1.213 or later.
+- **Billing status remains paused.** The June 15 Agent SDK notice still says Agent SDK, `claude -p`, and third-party app usage draw from subscription limits; the separate monthly credit remains unavailable, and the `ANTHROPIC_API_KEY` API-billing caveat remains present.
+- **Model lineups re-verified.** Claude, Codex, Grok, Cursor, and Gemini/Antigravity match their official model pages. Hermes still has no official lineup and remains `unverified this run`; model and billing freshness stamps advanced to 2026-08-15.
+- **Antigravity SPA pages re-rendered.** The reference, plugins, usage, resume, headless, and SDK pages retain their documented surfaces; the site banners now show Antigravity CLI v1.1.13 and SDK v0.1.12. The reference adds `editorMode` and `vimInsertFirst` settings.
+
 ## Unreleased — 2026-08-13
 
 Daily refresh (verification fetched 2026-08-13; all 68 sources reachable, none unverified this run). Grok 4.6 landed across xAI and Cursor documentation; time-sensitive stamps advanced.
