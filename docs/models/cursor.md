@@ -2,7 +2,7 @@
 
 Official source: https://cursor.com/docs/models-and-pricing
 (`cursor.com/docs/models` 308-redirects here)
-Last reviewed: 2026-08-13 (verified live against the official models & pricing page)
+Last reviewed: 2026-08-15 (verified live against the official models & pricing page)
 
 ## Current shipping models
 
@@ -18,7 +18,7 @@ separate lineup section.
 | Grok 4.5 ("Cursor Grok 4.5") | Cursor + SpaceXAI | "Grok 4.5 is jointly trained by Cursor and SpaceXAI for long-running coding and knowledge work." |
 | Anthropic Claude family (Claude Fable 5 / Opus 5 / Opus 4.8 / Opus 4.7 / Sonnet 5) | third-party | Sonnet 5 launch promo "$2/M input and $10/M output through August 31, 2026"; Fable 5 $10/$50 — "Requests that trip a security guardrail are automatically routed to Claude Opus" |
 | OpenAI GPT-5 family (GPT-5.6 Luna / Sol / Terra, GPT-5.5, GPT-5.4/Mini/Nano, plus the Codex line) | third-party | GPT-5.6 rows carry cache-write columns ("Cache writes are billed at 1.25x the uncached input rate") |
-| Google Gemini family (Gemini 3.5 / 3.6 Flash, 3.1 Pro) | third-party | selectable alongside the above |
+| Google Gemini family (Gemini 3.5 / 3.6 / 3.7 Flash, 3.1 Pro) | third-party | selectable alongside the above; Gemini 3.7 Flash is the newest listed row |
 | GLM 5.2 (Z.ai), Kimi K2.7 Code / Kimi K3 (Moonshot) | third-party | also listed |
 
 - `Auto` is still **not a row of the pricing table**, but it is no longer a single

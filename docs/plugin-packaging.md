@@ -1,6 +1,6 @@
 # Plugin And Extension Packaging
 
-Last reviewed: 2026-07-20
+Last reviewed: 2026-08-15
 
 ## Shared Rule
 
@@ -11,7 +11,7 @@ Treat each runtime's package format as a separate adapter over the same canonica
 Project instruction filenames are runtime-specific and are not the same thing as skills, hooks, or plugin packaging:
 
 - Codex uses `AGENTS.override.md`, `AGENTS.md`, and configured fallback filenames.
-- Claude Code uses `CLAUDE.md` / `.claude/CLAUDE.md` / `CLAUDE.local.md`; when sharing with `AGENTS.md`-based agents, use `@AGENTS.md` import or a symlink.
+- Claude Code uses `CLAUDE.md` / `.claude/CLAUDE.md` / `CLAUDE.local.md`; when sharing with `AGENTS.md`-based agents, use `@AGENTS.md` import or a symlink. Claude Code v2.1.213+ also provides `/import` for a one-time conversion of supported agent instructions and related MCP servers, commands, subagents, and skills; it is a migration path, not a live parallel owner.
 - Grok documents a six-name instruction-file family: `AGENTS.md`, `Agents.md`, `AGENT.md`,
   `CLAUDE.md`, `Claude.md`, `CLAUDE.local.md`, plus `*.md` under `.grok/rules/`
   (`.claude/rules/` and `.cursor/rules/` are read for compatibility).

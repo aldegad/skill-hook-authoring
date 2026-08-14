@@ -1,19 +1,20 @@
 # Google Antigravity CLI (`agy`) / Gemini — model lineup
 
 Official source: https://ai.google.dev/gemini-api/docs/models (the official Google
-Gemini model page; render dynamically — page last-updated 2026-08-05), plus
+Gemini model page; render dynamically — page last-updated 2026-08-14), plus
 https://antigravity.google (JS-rendered SPA — a static fetch returns an empty
 shell; render dynamically before claiming a change).
-Last reviewed: 2026-08-13 (verified live against the official Google Gemini model
+Last reviewed: 2026-08-15 (verified live against the official Google Gemini model
 page; Antigravity SPA re-rendered this run)
 
 ## Current shipping models
 
 | Model | Status | Notes |
 |---|---|---|
-| `gemini-3.6-flash` | **Stable** | "Our latest model that balances speed with intelligence to deliver strong performance in agentic and multimodal tasks." Now also the page's canonical naming example of a stable model id. |
-| `gemini-3.5-flash` | Stable | Google's **most intelligent model** — "sustained frontier performance on agentic and coding tasks". The frontier tier. |
-| `gemini-3.5-flash-lite` | Stable | new on the page this pass. |
+| `gemini-3.7-flash` | **Stable** | New latest and most capable Flash model, built for complex coding, agentic workflows, and reliable multi-step execution. |
+| `gemini-3.6-flash` | Stable | Previous-generation Flash model balancing speed and multimodal capabilities. It remains the page's canonical naming example of a stable model id. |
+| `gemini-3.5-flash` | Stable | Legacy Flash model for baseline speed and routine, high-throughput workloads. |
+| `gemini-3.5-flash-lite` | Stable | Fast, cost-effective 3.5 model for high-throughput execution. |
 | `gemini-3.1-flash-lite` | Stable | "frontier-class performance rivaling larger models at a fraction of the cost". |
 | `gemini-3.1-pro-preview` | **Preview** | Advanced intelligence for complex problem-solving and agentic + vibe coding. Preview ids carry an explicit `-preview` suffix. |
 | `gemini-3-flash-preview` | **Preview** | current Flash-generation preview. |

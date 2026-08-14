@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-08-13",
+  "updated": "2026-08-15",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "vendorSourceRule": "Narrow exception to sourceRule, for facts a vendor's docs structurally cannot attest — not a general licence to read code. A vendor-owned artifact (its public source repo) may anchor ONLY: (a) source availability and licence, and (b) implementation internals explicitly labelled source-verified with the file path, where no doc states them. It may never anchor a capability/compatibility claim that a vendor doc already covers — that claim keeps its doc owner, so the two never split. Source-verified facts are implementation, not a vendor contract: they can change without notice and must be re-verified like any other claim. Current holders: xai-grok-build-repo (kind source-availability; Grok Build is Apache-2.0 but docs.x.ai never says so) and docs/completion-stack.md (Codex /goal internals verified against openai/codex).",
@@ -203,7 +203,7 @@
       "agent": "claude-code",
       "kind": "project-instructions",
       "url": "https://code.claude.com/docs/en/memory",
-      "notes": "2026-07-04: CLAUDE_CONFIG_DIR is no longer documented on this page; it remains documented on the sessions page (anthropic-claude-sessions), which stays the anchor for that claim.",
+      "notes": "2026-07-04: CLAUDE_CONFIG_DIR is no longer documented on this page; it remains documented on the sessions page (anthropic-claude-sessions), which stays the anchor for that claim. Re-verified 2026-08-15: /import now converts a supported coding agent configuration into Claude Code by appending a one-time copy of instruction files such as AGENTS.md to CLAUDE.md and carrying over MCP servers, commands, subagents, and skills; requires Claude Code v2.1.213+.",
       "claims": [
         "CLAUDE.md",
         ".claude/CLAUDE.md",
@@ -222,6 +222,7 @@
         "--add-dir flag",
         "CLAUDE_CODE_DISABLE_AUTO_MEMORY env var",
         "CLAUDE_CODE_NEW_INIT env var for interactive multi-phase init flow",
+        "/import one-time supported coding-agent configuration conversion into CLAUDE.md plus MCP servers commands subagents and skills, Claude Code v2.1.213+",
         "~/.claude/rules/ user-level rules for all projects",
         "auto memory MEMORY.md loads first 200 lines or 25KB at session start",
         "managed CLAUDE.md macOS /Library/Application Support/ClaudeCode/CLAUDE.md",
@@ -1178,7 +1179,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/cli/reference",
-      "notes": "JS-rendered SPA; static fetch returns an empty shell — render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome). Page moved from /docs/cli-reference to /docs/cli/reference (old URL redirects). 2026-07-28 MAJOR REVERSAL: a dedicated 'Headless mode' page now exists at /docs/cli/headless (registered as antigravity-cli-headless) — the long-standing 'no headless one-shot flag' verdict is RETIRED; agy documents -p/--print/--prompt, --output-format text|json|stream-json, and more (see that entry); the Antigravity SDK remains the richer programmatic path. The --sandbox / --dangerously-skip-permissions launch overrides and the settings.json path are documented on the cli/using page (antigravity-cli-using), not here. New commands in the core table as of 2026-07-04: /add-dir, /btw, /clear, /diff, /exit, /fast, /logout, /open, /planning, /rename, /statusline, /title, /usage. 2026-07-17: keybindings.json is not named on this page (zero hits) — its keybinding content is a default-keybindings reference (Key -> TUI command -> behavior, e.g. Esc / cli.escape), not a config-key table for the file. The keybindings.json filename and its path stay anchored on antigravity-cli-using ('File Location: ~/.gemini/antigravity-cli/keybindings.json'), which already anchors the settings.json path for the same reason; the claim was split accordingly. 2026-07-19: /memory (and /memory show, /memory refresh) has ZERO hits across the Antigravity CLI docs and is absent from this page's complete agy slash-command table — it is a retired-Gemini-CLI command only (see gemini-cli-gemini-md), not an agy command. 2026-07-28 additions: slash table gained /artifact (Artifact Review Panel), /context, /copy, /credits, /feedback, /help; /usage gained alias /quota; settings table gained useG1Credits, runningLightSpeed, verbosity, showTips, showFeedbackSurvey, allowNonWorkspaceAccess, enableTelemetry, editor, notifications, altScreenMode, colorScheme. Site banner re-verified 2026-08-12: Antigravity CLI v1.1.12.",
+      "notes": "JS-rendered SPA; static fetch returns an empty shell — render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome). Page moved from /docs/cli-reference to /docs/cli/reference (old URL redirects). 2026-07-28 MAJOR REVERSAL: a dedicated 'Headless mode' page now exists at /docs/cli/headless (registered as antigravity-cli-headless) — the long-standing 'no headless one-shot flag' verdict is RETIRED; agy documents -p/--print/--prompt, --output-format text|json|stream-json, and more (see that entry); the Antigravity SDK remains the richer programmatic path. The --sandbox / --dangerously-skip-permissions launch overrides and the settings.json path are documented on the cli/using page (antigravity-cli-using), not here. New commands in the core table as of 2026-07-04: /add-dir, /btw, /clear, /diff, /exit, /fast, /logout, /open, /planning, /rename, /statusline, /title, /usage. 2026-07-17: keybindings.json is not named on this page (zero hits) — its keybinding content is a default-keybindings reference (Key -> TUI command -> behavior, e.g. Esc / cli.escape), not a config-key table for the file. The keybindings.json filename and its path stay anchored on antigravity-cli-using ('File Location: ~/.gemini/antigravity-cli/keybindings.json'), which already anchors the settings.json path for the same reason; the claim was split accordingly. 2026-07-19: /memory (and /memory show, /memory refresh) has ZERO hits across the Antigravity CLI docs and is absent from this page's complete agy slash-command table — it is a retired-Gemini-CLI command only (see gemini-cli-gemini-md), not an agy command. 2026-07-28 additions: slash table gained /artifact (Artifact Review Panel), /context, /copy, /credits, /feedback, /help; /usage gained alias /quota; settings table gained useG1Credits, runningLightSpeed, verbosity, showTips, showFeedbackSurvey, allowNonWorkspaceAccess, enableTelemetry, editor, notifications, altScreenMode, colorScheme. Re-verified dynamically 2026-08-15: Antigravity CLI v1.1.13; the table also includes editorMode and vimInsertFirst, while the recorded command and permission surfaces remain unchanged.",
       "claims": [
         "interactive TUI launch",
         "/memory /memory show /memory refresh are not agy commands — zero hits across the Antigravity CLI docs and absent from the complete slash-command table",
@@ -1202,7 +1203,8 @@
         "default keybindings reference table key to TUI command",
         "settings.json toolPermission request-review proceed-in-sandbox always-proceed strict",
         "settings.json artifactReviewPolicy",
-        "settings.json enableTerminalSandbox"
+        "settings.json enableTerminalSandbox",
+        "settings.json editorMode default or vim and vimInsertFirst"
       ]
     },
     {
@@ -1374,7 +1376,7 @@
       "agent": "antigravity-cli",
       "kind": "cli-invocation",
       "url": "https://antigravity.google/docs/sdk/overview",
-      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome; fenced code blocks hydrated empty this run, so the pip-install and import literals were held via surrounding prose). Page moved from /docs/sdk-overview to /docs/sdk/overview (old URL redirects). 2026-07-28: the SDK is no longer the ONLY unattended path — agy now documents its own headless mode (antigravity-cli-headless); the SDK remains the richer programmatic option. SDK v0.1.10 per the site banner, re-verified 2026-08-12.",
+      "notes": "JS-rendered SPA; render dynamically to verify (re-verified by dynamic render 2026-07-07, claude-in-chrome; fenced code blocks hydrated empty this run, so the pip-install and import literals were held via surrounding prose). Page moved from /docs/sdk-overview to /docs/sdk/overview (old URL redirects). 2026-07-28: the SDK is no longer the ONLY unattended path — agy now documents its own headless mode (antigravity-cli-headless); the SDK remains the richer programmatic option. SDK v0.1.12 per the site banner, dynamically re-verified 2026-08-15.",
       "claims": [
         "Antigravity SDK is a Python framework",
         "pip install google-antigravity",
@@ -1410,7 +1412,7 @@
       "claims": [
         "Agent SDK with Claude plan",
         "claude -p headless",
-        "2026-06-15 Agent SDK billing change still paused as of 2026-08-13",
+        "2026-06-15 Agent SDK billing change still paused as of 2026-08-15",
         "Agent SDK and claude -p currently draw from regular subscription usage limits same as interactive use",
         "API key accounts remain pay-as-you-go API billing",
         "original plan described separate monthly credits per plan tier but change is paused"
@@ -1576,7 +1578,7 @@
       "agent": "cursor-cli",
       "kind": "model-lineup",
       "url": "https://cursor.com/docs/models-and-pricing",
-      "notes": "Registered 2026-07-16; mirror: docs/models/cursor.md. Re-verified live 2026-08-13: the Cursor Models pool now includes Cursor Grok 4.6, Grok 4.5, and Composer 2.5, with standard and Fast Grok 4.6 rows. Auto still has Auto Cost, Auto Balance, and Auto Intelligence modes; the pricing table remains the model list, Composer 1 remains absent without a retirement notice, and no deprecation page is documented. Grok 4.6 provider and effort details are owned by cursor-grok-4-6.",
+      "notes": "Registered 2026-07-16; mirror: docs/models/cursor.md. Re-verified live 2026-08-15: the Cursor Models pool includes Cursor Grok 4.6, Grok 4.5, and Composer 2.5, with standard and Fast Grok 4.6 rows. The expanded third-party table now includes Gemini 3.7 Flash alongside the existing Gemini 3.6/3.5 rows, GLM 5.2, and Kimi K2.7 Code/K3. Auto still has Auto Cost, Auto Balance, and Auto Intelligence modes; the pricing table remains the model list, Composer 1 remains absent without a retirement notice, and no deprecation page is documented. Grok 4.6 provider and effort details are owned by cursor-grok-4-6.",
       "claims": [
         "page titled Models & Pricing with two usage pools Cursor Models and Other Models",
         "Auto has three modes Auto Cost Auto Balance Auto Intelligence and is not a row of the pricing table",
@@ -1587,6 +1589,7 @@
         "Grok 4.5 jointly trained by Cursor and SpaceXAI",
         "third-party families Anthropic OpenAI Google plus GLM 5.2 and Kimi K2.7 Code and Kimi K3",
         "third-party lineup reaches GPT-5.6 Luna Sol Terra and Claude Fable 5 Opus 5 Sonnet 5",
+        "third-party lineup includes Gemini 3.7 Flash alongside Gemini 3.6 and 3.5 Flash",
         "no deprecation or retirement page exists so retirement is not documented",
         "the pricing table is the model list"
       ]
@@ -1610,10 +1613,11 @@
       "agent": "antigravity-cli",
       "kind": "model-lineup",
       "url": "https://ai.google.dev/gemini-api/docs/models",
-      "notes": "Google's official Gemini API model page. Mirror: docs/models/gemini-antigravity.md. Registered 2026-07-19. JS-rendered; required dynamic rendering to verify (2026-07-28 run served Korean-localized — same content). Verified live 2026-07-28: gemini-3.5-flash is GA and named Google's most intelligent model; gemini-3.1-pro and Gemini 3 Flash are Preview; gemini-3.1-flash-lite is GA; Antigravity Agent is Preview. Shut down: Gemini 2.0 Flash, Gemini 2.0 Flash-Lite, Gemini 3.1 Flash-Lite Preview, Gemini 3 Pro Preview. Imagen 4 is deprecated. Additions since 07-16: Preview — Gemini 3.5 Live Translate, Gemini 3.1 Flash Live, Gemini 3.1 Flash TTS, Gemini Omni Flash, Lyria 3 Pro/Clip; GA — Nano Banana 2 / 2 Lite, Gemini Embedding 2; Deep Research Max; Interactions API GA banner. NOTE: Gemini 3.6 Flash appears in Antigravity CLI's agy models output (see antigravity-cli-headless) but is NOT on this API models page. 2026-07-29: gemini-3.6-flash is now on this API page as a Stable model ('Our latest model that balances speed with intelligence to deliver strong performance in agentic and multimodal tasks.') and is the page's stable-naming example (replacing gemini-3.5-flash in that role); new Stable gemini-3.5-flash-lite; preview ids carry -preview suffixes (gemini-3.1-pro-preview, gemini-3-flash-preview, Antigravity Agent antigravity-preview-05-2026). The 'Gemini 3.6 Flash not on the API page' note is retired for the base id — only the effort-suffixed CLI slugs remain CLI-surface-only. Re-verified 2026-08-13; page states last-updated 2026-08-05 and the recorded Gemini 3 lineup is unchanged. Beyond-scope additions now include Deep Research / Deep Research Max, Computer Use, Robotics ER 2 / 1.6, Nano Banana Pro, and Lyria RealTime.",
+      "notes": "Google's official Gemini API model page. Mirror: docs/models/gemini-antigravity.md. Registered 2026-07-19. JS-rendered; required dynamic rendering to verify. Re-verified live 2026-08-15; page last-updated 2026-08-14. Gemini 3.7 Flash (gemini-3.7-flash) is the new Stable latest/capable Flash model for complex coding, agentic workflows, and reliable multi-step execution. Gemini 3.6 Flash remains Stable but is now described as previous-generation and remains the stable-id naming example; Gemini 3.5 Flash remains Stable but is now labelled legacy. Gemini 3.5 Flash-Lite and Gemini 3.1 Flash-Lite remain Stable; Gemini 3.1 Pro and Gemini 3 Flash remain Preview. Antigravity Agent remains Preview. Shut down: Gemini 2.0 Flash, Gemini 2.0 Flash-Lite, Gemini 3.1 Flash-Lite Preview, Gemini 3 Pro Preview. Imagen 4 is deprecated. Beyond-scope entries include Gemini 3.5 Live Translate, Gemini 3.1 Flash Live/TTS, Gemini Omni Flash, Nano Banana 2/2 Lite/Pro, Gemini Embedding 2, Deep Research / Deep Research Max, Computer Use, Robotics ER 2 / 1.6, and Lyria.",
       "claims": [
-        "gemini-3.5-flash GA and Google's most intelligent model frontier tier",
-        "gemini-3.5-flash sustained frontier performance on agentic and coding tasks",
+        "gemini-3.7-flash Stable latest and most capable Flash model for complex coding agentic workflows and reliable multi-step execution",
+        "gemini-3.6-flash Stable previous-generation Flash model and stable-id naming example",
+        "gemini-3.5-flash Stable legacy Flash model",
         "gemini-3.1-pro Preview advanced intelligence complex problem-solving agentic and vibe coding",
         "gemini-3.1-flash-lite GA frontier-class performance at a fraction of the cost",
         "Gemini 3 Flash Preview",
@@ -1621,7 +1625,6 @@
         "shut down Gemini 2.0 Flash and Gemini 2.0 Flash-Lite",
         "shut down Gemini 3.1 Flash-Lite Preview and Gemini 3 Pro Preview",
         "Imagen 4 deprecated",
-        "gemini-3.6-flash Stable on the API page and the stable-id naming example",
         "gemini-3.5-flash-lite Stable",
         "preview ids carry -preview suffixes gemini-3.1-pro-preview gemini-3-flash-preview antigravity-preview-05-2026"
       ]
