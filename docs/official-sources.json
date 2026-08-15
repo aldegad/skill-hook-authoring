@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-08-15",
+  "updated": "2026-08-16",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "vendorSourceRule": "Narrow exception to sourceRule, for facts a vendor's docs structurally cannot attest — not a general licence to read code. A vendor-owned artifact (its public source repo) may anchor ONLY: (a) source availability and licence, and (b) implementation internals explicitly labelled source-verified with the file path, where no doc states them. It may never anchor a capability/compatibility claim that a vendor doc already covers — that claim keeps its doc owner, so the two never split. Source-verified facts are implementation, not a vendor contract: they can change without notice and must be re-verified like any other claim. Current holders: xai-grok-build-repo (kind source-availability; Grok Build is Apache-2.0 but docs.x.ai never says so) and docs/completion-stack.md (Codex /goal internals verified against openai/codex).",
@@ -1412,7 +1412,7 @@
       "claims": [
         "Agent SDK with Claude plan",
         "claude -p headless",
-        "2026-06-15 Agent SDK billing change still paused as of 2026-08-15",
+        "2026-06-15 Agent SDK billing change still paused as of 2026-08-16",
         "Agent SDK and claude -p currently draw from regular subscription usage limits same as interactive use",
         "API key accounts remain pay-as-you-go API billing",
         "original plan described separate monthly credits per plan tier but change is paused"
