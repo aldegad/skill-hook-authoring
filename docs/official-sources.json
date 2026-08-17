@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-08-16",
+  "updated": "2026-08-18",
   "policy": {
     "sourceRule": "Use only official vendor documentation for compatibility claims. If the official docs do not document a capability, record not documented or unknown.",
     "vendorSourceRule": "Narrow exception to sourceRule, for facts a vendor's docs structurally cannot attest — not a general licence to read code. A vendor-owned artifact (its public source repo) may anchor ONLY: (a) source availability and licence, and (b) implementation internals explicitly labelled source-verified with the file path, where no doc states them. It may never anchor a capability/compatibility claim that a vendor doc already covers — that claim keeps its doc owner, so the two never split. Source-verified facts are implementation, not a vendor contract: they can change without notice and must be re-verified like any other claim. Current holders: xai-grok-build-repo (kind source-availability; Grok Build is Apache-2.0 but docs.x.ai never says so) and docs/completion-stack.md (Codex /goal internals verified against openai/codex).",
@@ -982,7 +982,7 @@
       "agent": "claude-code",
       "kind": "session-resume",
       "url": "https://code.claude.com/docs/en/sessions",
-      "notes": "2026-07-05: the -c short form and the URL-accepting --from-pr forms are no longer stated on this page (it shows claude --continue and 'claude --from-pr <number>' only); both full forms remain on the CLI reference (anthropic-claude-cli-reference: '--continue, -c'; '--from-pr accepts a PR number, a GitHub or GitHub Enterprise PR URL, a GitLab merge request URL, or a Bitbucket pull request URL'), which is the anchor. URL pasting survives here as a session-picker search feature ('Paste a GitHub, GitHub Enterprise, GitLab, or Bitbucket pull or merge request URL to find the session that created it'). 2026-07-07: 'same session id reused' is no longer stated in those words — the anchor is now fork semantics plus 'If you resume the same session in two terminals without forking, messages from both interleave into one transcript.' 2026-07-19: newly documented scoping footgun — passing a session ID to -r/--resume 'searches only the current project directory and its git worktrees', so resuming from the wrong cwd fails. 2026-07-28: '/rewind' no longer appears on this page — checkpoint-based rewind is routed to the Checkpointing page ('For checkpoint-based rewind within a single session, see Checkpointing'), so the '/rewind fork alias' claim is retired. New: /branch names the session after compaction as of v2.1.198; unnamed sessions get a default display name.",
+      "notes": "2026-07-05: the -c short form and the URL-accepting --from-pr forms are no longer stated on this page (it shows claude --continue and 'claude --from-pr <number>' only); both full forms remain on the CLI reference (anthropic-claude-cli-reference: '--continue, -c'; '--from-pr accepts a PR number, a GitHub or GitHub Enterprise PR URL, a GitLab merge request URL, or a Bitbucket pull request URL'), which is the anchor. URL pasting survives here as a session-picker search feature ('Paste a GitHub, GitHub Enterprise, GitLab, or Bitbucket pull or merge request URL to find the session that created it'). 2026-07-07: 'same session id reused' is no longer stated in those words — the anchor is now fork semantics plus 'If you resume the same session in two terminals without forking, messages from both interleave into one transcript.' 2026-07-19: scoping footgun documented — passing a session ID to -r/--resume searched only the current project directory and its git worktrees. 2026-08-18 DRIFT: that footgun is retired — 'You can run claude --resume <session-id> from any directory: Claude Code looks for the ID in the current project directory and its git worktrees first, then in every other project on this machine… The cross-project search resolves the ID only when exactly one other project holds a transcript with messages for it… Before v2.1.223, the lookup stopped at the current project directory and its git worktrees.' 2026-07-28: '/rewind' no longer appears on this page — checkpoint-based rewind is routed to the Checkpointing page ('For checkpoint-based rewind within a single session, see Checkpointing'), so the '/rewind fork alias' claim is retired. New: /branch names the session after compaction as of v2.1.198; unnamed sessions get a default display name.",
       "claims": [
         "--resume",
         "--continue",
@@ -1006,7 +1006,7 @@
         "Ctrl+R in session picker renames session",
         "Space in session picker previews session content",
         "session auto-named on plan accept if name not set",
-        "session ID passed to -r/--resume searches only the current project directory and its git worktrees"
+        "session ID passed to -r/--resume resolves from any directory searching the current project and its git worktrees first then every other project on this machine v2.1.223+"
       ]
     },
     {
@@ -1088,7 +1088,7 @@
       "agent": "claude-code",
       "kind": "cli-invocation",
       "url": "https://code.claude.com/docs/en/cli-reference",
-      "notes": "Verified live 2026-07-28: --effort takes NAMED levels, not numbers — low, medium, high, xhigh, max, ultracode ('ultracode starts the session at xhigh effort... requires v2.1.203'). --advisor <model> accepts a model alias (opus or sonnet) or a full model ID — and the page states 'Claude Code doesn't offer Fable 5 as the advisor: claude --advisor fable exits with an error.' --from-pr does NOT resume a session: it 'Open[s] the session picker filtered to sessions linked to a specific pull request', accepting a PR number, a GitHub or GitHub Enterprise PR URL, a GitLab merge request URL, or a Bitbucket pull request URL. 2026-07-28: --safe-mode remains fully documented ('Start with all customizations disabled to troubleshoot a broken configuration... Sets CLAUDE_CODE_SAFE_MODE') but its v2.1.169 version tie no longer renders anywhere on the page — version annotation dropped from the claim. 2026-07-29: claude setup-token is now documented on this page ('Generate long-lived OAuth token for CI and scripts… Requires Claude subscription') — the 'unverified this run' annotation in docs/cli-invocation.md is cleared. Also newly noted: v2.1.210+ refuses Fable 5 as advisor; --bg incompatible with -p as of v2.1.198+.",
+      "notes": "Verified live 2026-07-28: --effort takes NAMED levels, not numbers — low, medium, high, xhigh, max, ultracode ('ultracode starts the session at xhigh effort... requires v2.1.203'). --advisor <model> accepts a model alias (opus or sonnet) or a full model ID. --from-pr does NOT resume a session: it 'Open[s] the session picker filtered to sessions linked to a specific pull request', accepting a PR number, a GitHub or GitHub Enterprise PR URL, a GitLab merge request URL, or a Bitbucket pull request URL. 2026-07-28: --safe-mode remains fully documented ('Start with all customizations disabled to troubleshoot a broken configuration... Sets CLAUDE_CODE_SAFE_MODE') but its v2.1.169 version tie no longer renders anywhere on the page — version annotation dropped from the claim. 2026-07-29: claude setup-token is now documented on this page ('Generate long-lived OAuth token for CI and scripts… Requires Claude subscription') — the 'unverified this run' annotation in docs/cli-invocation.md is cleared. Also noted: --bg incompatible with -p as of v2.1.198+. 2026-08-18 DRIFT: --advisor now accepts fable — 'a model alias, fable, opus, or sonnet, or a full model ID… fable requires Fable 5 access' — so the earlier 'claude --advisor fable exits with an error' claim is retired. Also 2026-08-18: --resume by session ID is no longer cwd-scoped — 'When you pass a session ID, Claude Code searches the current project directory and its git worktrees, then every other project on this machine. Before v2.1.223, the ID search covered only the current project directory and its git worktrees.'",
       "claims": [
         "claude -p --print",
         "cat file pipe claude -p",
@@ -1115,15 +1115,15 @@
         "--agent specify agent for session",
         "--settings path or inline JSON override",
         "--safe-mode disable all customizations for troubleshooting",
-        "--advisor rejects fable — claude --advisor fable exits with an error",
         "--tools restrict built-in tools",
         "--disallowedTools deny rules",
         "--effort named levels low medium high xhigh max ultracode not numeric",
-        "--advisor <model> accepts model alias opus or sonnet or a full model ID",
+        "--advisor <model> accepts a model alias fable opus or sonnet or a full model ID and fable requires Fable 5 access",
         "--worktree -w isolated git worktree",
         "--from-pr opens the session picker filtered to sessions linked to a specific pull request",
         "--from-pr accepts a PR number or GitHub GitHub Enterprise GitLab or Bitbucket PR/MR URL",
-        "claude setup-token generates a long-lived OAuth token for CI and scripts, requires a Claude subscription"
+        "claude setup-token generates a long-lived OAuth token for CI and scripts, requires a Claude subscription",
+        "--resume with a session ID searches the current project directory and its git worktrees then every other project on this machine v2.1.223+"
       ]
     },
     {
@@ -1408,11 +1408,11 @@
       "agent": "claude-code",
       "kind": "billing",
       "url": "https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan",
-      "notes": "Re-verified 2026-07-29: the billing change originally planned for 2026-06-15 is still PAUSED (banner verbatim-unchanged; page dateline now reads 'June 16, 2026'). The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits. The previously announced monthly credit, which would have been available to eligible claimants in connection with these changes, isn't available. We're working to update the plan to better support how users build with Claude subscriptions. When we have an update, we'll share it before anything takes effect.' A line under the banner adds: 'The content below reflects the page before June 15. It's preserved for reference but is no longer taking effect on June 15.' Accounts using an API key continue on pay-as-you-go API billing. The original (paused, not-in-effect) plan described separate monthly credits per plan tier: Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise usage-based $20, Enterprise seat-based Premium seats $200 (Standard seats not eligible).",
+      "notes": "Re-verified 2026-08-18 (banner verbatim-unchanged, still PAUSED; earlier re-verification 2026-07-29): the billing change originally planned for 2026-06-15 is still PAUSED (banner verbatim-unchanged; page dateline now reads 'June 16, 2026'). The page opens with a dated banner: 'Update June 15: We're pausing the changes to Claude Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK, claude -p, and third-party app usage still draw from your subscription's usage limits. The previously announced monthly credit, which would have been available to eligible claimants in connection with these changes, isn't available. We're working to update the plan to better support how users build with Claude subscriptions. When we have an update, we'll share it before anything takes effect.' A line under the banner adds: 'The content below reflects the page before June 15. It's preserved for reference but is no longer taking effect on June 15.' Accounts using an API key continue on pay-as-you-go API billing. The original (paused, not-in-effect) plan described separate monthly credits per plan tier: Pro $20, Max 5x $100, Max 20x $200, Team Standard $20, Team Premium $100, Enterprise usage-based $20, Enterprise seat-based Premium seats $200 (Standard seats not eligible).",
       "claims": [
         "Agent SDK with Claude plan",
         "claude -p headless",
-        "2026-06-15 Agent SDK billing change still paused as of 2026-08-16",
+        "2026-06-15 Agent SDK billing change still paused as of 2026-08-18",
         "Agent SDK and claude -p currently draw from regular subscription usage limits same as interactive use",
         "API key accounts remain pay-as-you-go API billing",
         "original plan described separate monthly credits per plan tier but change is paused"
@@ -1448,7 +1448,7 @@
       "agent": "claude-code",
       "kind": "model-lineup",
       "url": "https://docs.anthropic.com/en/docs/about-claude/models/overview",
-      "notes": "Current Claude model lineup (ids + reasoning). Mirror: docs/models/claude.md. Verified live 2026-07-28 (docs.anthropic.com still 301-redirects to platform.claude.com — same official doc). MAJOR 2026-07-28: Claude Opus 5 (claude-opus-5) has shipped and replaced Opus 4.8 in the current table — 'If you're unsure which model to use, start with Claude Opus 5 for complex agentic coding and enterprise work'; $5/$25 MTok, knowledge cutoff May 2026; the page carries a 'Migrating to Claude Opus 5' guide and Opus 4.8 leads the legacy rows. Current: Fable 5 (claude-fable-5), Opus 5 (claude-opus-5), Sonnet 5 (claude-sonnet-5, intro pricing $2/$10 through 2026-08-31), Haiku 4.5 (id claude-haiku-4-5-20251001, alias claude-haiku-4-5). Reasoning: adaptive thinking on Fable 5 (always on) / Opus 5 / Sonnet 5; Haiku 4.5 uses extended thinking. Effort defaults: Opus 4.8 defaults to high on all surfaces; Opus 5 and Sonnet 5 default to high on the Claude API and Claude Code. Also documented but NOT generally available: Claude Mythos 5 (claude-mythos-5) and Claude Mythos Preview (claude-mythos-preview), invitation-only via Project Glasswing. Legacy: Opus 4.8 (→ 5), Opus 4.7, Opus 4.6, Sonnet 4.6 (→ 5), Sonnet 4.5, Opus 4.5. Re-verified live 2026-08-13: the current lineup is unchanged, and claude-opus-4-1-20250805 remains absent after its previously documented 2026-08-05 retirement date; Opus 5 remains the migration target.",
+      "notes": "Current Claude model lineup (ids + reasoning). Mirror: docs/models/claude.md. Verified live 2026-07-28 (docs.anthropic.com still 301-redirects to platform.claude.com — same official doc). MAJOR 2026-07-28: Claude Opus 5 (claude-opus-5) has shipped and replaced Opus 4.8 in the current table — 'If you're unsure which model to use, start with Claude Opus 5 for complex agentic coding and enterprise work'; $5/$25 MTok, knowledge cutoff May 2026; the page carries a 'Migrating to Claude Opus 5' guide and Opus 4.8 leads the legacy rows. Current: Fable 5 (claude-fable-5), Opus 5 (claude-opus-5), Sonnet 5 (claude-sonnet-5, $2/$10 MTok), Haiku 4.5 (id claude-haiku-4-5-20251001, alias claude-haiku-4-5). Reasoning: adaptive thinking on Fable 5 (always on) / Opus 5 / Sonnet 5; Haiku 4.5 uses extended thinking. Effort defaults: Opus 4.8 defaults to high on all surfaces; Opus 5 and Sonnet 5 default to high on the Claude API and Claude Code. Also documented but NOT generally available: Claude Mythos 5 (claude-mythos-5) and Claude Mythos Preview (claude-mythos-preview), invitation-only via Project Glasswing. Legacy: Opus 4.8 (→ 5), Opus 4.7, Opus 4.6, Sonnet 4.6 (→ 5), Sonnet 4.5, Opus 4.5. Re-verified live 2026-08-18: the current lineup is unchanged and the models overview lists Sonnet 5 at $2/$10 MTok with no promotional end date stated on that page, and claude-opus-4-1-20250805 remains absent after its previously documented 2026-08-05 retirement date; Opus 5 remains the migration target.",
       "claims": [
         "claude-fable-5 current",
         "claude-opus-5 current for complex agentic coding and enterprise work",
@@ -1547,13 +1547,14 @@
       "agent": "grok",
       "kind": "model-lineup",
       "url": "https://docs.x.ai/developers/models",
-      "notes": "Current Grok/xAI model lineup. Mirror: docs/models/grok.md. Re-verified live 2026-08-13: the overview now lists grok-4.6 as the 500k flagship for code and everything else, with configurable reasoning and a February 1, 2026 knowledge cutoff. The overview now lists only Grok 4.6 plus Voice and Imagine APIs; the former pricing rows for grok-4.3, grok-4.20-0309-reasoning, grok-4.20-0309-non-reasoning, grok-4.20-multi-agent-0309, and grok-build-0.1 are absent, which is not treated as a retirement claim. The alias rule is unchanged. The dedicated May 15 retirement page still lists eight retired ids with redirects. Exact effort levels are owned by xai-grok-reasoning.",
+      "notes": "Current Grok/xAI model lineup. Mirror: docs/models/grok.md. Re-verified live 2026-08-18: grok-4.6 remains the 500k flagship for code and general use, with configurable reasoning and a February 1, 2026 knowledge cutoff. DRIFT this run — the Text API pricing table again lists grok-4.5 (500k), grok-4.3, grok-4.20-0309-reasoning, grok-4.20-0309-non-reasoning, grok-4.20-multi-agent-0309 (1M each), and grok-build-0.1 (256k); the previous 'those rows are absent' reading is retired. The Voice API is also no longer id-less: the Voice Pricing section names grok-voice-think-fast-2.0 and marks grok-voice-think-fast-1.0 Deprecated. Imagine Pricing now names five ids, adding grok-imagine-image-2.0. Section headings are Text API Pricing, Imagine Pricing, Voice Pricing, and 'Which model should I choose?'. The alias rule is unchanged. The dedicated May 15 retirement page still lists eight retired ids with redirects. Exact effort levels are owned by xai-grok-reasoning.",
       "claims": [
         "grok-4.6 current 500k context flagship for code and general use with February 1 2026 knowledge cutoff",
-        "former pricing rows for grok-4.3 grok-4.20-0309 variants and grok-build-0.1 are absent from the overview and absence is not retirement",
-        "Grok Voice API current and id-less priced by realtime-minute TTS-characters and STT-hour",
+        "Text API pricing table lists grok-4.5 500k grok-4.3 grok-4.20-0309-reasoning grok-4.20-0309-non-reasoning grok-4.20-multi-agent-0309 1M and grok-build-0.1 256k",
+        "Text API table carries two rows per model for prompts below and at or above 200k tokens",
+        "Grok Voice API names grok-voice-think-fast-2.0 current and grok-voice-think-fast-1.0 Deprecated",
         "Imagine API image and video generation current",
-        "Imagine ids grok-imagine-image grok-imagine-image-quality grok-imagine-video grok-imagine-video-1.5",
+        "Imagine ids grok-imagine-image grok-imagine-image-2.0 grok-imagine-image-quality grok-imagine-video grok-imagine-video-1.5",
         "<modelname> aliased to the latest stable version, <modelname>-latest to the latest version, <modelname>-<date> to a specific release",
         "dedicated retirement page /developers/migration/may-15-retirement lists eight ids retired 2026-05-15 with redirects",
         "do not infer retirement from absence for ids on neither the models page nor the retirement page",
@@ -1578,7 +1579,7 @@
       "agent": "cursor-cli",
       "kind": "model-lineup",
       "url": "https://cursor.com/docs/models-and-pricing",
-      "notes": "Registered 2026-07-16; mirror: docs/models/cursor.md. Re-verified live 2026-08-15: the Cursor Models pool includes Cursor Grok 4.6, Grok 4.5, and Composer 2.5, with standard and Fast Grok 4.6 rows. The expanded third-party table now includes Gemini 3.7 Flash alongside the existing Gemini 3.6/3.5 rows, GLM 5.2, and Kimi K2.7 Code/K3. Auto still has Auto Cost, Auto Balance, and Auto Intelligence modes; the pricing table remains the model list, Composer 1 remains absent without a retirement notice, and no deprecation page is documented. Grok 4.6 provider and effort details are owned by cursor-grok-4-6.",
+      "notes": "Registered 2026-07-16; mirror: docs/models/cursor.md. Re-verified live 2026-08-18: the Cursor Models pool includes Cursor Grok 4.6, Grok 4.5, and Composer 2.5, with standard and Fast Grok 4.6 rows. The expanded third-party table now includes Gemini 3.7 Flash alongside the existing Gemini 3.6/3.5 rows, GLM 5.2, and Kimi K2.7 Code/K3. Auto still has Auto Cost, Auto Balance, and Auto Intelligence modes; the pricing table remains the model list, Composer 1 remains absent without a retirement notice, and no deprecation page is documented. Grok 4.6 provider and effort details are owned by cursor-grok-4-6. 2026-08-18: newly recorded — on the Start plan all three Cursor models run in non-fast mode and Grok 4.6 / 4.5 use a fixed medium effort level, changeable on Pro and above; on Teams and Enterprise plans third-party model requests include a Cursor Token Rate of $0.25 per million tokens.",
       "claims": [
         "page titled Models & Pricing with two usage pools Cursor Models and Other Models",
         "Auto has three modes Auto Cost Auto Balance Auto Intelligence and is not a row of the pricing table",
@@ -1591,7 +1592,9 @@
         "third-party lineup reaches GPT-5.6 Luna Sol Terra and Claude Fable 5 Opus 5 Sonnet 5",
         "third-party lineup includes Gemini 3.7 Flash alongside Gemini 3.6 and 3.5 Flash",
         "no deprecation or retirement page exists so retirement is not documented",
-        "the pricing table is the model list"
+        "the pricing table is the model list",
+        "Start plan runs Cursor models in non-fast mode with Grok 4.6 and 4.5 at a fixed medium effort changeable on Pro and above",
+        "Teams and Enterprise third-party model requests include a Cursor Token Rate of $0.25 per million tokens"
       ]
     },
     {
@@ -1613,7 +1616,7 @@
       "agent": "antigravity-cli",
       "kind": "model-lineup",
       "url": "https://ai.google.dev/gemini-api/docs/models",
-      "notes": "Google's official Gemini API model page. Mirror: docs/models/gemini-antigravity.md. Registered 2026-07-19. JS-rendered; required dynamic rendering to verify. Re-verified live 2026-08-15; page last-updated 2026-08-14. Gemini 3.7 Flash (gemini-3.7-flash) is the new Stable latest/capable Flash model for complex coding, agentic workflows, and reliable multi-step execution. Gemini 3.6 Flash remains Stable but is now described as previous-generation and remains the stable-id naming example; Gemini 3.5 Flash remains Stable but is now labelled legacy. Gemini 3.5 Flash-Lite and Gemini 3.1 Flash-Lite remain Stable; Gemini 3.1 Pro and Gemini 3 Flash remain Preview. Antigravity Agent remains Preview. Shut down: Gemini 2.0 Flash, Gemini 2.0 Flash-Lite, Gemini 3.1 Flash-Lite Preview, Gemini 3 Pro Preview. Imagen 4 is deprecated. Beyond-scope entries include Gemini 3.5 Live Translate, Gemini 3.1 Flash Live/TTS, Gemini Omni Flash, Nano Banana 2/2 Lite/Pro, Gemini Embedding 2, Deep Research / Deep Research Max, Computer Use, Robotics ER 2 / 1.6, and Lyria.",
+      "notes": "Google's official Gemini API model page. Mirror: docs/models/gemini-antigravity.md. Registered 2026-07-19. JS-rendered; required dynamic rendering to verify. Re-verified live 2026-08-18 (dynamically rendered); page last-updated 2026-08-14. Gemini 3.7 Flash (gemini-3.7-flash) is the new Stable latest/capable Flash model for complex coding, agentic workflows, and reliable multi-step execution. Gemini 3.6 Flash remains Stable but is now described as previous-generation and remains the stable-id naming example; Gemini 3.5 Flash remains Stable but is now labelled legacy. Gemini 3.5 Flash-Lite and Gemini 3.1 Flash-Lite remain Stable; Gemini 3.1 Pro and Gemini 3 Flash remain Preview. Antigravity Agent remains Preview. Shut down: Gemini 2.0 Flash, Gemini 2.0 Flash-Lite, Gemini 3.1 Flash-Lite Preview, Gemini 3 Pro Preview. Imagen 4 is deprecated. Beyond-scope entries include Gemini 3.5 Live Translate, Gemini 3.1 Flash Live/TTS, Gemini Omni Flash, Nano Banana 2/2 Lite/Pro, Gemini Embedding 2, Deep Research / Deep Research Max, Computer Use, Robotics ER 2 / 1.6, and Lyria.",
       "claims": [
         "gemini-3.7-flash Stable latest and most capable Flash model for complex coding agentic workflows and reliable multi-step execution",
         "gemini-3.6-flash Stable previous-generation Flash model and stable-id naming example",

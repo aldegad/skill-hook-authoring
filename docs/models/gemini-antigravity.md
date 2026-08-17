@@ -4,7 +4,7 @@ Official source: https://ai.google.dev/gemini-api/docs/models (the official Goog
 Gemini model page; render dynamically — page last-updated 2026-08-14), plus
 https://antigravity.google (JS-rendered SPA — a static fetch returns an empty
 shell; render dynamically before claiming a change).
-Last reviewed: 2026-08-16 (verified live against the official Google Gemini model
+Last reviewed: 2026-08-18 (verified live against the official Google Gemini model
 page; Antigravity SPA re-rendered this run)
 
 ## Current shipping models
@@ -26,12 +26,13 @@ page; Antigravity SPA re-rendered this run)
 - The Antigravity site is a **JS-rendered SPA**: treat a 200 with an empty shell
   as `unverified this run` and render it dynamically before recording a model
   change.
-- The Antigravity CLI's own `agy models` sample output (headless-mode page) lists
-  `gemini-3.6-flash-high`, `gemini-3.6-flash-medium`,
-  `gemini-3.5-flash-medium`, `gemini-3.1-pro-high`, and `claude-sonnet-4-6`
-  ("Claude Sonnet 4.6 (Thinking)") — effort-suffixed CLI slugs and a Claude model
-  that are **not** API model ids on this page. The base `gemini-3.6-flash` id
-  itself is now on the API page (Stable, above).
+- The Antigravity CLI's own `agy models` sample output (headless-mode page) now
+  leads with `gemini-3.7-flash-high` and `gemini-3.7-flash-medium`, followed by
+  `gemini-3.6-flash-high`, `gemini-3.6-flash-medium`, `gemini-3.5-flash-medium`,
+  `gemini-3.1-pro-high`, and `claude-sonnet-4-6` ("Claude Sonnet 4.6 (Thinking)")
+  — effort-suffixed CLI slugs and a Claude model that are **not** API model ids on
+  this page. The base `gemini-3.7-flash` and `gemini-3.6-flash` ids are on the API
+  page (Stable, above).
 - The API page also lists (beyond this table's scope): Preview — Gemini 3.5 Live
   Translate, Gemini 3.1 Flash Live, Gemini 3.1 Flash TTS, Gemini Omni Flash,
   Lyria 3 Pro/Clip; GA — Nano Banana 2 / 2 Lite, Gemini Embedding 2; plus Deep

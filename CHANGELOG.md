@@ -5,6 +5,23 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## Unreleased — 2026-08-18
+
+Daily refresh (verification fetched 2026-08-18; all 68 sources reachable, none unverified this run). Four documented-capability drifts landed this run, plus the usual time-sensitive stamp advance.
+
+### Changed
+
+- **Grok's models overview lists the full Text API table again.** `grok-4.5` (500k), `grok-4.3`, `grok-4.20-0309-reasoning`, `grok-4.20-0309-non-reasoning`, `grok-4.20-multi-agent-0309` (1M each), and `grok-build-0.1` (256k) all carry pricing rows, so the previous "those rows are absent from the overview" reading is retired. The table shows two rows per model, one for prompts below 200k tokens and one at or above.
+- **The Grok Voice API is no longer id-less.** The Voice Pricing section names `grok-voice-think-fast-2.0` and marks `grok-voice-think-fast-1.0` **Deprecated**. Imagine Pricing now names five ids, adding `grok-imagine-image-2.0`.
+- **Claude Code `--advisor` accepts `fable`.** The CLI reference now documents "a model alias, `fable`, `opus`, or `sonnet`, or a full model ID", with `fable` requiring Fable 5 access. The earlier "Claude Code doesn't offer Fable 5 as the advisor: `claude --advisor fable` exits with an error" claim is retired.
+- **Claude Code resume-by-id is no longer cwd-scoped.** From v2.1.223 a session ID resolves from any directory: Claude Code searches the current project directory and its git worktrees first, then every other project on the machine, resolving only when exactly one other project holds a transcript for that ID. The "restore the original cwd before resuming" footgun note is replaced.
+- **Antigravity `agy models` leads with Gemini 3.7 Flash slugs.** The headless-mode sample output now shows `gemini-3.7-flash-high` and `gemini-3.7-flash-medium` ahead of the 3.6/3.5/3.1 slugs and `claude-sonnet-4-6`.
+- **Cursor documents plan-tier effort limits and a Teams/Enterprise token rate.** On the Start plan all three Cursor models run in non-fast mode with Grok 4.6 / 4.5 pinned to a fixed medium effort, changeable on Pro and above; Teams and Enterprise third-party requests include a Cursor Token Rate of $0.25 per million tokens.
+- **Sonnet 5 pricing loses its promotional window.** The Claude models overview lists Sonnet 5 at $2/$10 per MTok with no end date stated on that page, so the "intro pricing through 2026-08-31" qualifier is dropped from the lineup mirror.
+- **Billing status remains paused.** The June 15 Agent SDK notice still says Agent SDK, `claude -p`, and third-party app usage draw from subscription limits; the separate monthly credit remains unavailable, and the `ANTHROPIC_API_KEY` API-billing caveat remains present.
+- **Model lineups re-verified.** Claude, Codex, Cursor, and Gemini/Antigravity otherwise match their official model pages. Hermes still has no official lineup and remains `unverified this run`; model and billing freshness stamps advanced to 2026-08-18.
+- **Antigravity SPA pages re-rendered.** The CLI reference and headless pages retain their documented surfaces; the site banners remain Antigravity CLI v1.1.13 and SDK v0.1.12.
+
 ## Unreleased — 2026-08-16
 
 Daily refresh (verification fetched 2026-08-16; all 68 sources reachable, none unverified this run). Time-sensitive stamps advanced; documented capability surfaces remain unchanged.

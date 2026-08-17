@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-08-16
+Last reviewed: 2026-08-18
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or
@@ -66,7 +66,7 @@ the same idea, but they are reached differently:
 | Runtime | Headless command | Prompt / stdin | Output format | Useful scripting flags |
 |---|---|---|---|---|
 | Codex | `codex exec "<prompt>"` (alias `codex e`) | prompt arg; `-` reads prompt from stdin | `--json` / `--experimental-json` (JSONL); else final message to stdout, progress to stderr | `--model`/`-m`, `--output-last-message`/`-o <file>`, `--sandbox`/`-s`, `--cd`/`-C`, `--output-schema <file>` (JSON-Schema-constrained final message), `--ephemeral` (don't persist rollout files), `--ignore-user-config`, `--ignore-rules`, `--skip-git-repo-check` ("overrides Git repository requirement check"), `--full-auto` (deprecated — the docs say prefer `--sandbox workspace-write`); `CODEX_API_KEY` for inline auth. (Aside: `-p` is `--profile`, a config-profile selector — **not** a print/headless flag.) |
-| Claude Code | `claude -p "<query>"` (`--print`) | `cat file \| claude -p "<query>"` | `--output-format text\|json\|stream-json` (+ `--input-format`) | `--model`, `--bare` (skip auto-discovery; recommended for scripts, will become default for `-p`), `--allowedTools`, `--permission-mode default\|manual\|acceptEdits\|plan\|auto\|dontAsk\|bypassPermissions` (`manual` = alias of `default`, v2.1.200), `--max-turns`, `--max-budget-usd`, `--json-schema`, `--system-prompt[-file]`, `--append-system-prompt[-file]`, `--permission-prompt-tool`, `--bg`, `--no-session-persistence`, `--plugin-url <url>` (fetch plugin zip for session), `--agents <json>` (inline subagent definitions), `--settings <file-or-json>`, `--effort low\|medium\|high\|xhigh\|max\|ultracode`, `--advisor <model>` ("model alias (`opus` or `sonnet`) or full model ID") |
+| Claude Code | `claude -p "<query>"` (`--print`) | `cat file \| claude -p "<query>"` | `--output-format text\|json\|stream-json` (+ `--input-format`) | `--model`, `--bare` (skip auto-discovery; recommended for scripts, will become default for `-p`), `--allowedTools`, `--permission-mode default\|manual\|acceptEdits\|plan\|auto\|dontAsk\|bypassPermissions` (`manual` = alias of `default`, v2.1.200), `--max-turns`, `--max-budget-usd`, `--json-schema`, `--system-prompt[-file]`, `--append-system-prompt[-file]`, `--permission-prompt-tool`, `--bg`, `--no-session-persistence`, `--plugin-url <url>` (fetch plugin zip for session), `--agents <json>` (inline subagent definitions), `--settings <file-or-json>`, `--effort low\|medium\|high\|xhigh\|max\|ultracode`, `--advisor <model>` ("a model alias, `fable`, `opus`, or `sonnet`, or a full model ID"; `fable` requires Fable 5 access — the earlier "Claude Code doesn't offer Fable 5 as the advisor" restriction is retired) |
 | Grok / xAI | `grok -p "<prompt>"` (`--single`) | `grok agent stdio` = ACP agent over JSON-RPC on stdin/stdout | `--output-format plain\|json\|streaming-json` | `--model`/`-m`, `--cwd`, `--always-approve` (alias `--yolo`); `--allow <RULE>` / `--deny <RULE>` permission rules and `--sandbox <PROFILE>` (per the CLI reference page); `--no-alt-screen` (documented on the headless-scripting page only, **not** the reference). Also on the reference flag table: `--effort <LEVEL>` (a CLI-layer reasoning-effort flag; the reasoning capability page documents the API parameter for `grok-4.6` with `low`/`medium`/`high`/`xhigh` and for `grok-4.5` with `low`/`medium`/`high`; both default to `high` and cannot disable reasoning), `--no-auto-update` (documented on the headless-scripting page for scripts/CI/ACP: skip background update checks; persistent form `auto_update = false` under `[cli]` in `~/.grok/config.toml`), `--fork-session` ("When resuming, fork into a new session ID"), `-w, --worktree [<NAME>]`, `--ref <REF>`, `--rules <TEXT>`, `--system-prompt-override <TEXT>`, `--tools <LIST>` / `--disallowed-tools <LIST>`, `--max-turns <N>`, `--no-plan`, `--no-subagents`, `--no-memory`, `--disable-web-search`, `--experimental-memory`, `--oauth`. The reference also states Claude Code flag names are accepted as aliases where they overlap — `--allowedTools`, `--disallowedTools`, `--append-system-prompt`, `--system-prompt`, and the skip-permissions flag. Subcommands: `grok sessions <list\|search\|delete>`, `grok export <session-id> [output]`, `grok import [targets...]` (imports from Claude Code), `grok worktree <list\|show\|rm\|gc>`, `grok mcp <list\|add\|remove\|doctor>`, `grok dashboard`, `grok wrap`, `grok login [--device-auth]`, `grok logout`, `grok inspect [--json]`, `grok models`, `grok plugin <list\|install\|uninstall\|update\|enable\|disable\|details\|validate>`, `grok plugin marketplace <list\|add\|remove\|update>`, `grok memory clear [--workspace\|--global\|--all]`, `grok update`, `grok version`, `grok completions <shell>`, `grok setup` |
 | Hermes Agent | `hermes chat -q "<query>"` (single query); `hermes -w -z "<query>"` runs a single query inside an isolated git worktree | not documented (no stdin/JSON piping flag) | not documented (no JSON output-format flag) | `--model`, `--provider nous\|openrouter`, `--toolsets`, `-s <skill>`, `--verbose`, `-w` (isolated git worktree; `hermes -w` alone is the interactive form), `-z "<query>"` (single-query entry point alongside `-q`) |
 | Antigravity CLI | `agy -p "<prompt>"` (`--print`/`--prompt`) — "sends a single prompt to the agent, streams or returns the response, and exits" (dedicated Headless-mode page at `/docs/cli/headless`) | prompt arg | `--output-format text\|json\|stream-json` (json envelope carries `conversation_id`/`status`/`response`/`usage`; stream-json is NDJSON with `init`/`step_update`/`result` events); `--json-schema` for structured output | `--model`, `--effort low\|medium\|high`, `--agent`, `--print-timeout` (default 5m), `--sandbox` (default false — "Run with terminal sandbox restrictions enabled", the launch override of `enableTerminalSandbox`), headless `-c`/`--continue` and `--conversation <id>` resume; `agy models` / `agy agents` list selectable models/agents; `permissions.allow` `action(target)` rules (e.g. `"command(git)"`, `"write_file(src/)"`) in `settings.json`; unapprovable tools are **soft-denied** (run exits 0, notice to stderr); `--dangerously-skip-permissions` = permission_mode always-proceed. The **Antigravity SDK** (`pip install google-antigravity`) remains the richer programmatic path |
@@ -75,7 +75,7 @@ the same idea, but they are reached differently:
 
 > **Billing caveat (Claude Code).** On a subscription, `claude -p` and Agent SDK
 > runs draw from your plan's usage limits — the same pool as interactive use, with
-> no separate per-run credit. As of 2026-08-16, the Agent SDK billing
+> no separate per-run credit. As of 2026-08-18, the Agent SDK billing
 > change announced for 2026-06-15 remains **paused**. The official support page
 > opens with a dated banner: *"Update June 15: We're pausing the changes to Claude
 > Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK,
@@ -88,7 +88,7 @@ the same idea, but they are reached differently:
 > `claude -p` cron; the reliability advantage (Routine runs regardless of laptop
 > state) still applies. See `docs/cloud-automation.md`. (Source:
 > https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan,
-> verified 2026-08-16; the `ANTHROPIC_API_KEY` caveat re-confirmed 2026-08-16 on
+> verified 2026-08-18; the `ANTHROPIC_API_KEY` caveat re-confirmed 2026-08-18 on
 > https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan.)
 
 ## C. Resume invocation (command syntax)
@@ -115,9 +115,11 @@ command to type.
 `claude -r "<id-or-name>"`, `grok -r <id>`, `hermes -r <id>`,
 `agy --conversation <conversation-id>`, `agent --resume [chatId]`.
 Identifiers differ (UUID vs. human name vs. `--conversation`), so store the handle
-in the form that runtime's resume command accepts. For Claude Code, "passing a
-session ID searches only the current project directory and its git worktrees", so
-a resume issued from the wrong cwd fails. `claude --from-pr` is **not** a pin: it
+in the form that runtime's resume command accepts. For Claude Code, a session ID
+resolves from any directory: Claude Code "searches the current project directory
+and its git worktrees, then every other project on this machine" (v2.1.223+; the
+cross-project search resolves only when exactly one other project holds a
+transcript for that ID, so a hand-copied duplicate reports not-found). `claude --from-pr` is **not** a pin: it
 "open[s] the session picker filtered to sessions linked to a specific pull
 request. Accepts a PR number, a GitHub or GitHub Enterprise PR URL, a GitLab merge
 request URL, or a Bitbucket pull request URL" — it filters a picker rather than
@@ -199,7 +201,7 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
   the transition blog does **not** state the OSS repo's licence, so no Apache-2.0
   claim is made for it. (The Codex *goal internals* in `completion-stack.md` are
   source-verified against `openai/codex` under the same rule.)
-- **Claude Code Agent SDK billing (status as of 2026-08-16):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token for CI and scripts; requires a Claude subscription — now documented on the CLI reference page, verified 2026-07-29) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-08-16.)
+- **Claude Code Agent SDK billing (status as of 2026-08-18):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token for CI and scripts; requires a Claude subscription — now documented on the CLI reference page, verified 2026-07-29) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-08-18.)
 - **Antigravity CLI billing (G1 credits, verified 2026-07-28):** `agy` model calls
   run against plan quota; the `useG1Credits` setting ("External builds only. Uses
   personal AI credits for model calls once plan quotas are exhausted.") is the
@@ -240,4 +242,4 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
 - Cursor CLI using (in-session `/resume`, `--continue`) — <https://cursor.com/docs/cli/using>
 - gajae-code (community project, README — not vendor docs) — <https://github.com/Yeachan-Heo/gajae-code>
 - Claude Code with Pro/Max plan (billing) — <https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan>
-- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-08-16) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
+- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-08-18) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
