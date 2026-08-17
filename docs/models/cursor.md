@@ -2,7 +2,7 @@
 
 Official source: https://cursor.com/docs/models-and-pricing
 (`cursor.com/docs/models` 308-redirects here)
-Last reviewed: 2026-08-16 (verified live against the official models & pricing page)
+Last reviewed: 2026-08-18 (verified live against the official models & pricing page)
 
 ## Current shipping models
 
@@ -14,7 +14,7 @@ separate lineup section.
 | Model | Owner | Notes |
 |---|---|---|
 | Composer 2.5 | **Cursor** | "Composer 2.5 is Cursor's own model, trained to be highly capable for agentic coding." (Composer 1 no longer appears on the page.) |
-| Grok 4.6 (standard / Fast) | Cursor + SpaceXAI | Frontier model for complex coding and knowledge work; improves instruction following and long-horizon agentic work over 4.5. Supports `low`, `medium`, `high` (default), and `xhigh` effort. |
+| Grok 4.6 (standard / Fast) | Cursor + SpaceXAI | Frontier model for complex coding and knowledge work; improves instruction following and long-horizon agentic work over 4.5. Supports `low`, `medium`, `high` (default), and `xhigh` effort (per the model's own page). On the Start plan all three Cursor models run in non-fast mode and Grok 4.6 / 4.5 are pinned to a fixed medium effort; the level is changeable on Pro and above. |
 | Grok 4.5 ("Cursor Grok 4.5") | Cursor + SpaceXAI | "Grok 4.5 is jointly trained by Cursor and SpaceXAI for long-running coding and knowledge work." |
 | Anthropic Claude family (Claude Fable 5 / Opus 5 / Opus 4.8 / Opus 4.7 / Sonnet 5) | third-party | Sonnet 5 launch promo "$2/M input and $10/M output through August 31, 2026"; Fable 5 $10/$50 — "Requests that trip a security guardrail are automatically routed to Claude Opus" |
 | OpenAI GPT-5 family (GPT-5.6 Luna / Sol / Terra, GPT-5.5, GPT-5.4/Mini/Nano, plus the Codex line) | third-party | GPT-5.6 rows carry cache-write columns ("Cache writes are billed at 1.25x the uncached input rate") |
@@ -27,7 +27,8 @@ separate lineup section.
   priced "per million tokens, regardless of which model is used"; Auto
   Balance/Intelligence are "charged at Model API rates for the model used". On
   Teams/Enterprise plans, **Cursor Router** (`docs/cursor-router.md` on the site)
-  picks the model per Auto request.
+  picks the model per Auto request, and third-party model requests carry "a Cursor
+  Token Rate of $0.25 per million tokens".
 - Cursor **does ship models of its own** (Composer), so it is not a pure router —
   do not describe it as selecting only upstream provider models.
 - The docs now document the CLI binary as `agent`: `agent --list-models` reports

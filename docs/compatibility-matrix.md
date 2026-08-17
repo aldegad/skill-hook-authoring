@@ -1,6 +1,6 @@
 # Cross-Agent Compatibility Matrix
 
-Last reviewed: 2026-08-15
+Last reviewed: 2026-08-18
 
 This matrix records only official documentation claims from `docs/official-sources.json`. If a feature is absent from official docs, write `not documented` instead of inferring support.
 
@@ -68,7 +68,7 @@ Same-platform resume (continue an existing conversation on the same engine, by s
 Notes for implementers:
 
 - The resume **locator** (session/thread id) plus the engine's resume invocation is the minimum needed to continue same-platform. Capture the locator before the worker exits, keyed by cwd (the most stable cross-engine signal exposed here).
-- Claude resume-by-id is **cwd-scoped**: passing a session ID searches only the current project directory and its git worktrees, so a resume issued from the wrong cwd fails even with a valid id. Restore the original cwd before resuming.
+- Claude resume-by-id resolves **across projects**: passing a session ID searches the current project directory and its git worktrees first, then every other project on this machine (v2.1.223+). The cross-project search resolves the ID only when exactly one other project holds a transcript with messages for it, so a hand-copied duplicate reports not-found rather than resuming an arbitrary copy.
 - Codex workers launched through the desktop **app-server** (`codex app-server --listen stdio://`) resume via `thread/resume`, not a CLI flag. The rollout JSONL **directory** is still not normatively stated in any Codex doc (the CLI reference dropped `~/.codex/sessions/` 2026-07-04; it survives only in a user-example prompt on the automations page) — verify the live rollout path before relying on a file-level integration. The history file `~/.codex/history.jsonl` is documented on the config-advanced page (as of 2026-07-05), but it is the transcript/history store, not the rollout directory.
 - Hermes resume reads from `state.db` (SQLite), so a file-scan over `~/.hermes/sessions/` will not find resumable state — query the db (or the displayed "Resume this session with: hermes --resume <id>" line) instead.
 - When a runtime does not document a resume capability, record `not documented` and require live verification before shipping.
