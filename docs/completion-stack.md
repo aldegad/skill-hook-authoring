@@ -1,6 +1,6 @@
 # Native Completion & Verification Stacks (Claude Code · Codex)
 
-Last reviewed: 2026-07-29 (claims verified against official docs and vendor
+Last reviewed: 2026-08-19 (claims verified against official docs and vendor
 source 2026-06-15; migrated into this skill from operator research pages
 2026-07-10; Codex goal claims re-anchored 2026-07-17 after the follow-goals
 page was slimmed to a use-case walkthrough)
@@ -72,6 +72,14 @@ installed" — it is there.
   turn). `/goal` + auto mode are complementary: the former removes the
   per-turn prompt, the latter the per-tool prompt. Outside a session:
   scheduled tasks / cloud routines.
+- **Background work gets a nudge, not a wait.** When a turn ends and background
+  work has kept the goal waiting 30 minutes or more, Claude Code asks Claude at
+  the next turn end to list the running tasks, read their output, keep waiting if
+  they are progressing, and fix or stop any that are stuck; it asks again after
+  each further 30 minutes. `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` changes the
+  interval, `0` turns check-ins off. Requires Claude Code v2.1.234+. This is the
+  answer to the "goal parked forever on a hung background job" failure mode — it
+  is a prompt to Claude, not a runtime kill.
 - Requirements: accepted workspace trust and hooks enabled — with
   `disableAllHooks` or `allowManagedHooksOnly` the goal is inactive and Claude
   Code says why (no silent failure).
@@ -172,8 +180,9 @@ commands, and tests — the decisive contrast with Claude's `/goal` evaluator
   buttons also expose edit/pause/resume/clear
   ([developer-commands](https://learn.chatgpt.com/docs/developer-commands?surface=cli),
   the registered source — it states *"`/goal` | Set, edit, pause, resume, view,
-  or clear a task goal."*; the narrower sentence *"Use `/goal edit` to revise the
-  objective."* is `unverified this run`).
+  or clear a task goal."*, and the page's own `/goal` walkthrough now carries the
+  narrower sentence *"Use `/goal edit` to revise the objective."* verbatim, so
+  that claim is doc-anchored rather than source-only).
   There is no `/goal set` subcommand — setting is the bare `/goal <objective>`.
 - **`/goal edit` — in-place edit of a running goal (source-verified in
   openai/codex):** loads the current objective into the editor

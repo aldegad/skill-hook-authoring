@@ -5,6 +5,20 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## Unreleased — 2026-08-19
+
+Daily refresh (verification fetched 2026-08-19; all 68 sources reachable, none unverified this run). Two documented-capability drifts landed this run, plus one new capability, one cleared `unverified` annotation, and the usual time-sensitive stamp advance.
+
+### Changed
+
+- **Codex hook tool coverage is wider than shell, and the "only the simple ones" caveat is retired.** The hooks page now carries an explicit **Tool coverage** table: shell commands (match as `Bash`), unified exec `exec_command` (also `Bash`), `apply_patch` (`apply_patch`/`Edit`/`Write`), MCP tools, and **other local function tools** — matched by function-tool name such as `update_plan`, with `spawn_agent` also matching `Agent` — all fire both `PreToolUse` and `PostToolUse`. Hosted tools such as `WebSearch` are the documented exception: they do not use the local function-tool hook path. `write_stdin` is transport for an existing unified-exec session and does not re-run `PreToolUse`; a later `write_stdin` poll is what delivers the original command's `PostToolUse`. The residual caveat is now "some specialized tool paths can opt out of the default hook path" plus "treat tool hooks as a useful guardrail, not a complete enforcement boundary".
+- **Cursor's Claude Sonnet 5 row loses its promotional window.** The Models & Pricing table now notes only "Requires Max Mode on legacy request-based plans; Up to 1M tokens with extended context at the same per-token rates; Uses an updated tokenizer" — the "$2/M input and $10/M output through August 31, 2026" launch window is gone, matching the drop already made in the Claude lineup mirror. (The Grok 4.6 rows carry a separate 50% launch discount for one week starting August 12, 2026.)
+- **Claude `/goal` documents background-work check-ins.** When a turn ends and background work has kept the goal waiting 30 minutes or more, Claude Code asks Claude at the next turn end to list running tasks, read their output, keep waiting if they are progressing, and fix or stop stuck ones, repeating after each further 30 minutes. `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` sets the interval and `0` disables it; requires v2.1.234 or later.
+- **Codex `/goal edit` is doc-anchored again.** The developer-commands page's `/goal` walkthrough states "Use `/goal edit` to revise the objective", so the narrower sentence's `unverified this run` annotation in `docs/completion-stack.md` is cleared; the source-verified `UpdateExisting` mechanics are unchanged.
+- **Billing status remains paused.** The June 15 Agent SDK notice still says Agent SDK, `claude -p`, and third-party app usage draw from subscription limits; the separate monthly credit remains unavailable, and the `ANTHROPIC_API_KEY` API-billing caveat remains present.
+- **Model lineups re-verified.** Claude, Codex, Grok, Cursor, and Gemini/Antigravity otherwise match their official model pages; the Gemini page is still stamped "Last updated 2026-08-14 UTC". Hermes still has no official lineup and remains `unverified this run`; model and billing freshness stamps advanced to 2026-08-19.
+- **Antigravity pages re-verified.** The CLI reference, headless, plugins, conversations, and resume pages retain their documented surfaces and served clean markdown at their `.md` URLs this run; the site CLI banner moved to v1.1.14 (SDK stays v0.1.12).
+
 ## Unreleased — 2026-08-18
 
 Daily refresh (verification fetched 2026-08-18; all 68 sources reachable, none unverified this run). Four documented-capability drifts landed this run, plus the usual time-sensitive stamp advance.
