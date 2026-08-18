@@ -1,6 +1,6 @@
 # Cross-Agent Compatibility Matrix
 
-Last reviewed: 2026-08-18
+Last reviewed: 2026-08-19
 
 This matrix records only official documentation claims from `docs/official-sources.json`. If a feature is absent from official docs, write `not documented` instead of inferring support.
 
