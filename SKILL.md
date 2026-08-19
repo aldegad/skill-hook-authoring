@@ -18,137 +18,87 @@ Use these words precisely:
 
 - **Skill**: instructions the model reads when the task matches. Usually `SKILL.md` plus optional `scripts/`, `docs/`, and `assets/` (`references/` only for genuine lookup material — see Skill Document Topology). A skill can tell the model what to do, but it does not enforce tool behavior by itself.
 - **Hook**: a harness-level guard or automation invoked around lifecycle events such as tool calls. A hook can allow, deny, ask, mutate input, or add context depending on runtime support. Hooks must be registered in the runtime config or plugin metadata; putting a hook script inside a skill folder is not enough.
-- **Plugin / extension**: a runtime-specific packaging and trust boundary that can bundle skills, hooks, MCP servers, apps, commands, agents, or metadata. Codex and Grok document plugin packages; Antigravity documents native plugins (legacy Gemini extensions migrate in via `agy plugin import gemini`); Claude documents plugins as self-contained directories with skills, agents, hooks, or a `.claude-plugin/plugin.json` manifest — the manifest directory is marked *optional if components use default locations* (a single-skill plugin may put `SKILL.md` at the plugin root), and when present the manifest is the direct analogue of Codex's `.codex-plugin/plugin.json`, bundling skills, agents, hooks, MCP servers, LSP servers, and monitors.
+- **Plugin / extension**: a runtime-specific packaging and trust boundary that can bundle skills, hooks, MCP servers, apps, commands, agents, or metadata. Per-runtime package shapes (Codex `.codex-plugin/plugin.json`, Claude `.claude-plugin/plugin.json`, Antigravity native plugins, Hermes `plugin.yaml`) are in [`docs/plugin-packaging.md`](docs/plugin-packaging.md).
 - **Package root**: the repo-owned canonical source directory we maintain. Most local "skills" in this workspace are actually plugin-like package roots because they include `SKILL.md`, scripts, docs, installers, and policy.
 
 If the task changes discovery, installation, trust, hook behavior, bundled scripts, or cross-runtime compatibility, treat it as **package authoring**, not just skill text editing.
 
 ## Runtime Coverage
 
-Eight runtimes are tracked — seven vendor runtimes plus one community project (**gajae-code**, `gjc`, MIT/beta by Yeachan-Heo, not an official vendor product; flagged the way Kuma Studio is, with its GitHub README as the only source). The detailed, source-cited truth lives in `docs/compatibility-matrix.md` and `docs/plugin-packaging.md`; this is the short working model:
+Eight runtimes are tracked — seven vendor runtimes plus one community project (**gajae-code**, `gjc`, MIT/beta, GitHub README as the only source; flagged the way Kuma Studio is). The source-cited truth for **every** cross-runtime claim — skill/hook/plugin surfaces, skill invocation tokens, session resume, project-instruction filenames and their loading mechanics — lives in [`docs/compatibility-matrix.md`](docs/compatibility-matrix.md) and [`docs/plugin-packaging.md`](docs/plugin-packaging.md). Read it there; this file does not restate it.
 
-| Runtime | Skill surface | Hook surface | Plugin/package surface |
-|---|---|---|---|
-| Codex | Repo `.agents/skills/` plus user/admin/system skill roots | User/project `.codex/hooks.json` or inline config hooks, plus plugin-bundled hooks | `.codex-plugin/plugin.json` can bundle skills, apps, MCP servers, hooks, and marketplace metadata |
-| Claude Code | Project/user `.claude/skills/`, `.claude/commands`, add-dir skills, and skill-directory plugins | User/project/local `.claude/settings*.json` hooks, plugin hooks, and skill lifecycle hooks | `.claude-plugin/plugin.json` plugins can bundle skills, agents, hooks, MCP servers, LSP servers, and monitors |
-| Grok / xAI | User, project, plugin, and configured skill roots | User, project, and plugin hook roots | Plugins can bundle skills, agents, hooks, MCP servers, and LSP servers |
-| Hermes Agent | Skills, skill taps, and plugin-bundled skills are documented | Gateway hooks, shell hooks, and plugin hooks are documented | `plugin.yaml` plugins can bundle tools, hooks, slash commands, CLI commands, and skills; four documented roots — `~/.hermes/plugins/`, project-local `./.hermes/plugins/` (needs `HERMES_ENABLE_PROJECT_PLUGINS=true`), bundled `<repo>/plugins/`, and pip entry points under `hermes_agent.plugins`. Plugin hooks register via `ctx.register_hook()`, so project-local hooks are reachable |
-| Antigravity CLI (`agy`, was Gemini CLI) | `.agents/skills/` (global `~/.gemini/antigravity-cli/skills/`); skills auto-become `/<name>` slash commands | Hooks in a plugin's `hooks.json` or primary `settings.json` (pre/post-tool); `/hooks` browses loaded hooks | Native plugins at `~/.gemini/antigravity-cli/plugins/<name>/` (`plugin.json`, `hooks.json`, `skills/`, `agents/`, `rules/`) managed by `agy plugin`; MCP via standalone `mcp_config.json` |
-| Cursor CLI | Project/user `.agents/skills/` and `.cursor/skills/`, plus Claude/Codex compatibility skill roots | Project `.cursor/hooks.json`, team/enterprise hooks, and command/prompt hook events | Plugins are documented separately; hooks include `workspaceOpen` plugin-path injection, but do not infer Codex-style package parity |
-| Kuma Studio | skills in canonical repo paths | guardrail hooks that must fail loudly | symlink or generated-config install |
-| gajae-code (`gjc`, community) | `SKILL.md` bundled skills installed into the user `.gjc` directory by `gjc setup defaults` (exact path no longer stated; `gjc skills list`/`read <name>`); ships `deep-interview`, `ralplan`, `ultragoal`, `team` | not documented | not documented (README explicitly says it is "not a hidden plugin" for other CLIs) |
+Two consequences an author must not get wrong:
 
-When a runtime capability is not documented, write `not documented` or `unknown` and require live verification before shipping behavior that depends on it.
+- **When a runtime capability is not documented, write `not documented` or `unknown`** and require live verification before shipping behavior that depends on it. Never infer parity from another agent.
+- **Explicit skill invocation is not the same token across runtimes** — Claude/Grok/Cursor `/<skill-name>`, Codex `/skills` or `$<skill-name>` (typed `/<skill-name>` is not a documented Codex form), Antigravity `/<skill-name>`, gajae-code `/skill:<name>`, Hermes none documented. For cross-engine commands, rely on **description-triggered** invocation as the portable layer and treat the typed token as per-engine sugar.
 
-**Explicit skill invocation is not the same token across runtimes.** Claude Code, Grok, and Cursor expose user-invocable skills as slash commands such as `/<skill-name>` (Claude/Cursor: `disable-model-invocation: true` makes a skill explicit-only); Codex uses `/skills` (selector) or `$<skill-name>` (mention) — typed `/<skill-name>` is not a documented Codex form, and `allow_implicit_invocation: false` in `agents/openai.yaml` turns off description-matching; Hermes documents no typed invocation token, but Antigravity registers each skill as a typed `/<skill-name>` slash command in the TUI; community gajae-code is the odd one out — it uses a **colon** form, `/skill:<name>` (e.g. `/skill:deep-interview`), not `/<skill-name>`. Full source-cited table: `docs/compatibility-matrix.md` → **Skill Invocation**. For cross-engine commands, rely on description-triggered invocation as the portable layer and treat the typed token as per-engine sugar.
+## CLI Spawn, Headless Launch, Session Resume
 
-## CLI Spawn And Headless Launch
+Per-runtime spawn commands, headless forms, output-format flags, and resume invocation live in
+[`docs/cli-invocation.md`](docs/cli-invocation.md); the deeper resume semantics (session store, id form,
+capture timing) live in [`docs/compatibility-matrix.md`](docs/compatibility-matrix.md) → **Session Resume**.
 
-When one agent **spawns another** from a script, hook, or orchestrator, use the runtime's documented command for the mode you want — interactive and headless are reached differently. Full tables and citations live in `docs/cli-invocation.md`; resume is covered under **Session Resume** below.
+Three shape facts that trip orchestrators:
 
-| Runtime | Interactive launch | Headless run |
-|---|---|---|
-| Codex | `codex` / `codex "<p>"` (optional `PROMPT` positional, per the CLI reference) | `codex exec "<p>"` |
-| Claude Code | `claude` / `claude "<q>"` | `claude -p "<q>"` |
-| Grok / xAI | `grok` | `grok -p "<p>"` |
-| Hermes | `hermes chat` | `hermes chat -q "<q>"` |
-| Antigravity CLI | `agy` | not documented (use Antigravity SDK) |
-| Cursor CLI | `agent` (the docs now document `agent`; they do not state whether the older `cursor-agent` binary still works) | `agent -p "<p>"` |
-| gajae-code (community) | `gjc` / `gjc --tmux` / `gjc --tmux --worktree <branch>` | not documented (the README dropped `--mode rpc`; external control is the SDK loopback WebSocket or `gjc daemon session`) |
-
-- **The mode switch is not the same shape.** For Claude/Grok/Cursor/Hermes, headless is a **flag** (`-p`/`--print`, or Hermes `-q`) added to the bare interactive command — so interactive = omit the flag. **Codex** is the exception: headless is a separate **subcommand** (`codex exec`), with no print/headless `-p` to drop (Codex's `-p` *is* `--profile`, a config-profile selector — not a prompt flag, so "Codex has no `-p`" is wrong; it has no *headless* `-p`), so a list of only `codex exec …` is *not* "Codex is headless-only". **Antigravity** (`agy`) is TUI-only with **no documented headless one-shot** — run it unattended through the Antigravity SDK, not `agy -p` (which appears only in third-party guides).
-- Output format is not uniform: Codex `--json` (JSONL); Claude/Cursor `--output-format json|stream-json`; Grok `--output-format json`; Hermes and Antigravity document **no** headless JSON flag.
-- Gemini CLI is omitted: **as of 2026-06-18 it has stopped serving** AI Pro/Ultra and free individual users (replaced by Antigravity CLI, `agy`); enterprise/Google Cloud keeps Gemini CLI. See `docs/cli-invocation.md` → transition section.
-
-## Session Resume
-
-Same-platform resume (continue the *same* conversation on the *same* engine, by session id) is officially documented for all four worker runtimes. Per-engine resume invocation, session store, and id form live in `docs/compatibility-matrix.md` → **Session Resume**. The working model:
-
-- The minimum to continue is the **resume locator** (session/thread id) plus the engine's resume invocation: Claude `claude --resume <id>`, Codex CLI `codex resume <id>` (`codex fork [<id>|--last]` branches a past session into a **new** thread; desktop app-server: the `thread/resume` / `thread/fork` methods with the recorded `thread.id`), Grok `grok -r/--resume <id>` (with `--fork-session` to fork the resumed session into a new session id), Hermes `hermes --resume <id>`.
-- Capture the locator **before the worker exits**, keyed by `cwd` (the most stable signal every engine exposes). Session stores differ — Claude/Codex/Grok keep per-session transcript/rollout files; **Hermes keeps history in SQLite `~/.hermes/state.db`**, so a file scan of `~/.hermes/sessions/` (which holds only API error dumps) finds nothing resumable.
-- **Antigravity CLI** (`agy`, the Gemini CLI successor) resumes into the TUI only: `agy -c` / `agy --continue` (most recent in the workspace) or `agy --conversation <conversation-id>`; conversations are **workspace-scoped** (it lists only sessions started in that cwd). `-c` resolves through a documented workspace-keyed cache map, `~/.gemini/antigravity-cli/cache/last_conversations.json` — the one Antigravity session store the docs state.
-- **gajae-code** documents **no** session-id resume command; it persists per-session evidence under a project `.gjc/` dir and isolates work with git worktrees (`gjc --tmux --worktree <branch>`), but worktree isolation is not the same as id-keyed resume — treat resume as `not documented`.
-- **Cross-engine moves** (resume one engine's session under a *different* engine) are a separate, harder problem and out of scope here — keep them off the same-platform path.
-- When a runtime does not document resume, record `not documented` and require live verification before shipping.
+- **The mode switch is not the same shape.** Claude/Grok/Cursor/Hermes reach headless by adding a flag to the bare interactive command; **Codex** uses a separate subcommand (`codex exec`) — its `-p` is `--profile`, not a prompt flag. **Antigravity** (`agy`) is TUI-only with no documented headless one-shot; drive it through the Antigravity SDK.
+- **Capture the resume locator before the worker exits**, keyed by `cwd`. Session stores differ — Hermes keeps history in SQLite (`~/.hermes/state.db`), so scanning `~/.hermes/sessions/` finds nothing resumable.
+- **Cross-engine resume** (resuming one engine's session under another) is a different, harder problem — keep it off the same-platform path.
 
 ## Model Lineup
 
-Which models each runtime **currently ships** — the exact ids a caller selects today, their reasoning/effort tiers, and which models the vendor has **retired** — drifts on its own cadence (a new frontier model or a retirement lands independently of any skill/hook/CLI change). The detailed, source-cited record lives in `docs/models/` (one file per runtime, each with a `Last reviewed:` stamp and its official URL); this is the short working model:
+Which models each runtime currently ships, their effort tiers, and what the vendor retired drifts on its
+own cadence. The source-cited record is [`docs/models/`](docs/models/) — one file per runtime, each with a
+`Last reviewed:` stamp and its official URL.
 
-- **Claude / Claude Code** — current: Fable 5 (`claude-fable-5`), Opus 4.8 (`claude-opus-4-8`), Sonnet 5 (`claude-sonnet-5`), Haiku 4.5 (`claude-haiku-4-5`, id `claude-haiku-4-5-20251001`). Legacy: Opus 4.7 (→ 4.8) and Sonnet 4.6 (→ 5); `claude-opus-4-1-20250805` is deprecated, retiring 2026-08-05. Reasoning is **adaptive thinking** on the current generation (Haiku 4.5: extended thinking); the `--effort` labels (`low`, `medium`, `high`, `xhigh`, `max`, `ultracode`) are a Claude Code caller-layer selector, not distinct vendor models. The Mythos pair (`claude-mythos-5`, `claude-mythos-preview`) is documented but invitation-only (not GA) — do not treat it as spawnable.
-- **Codex** — current recommended family: `gpt-5.6` (the page shows the bare id only as a CLI example, not as a labelled default), with explicit Sol/Terra/Luna selectors `gpt-5.6-sol`, `gpt-5.6-terra`, and `gpt-5.6-luna`; `gpt-5.5` is now previous-generation, `gpt-5.4` / `gpt-5.4-mini` remain under "Other models", and `gpt-5.3-codex-spark` is still a text-only research preview. `gpt-5.2` and `gpt-5.3-codex` are deprecated. Reasoning effort is selected separately (Low through Ultra); `model_reasoning_effort` + `service_tier` stay config knobs.
-- **Grok** — current: `grok-4.5` (500k context; its detail page states `Reasoning: Yes`), plus the Grok Voice API and Imagine image/video APIs. `grok-4.3`, the `grok-4.20-0309-reasoning` / `-non-reasoning` / `-multi-agent-0309` trio (1M context), and `grok-build-0.1` (256k) are shown again in the pricing table — which is the only model list the page has. Effort is documented at the **CLI layer only** — the CLI reference lists a common flag `--effort <LEVEL>` ("Reasoning effort") without enumerating the levels — while the models page documents **no** `effort`/`reasoning_effort` API or model parameter; at the model level the `grok-4.20-0309-reasoning` / `-non-reasoning` pre-built variant pair remains the only reasoning split.
-- **Gemini-Antigravity** — provider-routed; ids verified against Google's official model page (<https://ai.google.dev/gemini-api/docs/models>, page last-updated 2026-07-16).
-- **Hermes** — router-routed; ids seeded from downstream catalogs and `unverified this run` against the vendor page. Hermes selects **upstream** provider models rather than shipping its own.
-- **Cursor** — mixed: it ships **Cursor-owned** models (Composer 2.5 — "Cursor's own model, trained to be highly capable for agentic coding" — plus Composer 1, and Grok 4.5 jointly trained with SpaceXAI) *and* routes to third-party families (Anthropic, OpenAI, Google, GLM 5.2, Kimi K2.7 Code), with `Auto` as the default (`Auto` is described in the page's prose, not listed as a row of the pricing table). It is not a pure router.
-
-**SSoT boundary — this folder does not own everything model-shaped.** It owns *current shipping ids + tiers + retirement status*, verified against each vendor's official model page. It does **not** own: **pricing/limits** (the `claude-api` skill and vendor pricing pages), the **Kuma Studio spawnable catalog** (`packages/shared/team.json` `modelCatalog` — a *downstream consumer* that syncs from these lineups, never the reverse), or **naming/phonetic-gloss standards** (the Kuma vault `domains/model-frontier.md`). Link to those; do not duplicate. When a value cannot be confirmed against the official doc in a run, mark it `unverified this run` and leave it for the next daily pass — never substitute a guess or a non-vendor mirror.
+**SSoT boundary — this folder does not own everything model-shaped.** It owns *current shipping ids +
+tiers + retirement status*, verified against each vendor's official model page. It does **not** own
+**pricing/limits** (the `claude-api` skill and vendor pricing pages), the **Kuma Studio spawnable
+catalog** (`packages/shared/team.json` `modelCatalog` — a downstream consumer that syncs from these
+lineups, never the reverse), or **naming/phonetic-gloss standards** (the Kuma vault
+`domains/model-frontier.md`). Link to those; do not duplicate. A value that cannot be confirmed against
+the official doc in a run is `unverified this run` — never a guess or a non-vendor mirror.
 
 ## Project Instruction Files
 
-Do not assume every non-Claude runtime reads `AGENTS.md`. Use the officially documented project-instruction filename for the target runtime:
+Do not assume every non-Claude runtime reads `AGENTS.md`. The per-runtime filenames **and** their loading
+mechanics (ancestor walk-up, subdirectory discovery, eager vs on-demand, size caps) are owned by
+[`docs/compatibility-matrix.md`](docs/compatibility-matrix.md) → **Project Instruction File Loading**.
 
-| Runtime | Official project instruction/context files |
-|---|---|
-| Codex | `AGENTS.override.md`, `AGENTS.md`, then configured `project_doc_fallback_filenames` |
-| Claude Code | `CLAUDE.md`, `.claude/CLAUDE.md`, `CLAUDE.local.md`, and `.claude/rules/`; Claude docs explicitly say Claude reads `CLAUDE.md`, not `AGENTS.md` |
-| Grok / xAI | `AGENTS.md`, `Agents.md`, `AGENT.md`, `CLAUDE.md`, `Claude.md`, `CLAUDE.local.md`, plus `.grok/rules/` (and `.claude/rules/`, `.cursor/rules/` for compatibility); global rules in `~/.grok/`, then repo root down to cwd, deeper wins; `.gitignore`d files are skipped |
-| Hermes Agent | `.hermes.md` / `HERMES.md`, then `AGENTS.md`, then `CLAUDE.md`, then `.cursorrules` — the documented first-match chain ends there; `.cursor/rules/*.mdc` is a recognized file (CWD only) but is not part of the chain. `SOUL.md` is global identity, not project instructions |
-| Antigravity CLI (was Gemini CLI) | Reads `GEMINI.md` and `AGENTS.md` (global `~/.gemini/GEMINI.md`); Gemini CLI's `GEMINI.md` hierarchical memory is the legacy form |
-| Cursor CLI | `.cursor/rules`, plus project-root `AGENTS.md` and `CLAUDE.md` |
-| Kuma Studio | `AGENTS.md` and `CLAUDE.md` are parallel repo SSoT files for shared rules |
-| gajae-code (community) | not documented — README does not document an instruction-file loader (`AGENTS.md`/`CLAUDE.md`/`GEMINI.md`); user config is `~/.gjc/config.yml`, per-project state lives in `.gjc/` |
+Two authoring consequences:
 
-For cross-agent repo rules, maintain the smallest set of files that each runtime actually reads. In Kuma-style Codex/Claude/Grok/Hermes repos, that usually means repo-owned `AGENTS.md` plus a `CLAUDE.md` import/symlink or Claude-specific wrapper; add `GEMINI.md` only when Antigravity CLI (or legacy Gemini CLI) is a supported runtime.
-
-**The filename is only half the contract — *loading mechanics* differ per engine** along two axes: ancestor walk-up (climb cwd → root, merging every file passed) and subdirectory discovery (nested files below cwd, loaded upfront vs on-demand). Full source-cited comparison: `docs/compatibility-matrix.md` → **Project Instruction File Loading**. The working model:
-
-- **Claude Code** loads ancestor `CLAUDE.md`/`CLAUDE.local.md` from cwd up to the filesystem root **in full at launch** (concatenated root → cwd, closer-to-cwd wins), and discovers nested subdirectory `CLAUDE.md` **on-demand** when it reads files there (not re-injected after `/compact` until that dir is touched again). So it is *not* "just root + cwd" — it is the whole ancestor chain eagerly plus the descendant tree lazily.
-- **Codex** walks *root → down to cwd*, ≤ 1 file per dir, concatenated with closer files overriding, built **once per run** under a 32 KiB cap — and has **no subdirectory lookahead** (never reads below cwd).
-- **Gemini / Antigravity** concatenates global + ancestor + the **entire subtree below cwd** into the prompt sent with **every request** (`.gitignore`-aware) — always in context, not lazy like Claude.
-- **Hermes** loads a **single** project file (first match: `.hermes.md` → `AGENTS.md` → `CLAUDE.md` → `.cursorrules`, no merge; `.cursor/rules/*.mdc` is recognized but sits outside the documented priority chain) but does on-demand discovery of the dir + 5 parents (each checked at most once per session) during file ops.
-- **Grok** loads global `~/.grok/` rules, then **every** directory from the repo root down to cwd (cwd only outside a git repo), with **deeper files taking precedence on conflicts**. Unlike Hermes it does *not* stop at the first match — it reads **every** matching name in a directory, across a six-name family (`AGENTS.md`, `Agents.md`, `AGENT.md`, `CLAUDE.md`, `Claude.md`, `CLAUDE.local.md`) plus `.grok/rules/` (`.claude/rules/`, `.cursor/rules/` for compat). It is the one runtime that **honors `.gitignore` for rules**, which is what keeps `CLAUDE.local.md` personal and out of shared context. `grok inspect` lists what was discovered, with token counts.
-- **Cursor** documents project-root `AGENTS.md`/`CLAUDE.md` only; tree-walk/merge is **not documented**.
-
-Implication for cross-engine repos: a module-specific instruction placed in a deep subdirectory is seen eagerly by Gemini, lazily by Claude/Hermes, and **never** by Codex (below cwd) — keep anything Codex must obey at or above the launch directory.
-
-**Symlink the wrapper, edit only the canonical file.** When `CLAUDE.md`/`GEMINI.md` are symlinks to a repo-owned `AGENTS.md`, reads resolve correctly — every runtime sees the canonical content, and git stores the link as mode `120000` (a pointer, not a copy; both links share one blob). But Claude Code's Edit/Write **refuses to write through a symlink** (`Refusing to write through symlink ... pass the real target path explicitly`, verified 2026-06-05), so edits must target the real `AGENTS.md`; treat the symlinks as read-only. This is a feature, not a limitation: it stops an atomic-save from silently swapping the link for a divergent regular file, so the SSoT cannot drift. Use **relative** symlinks (`ln -s AGENTS.md CLAUDE.md`, never an absolute path) so they survive clone/move. Caveat: a Windows checkout without `core.symlinks` materializes the link as a plain text file — use a one-line stub+pointer instead of a symlink when a Windows runtime is in scope.
+- **Placement follows the weakest reader.** A module-specific instruction in a deep subdirectory is seen eagerly by Gemini/Antigravity, lazily by Claude/Hermes, and **never** by Codex (it does not read below cwd). Keep anything Codex must obey at or above the launch directory. Hermes is single-file first-match and does not merge, so the canonical content must live in the file Hermes actually picks.
+- **Symlink the wrapper, edit only the canonical file.** When `CLAUDE.md`/`GEMINI.md` are symlinks to a repo-owned `AGENTS.md`, every runtime reads the canonical content and git stores mode `120000` (a pointer, not a copy). Claude Code's Edit/Write **refuses to write through a symlink** (verified 2026-06-05), which is the feature: an atomic save cannot silently replace the link with a divergent regular file, so the SSoT cannot drift. Use **relative** links (`ln -s AGENTS.md CLAUDE.md`) so they survive clone/move. A Windows checkout without `core.symlinks` materializes the link as a plain file — use a one-line stub+pointer instead when a Windows runtime is in scope.
 
 ## Core Rules
 
-- Pick one canonical repo path first. Installed copies under `~/.claude/skills` and `~/.agents/skills` must be symlinks or generated config entries.
-- **Registration goes through the umbrella manifest, `skills.json`, and nothing else.** In the `agent-extensions` umbrella, `skills.json` is the single record of *which* skill installs from *which* canonical path; `scripts/install/install-local.mjs` reads it and generates the symlinks into every engine's skill root. Adding a skill = adding one entry there, then re-running the installer. Do **not** register a skill by hand-symlinking it into an engine root or by adding an engine-config entry (e.g. Codex `~/.codex/config.toml` `[[skills.config]]`) — that is a second registration channel and it drifts. This skill states the *conventions*; `skills.json` is the *data* that applies them; the installer is what *executes* them.
-- **A skill whose repo also builds artifacts must point its manifest `path` at the skill subfolder, not the repo root.** Runtimes scan the whole skill root recursively — Codex walks `~/.agents/skills` under a traversal budget and aborts with `skills scan reached its traversal limit` when one folder is oversized — so a repo root that carries a build cache (`target/`, `node_modules/`, `dist/`) gets swept into the scan and can starve discovery of *other* skills. Link the minimal skill folder inside the repo (`<repo>/skills/<name>/` or the runtime-native subpath) so the build tree stays outside the scan root; the repo itself, its build, and its upstream remote are untouched. Precedent: `kordoc` links `kordoc/plugins/kordoc/skills/kordoc/`, not its repo root. (This is a refinement of "one canonical repo path", not a `skills/` index in the umbrella root — that remains banned below.)
-- Do not edit home-directory installed copies directly.
-- Do not keep separate Claude and Codex versions unless a difference is explicitly documented and tested.
-- Name the package layer explicitly before editing: skill-only, hook-only, plugin-like package, or generated runtime plugin. Do not let a `SKILL.md` entrypoint hide installer, hook, or trust-boundary changes.
-- Keep `SKILL.md` body under 500 lines — a performance guideline, **not** a hard loading cap. Anthropic's [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) say "Keep SKILL.md body under 500 lines for optimal performance": once loaded, every line competes with conversation history and other context. Put deterministic behavior in scripts; move scenario-specific detail into `docs/*.md` linked **one level deep** from `SKILL.md` (progressive disclosure — Anthropic's page names the folder `reference/`; here it is `docs/`, see Skill Document Topology).
-- `name`: max 64 chars, lowercase/numbers/hyphens only, no XML tags, no reserved words (`anthropic`, `claude`); prefer gerund form (`processing-pdfs`). `description`: max 1024 chars, no XML tags, third person, stating both *what* the skill does and *when* to use it (trigger terms) — not the procedure.
-- **Quote the `description` if it contains a colon-space (`: `), or the skill silently fails to load.** A `: ` in an unquoted YAML scalar is parsed as a nested mapping → `mapping values are not allowed in this context`. Common trap: `description: ... Korean triggers: 원샷, ...`. Wrap the whole value in single quotes (`description: '...'`); double inner single-quotes, double-quotes are fine inside. Validate frontmatter parses before shipping.
-- Hooks are guardrails, not silent fallback paths. They should block clearly, explain why, and require an explicit operator decision for dangerous actions.
-- **Do not re-implement a slash surface in a host layer above the engine.** A GUI/terminal wrapper that intercepts keystrokes to fake `/command` creates a second input path that must re-derive session context (current target resolution, ambiguity handling) the engine-side skill already has, and it standardizes on one invocation token where runtimes differ (Claude/Grok `/name` vs Codex `$name` — see Runtime Coverage above). Forward typed input to the engine verbatim and ship the capability as a skill + CLI; reserve host-level interception for things no engine surface can do.
-- Cross-agent guidance must be based on official vendor docs. If a platform does not document a feature, record it as `not documented` or `unknown`; do not infer parity from another agent.
-- **Make hook scripts executable (`chmod +x`) and give them a shebang.** Claude runs a hook in one of two documented forms: with `args` set the `command` is **spawned directly as an executable with no shell**; with `args` omitted the whole `command` string is **passed to a shell** (`sh -c`, Git Bash on Windows, or PowerShell). Either way the executable path itself must be runnable, so a missing exec bit fails with `Permission denied` on *every* matching event (PreToolUse/Stop) in *every* session — one forgotten `chmod +x` silently breaks all agents at once. Codex registers as `node <path>` so it tolerates a missing bit, but always `chmod +x` for parity and **commit the mode** (git stores `100755`). Use the `args` form on Claude when you want to avoid shell quoting entirely.
-- **Hook scripts must not assume GNU coreutils.** macOS ships neither `timeout` nor `stat -c`; a hook that calls them unguarded fails on *every* macOS agent — and a fail-closed `|| exit 0` turns that into a silent no-op that looks like "working but quiet". Detect and degrade (`command -v timeout || gtimeout || plain`) and use portable forms (`stat -f %m || stat -c %Y`).
-- **Keep history out of doc bodies.** Changelog narrative — what was added/changed/removed and when — lives in `CHANGELOG.md` plus the git tag (the version SSoT), never accreting in `SKILL.md` or `docs/*` prose. A doc body states the **current** truth only; when a fact changes, replace it, don't append the old one. The one exception is a *verification* stamp (`Last reviewed: YYYY-MM-DD`, `verified YYYY-MM-DD`): that is provenance for a live claim, not history. This is what keeps a daily-refreshed wiki from turning into a changelog as it is re-verified. **A freshness stamp must advance when the claim is re-verified, even if the wording is unchanged** — for a *time-sensitive status claim* (a status that can flip: billing paused/resumed/cancelled, an announced-but-not-yet-effective cutoff, any "currently X" status), re-confirming it on a new date *is* the update; a still-true status whose stamp is months old reads as wrong. A blanket "no content change → touch nothing" refresh rots exactly these claims, so carve them out.
+Each rule's rationale, measured evidence, and the failure it was written against live in
+[`docs/authoring-rules.md`](docs/authoring-rules.md). The rules themselves:
+
+- **One canonical repo path.** Installed copies under `~/.claude/skills` / `~/.agents/skills` are symlinks or generated config entries. Never edit an installed home copy.
+- **Registration goes through the umbrella manifest `skills.json`, and nothing else.** Adding a skill = one entry there plus a re-run of `scripts/install/install-local.mjs`. Hand-symlinking into an engine root, or adding an engine-config entry (Codex `[[skills.config]]`), is a second registration channel and it drifts.
+- **A repo that also builds artifacts registers its skill subfolder, not its repo root** (`<repo>/skills/<name>/`). Runtimes scan the skill root recursively under a traversal budget — a `target/`/`node_modules/`/`dist/` swept into the scan can starve discovery of *other* skills.
+- **No separate Claude and Codex versions** unless the difference is explicitly documented and tested.
+- **Name the package layer before editing** — skill-only, hook-only, plugin-like package, or generated runtime plugin. A `SKILL.md` entrypoint must not hide installer, hook, or trust-boundary changes.
+- **Keep the `SKILL.md` body under 500 lines** — a performance guideline, not a loading cap. Deterministic behavior goes in scripts; scenario-specific detail goes into `docs/*.md` linked one level deep.
+- **Frontmatter limits.** `name`: ≤64 chars, lowercase/numbers/hyphens, no XML tags, no reserved words (`anthropic`, `claude`), gerund preferred. `description`: ≤1024 chars, no XML tags, third person, stating both *what* and *when* (trigger terms) — not the procedure.
+- **Quote a `description` containing a colon-space (`: `) or the skill silently fails to load** — unquoted YAML parses `: ` as a nested mapping. Wrap the value in single quotes and confirm the frontmatter parses before shipping.
+- **Hooks are guardrails, not silent fallback paths.** Block clearly, explain why, require an explicit operator decision for dangerous actions.
+- **Do not re-implement a slash surface above the engine.** A host wrapper faking `/command` builds a second input path that must re-derive session context, and it standardizes one invocation token where runtimes differ. Forward typed input verbatim; ship the capability as skill + CLI.
+- **Cross-agent claims come from official vendor docs.** Undocumented = `not documented` / `unknown`, never inferred parity.
+- **`chmod +x` every hook script and give it a shebang**, and commit the mode (`100755`). A missing exec bit fails with `Permission denied` on every matching event in every session.
+- **Hook scripts must not assume GNU coreutils.** macOS ships neither `timeout` nor `stat -c`; a fail-closed `|| exit 0` turns that into a silent no-op that looks green. Detect and degrade (`command -v timeout || gtimeout`), use portable forms (`stat -f %m || stat -c %Y`).
+- **Keep history out of doc bodies.** Changelog narrative belongs in `CHANGELOG.md` plus the git tag; a doc body states the current truth only. The one exception is a *verification* stamp (`Last reviewed: YYYY-MM-DD`) — provenance for a live claim. **A freshness stamp must advance when a time-sensitive status claim is re-verified even if the wording is unchanged**; a blanket "no content change → touch nothing" refresh rots exactly those claims.
 
 ## Skill Document Topology
 
-**A `SKILL.md` body is a topology, not a manual.** It carries what the model needs in order to *route*: what the skill is for, the command surface, and one pointer per concern to the sub-document that owns it. Everything else lives in a sibling file and is named from the body in a single line.
+**A `SKILL.md` body is a topology, not a manual.** It carries what the model needs in order to *route*:
+what the skill is for, the command surface, and one pointer per concern to the sub-document that owns it.
 
-What must **not** accrete in the body:
-
-- **History** — changelog narrative, incident write-ups, "we used to do X", dated decision records. Goes to `CHANGELOG.md` (see *Keep history out of doc bodies* in Core Rules).
-- **Architecture and rationale** — why the design is what it is, subsystem internals, data-flow prose. Goes to `docs/<topic>.md`.
-- **Per-feature procedure** — the step-by-step for one mode among several. Goes to `docs/<feature>.md`.
-
-What stays in the body: purpose and trigger scope, the command/verb surface, rules short enough to state once and never expand, and a pointer line per sub-document.
-
-**Sub-documents go in `docs/`, not `references/`.** A reference is material you *look things up in* — vendor API tables, payload schemas, source-cited matrices. Instruction prose telling an agent what to do is not a reference, and naming it one makes the folder lie about its contents. Put instruction bodies in `docs/<feature>.md`; keep `references/` for genuine lookup material, and omit it when the skill has none.
-
-**Split by feature, not by line count.** Splitting on size alone produces `part-1.md` / `part-2.md`, which is a worse index than the un-split original. The trigger is a *second* concern's procedure landing in the body: at that point the body becomes the topology and each concern moves to its own `docs/` file.
-
-**A split must shrink the body.** Moving content out and leaving a condensed restatement behind creates two sources of truth that drift apart on the next edit. What remains is a **one-line pointer**, not a summary. Verify by line count before and after: **the body must drop**. Do not judge by the total — an honest split grows it by one title-and-provenance header per new file (measured 2026-07-26: eight files, +32 lines of header, +12 of pointer, against a body that fell 325), so a total-grew test fails every correct split. **The discriminator is whether a moved body line now exists in two places.** Check it by diffing the moved lines against what stayed: zero lost, zero duplicated. If a line lives in both, that is a copy, not a split.
+- **Must not accrete in the body:** history (changelog narrative, incident write-ups, dated decisions → `CHANGELOG.md`), architecture and rationale (→ `docs/<topic>.md`), per-feature procedure (→ `docs/<feature>.md`).
+- **Stays in the body:** purpose and trigger scope, the command/verb surface, rules short enough to state once and never expand, and one pointer line per sub-document.
+- **Sub-documents go in `docs/`, not `references/`.** A reference is material you look things up in — vendor tables, payload schemas, source-cited matrices. Instruction prose telling an agent what to do is not a reference, and naming it one makes the folder lie.
+- **Split by feature, not by line count.** Splitting on size alone produces `part-1.md`/`part-2.md`, a worse index than the un-split original. The trigger is a *second* concern's procedure landing in the body.
+- **A split must shrink the body.** What remains is a **one-line pointer, not a summary** — a condensed restatement is a second source of truth that drifts on the next edit. Judge by the body's line count, not the total: an honest split grows the total by one header per new file. **The discriminator is whether a moved line now exists in two places** — diff the moved lines against what stayed: zero lost, zero duplicated.
 
 ## Recommended Layout
 
@@ -240,125 +190,37 @@ Daily refresh automation must read the source manifest, fetch only official URLs
 
 ## Engine × Home Is A Product, And It Must Be Enumerated By A Machine
 
-A hook policy change is never done on one engine. It is also never done on one *home*: an engine's registration surface is `engine × home`, and the second factor is the one people drop.
+A hook policy change is never done on one engine, and never on one *home*: the registration surface is
+`engine × home`, and the second factor is the one people drop. This skill already said "cover every
+engine" and the drift kept happening anyway (수홍 2026-07-23) — so it is no longer a rule an author
+follows, it is a check a machine runs. Prose cannot enumerate a product that changes when an account is
+added. Full rationale and the measured incidents: [`docs/authoring-rules.md`](docs/authoring-rules.md).
 
-> 훅 작업할 때 엔진 빼먹으면 안 돼, skill-hook-authoring 으로 관리함에도 드리프트 계속 발생 (수홍, 2026-07-23)
-
-That sentence is the reason this section exists. **This skill already said "cover every engine" and the drift kept happening anyway**, so the rule is no longer a rule an author follows — it is a check a machine runs. Prose cannot enumerate a product that changes when an account is added.
-
-**The contract.**
-
-- **Enumerate homes by DERIVATION, never by a hand-kept list.** A written list rots the moment an account is registered, and the failure is silent. Derive from the routing contract — a home is a hook surface **iff the spawner points the engine at it**. In Kuma Studio that source is `ENGINE_ACCOUNT_ENV` (`packages/shared/engine-resume-provider.mjs`): Codex → `CODEX_HOME`, Grok → `GROK_HOME`.
-- **An engine's absence from that map is itself a claim, and it must be read.** Claude is deliberately absent: its account switch swaps the *global* credential and `CLAUDE_CONFIG_DIR` is stripped from the spawn env, so every Claude session reads the default home and the per-account directories are **credential stores, not hook surfaces**. Scanning the filesystem instead of the routing contract would invent ten phantom Claude homes and train everyone to ignore the guard.
-- **An isolated account home IS the config root.** `CODEX_HOME`/`GROK_HOME` hold `hooks.json` directly — there is no `.codex`/`.grok` segment to join. Addressing them with a `$HOME`-shaped joiner is exactly how a profile home kept a stale registration (2026-07-23: a Codex profile home pinned to a worktree path with bare `node`).
-- **The same policy means different things per engine — write down which, do not assume parity of semantics.** Grok's Stop hook is passive ("Only PreToolUse can block"), so a Stop-based guard that blocks on Claude/Codex only *observes* on Grok. Registration parity and enforcement parity are two different claims.
-- **A home you could not read is `unknown`, never "matches."** Not measured is not equal. A corrupt or unreadable config must surface as its own verdict and must not be summarised away by a drifted-but-readable sibling.
+- **Enumerate homes by DERIVATION, never a hand-kept list.** A home is a hook surface **iff the spawner points the engine at it**. In Kuma Studio that source is `ENGINE_ACCOUNT_ENV` (`packages/shared/engine-resume-provider.mjs`): Codex → `CODEX_HOME`, Grok → `GROK_HOME`.
+- **An engine's absence from that map is itself a claim, and it must be read.** Claude is deliberately absent — its account switch swaps the global credential and `CLAUDE_CONFIG_DIR` is stripped from the spawn env, so the per-account directories are credential stores, not hook surfaces. Scanning the filesystem instead would invent phantom homes.
+- **An isolated account home IS the config root** — `CODEX_HOME`/`GROK_HOME` hold `hooks.json` directly, with no `.codex`/`.grok` segment to join.
+- **The same policy means different things per engine.** Grok's Stop hook is passive ("Only PreToolUse can block"), so a Stop-based guard that blocks on Claude/Codex only *observes* on Grok. Registration parity and enforcement parity are two different claims.
+- **A home you could not read is `unknown`, never "matches."** Not measured is not equal.
 - **Drift fails loudly.** A parity check that passes quietly on a surface it skipped is worse than no check.
 
-**The machine (Kuma Studio).** `npm run hooks:parity` (`scripts/check-hook-parity.mjs`) judges every discovered `engine × home` against the canonical policy, and `npm run skill:doctor` runs it on every sweep. A commit touching `scripts/hooks/` or `scripts/install/` is gated on it by the repo pre-commit hook. Its oracle is the installer itself — the canonical policy is applied to a throwaway copy and the config is canonical iff nothing moved — so there is no second description of "canonical" to drift from.
+**The machine (Kuma Studio).** `npm run hooks:parity` judges every discovered `engine × home` against the
+canonical policy; `npm run skill:doctor` runs it on every sweep, and commits touching `scripts/hooks/` or
+`scripts/install/` are gated on it. Its oracle is the installer itself — the canonical policy is applied
+to a throwaway copy and the config is canonical iff nothing moved — so there is no second description of
+"canonical" to drift from. Other runtimes should copy the *shape*, not the paths.
 
-Other runtimes should copy the *shape*, not the paths: derive the home set from whatever routes sessions, judge each home with the installer's own logic, and never let an unmeasured surface report green.
+## Hook Payload And Decision Contract
 
-## Hook Payload Pattern
+The shared Claude/Codex `PreToolUse`/`PostToolUse` input schema, the decision output schema (modern
+`hookSpecificOutput` and the legacy form), the Codex fields that are parsed-but-unsupported and which
+failure mode each has, and Codex hook registration shape are all in
+[`docs/hook-contract.md`](docs/hook-contract.md).
 
-Claude Code and Codex CLI use the **same input schema** for `PreToolUse` / `PostToolUse` hooks. A Bash tool call arrives as:
-
-```json
-{
- "session_id": "abc123",
- "prompt_id": "prompt_abc123",
- "transcript_path": "~/.claude/projects/.../transcript.jsonl",
- "cwd": "/Users/me/project",
- "permission_mode": "default",
- "hook_event_name": "PreToolUse",
- "tool_name": "Bash",
- "tool_use_id": "toolu_...",
- "tool_input": {
- "command": "npm install foo",
- "description": "Install foo",
- "timeout": 120000
- }
-}
-```
-
-Notes:
-
-- `tool_input.command` — the shell command. Use this single field; do not read from `.input.command`, `.arguments.command`, or other variants.
-- `cwd`, `session_id`, `prompt_id`, `transcript_path`, `permission_mode`, `hook_event_name`, `tool_name`, `tool_use_id` are all **top-level**, not under `tool_input`. Reading `tool_input.cwd` returns nothing.
-- `permission_mode` is one of `default`, `plan`, `acceptEdits`, `auto`, `dontAsk`, `bypassPermissions`.
-- Both engines share this schema. Codex additionally provides `turn_id` and `model`.
-
-## Hook Decision Output
-
-Claude Code and Codex use the **same decision schema** for `PreToolUse`. Pick one of these to block:
-
-Modern (recommended):
-
-```json
-{
- "hookSpecificOutput": {
- "hookEventName": "PreToolUse",
- "permissionDecision": "deny",
- "permissionDecisionReason": "safedeps: install not approved — run `safedeps check ...` first"
- }
-}
-```
-
-Legacy (still supported by both engines):
-
-```json
-{"decision": "block", "reason": "safedeps: install not approved ..."}
-```
-
-`permissionDecision` accepts `"allow" | "deny" | "ask" | "defer"` on Claude Code. Official Codex hooks docs document only `"allow"` and `"deny"` for `PreToolUse`, and `"defer"` is not documented for Codex at all. Codex parses several other fields but does not implement them — know which failure mode each has:
-
-- **Handler kinds** — only `type: "command"` runs; `prompt` and `agent` handlers are parsed but skipped. `async` is parsed but async command hooks are unsupported, so those handlers are skipped too.
-- **PreToolUse** — `permissionDecision: "ask"`, the legacy `decision: "approve"`, `continue: false`, `stopReason`, and `suppressOutput` are parsed but not supported: the hook run is **marked failed and the tool call continues**.
-- **PostToolUse** — `updatedMCPToolOutput` and `suppressOutput` are parsed but not supported.
-- **PermissionRequest** — `updatedInput`, `updatedPermissions`, and `interrupt` are **reserved and fail closed today**, a different failure mode from the "marked failed, call continues" fields above. Codex's `PermissionRequest` hook otherwise uses a `behavior` field (`"allow"`/`"deny"` with an optional `message`), not `permissionDecision`.
-
-`hookSpecificOutput` may also carry `updatedInput` (replace the tool input before it runs) and `additionalContext` (inject context for the model). For **allow**, exit 0 with no output is sufficient; or emit `permissionDecision: "allow"` explicitly.
-
-**Do not use `{"continue": false, "stopReason": "..."}` for PreToolUse** — that is the schema for the `Stop` hook (final-exit block), not for PreToolUse. Same applies to `{"continue": true}` as an allow signal. Mixing them up silently fails closed or open depending on the engine version.
-
-For `PostToolUse` block (prevent normal post-processing), use `{"decision": "block", "reason": "..."}` on both engines.
-
-## Codex hook registration
-
-`~/.codex/hooks.json` shape (or inline `[hooks]` in `~/.codex/config.toml`):
-
-```json
-{
- "hooks": {
- "PreToolUse": [
- {
- "matcher": "^Bash$",
- "hooks": [
- { "type": "command", "command": "~/.agents/skills/<id>/scripts/<hook>.sh", "timeout": 30 }
- ]
- }
- ],
- "PostToolUse": [
- {
- "matcher": "^Bash$",
- "hooks": [
- { "type": "command", "command": "~/.agents/skills/<id>/scripts/<hook>.sh", "timeout": 30 }
- ]
- }
- ]
- }
-}
-```
-
-Claude `~/.claude/settings.json` uses the same `hooks.PreToolUse[].hooks[]` shape. Idempotent installers should match on the canonical `command` string and skip if already present.
-
-**Matcher semantics: wildcards now agree, per-event honoring does not.** **Codex matchers are regex strings** (`^apply_patch$`, `Edit|Write`, `mcp__filesystem__.*`), but Codex special-cases the wildcard forms: `"*"`, `""`, or omitting `matcher` entirely matches every occurrence of a supported event — the same as Claude. So a Claude-style `"*"` matcher ports to Codex unchanged, and the old matcher-syntax divergence is gone. What still differs is **which events honor `matcher` at all**: on Codex, `UserPromptSubmit` and `Stop` ignore any configured matcher, so scope those hooks inside the script rather than by matcher.
-
-Codex tool coverage (verified 2026-06-22 against <https://learn.chatgpt.com/docs/hooks>): PreToolUse intercepts **Bash, `apply_patch` file edits, and MCP tool calls**, and a denying PreToolUse prevents the blocked `apply_patch` file from being created (`openai/codex#16732` fixed; PR `#18391`). The earlier "Bash only" behavior is obsolete — do **not** assume apply_patch is unhookable. Three things still bite, so design accordingly:
-
-- **Shell coverage is partial — "only the simple ones".** The official docs state PreToolUse "doesn't intercept all shell calls yet, only the simple ones" (and excludes WebSearch and other non-shell tools), so a compound/complex shell invocation can still slip past a Bash `PreToolUse` guard. Treat a Bash hook as best-effort, not a complete shell gate.
-- **Field shape differs per tool.** Bash and apply_patch carry `tool_input.command`; Write/Edit/MultiEdit carry `tool_input.file_path`; MCP tools send their own args. For `apply_patch` the target path lives in the patch body's `*** Add/Update/Delete File: <path>` header lines, **not** a `file_path` field — read the right field and gate on `tool_name`. Scanning the whole `tool_input` blob over-blocks (it matches the path string appearing in *content*, reads, or even the hook script itself).
-- **Coverage can still be inconsistent across tool handlers** on some versions (`openai/codex#20204`); very old Codex fired hooks for `Bash` only. Verify on the *target* Codex version rather than assuming.
+The three that cause silent breakage: `tool_input.command` is the only command field (`cwd`,
+`session_id`, `tool_name` are **top-level**, not under `tool_input`); `{"continue": false, "stopReason"}`
+is the **Stop** hook schema and fails open or closed if used for `PreToolUse`; and on Codex a Bash
+`PreToolUse` guard is best-effort — the docs say it intercepts "only the simple ones" — so never treat it
+as a complete shell gate.
 
 ## Validation Checklist
 

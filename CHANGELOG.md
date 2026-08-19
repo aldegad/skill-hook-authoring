@@ -5,6 +5,23 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## Unreleased — 2026-08-20
+
+- **`SKILL.md` 48.1KB → 24.0KB, applying this package's own Skill Document Topology rule to itself.**
+  The body had grown into a condensed restatement of the wiki it points at: Runtime Coverage,
+  CLI Spawn, Session Resume, Model Lineup, and Project Instruction Files each carried a summary
+  table of what `docs/compatibility-matrix.md`, `docs/cli-invocation.md`, and `docs/models/`
+  already own source-cited. By the package's own discriminator those lines existed in two
+  places, so they are deleted rather than moved — what remains per section is a pointer plus
+  only the consequences an *author* acts on (invocation token is per-engine sugar; Codex never
+  reads below cwd; edit the canonical file, not the symlink wrapper).
+- **Two genuine splits.** The hook payload/decision/registration schemas move to
+  `docs/hook-contract.md` (lookup material, the one legitimate reference shape), and the
+  rationale behind Core Rules + Engine × Home moves to `docs/authoring-rules.md`. The body keeps
+  each rule in one line; the doc keeps the why and the measured incidents. Zero moved lines
+  survive in both files.
+- Frontmatter `description` is byte-identical — trigger vocabulary is unchanged.
+
 ## Unreleased — 2026-07-26
 
 - Skill Document Topology: replaced the split discriminator. Judging by total line count fails every honest split — one title-and-provenance header per new file grows the total by construction (measured: 8 files, +32 header + 12 pointer, body −325). The test is now whether a moved body line exists in two places, checked by diffing moved-vs-stayed for zero lost and zero duplicated.
