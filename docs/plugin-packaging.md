@@ -1,6 +1,6 @@
 # Plugin And Extension Packaging
 
-Last reviewed: 2026-08-15
+Last reviewed: 2026-08-20
 
 ## Shared Rule
 
@@ -15,7 +15,7 @@ Project instruction filenames are runtime-specific and are not the same thing as
 - Grok documents a six-name instruction-file family: `AGENTS.md`, `Agents.md`, `AGENT.md`,
   `CLAUDE.md`, `Claude.md`, `CLAUDE.local.md`, plus `*.md` under `.grok/rules/`
   (`.claude/rules/` and `.cursor/rules/` are read for compatibility).
-- Hermes loads one project context file on a documented first-match chain: `.hermes.md` / `HERMES.md`, `AGENTS.md`, `CLAUDE.md`, `.cursorrules`. `.cursor/rules/*.mdc` is a recognized file (CWD only) but is not part of that chain. `SOUL.md` is global identity, not project instructions.
+- Hermes picks one project context type on a documented first-match chain: `.hermes.md` / `HERMES.md`, `AGENTS.override.md`, `AGENTS.md`, `CLAUDE.md`, `.cursorrules` — `AGENTS.override.md` is a personal, per-directory override (typically gitignored) that loads instead of the committed `AGENTS.md` beside it. When the chosen type is `AGENTS.md` and cwd is inside a git repo, Hermes merges the whole git-root-to-cwd chain of `AGENTS.md` files rather than loading a single one. `.cursor/rules/*.mdc` is a recognized file (CWD only) but is not part of that chain. `SOUL.md` is global identity, not project instructions.
 - Antigravity CLI (the Gemini CLI successor, `agy`) reads `GEMINI.md` and `AGENTS.md`; global `~/.gemini/GEMINI.md`.
 - Cursor CLI uses `.cursor/rules` plus project-root `AGENTS.md` and `CLAUDE.md`.
 - gajae-code (`gjc`, community) documents **no** project-instruction-file loader; its config is `~/.gjc/config.yml` (user) plus a per-project `.gjc/` state dir. Do not assume it reads `AGENTS.md`/`CLAUDE.md`.
