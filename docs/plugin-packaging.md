@@ -1,6 +1,6 @@
 # Plugin And Extension Packaging
 
-Last reviewed: 2026-08-20
+Last reviewed: 2026-08-21
 
 ## Shared Rule
 
@@ -72,7 +72,7 @@ Hermes hooks are split across three documented systems: gateway hooks under `~/.
 
 ## Cursor CLI
 
-Cursor documents Agent Skills and Hooks as first-class surfaces. Skills load from project `.agents/skills/` and `.cursor/skills/`, user `~/.agents/skills/` and `~/.cursor/skills/`, and compatibility roots for Claude/Codex skills. Skills may be slash-invoked from Agent chat, auto-applied by context, scoped with `paths`, or made explicit-only with `disable-model-invocation: true`; frontmatter also documents an optional `metadata` field holding arbitrary key-value pairs.
+Cursor documents Agent Skills and Hooks as first-class surfaces. Skills load from project `.agents/skills/` and `.cursor/skills/`, user `~/.agents/skills/` and `~/.cursor/skills/`, and compatibility roots for Claude/Codex skills. Skills may be slash-invoked from Agent chat, auto-applied by context, scoped with `paths`, or made explicit-only with `disable-model-invocation: true`; frontmatter also documents an optional `metadata` field holding arbitrary key-value pairs, plus `icon` and `color`, which style the badge when a skill backs a **Custom Mode** (a skill kept in context for a whole session). The legacy `globs` field is still accepted as a fallback for older skills, but new skills should use `paths`.
 
 Hooks are configured at four scopes in priority order: enterprise (MDM-managed system-wide), team (Enterprise cloud dashboard), project (`<project-root>/.cursor/hooks.json`, committable to version control), and user (`~/.cursor/hooks.json`). Cloud agents load project hooks; team and enterprise hooks are distributed via the dashboard. Cursor documents events for sessions, tool-use, subagents, shell/MCP execution, file access, prompt submission, agent responses, Tab inline-completion hooks (`beforeTabFileRead`, `afterTabFileEdit`), compaction, and workspace startup — a broader event set than prior reviews captured; cloud agents do not support `sessionStart`, `sessionEnd`, `beforeMCPExecution`, `afterMCPExecution`, Tab hooks, or `workspaceOpen` (the docs attribute this to "differences in the execution environment"), while `beforeSubmitPrompt`, `afterAgentResponse`, `afterAgentThought`, and `stop` **are** supported there. `failClosed` defaults to `false`; `loop_limit` defaults to `5` on Cursor (`null` = no cap on Claude Code). Keep Cursor's hook schema separate from Claude/Codex schemas even when event names look similar.
 
