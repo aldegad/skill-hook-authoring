@@ -4,7 +4,7 @@ Official source: https://docs.x.ai/developers/models
 (moved from `docs.x.ai/docs/models`, which now 308-redirects here; model detail
 links live under `/developers/models/<id>`) plus the CLI reference at
 https://docs.x.ai/build/cli/reference
-Last reviewed: 2026-08-21 (verified live against the official xAI models page,
+Last reviewed: 2026-08-22 (verified live against the official xAI models page,
 the reasoning capability page, the may-15-retirement page, and the CLI reference)
 
 ## Current shipping models
@@ -38,6 +38,13 @@ stable version. `<modelname>-latest` is aliased to the latest version.
 - The official models overview recommends Grok 4.6 for code and chat and calls it the most intelligent and fastest model xAI has built.
 - The models overview is organized as "Text API Pricing", "Imagine Pricing", "Voice Pricing", and "Which model should I choose?". The Text API table carries two rows per model (below and at/above a 200k-token prompt), so an id appearing twice is a pricing tier, not two models.
 - Reasoning effort is documented at **both layers**. The CLI reference lists `--effort <LEVEL>` ("Reasoning effort"), and the reasoning capability page (`/developers/model-capabilities/text/reasoning`) documents the API parameter for both `grok-4.6` and `grok-4.5`. Both default to `high` and cannot disable reasoning; `grok-4.6` adds `xhigh`, while `grok-4.5` treats `xhigh` as `high`. For `grok-4.20-multi-agent`, the same parameter controls collaborator count rather than reasoning depth.
+- **Fetching note (verified 2026-08-22):** on `docs.x.ai` the models overview's
+  pricing tables are **client-rendered** — a static HTML fetch shows only the
+  `grok-4.6` / Voice API / Imagine API cards and none of the per-id rows. Each
+  page serves a plain-Markdown twin at `<page>.md`
+  (`https://docs.x.ai/developers/models.md`, the page's own "View as Markdown")
+  which carries the full Text/Imagine/Voice pricing tables; diff that, not the
+  HTML, or the ids below will read as retired when they are simply unrendered.
 - **Kuma-catalog note:** downstream Kuma catalog ids such as `grok-build` or
   `grok-composer-2.5-fast` are not owned here. Catalog sync happens in the
   kuma-studio repo, not in this compatibility wiki.

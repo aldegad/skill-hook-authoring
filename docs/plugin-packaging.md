@@ -1,6 +1,6 @@
 # Plugin And Extension Packaging
 
-Last reviewed: 2026-08-21
+Last reviewed: 2026-08-22
 
 ## Shared Rule
 
@@ -78,7 +78,7 @@ Hooks are configured at four scopes in priority order: enterprise (MDM-managed s
 
 ## gajae-code (community, non-vendor)
 
-gajae-code (`gjc`, MIT/beta by Yeachan-Heo; GitHub README is the only source, verified 2026-07-20) is a coding-agent harness that runs *adjacent* to other CLIs, not a packaging host. It documents **no plugin/extension format and no hooks** — the README explicitly says it is "not a hidden plugin for Codex CLI, Claude Code, OpenCode, or Claw Code." The one extension surface it does document is **skills**: `SKILL.md`-format bundled skills installed into the user `.gjc` directory by `gjc setup defaults` (the exact `~/.gjc/skills/` path is no longer literally stated in the README; bundled defaults `deep-interview`, `ralplan`, `ultragoal`, `team`), inspected with `gjc skills list` / `gjc skills read <name>` and invoked in-session as `/skill:<name>` (colon form — not the `/<skill-name>` other runtimes use). Install with `bun install -g gajae-code` (scoped package `@gajae-code/coding-agent`); user config is `~/.gjc/config.yml` (provider retry budgets), per-project state lives in `.gjc/`. The README's "Workflow surface" section also documents four bundled **role agents**: `executor` (bounded implementation, fixes, refactors) plus read-only `architect`, `planner`, and `critic`; authoring a *custom* gajae agent is `not documented` (the README gives a role table only — no agent file format, install path, or authoring interface). Treat any plugin/hook claim for gajae as `not documented` until the project documents one.
+gajae-code (`gjc`, MIT/beta by Yeachan-Heo; GitHub README is the only source, verified 2026-07-20) is a coding-agent harness that runs *adjacent* to other CLIs, not a packaging host. It documents **no plugin/extension format and no hooks** — the README explicitly says it is "not a hidden plugin for Codex CLI, Claude Code, OpenCode, or Claw Code." The one extension surface it does document is **skills**: `SKILL.md`-format bundled skills installed into the user `.gjc` directory by `gjc setup defaults` (the exact `~/.gjc/skills/` path is no longer literally stated in the README; bundled defaults `deep-interview`, `ralplan`, `ultragoal`, `autoresearch`), inspected with `gjc skills list` / `gjc skills read <name>` and invoked in-session as `/skill:<name>` (colon form — not the `/<skill-name>` other runtimes use). Install with `bun install -g gajae-code` (scoped package `@gajae-code/coding-agent`); user config is `~/.gjc/config.yml` (provider retry budgets), per-project state lives in `.gjc/`. The README's "Workflow surface" section also documents four bundled **role agents**: `executor` (bounded implementation, fixes, refactors) plus read-only `architect`, `planner`, and `critic`; authoring a *custom* gajae agent is `not documented` (the README gives a role table only — no agent file format, install path, or authoring interface). Treat any plugin/hook claim for gajae as `not documented` until the project documents one.
 
 ## Packaging Decision Gate
 

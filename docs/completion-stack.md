@@ -1,6 +1,6 @@
 # Native Completion & Verification Stacks (Claude Code · Codex)
 
-Last reviewed: 2026-08-21 (claims verified against official docs and vendor
+Last reviewed: 2026-08-22 (claims verified against official docs and vendor
 source 2026-06-15; migrated into this skill from operator research pages
 2026-07-10; Codex goal claims re-anchored 2026-07-17 after the follow-goals
 page was slimmed to a use-case walkthrough)
@@ -41,10 +41,14 @@ installed" — it is there.
   toward it autonomously. Official: *"After each turn, a small fast model
   checks whether the condition holds. If not, Claude starts another turn
   instead of returning control to you."*
-- **The evaluator is a separate fresh model** (default Haiku) returning yes/no
-  plus a short reason. Official: *"completion is decided by a fresh model
-  rather than the one doing the work."* — independent judgment, not the
-  agent's own completion claim.
+- **The evaluator is a separate fresh model** (default Haiku) returning one of
+  **three** verdicts, each with a short reason: *Not yet met* (Claude keeps
+  working and takes the reason as guidance), *Met* (goal cleared, achieved entry
+  recorded), *Impossible* (the condition can never be satisfied — goal cleared,
+  failed entry recorded, no manual clear needed). Official: *"completion is
+  decided by a fresh model rather than the one doing the work."* — independent
+  judgment, not the agent's own completion claim. `ANTHROPIC_DEFAULT_HAIKU_MODEL`
+  changes the evaluator model (and every other small-fast-model use).
 - Implementation: *"`/goal` is a wrapper around a session-scoped prompt-based
   Stop hook."* — the same primitive as the Hooks section below.
 - One goal per session. **Typing a new `/goal <condition>` over an active goal
@@ -53,7 +57,8 @@ installed" — it is there.
   favors Codex). `/goal` with no argument shows status/turns/tokens;
   `/goal clear` (aliases `stop`/`off`/`reset`/`none`/`cancel`) clears it.
   `--resume`/`--continue` restores an active goal (turn/timer/token baselines
-  reset). Works headless (`-p "/goal ..."`), in desktop, and via Remote
+  reset) — on **every** resume route including the `claude --resume` picker
+  since v2.1.239; an achieved or cleared goal is not restored. Works headless (`-p "/goal ..."`), in desktop, and via Remote
   Control. Conditions max 4,000 chars; turn/time bound clauses are allowed
   ("or stop after 20 turns").
 - **Decisive limitation (official, verbatim):** *"The evaluator judges your
@@ -72,14 +77,33 @@ installed" — it is there.
   turn). `/goal` + auto mode are complementary: the former removes the
   per-turn prompt, the latter the per-tool prompt. Outside a session:
   scheduled tasks / cloud routines.
-- **Background work gets a nudge, not a wait.** When a turn ends and background
-  work has kept the goal waiting 30 minutes or more, Claude Code asks Claude at
-  the next turn end to list the running tasks, read their output, keep waiting if
-  they are progressing, and fix or stop any that are stuck; it asks again after
-  each further 30 minutes. `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` changes the
-  interval, `0` turns check-ins off. Requires Claude Code v2.1.234+. This is the
+- **Background work defers evaluation, then gets a nudge — not a wait.** A turn
+  that ends with a subagent or background shell still running is **not
+  evaluated**; evaluation happens at the end of the next turn that finishes
+  clean. Once background work has kept the goal waiting 30 minutes, a check-in
+  comes due: Claude Code lists the running tasks and asks Claude to read their
+  output, keep waiting if they are progressing, and fix or stop any that are
+  stuck. Later check-ins **back off geometrically** — each waits twice as long as
+  the last, capped at 4x the first interval (with the default: 1 hour after the
+  first, then every 2 hours); before v2.1.239 only idle check-ins backed off and
+  turn-end check-ins recurred at the first interval.
+  `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` replaces the 30-minute first interval and
+  scales the later ones with it, `0` turns check-ins off. Requires v2.1.234+
+  (idle check-ins, where an interactive session starts a turn on its own,
+  v2.1.236+; a `-p` session only ever gets turn-end check-ins). This is the
   answer to the "goal parked forever on a hung background job" failure mode — it
   is a prompt to Claude, not a runtime kill.
+- **Two ways a goal ends that are not "condition met".** A turn that fails on an
+  error you have to fix clears the goal outright (warning: *"Goal cleared after
+  an unrecoverable error"* … *"Run `/goal` again to continue"*) — exactly four
+  causes: an auth failure when Claude Code manages its own credentials (a host
+  that manages them, like the desktop app or a cloud session, leaves the goal
+  active), an exhausted credit balance, a context overflow auto-compaction could
+  not clear, and an unavailable model. Every other failure, rate limits and
+  overloads included, leaves the goal active. Separately, if Claude answers the
+  evaluator without using tools for several turns running, Claude Code **stops
+  the loop, warns, and hands control back with the goal still set** — evaluation
+  resumes on your next prompt. Neither path is a silent stall.
 - Requirements: accepted workspace trust and hooks enabled — with
   `disableAllHooks` or `allowManagedHooksOnly` the goal is inactive and Claude
   Code says why (no silent failure).

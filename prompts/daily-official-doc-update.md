@@ -63,14 +63,16 @@ another.
 `docs/official-sources.json` with `"kind": "cli-invocation"` MUST be fetched and
 re-verified every run: the interactive launch command, the non-interactive /
 headless command (`claude -p`, `codex exec`, `grok -p`, `hermes chat -q`,
-`cursor-agent -p`, or for Antigravity the lack of a headless flag), and the
-output-format flags. If the official docs changed a spawn flag or output format,
+`cursor-agent -p`, `agy -p`), and the input/output-format flags. If the official docs changed a spawn flag or output format,
 treat the **CLI Spawn And Headless Launch** baseline as drifted and update both
 mirrors: the `## CLI Spawn And Headless Launch` section of `SKILL.md` and the
 launch/headless tables in `docs/cli-invocation.md`. The Antigravity docs
-(`antigravity.google`) are a JS-rendered SPA — a static fetch returns an empty
-shell, so treat a 200 with no content as `unverified this run` and render it
-dynamically before claiming a change. The **2026-06-18 Gemini CLI individual
+(`antigravity.google`) are **server-rendered** and fetch statically — but the
+server answers compressed, so request them with decompression (`curl
+--compressed`) or take the plain-Markdown twin each page serves at `<page>.md`
+(e.g. `/docs/cli/headless.md`). A 200 whose body reads as binary garbage is a
+missing decompression step, not a JS shell — re-request before recording
+`unverified this run`. The **2026-06-18 Gemini CLI individual
 cutoff** has now passed (reached 2026-06-18), so keep legacy Gemini references in
 past tense and retire any that are stale; record any capability the official docs
 do not cover as `not documented`.
@@ -107,8 +109,8 @@ per-runtime file under `docs/models/`. Cite the runtime's own official model pag
 does NOT own pricing/limits (the `claude-api` skill), the Kuma Studio spawnable
 catalog (`team.json`, a downstream consumer that syncs from these lineups), or
 naming standards (the Kuma vault); link to those, do not duplicate. If a value
-cannot be confirmed against the official doc this run (403/unreachable, a
-JS-rendered SPA returning an empty shell, or simply not yet documented), record it
+cannot be confirmed against the official doc this run (403/unreachable, a page
+that returns no usable content, or simply not yet documented), record it
 as `unverified this run` and leave it for the next pass — never substitute a guess
 or a non-vendor mirror. The per-file `Last reviewed:` stamp is a
 **time-sensitive** provenance line: advance it to today on every successful
