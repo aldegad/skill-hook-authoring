@@ -1,11 +1,11 @@
 # Google Antigravity CLI (`agy`) / Gemini — model lineup
 
 Official source: https://ai.google.dev/gemini-api/docs/models (the official Google
-Gemini model page; render dynamically — page last-updated 2026-08-14), plus
-https://antigravity.google (JS-rendered SPA — a static fetch returns an empty
-shell; render dynamically before claiming a change).
-Last reviewed: 2026-08-21 (verified live against the official Google Gemini model
-page; Antigravity SPA re-rendered this run)
+Gemini model page — page last-updated 2026-08-14; request it **without**
+following redirects, since a followed request bounces to a Google OAuth
+`auto_signin` URL), plus https://antigravity.google (server-rendered docs site).
+Last reviewed: 2026-08-22 (verified live against the official Google Gemini model
+page and the Antigravity docs pages)
 
 ## Current shipping models
 
@@ -23,9 +23,14 @@ page; Antigravity SPA re-rendered this run)
 - **Antigravity CLI** (`agy`) is the Gemini CLI successor; Gemini CLI itself
   stopped serving individual Pro/Ultra/free users as of **2026-06-18** (enterprise
   / Google Cloud keeps it). Keep legacy Gemini references in past tense.
-- The Antigravity site is a **JS-rendered SPA**: treat a 200 with an empty shell
-  as `unverified this run` and render it dynamically before recording a model
-  change.
+- **Fetching the Antigravity docs (verified 2026-08-22).** The docs site is
+  **server-rendered** (Astro/Starlight): a plain `curl --compressed` returns the
+  full page content, and every page also serves a plain-Markdown twin at
+  `<page>.md` (e.g. `/docs/cli/headless.md`), which is the most robust form to
+  diff. The failure that used to read as "empty shell" is a **missing
+  `--compressed`** — the server answers with a compressed body that an
+  undecoded fetch renders as binary garbage. Do not record `unverified this run`
+  on that symptom; re-request with decompression, or take the `.md` twin.
 - The Antigravity CLI's own `agy models` sample output (headless-mode page) now
   leads with `gemini-3.7-flash-high` and `gemini-3.7-flash-medium`, followed by
   `gemini-3.6-flash-high`, `gemini-3.6-flash-medium`, `gemini-3.5-flash-medium`,
