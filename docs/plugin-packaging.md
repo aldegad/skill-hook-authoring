@@ -1,6 +1,6 @@
 # Plugin And Extension Packaging
 
-Last reviewed: 2026-08-22
+Last reviewed: 2026-08-24
 
 ## Shared Rule
 
@@ -61,6 +61,8 @@ Claude Code now documents both standalone project customization and first-class 
 **Plugin development CLI.** `claude plugin init <name>` scaffolds a skills-directory plugin under `~/.claude/skills/<name>/`. The `--plugin-dir` flag accepts a `.zip` archive as well as a directory (from v2.1.128); `--plugin-url` loads a plugin from a remote URL for that session. Run `/reload-plugins` inside a session to pick up plugin edits without restarting. `claude plugin validate` runs the same structural checks that the marketplace submission pipeline uses.
 
 Settings remain hierarchical: user `~/.claude/settings.json`, project `.claude/settings.json`, and local `.claude/settings.local.json`. Keep managed/plugin-marketplace policy details in the settings docs and this repo's source manifest; do not infer Codex `.codex-plugin` parity where Claude documents its own `.claude-plugin` format.
+
+The Claude settings docs are **three pages**, so cite the right one: `/docs/en/settings` is the task page (which file a key belongs in, how to change one, precedence, cloud sessions), `/docs/en/settings-reference` is the complete per-key reference — scope, type, default, and an index of every key — and `/docs/en/settings-example` holds paste-ready developer/team/organization files. Every key claim in this repo's manifest is anchored to the **reference** page.
 
 Current settings claims include `disableBundledSkills`. Older `workflowKeywordTriggerEnabled` and `strictPluginOnlyCustomization` claims are not retained because the current official settings docs no longer show them.
 

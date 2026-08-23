@@ -2,7 +2,7 @@
 
 Official source: https://cursor.com/docs/models-and-pricing
 (`cursor.com/docs/models` 308-redirects here)
-Last reviewed: 2026-08-22 (verified live against the official models & pricing page)
+Last reviewed: 2026-08-24 (verified live against the official models & pricing page)
 
 ## Current shipping models
 
@@ -13,7 +13,7 @@ separate lineup section.
 
 | Model | Owner | Notes |
 |---|---|---|
-| Composer 2.5 | **Cursor** | "Composer 2.5 is Cursor's own model, trained to be highly capable for agentic coding." (Composer 1 no longer appears on the page.) |
+| Composer 2.5 (standard / Fast) | **Cursor** | Described on its own per-model page (`docs/models/cursor-composer-2-5`), not on the pricing page: "Composer 2.5 is Cursor's own agentic model. It builds on Composer 2 with stronger intelligence on long agentic tasks, better effort calibration, tool selection, intent understanding, and reliability." The **fast** variant is the product default; the standard tier is the cost-optimized one. (Composer 1 no longer appears anywhere on the pricing page.) |
 | Grok 4.6 (standard / Fast) | Cursor + SpaceXAI | Frontier model for complex coding and knowledge work; improves instruction following and long-horizon agentic work over 4.5. Supports `low`, `medium`, `high` (default), and `xhigh` effort (per the model's own page). On the Start plan all three Cursor models run in non-fast mode and Grok 4.6 / 4.5 are pinned to a fixed medium effort; the level is changeable on Pro and above. |
 | Grok 4.5 ("Cursor Grok 4.5") | Cursor + SpaceXAI | "Grok 4.5 is jointly trained by Cursor and SpaceXAI for long-running coding and knowledge work." |
 | Anthropic Claude family (Claude Fable 5 / Opus 5 / Opus 4.8 / Opus 4.7 / Sonnet 5) | third-party | Sonnet 5 $2/$10 with no promotional end date on the page (its row notes now read "Requires Max Mode on legacy request-based plans; Up to 1M tokens with extended context at the same per-token rates"; the earlier "through August 31, 2026" launch window is gone); Fable 5 $10/$50 — "Requests that trip a security guardrail are automatically routed to Claude Opus" |
@@ -31,6 +31,12 @@ separate lineup section.
   Token Rate of $0.25 per million tokens".
 - Cursor **does ship models of its own** (Composer), so it is not a pure router —
   do not describe it as selecting only upstream provider models.
+- **The pricing table is the index, not the description.** Every model row links
+  to a per-model page under `cursor.com/docs/models/<slug>` (e.g.
+  `cursor-composer-2-5`, `grok-4-6`, `claude-fable-5`, `gpt-5-6-sol`), and that is
+  where the prose lives — capability description, strengths, tool access, and the
+  fast/standard split. Read the per-model page before quoting a description; the
+  pricing page carries rates and short caveats only.
 - The docs now document the CLI binary as `agent`: `agent --list-models` reports
   the live selectable set, and an `agent models` subcommand is documented. Prefer
   either over copying ids from this table into automation. (The rename is what the
