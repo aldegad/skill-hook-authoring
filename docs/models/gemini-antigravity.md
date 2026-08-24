@@ -4,7 +4,7 @@ Official source: https://ai.google.dev/gemini-api/docs/models (the official Goog
 Gemini model page — page last-updated 2026-08-14; request it **without**
 following redirects, since a followed request bounces to a Google OAuth
 `auto_signin` URL), plus https://antigravity.google (server-rendered docs site).
-Last reviewed: 2026-08-24 (verified live against the official Google Gemini model
+Last reviewed: 2026-08-25 (verified live against the official Google Gemini model
 page and the Antigravity docs pages)
 
 ## Current shipping models
