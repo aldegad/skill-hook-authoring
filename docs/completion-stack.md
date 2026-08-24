@@ -1,6 +1,6 @@
 # Native Completion & Verification Stacks (Claude Code · Codex)
 
-Last reviewed: 2026-08-24 (claims verified against official docs and vendor
+Last reviewed: 2026-08-25 (claims verified against official docs and vendor
 source 2026-06-15; migrated into this skill from operator research pages
 2026-07-10; Codex goal claims re-anchored 2026-07-17 after the follow-goals
 page was slimmed to a use-case walkthrough)
@@ -31,7 +31,7 @@ Sources: [Claude Code /goal](https://code.claude.com/docs/en/goal) ·
 
 ### `/goal` — session-scoped completion gate (HARD, built-in)
 
-[docs/en/goal](https://code.claude.com/docs/en/goal) · v2.1.139+
+[docs/en/goal](https://code.claude.com/docs/en/goal)
 
 **`/goal` is a Claude Code (Anthropic) built-in slash command.** It does not
 appear in skill/bin listings, which makes it easy to misjudge as "not
@@ -314,7 +314,10 @@ source. These are the claims most often gotten wrong from memory; several are
 **not stated in any single official page**, so they are preserved here
 explicitly.
 
-1. **`/goal` is a Claude Code built-in** (Anthropic, v2.1.139+). It does not
+1. **`/goal` is a Claude Code built-in** (Anthropic). The docs state no
+   introducing version for the command itself; the version stamps they do give
+   are for check-ins (`v2.1.234+`, idle check-ins `v2.1.236+`) and for goal
+   restore on every resume route (`v2.1.239+`). It does not
    show up in skill/bin listings, which repeatedly causes a false "it doesn't
    exist" conclusion. Verified live in-session.
 2. **ZCode is not a Claude-Code-family runtime, and no "ZCode `/goal`" has

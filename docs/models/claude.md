@@ -2,7 +2,7 @@
 
 Official source: https://docs.anthropic.com/en/docs/about-claude/models/overview
 (301-redirects to `platform.claude.com/docs/en/docs/about-claude/models/overview` — same official doc)
-Last reviewed: 2026-08-24 (verified live against the official models overview)
+Last reviewed: 2026-08-25 (verified live against the official models overview)
 
 ## Current shipping models
 
@@ -19,10 +19,15 @@ Last reviewed: 2026-08-24 (verified live against the official models overview)
   not distinct vendor model ids — the CLI reference documents `--effort` with the
   named options `low`, `medium`, `high`, `xhigh`, `max`, `ultracode`.
 - **Documented but not generally available:** Claude Mythos 5 (`claude-mythos-5`)
-  and Claude Mythos Preview (`claude-mythos-preview`) — invitation-only, limited
-  availability to approved customers in Project Glasswing (defensive cybersecurity
-  workflows; no self-serve sign-up). Mythos 5 shares Fable 5's specs and pricing. Do not list
-  these as spawnable ids in downstream catalogs.
+  — invitation-only, limited availability to approved customers in Project
+  Glasswing (defensive cybersecurity workflows; no self-serve sign-up; access via
+  an Anthropic, AWS, or Google Cloud account team). It shares Fable 5's specs and
+  pricing and omits Fable 5's safety classifiers. The models overview no longer
+  carries it; its documentation is the dedicated model page
+  <https://platform.claude.com/docs/en/models/mythos-5/overview>. Claude Mythos
+  Preview (`claude-mythos-preview`) is **deprecated**, with `claude-mythos-5` as
+  the stated migration target (model-deprecations page). Do not list either as a
+  spawnable id in downstream catalogs.
 - Every current model id is a **pinned snapshot**: from the 4.6 generation onward
   the ids use a dateless format that is still a pinned snapshot, not an evergreen
   pointer (Haiku 4.5 keeps its dated `-20251001` form).
