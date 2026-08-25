@@ -2,7 +2,7 @@
 
 Official source: https://cursor.com/docs/models-and-pricing
 (`cursor.com/docs/models` 308-redirects here)
-Last reviewed: 2026-08-25 (verified live against the official models & pricing page)
+Last reviewed: 2026-08-26 (verified live against the official models & pricing page)
 
 ## Current shipping models
 
@@ -21,14 +21,17 @@ separate lineup section.
 | Google Gemini family (Gemini 3.5 / 3.6 / 3.7 Flash, 3.1 Pro) | third-party | selectable alongside the above; Gemini 3.7 Flash is the newest listed row |
 | GLM 5.2 (Z.ai), Kimi K2.7 Code / Kimi K3 (Moonshot) | third-party | also listed |
 
-- `Auto` is still **not a row of the pricing table**, but it is no longer a single
-  prose sentence either — the page now documents an "Auto modes" section: "Auto
-  has three modes: Auto Cost, Auto Balance, and Auto Intelligence." Auto Cost is
-  priced "per million tokens, regardless of which model is used"; Auto
-  Balance/Intelligence are "charged at Model API rates for the model used". On
-  Teams/Enterprise plans, **Cursor Router** (`docs/cursor-router.md` on the site)
-  picks the model per Auto request, and third-party model requests carry "a Cursor
-  Token Rate of $0.25 per million tokens".
+- `Auto` is still **not a row of the pricing table**; it has its own "Auto modes"
+  section: "Auto has three modes: Cost, Balance, and Intelligence." All three now
+  bill the same way — "All Auto modes bill at the list price of the model each
+  request is routed to" — so there is no longer a flat per-million Auto tier on
+  the current plans. The per-million-regardless-of-model rate survives only as
+  **Legacy Enterprise Auto**: "Until September 7, 2026, Enterprise Auto pricing is
+  set per million tokens, regardless of which model is used." On Teams/Enterprise
+  plans, **Cursor Router** (`docs/cursor-router.md` on the site) picks the model
+  per Auto request "based on your optimization mode", and third-party model
+  requests carry "a Cursor Token Rate of $0.25 per million tokens" — first-party
+  Cursor models (Grok and Composer) are exempt from that rate.
 - Cursor **does ship models of its own** (Composer), so it is not a pure router —
   do not describe it as selecting only upstream provider models.
 - **The pricing table is the index, not the description.** Every model row links
