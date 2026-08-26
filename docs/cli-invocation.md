@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-08-26
+Last reviewed: 2026-08-27
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or
@@ -59,7 +59,7 @@ the same idea, but they are reached differently:
 | Hermes Agent | `hermes chat` — interactive chat | type after launch (`-q` switches to a single non-interactive query) |
 | Antigravity CLI | `agy` — launches the TUI (first launch detects a legacy Gemini CLI config and runs an interactive migration checklist: auto-converting extensions and global configs, migrating keyring tokens, and aligning settings) | type in the prompt box after launch (no documented interactive seed-prompt positional; `-p`/`--print`/`--prompt` switches to headless) |
 | Cursor CLI | `agent` — interactive agent (all three official Cursor CLI pages now document the binary as `agent`) | type after launch (`-p`/`--print` switches to headless) |
-| gajae-code (community) | `gjc` — interactive TUI; `gjc --tmux` runs it inside tmux, `gjc --tmux --worktree <name>` adds a git-worktree per task — the README notes "`--worktree` takes an optional branch-like name, not a filesystem path"; to use an existing worktree directory, `cd ../my-task-worktree && gjc --tmux` | `gjc @screenshot.png "<prompt>"` (image + prompt arg); interactive clipboard image paste with Ctrl+V |
+| gajae-code (community) | `gjc` — interactive TUI; `gjc --tmux` runs it inside tmux, `gjc --tmux --worktree <name>` adds a git-worktree per task — the README notes "`--worktree` takes an optional branch-like name, not a filesystem path"; to use an existing worktree directory, `cd ../my-task-worktree && gjc --tmux` | `gjc @screenshot.png "<prompt>"` (image + prompt arg); interactive clipboard image paste with Ctrl+V. Install is a tagged prebuilt binary (`scripts/install.sh` / `install.ps1`, `--channel nightly` optional) — the earlier `bun install -g gajae-code` package install is no longer documented; Bun is only for building from source |
 
 ## B. Headless run (non-interactive / print / one-shot)
 
@@ -71,11 +71,11 @@ the same idea, but they are reached differently:
 | Hermes Agent | `hermes chat -q "<query>"` (single query); `hermes -w -z "<query>"` runs a single query inside an isolated git worktree | `hermes chat --query-file <file>`, and `--query-file -` reads the prompt from **stdin** — the docs note "nothing is shell-interpreted, so arbitrary text (quotes, `$(...)`, backticks) arrives verbatim" | not documented (no JSON output-format flag) | `--model`, `--provider nous\|openrouter`, `--toolsets`, `-s <skill>`, `--verbose`, `-w` (isolated git worktree; `hermes -w` alone is the interactive form), `-z "<query>"` (single-query entry point alongside `-q`) |
 | Antigravity CLI | `agy -p "<prompt>"` (`--print`/`--prompt`) — "sends a single prompt to the agent, streams or returns the response, and exits" (dedicated Headless-mode page at `/docs/cli/headless`) | prompt arg; `--input-format text\|stream-json` reads prompts on **stdin** — with `stream-json` the CLI consumes one `{"event":"user","message":{"content":…}}` object per line and emits exactly one `result` event per turn, so a script can hold the pipe open, read the answer, and write the next prompt without paying startup cost again (closing stdin ends the session, exit 0). It requires `--output-format stream-json` | `--output-format text\|json\|stream-json` (json envelope carries `conversation_id`/`status`/`response`/`usage`; stream-json is NDJSON with `init`/`step_update`/`result` events); `--json-schema` for structured output | `--model`, `--effort low\|medium\|high`, `--agent`, `--print-timeout` (default 5m), `--input-format text\|stream-json` (stdin prompts; `stream-json` must pair with `--output-format stream-json`), `--sandbox` (default false — "Run with terminal sandbox restrictions enabled", the launch override of `enableTerminalSandbox`), headless `-c`/`--continue` and `--conversation <id>` resume; `agy models` / `agy agents` list selectable models/agents; `permissions.allow` `action(target)` rules (e.g. `"command(git)"`, `"write_file(src/)"`) in `settings.json`; unapprovable tools are **soft-denied** (run exits 0, notice to stderr); `--dangerously-skip-permissions` = permission_mode always-proceed. The **Antigravity SDK** (`pip install google-antigravity`) remains the richer programmatic path |
 | Cursor CLI | `agent -p "<prompt>"` (`--print`) | print mode for scripts | `--output-format text\|json\|stream-json` (only with `--print`); `--stream-partial-output` | `--model`, `-f`/`--force` (`--yolo`), `--trust` (headless only), `--mode <plan\|ask>`, `--plan`, `-w, --worktree [name]` (worktrees land in `~/.cursor/worktrees/<reponame>/<name>`), `--worktree-base <branch>`, `--skip-worktree-setup`, `--sandbox`. Subcommands relevant to orchestration: `agent acp` (ACP agent) and `agent worker` |
-| gajae-code (community) | **not documented** — the README dropped `--mode rpc`; no headless one-shot mode is documented | — | not documented (no `--output-format`/`--json` flag) | external control is the SDK loopback WebSocket (`docs/sdk.md`) or `gjc daemon session` — none is a one-shot run; the Coordinator MCP server is `not documented` (every `mcp` mention is absent from the README again as of 2026-07-20). Provider retry budgets in `~/.gjc/config.yml`; BYO provider credentials (Anthropic/OpenAI/Google etc.), MIT/free harness with no billing of its own |
+| gajae-code (community) | **not documented** — the README dropped `--mode rpc`; no headless one-shot mode is documented | — | not documented (no `--output-format`/`--json` flag) | external control is the broker-bound **SDK session CLI** (`gjc sdk session list/inspect/send/status/tail`, plus allowlisted `gjc sdk session raw` ops) or the native **Coordinator MCP bridge** (`gjc mcp-serve coordinator`, installed by `gjc setup hermes`) — neither is a one-shot run. The README tells controllers never to scrape terminal output, read endpoint records under `.gjc/state/sdk`, or open a raw session WebSocket. SDK prompt lease `sdk.promptDeadlineMs` (30 min default) bounded by `sdk.promptMaxRuntimeMs` (6 h default). Provider retry budgets in `~/.gjc/config.yml`; BYO provider credentials, MIT/free harness with no billing of its own |
 
 > **Billing caveat (Claude Code).** On a subscription, `claude -p` and Agent SDK
 > runs draw from your plan's usage limits — the same pool as interactive use, with
-> no separate per-run credit. As of 2026-08-26, the Agent SDK billing
+> no separate per-run credit. As of 2026-08-27, the Agent SDK billing
 > change announced for 2026-06-15 remains **paused**. The official support page
 > opens with a dated banner: *"Update June 15: We're pausing the changes to Claude
 > Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK,
@@ -88,7 +88,7 @@ the same idea, but they are reached differently:
 > `claude -p` cron; the reliability advantage (Routine runs regardless of laptop
 > state) still applies. See `docs/cloud-automation.md`. (Source:
 > https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan,
-> verified 2026-08-26; the `ANTHROPIC_API_KEY` caveat re-confirmed 2026-08-26 on
+> verified 2026-08-27; the `ANTHROPIC_API_KEY` caveat re-confirmed 2026-08-27 on
 > https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan.)
 
 ## C. Resume invocation (command syntax)
@@ -109,7 +109,7 @@ command to type.
 | Hermes Agent | `hermes -c` | `hermes -r <session_id>` (or by title) | not separately documented |
 | Antigravity CLI | `agy -c` / `agy --continue` (latest in workspace); "When you close the CLI, it automatically prints the exact command needed to resume that specific session" | `agy --conversation <conversation-id>`; in-TUI `/resume` (`/switch`, `/conversation`) picker, Tab imports Antigravity 2.0 desktop threads; `/fork` (`/branch`) | add `-p`: the Headless-mode page documents `-c`/`--continue` and `--conversation` working headless |
 | Cursor CLI | `--continue` (documented as an alias for `--resume=-1`) / `agent resume`; in-session `/resume` slash command | `agent --resume [chatId]` (list via `agent ls`) | same flags plus `-p`; `agent create-chat` returns a new id |
-| gajae-code (community) | not documented | not documented (worktree isolation via `--worktree <name>` is not id-keyed resume) | not documented |
+| gajae-code (community) | not documented — no CLI resume flag; SDK-path lifecycle ops `session.create`/`session.fork`/`session.resume`/`session.close` are allowlisted through `gjc sdk session raw`, and `gjc sdk session tail <sessionId> --until-idle` replays then follows | not documented (worktree isolation via `--worktree <name>` is not id-keyed resume) | not documented |
 
 **Pinning a specific session** is shell-level on every runtime: `codex resume <id>`,
 `claude -r "<id-or-name>"`, `grok -r <id>`, `hermes -r <id>`,
@@ -212,7 +212,7 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
   the transition blog does **not** state the OSS repo's licence, so no Apache-2.0
   claim is made for it. (The Codex *goal internals* in `completion-stack.md` are
   source-verified against `openai/codex` under the same rule.)
-- **Claude Code Agent SDK billing (status as of 2026-08-26):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token for CI and scripts; requires a Claude subscription — now documented on the CLI reference page, verified 2026-07-29) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-08-26.)
+- **Claude Code Agent SDK billing (status as of 2026-08-27):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token for CI and scripts; requires a Claude subscription — now documented on the CLI reference page, verified 2026-07-29) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-08-27.)
 - **Antigravity CLI billing (G1 credits, verified 2026-07-28):** `agy` model calls
   run against plan quota; the `useG1Credits` setting ("External builds only. Uses
   personal AI credits for model calls once plan quotas are exhausted.") is the
@@ -251,6 +251,6 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
 - Cursor CLI parameters — <https://cursor.com/docs/cli/reference/parameters>
 - Cursor CLI overview — <https://cursor.com/docs/cli/overview>
 - Cursor CLI using (in-session `/resume`, `--continue`) — <https://cursor.com/docs/cli/using>
-- gajae-code (community project, README — not vendor docs) — <https://github.com/Yeachan-Heo/gajae-code>
+- gajae-code (community project, README — not vendor docs; re-verified 2026-08-27) — <https://github.com/Yeachan-Heo/gajae-code>
 - Claude Code with Pro/Max plan (billing) — <https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan>
-- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-08-26) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
+- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-08-27) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
