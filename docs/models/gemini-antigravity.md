@@ -1,14 +1,17 @@
 # Google Antigravity CLI (`agy`) / Gemini — model lineup
 
 Official source: https://ai.google.dev/gemini-api/docs/models (the official Google
-Gemini model page — page last-updated 2026-08-14; **a plain `curl` no longer
+Gemini model page — page last-updated 2026-08-26; **a plain `curl` no longer
 returns it at all**: following redirects lands in a Google OAuth `auto_signin`
 loop, and not following them returns a bodyless `302`. Render it with a headless
 browser instead — `kuma agent-browser render --url … --settle-ms 6000
---scroll-passes 25` returns the full model tables. Append `?hl=en` unless you want
-the browser-locale translation), plus https://antigravity.google (server-rendered
-docs site).
-Last reviewed: 2026-08-26 (verified live against the official Google Gemini model
+--scroll-passes 25` returns the full model tables. **Always append `?hl=en`.** The
+locale-translated build of this page is not just a translation — it lags the
+English one by whole model generations (a `hl=ko` render on 2026-08-27 topped out
+at Gemini 3.5 Flash and carried no 3.7/3.6 row at all), so a browser-locale render
+will read as a mass retirement that has not happened), plus
+https://antigravity.google (server-rendered docs site).
+Last reviewed: 2026-08-27 (verified live against the official Google Gemini model
 page and the Antigravity docs pages)
 
 ## Current shipping models
@@ -22,6 +25,7 @@ page and the Antigravity docs pages)
 | `gemini-3.1-flash-lite` | Stable | "frontier-class performance rivaling larger models at a fraction of the cost". |
 | `gemini-3.1-pro-preview` | **Preview** | Advanced intelligence for complex problem-solving and agentic + vibe coding. Preview ids carry an explicit `-preview` suffix. |
 | `gemini-3-flash-preview` | **Preview** | current Flash-generation preview. |
+| `gemini-3.5-transcribe` / `gemini-3.5-transcribe-live` | **Stable** (new) | Low-latency speech-to-text with utterance-based language detection, speaker diarization, word-level timestamps, and custom vocabulary biasing. Two endpoints under one model entry — batch and live. |
 | Antigravity Agent (`antigravity-preview-05-2026`) | **Preview** | managed general-purpose agent model that plans, reasons, and executes code in an isolated Linux sandbox. |
 
 - **Antigravity CLI** (`agy`) is the Gemini CLI successor; Gemini CLI itself
