@@ -1,6 +1,6 @@
 # Native Completion & Verification Stacks (Claude Code · Codex)
 
-Last reviewed: 2026-08-27 (claims verified against official docs and vendor
+Last reviewed: 2026-08-28 (claims verified against official docs and vendor
 source 2026-06-15; migrated into this skill from operator research pages
 2026-07-10; Codex goal claims re-anchored 2026-07-17 after the follow-goals
 page was slimmed to a use-case walkthrough)
@@ -90,7 +90,13 @@ installed" — it is there.
   `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` replaces the 30-minute first interval and
   scales the later ones with it, `0` turns check-ins off. Requires v2.1.234+
   (idle check-ins, where an interactive session starts a turn on its own,
-  v2.1.236+; a `-p` session only ever gets turn-end check-ins). This is the
+  v2.1.236+; a `-p` session only ever gets turn-end check-ins). **Idle check-ins
+  are capped**: Claude Code starts at most **three** per goal between your
+  prompts, and the third one says idle check-ins are paused until you send
+  another prompt (v2.1.246+; before that they were uncapped). Turn-end check-ins
+  are not capped — so an unattended `-p` run is unaffected, while an idle
+  interactive session stops self-nudging after three tries and waits for you.
+  This is the
   answer to the "goal parked forever on a hung background job" failure mode — it
   is a prompt to Claude, not a runtime kill.
 - **Two ways a goal ends that are not "condition met".** A turn that fails on an
@@ -316,7 +322,8 @@ explicitly.
 
 1. **`/goal` is a Claude Code built-in** (Anthropic). The docs state no
    introducing version for the command itself; the version stamps they do give
-   are for check-ins (`v2.1.234+`, idle check-ins `v2.1.236+`) and for goal
+   are for check-ins (`v2.1.234+`, idle check-ins `v2.1.236+`, the three-per-goal
+   idle check-in cap `v2.1.246+`) and for goal
    restore on every resume route (`v2.1.239+`). It does not
    show up in skill/bin listings, which repeatedly causes a false "it doesn't
    exist" conclusion. Verified live in-session.
