@@ -3,7 +3,7 @@
 Official source: https://learn.chatgpt.com/docs/models
 (moved 2026-07-16 — `developers.openai.com/codex/models` now 308-redirects here,
 along with the rest of the Codex doc set)
-Last reviewed: 2026-08-27 (verified live against the official Codex models page)
+Last reviewed: 2026-08-28 (verified live against the official Codex models page)
 
 ## Current shipping models
 

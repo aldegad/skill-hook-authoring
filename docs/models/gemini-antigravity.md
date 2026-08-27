@@ -1,7 +1,7 @@
 # Google Antigravity CLI (`agy`) / Gemini — model lineup
 
 Official source: https://ai.google.dev/gemini-api/docs/models (the official Google
-Gemini model page — page last-updated 2026-08-26; **a plain `curl` no longer
+Gemini model page — page last-updated 2026-08-27; **a plain `curl` no longer
 returns it at all**: following redirects lands in a Google OAuth `auto_signin`
 loop, and not following them returns a bodyless `302`. Render it with a headless
 browser instead — `kuma agent-browser render --url … --settle-ms 6000
@@ -11,7 +11,7 @@ English one by whole model generations (a `hl=ko` render on 2026-08-27 topped ou
 at Gemini 3.5 Flash and carried no 3.7/3.6 row at all), so a browser-locale render
 will read as a mass retirement that has not happened), plus
 https://antigravity.google (server-rendered docs site).
-Last reviewed: 2026-08-27 (verified live against the official Google Gemini model
+Last reviewed: 2026-08-28 (verified live against the official Google Gemini model
 page and the Antigravity docs pages)
 
 ## Current shipping models
