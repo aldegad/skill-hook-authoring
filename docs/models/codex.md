@@ -3,12 +3,13 @@
 Official source: https://learn.chatgpt.com/docs/models
 (moved 2026-07-16 — `developers.openai.com/codex/models` now 308-redirects here,
 along with the rest of the Codex doc set)
-Last reviewed: 2026-08-29 (verified live against the official Codex models page)
+Last reviewed: 2026-09-10 (verified live against the official Codex models page)
 
 ## Current shipping models
 
 | Model id | Selection | Notes |
 |---|---|---|
+| `gpt-6-astra` | `codex -m gpt-6-astra` | New GPT-6 generation flagship, positioned above the GPT-5.6 family: "Our most capable model for complex work across code, apps, and research, combining advanced reasoning, computer use, and stronger judgment." Available on ChatGPT desktop/web, Codex CLI, Codex IDE extension, Codex cloud, ChatGPT Credits, and API access ("Availability depends on the rollout, your sign-in method, and your client."). |
 | `gpt-5.6-sol` | `codex -m gpt-5.6-sol` | Flagship GPT-5.6 model for complex coding, computer use, research, and cybersecurity; default Power uses Sol with medium reasoning. |
 | `gpt-5.6-terra` | `codex -m gpt-5.6-terra` | Balanced GPT-5.6 model for everyday work; the page says it is a natural starting point for work previously given to GPT-5.5. |
 | `gpt-5.6-luna` | `codex -m gpt-5.6-luna` | Fast, affordable GPT-5.6 model for clear, repeatable tasks such as extraction, classification, transformation, and structured summaries. |
@@ -17,7 +18,7 @@ Last reviewed: 2026-08-29 (verified live against the official Codex models page)
 | `gpt-5.4` | `codex -m gpt-5.4` | Other model: frontier model for professional work with strong coding, reasoning, tool use, and agentic workflow capabilities. **Retires from Codex on 2026-08-31** when signing in with ChatGPT. |
 | `gpt-5.4-mini` | `codex -m gpt-5.4-mini` | Other model: fast, efficient mini model for responsive coding tasks and subagents. **Retires from Codex on 2026-08-31** when signing in with ChatGPT. |
 
-- The models page lists exactly the seven ids above. The bare family id `gpt-5.6`
+- The models page lists exactly the eight ids above. The bare family id `gpt-5.6`
   appears only as example shorthand (`codex --model gpt-5.6`,
   `codex exec -m gpt-5.6`, and config `model = "gpt-5.6"`), not as a listed
   model id — do not treat it as a documented selector.
