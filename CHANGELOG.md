@@ -5,6 +5,18 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## Unreleased — 2026-09-10
+
+Daily refresh (verification focused on the mandatory time-sensitive claims — billing status and model lineups — plus a spot-check of session-resume for Claude/Grok and the gajae-code README). One real drift found: a new Codex model shipped.
+
+### Changed
+
+- **New Codex model: GPT-6 Astra (`gpt-6-astra`).** `docs/models/codex.md` now lists it as the GPT-6-generation flagship, positioned above the GPT-5.6 family (Sol/Terra/Luna), selectable via `codex -m gpt-6-astra`, available across ChatGPT desktop/web, Codex CLI, Codex IDE extension, Codex cloud, ChatGPT Credits, and API access. The page now lists eight current shipping ids, not seven.
+- **Billing status remains paused.** Re-verified against `https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan`: the June 15 Agent SDK change is still paused verbatim, `claude -p` / Agent SDK / third-party app usage still draws from subscription usage limits, and the `ANTHROPIC_API_KEY` API-billing caveat is unchanged. Status stamps in `docs/cli-invocation.md` and `docs/cloud-automation.md` advanced to 2026-09-10.
+- **Other vendor model lineups re-verified with no drift.** Claude (Fable 5 / Opus 5 / Sonnet 5 / Haiku 4.5), Grok (Text/Imagine/Voice tables, `xhigh` split), Cursor (both usage pools, Auto modes), and Gemini (Stable/Preview split, shut-down list) all match their official pages; `Last reviewed` stamps in `docs/models/claude.md`, `docs/models/grok.md`, `docs/models/cursor.md`, and `docs/models/gemini-antigravity.md` advanced to 2026-09-10.
+- **Session resume spot-check unchanged.** Claude Code's `--continue`/`--resume`/`--from-pr` forms and `~/.claude/projects/<project>/<session-id>.jsonl` transcript path, and Grok's `-c/--continue`, `-r/--resume <ID>`, `-s/--session-id <ID>` with `~/.grok/sessions` storage, both match `docs/compatibility-matrix.md` unchanged.
+- **gajae-code README re-verified unchanged** (community/non-vendor; skills, hooks, plugins, and session resume all still documented as before). Re-verification date in `docs/cli-invocation.md` advanced to 2026-09-10.
+
 ## Unreleased — 2026-08-29
 
 Daily refresh (verification fetched 2026-08-29; all 68 sources reachable, none unverified this run). No vendor drift: every tracked capability, lineup, and status claim re-verified unchanged. One fetch-method correction landed, plus the time-sensitive stamp advance.

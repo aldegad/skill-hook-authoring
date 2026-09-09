@@ -13,7 +13,7 @@ English one by whole model generations (a `hl=ko` render on 2026-08-27 topped ou
 at Gemini 3.5 Flash and carried no 3.7/3.6 row at all), so a browser-locale render
 will read as a mass retirement that has not happened), plus
 https://antigravity.google (server-rendered docs site).
-Last reviewed: 2026-08-29 (verified live against the official Google Gemini model
+Last reviewed: 2026-09-10 (verified live against the official Google Gemini model
 page and the Antigravity docs pages)
 
 ## Current shipping models
