@@ -2,7 +2,7 @@
 
 Official source: https://cursor.com/docs/models-and-pricing
 (`cursor.com/docs/models` 308-redirects here)
-Last reviewed: 2026-09-10 (verified live against the official models & pricing page)
+Last reviewed: 2026-09-11 (verified live against the official models & pricing page)
 
 ## Current shipping models
 
@@ -16,10 +16,11 @@ separate lineup section.
 | Composer 2.5 (standard / Fast) | **Cursor** | Described on its own per-model page (`docs/models/cursor-composer-2-5`), not on the pricing page: "Composer 2.5 is Cursor's own agentic model. It builds on Composer 2 with stronger intelligence on long agentic tasks, better effort calibration, tool selection, intent understanding, and reliability." The **fast** variant is the product default; the standard tier is the cost-optimized one. (Composer 1 no longer appears anywhere on the pricing page.) |
 | Grok 4.6 (standard / Fast) | Cursor + SpaceXAI | Frontier model for complex coding and knowledge work; improves instruction following and long-horizon agentic work over 4.5. Supports `low`, `medium`, `high` (default), and `xhigh` effort (per the model's own page). On the Start plan all three Cursor models run in non-fast mode and Grok 4.6 / 4.5 are pinned to a fixed medium effort; the level is changeable on Pro and above. |
 | Grok 4.5 ("Cursor Grok 4.5") | Cursor + SpaceXAI | "Grok 4.5 is jointly trained by Cursor and SpaceXAI for long-running coding and knowledge work." |
-| Anthropic Claude family (Claude Fable 5 / Opus 5 / Opus 4.8 / Opus 4.7 / Sonnet 5) | third-party | Sonnet 5 $2/$10 with no promotional end date on the page (its row notes now read "Requires Max Mode on legacy request-based plans; Up to 1M tokens with extended context at the same per-token rates"; the earlier "through August 31, 2026" launch window is gone); Fable 5 $10/$50 — "Requests that trip a security guardrail are automatically routed to Claude Opus" |
-| OpenAI GPT-5 family (GPT-5.6 Luna / Sol / Terra, GPT-5.5, GPT-5.4/Mini/Nano, plus the Codex line) | third-party | GPT-5.6 rows carry cache-write columns ("Cache writes are billed at 1.25x the uncached input rate") |
-| Google Gemini family (Gemini 3.5 / 3.6 / 3.7 Flash, 3.1 Pro) | third-party | selectable alongside the above; Gemini 3.7 Flash is the newest listed row |
-| GLM 5.2 (Z.ai), Kimi K2.7 Code / Kimi K3 (Moonshot) | third-party | also listed |
+| Anthropic Claude family (headline rows: Claude Fable 5 / 5.1, Opus 5, Sonnet 5, Opus 4.8 / 4.7) | third-party | Sonnet 5 $2/$10 with no promotional end date on the page (its row notes now read "Requires Max Mode on legacy request-based plans; Up to 1M tokens with extended context at the same per-token rates"; the earlier "through August 31, 2026" launch window is gone); Fable 5 $10/$50 — "Requests that trip a security guardrail are automatically routed to Claude Opus"; Fable 5.1 newly listed 2026-09-11 following Anthropic's own launch (see `claude.md`), pricing row not independently re-quoted this run |
+| OpenAI GPT-5 family (GPT-5, GPT-5 Fast, GPT-5 Mini, GPT-5-Codex, GPT-5.1 Codex / Codex Max / Codex Mini, GPT-5.2, GPT-5.2 Codex, GPT-5.3 Codex, GPT-5.4 / Mini / Nano, GPT-5.5, GPT-5.6 Luna / Sol / Terra) | third-party | 2026-09-11: the table now spans the full GPT-5 generation, not just the 5.6 family — confirm before assuming an older GPT-5.x id is gone from Cursor's router. GPT-5.6 rows carry cache-write columns ("Cache writes are billed at 1.25x the uncached input rate") |
+| Google Gemini family (Gemini 2.5 Flash, Gemini 3 Flash / Pro / Pro Image Preview, Gemini 3.1 Pro, Gemini 3.5 / 3.6 / 3.7 / 3.8 Flash) | third-party | Gemini 3.8 Flash is now the newest listed row (2026-09-11 — Google's own lineup shipped `gemini-3.8-flash` as the new leading Stable model, see `gemini-antigravity.md`) |
+| GLM 5.2 (Z.ai), Kimi K2.7 Code / Kimi K3 (Moonshot), **Muse Spark 1.3 (Meta, new 2026-09-11)** | third-party | Muse Spark 1.3 is a newly-observed row — first Meta model in the Cursor third-party table; per-model page not yet checked, `unverified this run` beyond its appearance in the pricing table |
+| Anthropic Claude family, expanded (Claude 4 Sonnet / 4 Sonnet 1M, 4.5 Haiku / Opus / Sonnet, 4.6 Opus / Sonnet, 4.7 Opus (+ fast mode), Opus 4.8, Fable 5 / 5.1, Opus 5, Sonnet 5) | third-party | 2026-09-11: the Claude row list is broader than previously recorded (older Sonnet/Opus point releases are still selectable, not just the current-generation set); see the row above for Sonnet 5 / Fable 5 pricing notes |
 
 - `Auto` is still **not a row of the pricing table**; it has its own "Auto modes"
   section: "Auto has three modes: Cost, Balance, and Intelligence." All three now

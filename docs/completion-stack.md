@@ -1,9 +1,11 @@
 # Native Completion & Verification Stacks (Claude Code · Codex)
 
-Last reviewed: 2026-08-29 (claims verified against official docs and vendor
-source 2026-06-15; migrated into this skill from operator research pages
-2026-07-10; Codex goal claims re-anchored 2026-07-17 after the follow-goals
-page was slimmed to a use-case walkthrough)
+Last reviewed: 2026-09-11 (re-verified live against docs/en/goal,
+learn.chatgpt.com/use-cases/follow-goals, and the Codex goals cookbook —
+content unchanged this run; claims first verified against official docs and
+vendor source 2026-06-15; migrated into this skill from operator research
+pages 2026-07-10; Codex goal claims re-anchored 2026-07-17 after the
+follow-goals page was slimmed to a use-case walkthrough)
 
 How Claude Code and Codex natively force work to finish **with evidence** —
 the built-in goal gates, Stop hooks, and verification skills — and where each

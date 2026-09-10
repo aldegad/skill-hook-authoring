@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-09-10
+Last reviewed: 2026-09-11
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or
@@ -75,7 +75,7 @@ the same idea, but they are reached differently:
 
 > **Billing caveat (Claude Code).** On a subscription, `claude -p` and Agent SDK
 > runs draw from your plan's usage limits — the same pool as interactive use, with
-> no separate per-run credit. As of 2026-09-10, the Agent SDK billing
+> no separate per-run credit. As of 2026-09-11, the Agent SDK billing
 > change announced for 2026-06-15 remains **paused**. The official support page
 > opens with a dated banner: *"Update June 15: We're pausing the changes to Claude
 > Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK,
@@ -88,7 +88,7 @@ the same idea, but they are reached differently:
 > `claude -p` cron; the reliability advantage (Routine runs regardless of laptop
 > state) still applies. See `docs/cloud-automation.md`. (Source:
 > https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan,
-> verified 2026-09-10; the `ANTHROPIC_API_KEY` caveat re-confirmed 2026-09-10 on
+> verified 2026-09-11; the `ANTHROPIC_API_KEY` caveat re-confirmed 2026-09-11 on
 > https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan.)
 
 ## C. Resume invocation (command syntax)
@@ -119,7 +119,13 @@ in the form that runtime's resume command accepts. For Claude Code, a session ID
 resolves from any directory: Claude Code "searches the current project directory
 and its git worktrees, then every other project on this machine" (v2.1.223+; the
 cross-project search resolves only when exactly one other project holds a
-transcript for that ID, so a hand-copied duplicate reports not-found). `claude --from-pr` is **not** a pin: it
+transcript for that ID, so a hand-copied duplicate reports not-found). As of
+2026-09-11, `-r`/`--resume` also accepts, in place of a session ID, "the
+absolute path to a session's `.jsonl` transcript file," and Claude Code
+continues the conversation stored in that file. Also as of Claude Code
+v2.1.257, `--continue` "opens a background session that has finished, but not
+one that is still running" — a still-running background session is not a
+`--continue` target. `claude --from-pr` is **not** a pin: it
 "open[s] the session picker filtered to sessions linked to a specific pull
 request. Accepts a PR number, a GitHub or GitHub Enterprise PR URL, a GitLab merge
 request URL, or a Bitbucket pull request URL" — it filters a picker rather than
@@ -167,12 +173,19 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
   declared in a plugin `hooks.json` or the primary `settings.json` and browsed via
   `/hooks`; workspace skills in `.agents/skills/` compile to typed `/<skill-name>`
   slash commands. See `docs/plugin-packaging.md` and `docs/compatibility-matrix.md`.
-- **Not confirmed officially** (seen only in third-party guides, so excluded
-  here): a `GEMINI_API_KEY` → `AV_API_KEY` env-var swap and specific
-  default-model / exit-code changes. Auth is via the OS keyring, not an env var.
-  (The headless `agy -p` flag left this list on 2026-07-28 — it is now officially
-  documented on the Headless-mode page.) Re-verify on the official docs before
-  relying on any of these.
+- **`GEMINI_API_KEY` auth is now officially documented (2026-09-11).** The
+  install page's "Using a Gemini API key" section states: "Run Antigravity CLI
+  with your own Gemini API key instead of a signed-in Google account" for
+  "headless and CI runs, where no browser is available to complete a sign-in."
+  It requires **both** steps — set `modelProvider` to `gemini` in
+  `~/.gemini/antigravity-cli/settings.json` **and** export `GEMINI_API_KEY`
+  ("Only setting a `GEMINI_API_KEY` environment variable on its own has no
+  effect"). `GOOGLE_GEMINI_BASE_URL` points at a custom endpoint. This retires
+  the earlier "Auth is via the OS keyring, not an env var" verdict — keyring
+  sign-in remains the default, but a documented API-key path now exists
+  alongside it for unattended runs. No `AV_API_KEY` swap is documented anywhere
+  (that third-party claim stays unconfirmed). (Source:
+  <https://antigravity.google/docs/cli/install>.)
 
 ## Why this matters for package authoring
 
@@ -212,7 +225,7 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
   the transition blog does **not** state the OSS repo's licence, so no Apache-2.0
   claim is made for it. (The Codex *goal internals* in `completion-stack.md` are
   source-verified against `openai/codex` under the same rule.)
-- **Claude Code Agent SDK billing (status as of 2026-09-10):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token for CI and scripts; requires a Claude subscription — now documented on the CLI reference page, verified 2026-07-29) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-09-10.)
+- **Claude Code Agent SDK billing (status as of 2026-09-11):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token for CI and scripts; requires a Claude subscription — now documented on the CLI reference page, verified 2026-07-29) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-09-11.)
 - **Antigravity CLI billing (G1 credits, verified 2026-07-28):** `agy` model calls
   run against plan quota; the `useG1Credits` setting ("External builds only. Uses
   personal AI credits for model calls once plan quotas are exhausted.") is the
@@ -251,6 +264,6 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
 - Cursor CLI parameters — <https://cursor.com/docs/cli/reference/parameters>
 - Cursor CLI overview — <https://cursor.com/docs/cli/overview>
 - Cursor CLI using (in-session `/resume`, `--continue`) — <https://cursor.com/docs/cli/using>
-- gajae-code (community project, README — not vendor docs; re-verified 2026-09-10) — <https://github.com/Yeachan-Heo/gajae-code>
+- gajae-code (community project, README — not vendor docs; re-verified 2026-09-11) — <https://github.com/Yeachan-Heo/gajae-code>
 - Claude Code with Pro/Max plan (billing) — <https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan>
-- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-09-10) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
+- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-09-11) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>

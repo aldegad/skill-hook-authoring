@@ -2,14 +2,14 @@
 
 Official source: https://docs.anthropic.com/en/docs/about-claude/models/overview
 (301-redirects to `platform.claude.com/docs/en/docs/about-claude/models/overview` — same official doc)
-Last reviewed: 2026-09-10 (verified live against the official models overview)
+Last reviewed: 2026-09-11 (verified live against the official models overview)
 
 ## Current shipping models
 
 | Family | Model id | Reasoning | Notes |
 |---|---|---|---|
-| Claude Fable 5 | `claude-fable-5` | adaptive thinking (always on) | Most capable widely released model; next-generation intelligence for long-running agents. 1M context. |
-| Claude Opus 5 | `claude-opus-5` | adaptive thinking; `effort` defaults to `high` on the Claude API and Claude Code | "For complex agentic coding and enterprise work" — the page's start-here recommendation for that tier. $5/$25 per MTok; knowledge cutoff May 2026. Supersedes Opus 4.8 (see the page's "Migrating to Claude Opus 5" guide). |
+| Claude Fable 5.1 | `claude-fable-5-1` | adaptive thinking (always on) | "For demanding reasoning and long-horizon agentic work, or when your evals on Claude Opus 5 at higher effort still fall short." $10/$50 per MTok; 1M context; knowledge cutoff Jun 2026. Supersedes Fable 5, which moved to the legacy row below (2026-09-11). |
+| Claude Opus 5 | `claude-opus-5` | adaptive thinking; `effort` defaults to `high` on the Claude API and Claude Code | The page's start-here recommendation "for most workloads" (updated wording — previously "for complex agentic coding and enterprise work", still the per-model description on the compare table). $5/$25 per MTok; knowledge cutoff May 2026. Supersedes Opus 4.8 (see the page's "Migrating to Claude Opus 5" guide). |
 | Claude Sonnet 5 | `claude-sonnet-5` | adaptive thinking; `effort` defaults to `high` on the Claude API and Claude Code | Balanced tier; supersedes Sonnet 4.6. 1M context. $2/$10 per MTok on the models overview (no promotional end date is stated there). |
 | Claude Haiku 4.5 | `claude-haiku-4-5-20251001` (alias `claude-haiku-4-5`) | extended thinking | Low-latency / low-cost tier. 200k context. |
 
@@ -18,16 +18,18 @@ Last reviewed: 2026-09-10 (verified live against the official models overview)
   `effort` / `ultracode` labels remain a **Claude Code / caller-layer** selector,
   not distinct vendor model ids — the CLI reference documents `--effort` with the
   named options `low`, `medium`, `high`, `xhigh`, `max`, `ultracode`.
-- **Documented but not generally available:** Claude Mythos 5 (`claude-mythos-5`)
-  — invitation-only, limited availability to approved customers in Project
-  Glasswing (defensive cybersecurity workflows; no self-serve sign-up; access via
-  an Anthropic, AWS, or Google Cloud account team). It shares Fable 5's specs and
-  pricing and omits Fable 5's safety classifiers. The models overview no longer
-  carries it; its documentation is the dedicated model page
-  <https://platform.claude.com/docs/en/models/mythos-5/overview>. Claude Mythos
-  Preview (`claude-mythos-preview`) is **deprecated**, with `claude-mythos-5` as
-  the stated migration target (model-deprecations page). Do not list either as a
-  spawnable id in downstream catalogs.
+- **Documented but not generally available:** Claude Mythos, Project Glasswing's
+  invitation-only defensive-cybersecurity model — invitation-only, no self-serve
+  sign-up, access via an Anthropic, AWS, or Google Cloud account team. The models
+  overview's cache-pricing footnote now references **Claude Mythos 5.1**
+  (2026-09-11: previously Mythos 5) alongside Fable 5.1 for the reduced 2.5%
+  cache-read rate, tracking Mythos to the Fable line's current generation; its
+  own documentation remains the dedicated model page
+  <https://platform.claude.com/docs/en/models/mythos-5/overview> (not re-fetched
+  this run — verify the id there before citing `claude-mythos-5` vs a `-5-1`
+  form). Claude Mythos Preview (`claude-mythos-preview`) is **deprecated**, with
+  Mythos 5 as the stated prior migration target (model-deprecations page). Do not
+  list any Mythos id as a spawnable id in downstream catalogs.
 - Every current model id is a **pinned snapshot**: from the 4.6 generation onward
   the ids use a dateless format that is still a pinned snapshot, not an evergreen
   pointer (Haiku 4.5 keeps its dated `-20251001` form).
@@ -36,6 +38,7 @@ Last reviewed: 2026-09-10 (verified live against the official models overview)
 
 | Model | Status | Replaced by |
 |---|---|---|
+| `claude-fable-5` (Fable 5) | legacy (still available, 2026-09-11) | `claude-fable-5-1` |
 | `claude-opus-4-8` (Opus 4.8) | legacy (still available; `effort` defaults to `high` on all surfaces) | `claude-opus-5` |
 | `claude-opus-4-7` (Opus 4.7) | legacy (still available, migration recommended) | current Opus. Fully removed from the Kuma Studio spawnable catalog 2026-07-02. |
 | `claude-sonnet-4-6` (Sonnet 4.6) | legacy | `claude-sonnet-5` |
