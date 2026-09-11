@@ -4,7 +4,7 @@ Official source: https://docs.x.ai/developers/models
 (moved from `docs.x.ai/docs/models`, which now 308-redirects here; model detail
 links live under `/developers/models/<id>`) plus the CLI reference at
 https://docs.x.ai/build/cli/reference
-Last reviewed: 2026-09-11 (verified live against the official xAI models page,
+Last reviewed: 2026-09-12 (verified live against the official xAI models page,
 the reasoning capability page, the may-15-retirement page, and the CLI reference)
 
 ## Current shipping models
@@ -26,6 +26,9 @@ Specialized APIs:
 - **Imagine API** (image/video generation and editing) — five documented ids under
   "Imagine Pricing": `grok-imagine-image`, `grok-imagine-image-2.0`,
   `grok-imagine-image-quality`, `grok-imagine-video`, `grok-imagine-video-1.5`.
+  `grok-imagine-image-quality` is scheduled to retire on **2026-11-02** in favor
+  of `grok-imagine-image-2.0` (stated on the may-15-retirement page; as of
+  2026-09-12 it is still listed as current).
 - **Grok Voice API** (real-time conversations, speech-to-text, text-to-speech) —
   now **id-bearing**: the "Voice Pricing" section names
   `grok-voice-think-fast-2.0`, with `grok-voice-think-fast-1.0` marked
@@ -61,7 +64,7 @@ Retired effective 2026-05-15 12:00 PM PT, with documented redirects:
 | `grok-4-1-fast-reasoning`, `grok-4-fast-reasoning` | `grok-4.3` with `low` reasoning effort |
 | `grok-4-1-fast-non-reasoning`, `grok-4-fast-non-reasoning` | `grok-4.3` with `none` reasoning effort |
 | `grok-code-fast-1` | `grok-build-0.1` |
-| `grok-imagine-image-pro` | `grok-imagine-image-quality` |
+| `grok-imagine-image-pro` | `grok-imagine-image-quality` (itself scheduled to retire 2026-11-02 in favor of `grok-imagine-image-2.0`) |
 | `grok-4-0709` | `grok-4.3` with `low` reasoning effort |
 | `grok-3` | `grok-4.3` with `none` reasoning effort |
 
