@@ -1,6 +1,6 @@
 # Native Completion & Verification Stacks (Claude Code · Codex)
 
-Last reviewed: 2026-09-11 (re-verified live against docs/en/goal,
+Last reviewed: 2026-09-12 (re-verified live against docs/en/goal,
 learn.chatgpt.com/use-cases/follow-goals, and the Codex goals cookbook —
 content unchanged this run; claims first verified against official docs and
 vendor source 2026-06-15; migrated into this skill from operator research
@@ -256,9 +256,9 @@ commands, and tests — the decisive contrast with Claude's `/goal` evaluator
 [codex hooks](https://learn.chatgpt.com/docs/hooks)
 
 - Codex has a **full lifecycle hooks system** (modeled on Claude Code's).
-  Events: `SessionStart` · `SessionEnd` · `SubagentStart` · `PreToolUse` ·
-  `PermissionRequest` · `PostToolUse` · `PreCompact` · `PostCompact` ·
-  `UserPromptSubmit` · `SubagentStop` · `Stop`.
+  Events: `SessionStart` · `SessionEnd` · `Interrupt` · `SubagentStart` ·
+  `PreToolUse` · `PermissionRequest` · `PostToolUse` · `PreCompact` ·
+  `PostCompact` · `UserPromptSubmit` · `SubagentStop` · `Stop`.
 - **The Stop hook is a real hard gate**:
   `{"decision":"block","reason":"Run one more pass over the failing tests."}`
   or exit code 2 (+stderr) blocks turn termination and forces another pass.

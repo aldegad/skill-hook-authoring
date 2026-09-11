@@ -2,7 +2,7 @@
 
 Official source: https://docs.anthropic.com/en/docs/about-claude/models/overview
 (301-redirects to `platform.claude.com/docs/en/docs/about-claude/models/overview` — same official doc)
-Last reviewed: 2026-09-11 (verified live against the official models overview)
+Last reviewed: 2026-09-12 (verified live against the official models overview)
 
 ## Current shipping models
 
@@ -13,7 +13,7 @@ Last reviewed: 2026-09-11 (verified live against the official models overview)
 | Claude Sonnet 5 | `claude-sonnet-5` | adaptive thinking; `effort` defaults to `high` on the Claude API and Claude Code | Balanced tier; supersedes Sonnet 4.6. 1M context. $2/$10 per MTok on the models overview (no promotional end date is stated there). |
 | Claude Haiku 4.5 | `claude-haiku-4-5-20251001` (alias `claude-haiku-4-5`) | extended thinking | Low-latency / low-cost tier. 200k context. |
 
-- The current generation uses **adaptive thinking** (Fable 5: always on); Haiku
+- The current generation uses **adaptive thinking** (Fable 5.1: always on); Haiku
   4.5 is the one current model still on **extended thinking**. The
   `effort` / `ultracode` labels remain a **Claude Code / caller-layer** selector,
   not distinct vendor model ids — the CLI reference documents `--effort` with the

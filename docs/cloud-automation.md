@@ -1,6 +1,6 @@
 # Cloud Automation
 
-Last reviewed: 2026-09-11
+Last reviewed: 2026-09-12
 
 Keep this repo's compatibility docs current by running a daily agent that reads
 `docs/official-sources.json`, fetches the official vendor URLs, and opens a pull
@@ -26,7 +26,7 @@ against the subscription usage pool, and a present API key suppresses the
 `launchd`/`cron` job calling `claude -p` look tempting, but the primary
 drawback is **reliability**: a local job fires only when the machine is awake
 at the scheduled time, while a cloud Routine runs regardless of laptop state.
-Note: as of 2026-09-11 the billing difference described here previously (a
+Note: as of 2026-09-12 the billing difference described here previously (a
 separate monthly Agent SDK credit) remains **paused** — `claude -p` and
 Agent SDK usage on subscription plans draw from the same usage pool as
 interactive sessions (no separate per-run credit). For `ANTHROPIC_API_KEY` users billing remains
@@ -73,9 +73,9 @@ branch pushes** in that repository's routine Permissions and push an
 Codex users can run the same daily flow with a Codex scheduled task instead (the
 docs no longer use the "Automations" product name). It can schedule recurring
 tasks (RRULE recurrence), combine them with skills, and run repo work in a
-dedicated worktree. Project-scoped scheduled tasks require the Codex app to be
-running and the project to exist on disk, so they do not match the laptop-off
-behavior of a cloud routine.
+dedicated worktree. Project-scoped scheduled tasks require the machine to be
+powered on with the ChatGPT desktop app running and the project on disk, so they
+do not match the laptop-off behavior of a cloud routine.
 
 Use the same prompt from `prompts/daily-official-doc-update.md`.
 
@@ -102,8 +102,7 @@ not required for the gate above, and it has its own prerequisites: auto-merge
 must be **enabled for the repository** before it can be used on a pull request
 (a repo-level setting, not just branch protection), the option to enable it is
 **shown only on pull requests that cannot be merged immediately**, and write
-permission is required. GitHub disables auto-merge again if someone without
-write permission pushes to the head branch, or if the base branch is switched.
+permission is required. GitHub disables auto-merge again if someone without write permission pushes to the head branch or switches the base branch.
 The `gh pr merge --auto` invocation is a GitHub CLI surface, not something the
 `github-auto-merge` docs page documents.
 
