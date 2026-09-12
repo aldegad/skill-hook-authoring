@@ -1,6 +1,6 @@
 # Native Completion & Verification Stacks (Claude Code · Codex)
 
-Last reviewed: 2026-09-12 (re-verified live against docs/en/goal,
+Last reviewed: 2026-09-13 (re-verified live against docs/en/goal,
 learn.chatgpt.com/use-cases/follow-goals, and the Codex goals cookbook —
 content unchanged this run; claims first verified against official docs and
 vendor source 2026-06-15; migrated into this skill from operator research
@@ -272,22 +272,24 @@ commands, and tests — the decisive contrast with Claude's `/goal` evaluator
 
 ### `/review` and the soft surfaces
 
-- **`/review`** (in-session): *"a dedicated reviewer that reads the diff you
-  select and reports prioritized, actionable findings without touching your
-  working tree."* Report-shaped — **not a pass/fail gate**.
+- **`/review`** (in-session): *"Run a dedicated review against uncommitted
+  changes, a commit, or a base branch. Codex reports prioritized findings without
+  modifying your working tree"* Report-shaped — **not a pass/fail gate**.
   [codex/cli](https://learn.chatgpt.com/docs/codex/cli)
 - **`update_plan`** (plan tool) — display/tracking surface, not a gate.
 - **AGENTS.md** — soft instructions (e.g. "Always run `npm test` after
   modifying JS"); merged into the prompt, not an enforced checkpoint.
   [agent-configuration/agents-md](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
 - **Approval/sandbox modes** (read-only / workspace-write /
-  danger-full-access; on-request/never/untrusted/granular) — **safety and
+  danger-full-access; on-request/never/granular — `untrusted` is no longer
+  supported) — **safety and
   permission** gates, not completion gates.
   [agent-approvals-security](https://learn.chatgpt.com/docs/agent-approvals-security)
 - **`notify`** — fire-and-forget JSON side channel to an external program
   (`agent-turn-complete`); not a gate.
-- `codex exec` (non-interactive/CI, JSONL), `codex apply` (`unverified this
-  run`), `codex mcp`
+- `codex exec` (non-interactive/CI, JSONL), `codex apply` (applies the most recent
+  diff from a Codex cloud chat to the local repo; exits non-zero if `git apply`
+  fails), `codex mcp`
   (MCP client + server). [developer-commands](https://learn.chatgpt.com/docs/developer-commands?surface=cli)
 
 ### Enforcement grades (per official docs)
