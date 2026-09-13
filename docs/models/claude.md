@@ -2,7 +2,7 @@
 
 Official source: https://docs.anthropic.com/en/docs/about-claude/models/overview
 (301-redirects to `platform.claude.com/docs/en/models/overview` — same official doc)
-Last reviewed: 2026-09-13 (verified live against the official models overview)
+Last reviewed: 2026-09-14 (verified live against the official models overview)
 
 ## Current shipping models
 
@@ -39,7 +39,7 @@ Last reviewed: 2026-09-13 (verified live against the official models overview)
 | Model | Status | Replaced by |
 |---|---|---|
 | `claude-fable-5` (Fable 5) | legacy (still available, 2026-09-11) | `claude-fable-5-1` |
-| `claude-opus-4-8` (Opus 4.8) | legacy (still available; `effort` defaults to `high` on all surfaces) | `claude-opus-5` |
+| `claude-opus-4-8` (Opus 4.8) | legacy (still available; `effort` defaults to `high` on the Claude API) | `claude-opus-5` |
 | `claude-opus-4-7` (Opus 4.7) | legacy (still available, migration recommended) | current Opus. Fully removed from the Kuma Studio spawnable catalog 2026-07-02. |
 | `claude-sonnet-4-6` (Sonnet 4.6) | legacy | `claude-sonnet-5` |
 | `claude-opus-4-6`, `claude-sonnet-4-5-20250929`, `claude-opus-4-5-20251101` | legacy | current-generation equivalents |

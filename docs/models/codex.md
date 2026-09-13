@@ -3,7 +3,7 @@
 Official source: https://learn.chatgpt.com/docs/models
 (moved 2026-07-16 — `developers.openai.com/codex/models` now 308-redirects here,
 along with the rest of the Codex doc set)
-Last reviewed: 2026-09-13 (verified live against the official Codex models page)
+Last reviewed: 2026-09-14 (verified live against the official Codex models page)
 
 ## Current shipping models
 
@@ -26,8 +26,9 @@ Last reviewed: 2026-09-13 (verified live against the official Codex models page)
   lists the same surface labels for each model but does not preserve icon state,
   so do not infer an availability matrix from text-only fetches — read the page's `.md` twin (`https://learn.chatgpt.com/docs/models.md`), whose per-surface `value: true|false` flags carry it. The page still
   says you can't change the default model for Codex cloud chats.
-- Reasoning effort is documented as a selector: Low, Medium (default), High,
-  Extra High, Max, and Ultra. The page says there is no exact mapping from GPT-5.5
+- Reasoning effort is documented as a selector: Low, Medium, High,
+  Extra High, Max, and Ultra (the page says to "Start with the default effort"
+  but does not name which tier is the default). The page says there is no exact mapping from GPT-5.5
   reasoning efforts to GPT-5.6; try familiar tasks at a lower setting and adjust.
   The lowest tier is surface-named: "Light" in the ChatGPT desktop app / web /
   IDE extension, "Low" in the CLI. Max must be enabled in app settings; Ultra
@@ -43,7 +44,7 @@ Last reviewed: 2026-09-13 (verified live against the official Codex models page)
 
 - **`gpt-5.4` and `gpt-5.4-mini`**: the page still states they "retire from Codex
   on August 31, 2026" with ChatGPT sign-in; that date has passed and both ids
-  remain listed under Other models (as of 2026-09-13). Replace `gpt-5.4` with `gpt-5.6-terra` and
+  remain listed under Other models (as of 2026-09-14). Replace `gpt-5.4` with `gpt-5.6-terra` and
   `gpt-5.4-mini` with `gpt-5.6-luna` in saved configurations, custom agents, and
   scheduled tasks. The OpenAI API and Codex authenticated with an API key are
   not affected by this Codex-with-ChatGPT retirement.

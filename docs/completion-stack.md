@@ -1,6 +1,6 @@
 # Native Completion & Verification Stacks (Claude Code · Codex)
 
-Last reviewed: 2026-09-13 (re-verified live against docs/en/goal,
+Last reviewed: 2026-09-14 (re-verified live against docs/en/goal,
 learn.chatgpt.com/use-cases/follow-goals, and the Codex goals cookbook —
 content unchanged this run; claims first verified against official docs and
 vendor source 2026-06-15; migrated into this skill from operator research
