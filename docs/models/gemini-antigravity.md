@@ -1,8 +1,7 @@
 # Google Antigravity CLI (`agy`) / Gemini — model lineup
 
 Official source: https://ai.google.dev/gemini-api/docs/models (the official Google
-Gemini model page — page last-updated 2026-09-04, advanced from 2026-08-27 as of
-the 2026-09-11 check; **a cookieless `curl` fails**:
+Gemini model page — page last-updated 2026-09-04; **a cookieless `curl` fails**:
 following redirects lands in a Google OAuth `auto_signin` loop and not following
 them returns a bodyless `302`. Two fetches do work: `curl --compressed -c
 <jar> -b <jar>` (the jar absorbs the consent cookie the redirect chain sets, and
@@ -14,7 +13,7 @@ English one by whole model generations (a `hl=ko` render on 2026-08-27 topped ou
 at Gemini 3.5 Flash and carried no 3.7/3.6 row at all), so a browser-locale render
 will read as a mass retirement that has not happened), plus
 https://antigravity.google (server-rendered docs site).
-Last reviewed: 2026-09-13 (verified live against the official Google Gemini model
+Last reviewed: 2026-09-14 (verified live against the official Google Gemini model
 page and the Antigravity docs pages)
 
 ## Current shipping models
@@ -28,7 +27,7 @@ page and the Antigravity docs pages)
 | `gemini-3.5-flash-lite` | Stable | Fast, cost-effective 3.5 model for high-throughput execution. |
 | `gemini-3.1-flash-lite` | Stable | "frontier-class performance rivaling larger models at a fraction of the cost". |
 | `gemini-3.1-pro-preview` | **Preview** | Advanced intelligence for complex problem-solving and agentic + vibe coding. Preview ids carry an explicit `-preview` suffix. |
-| `gemini-3-flash-preview` | **Preview** | current Flash-generation preview. |
+| `gemini-3-flash-preview` | **Preview** | "Frontier-class performance rivaling larger models at a fraction of the cost." Preview ids carry an explicit `-preview` suffix. |
 | `gemini-3.5-transcribe` / `gemini-3.5-transcribe-live` | **Stable** (new) | Low-latency speech-to-text with utterance-based language detection, speaker diarization, word-level timestamps, and custom vocabulary biasing. Two endpoints under one model entry — batch and live. |
 | Antigravity Agent (`antigravity-preview-05-2026`) | **Preview** | managed general-purpose agent model that plans, reasons, and executes code in an isolated Linux sandbox. |
 
@@ -44,7 +43,7 @@ page and the Antigravity docs pages)
   undecoded fetch renders as binary garbage. Do not record `unverified this run`
   on that symptom; re-request with decompression, or take the `.md` twin.
 - The Antigravity CLI's own `agy models` sample output (headless-mode page,
-  re-verified 2026-09-13) leads with `gemini-3.8-flash-high` and
+  re-verified 2026-09-14) leads with `gemini-3.8-flash-high` and
   `gemini-3.8-flash-medium`, followed by `gemini-3.7-flash-high`,
   `gemini-3.7-flash-medium`, `gemini-3.6-flash-high`, `gemini-3.6-flash-medium`,
   `gemini-3.1-pro-high`, and `claude-sonnet-4-6` ("Claude Sonnet 4.6 (Thinking)")
@@ -54,9 +53,8 @@ page and the Antigravity docs pages)
 - The API page also lists (beyond this table's scope): Preview — Gemini 3.5 Live
   Translate, Gemini 3.1 Flash Live, Gemini 3.1 Flash TTS, Gemini Omni Flash,
   Lyria 3 Pro (previous generation)/Clip, Gemini Embedding 2
-  (`gemini-embedding-2-preview`); GA — Nano Banana 2 / 2 Lite; plus Deep
-  Research / Deep Research Max, Computer Use, Robotics-ER 2 / 1.6, Nano Banana
-  Pro, Lyria 3.5 (`lyria-3.5`, the flagship music model), and Lyria RealTime.
+  (`gemini-embedding-2-preview`); GA — Nano Banana 2 / 2 Lite / Pro; plus Deep
+  Research / Deep Research Max, Computer Use, Robotics-ER 2 / 1.6, Lyria 3.5 (`lyria-3.5`, the flagship music model), and Lyria RealTime.
 
 ## Retired / superseded
 

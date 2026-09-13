@@ -2,7 +2,7 @@
 
 Official source: https://cursor.com/docs/models-and-pricing
 (`cursor.com/docs/models` 308-redirects here)
-Last reviewed: 2026-09-13 (verified live against the official models & pricing page)
+Last reviewed: 2026-09-14 (verified live against the official models & pricing page)
 
 ## Current shipping models
 
@@ -15,7 +15,7 @@ separate lineup section.
 |---|---|---|
 | Composer 2.5 (standard / Fast) | **Cursor** | Described on its own per-model page (`docs/models/cursor-composer-2-5`), not on the pricing page: "Composer 2.5 is Cursor's own agentic model. It builds on Composer 2 with stronger intelligence on long agentic tasks, better effort calibration, tool selection, intent understanding, and reliability." The **fast** variant is the product default; the standard tier is the cost-optimized one. (Composer 1 no longer appears anywhere on the pricing page.) |
 | Grok 4.6 (standard / Fast) | Cursor + SpaceXAI | Frontier model for complex coding and knowledge work; improves instruction following and long-horizon agentic work over 4.5. Supports `low`, `medium`, `high` (default), and `xhigh` effort (per the model's own page). On the Start plan all three Cursor models run in non-fast mode and Grok 4.6 / 4.5 are pinned to a fixed medium effort; the level is changeable on Pro and above. |
-| Grok 4.5 ("Cursor Grok 4.5") | Cursor + SpaceXAI | Pricing-page row note: "Jointly trained by Cursor and SpaceXAI". |
+| Grok 4.5 (standard / Fast) | Cursor + SpaceXAI | Pricing-page row note (on all four Grok rows): "Jointly trained by Cursor and SpaceXAI". |
 | Anthropic Claude family (default-visible rows: Claude Fable 5.1, Opus 5, Sonnet 5) | third-party | Sonnet 5 $2/$10 with no promotional end date on the page (its row notes now read "Requires Max Mode on legacy request-based plans; Up to 1M tokens with extended context at the same per-token rates"; the earlier "through August 31, 2026" launch window is gone); Fable 5 $10/$50 — "Requests that trip a security guardrail are automatically routed to Claude Opus"; Fable 5.1 $10/$50 ("Prompt-cache reads are $0.25/M, 75% below the standard cache-read rate"; see `claude.md`) |
 | OpenAI GPT-5 family (GPT-5, GPT-5 Fast, GPT-5 Mini, GPT-5-Codex, GPT-5.1 Codex / Codex Max / Codex Mini, GPT-5.2, GPT-5.2 Codex, GPT-5.3 Codex, GPT-5.4 / Mini / Nano, GPT-5.5, GPT-5.6 Luna / Sol / Terra) | third-party | The table spans the full GPT-5 generation; rows before GPT-5.6 are listed but marked "Hidden by default". GPT-5.6 rows carry cache-write columns ("Cache writes are billed at 1.25x the uncached input rate") |
 | Google Gemini family (Gemini 2.5 Flash, Gemini 3 Flash / Pro / Pro Image Preview, Gemini 3.1 Pro, Gemini 3.5 / 3.6 / 3.7 / 3.8 Flash) | third-party | Gemini 3.8 Flash ($0.75 in / $3.5 out) is the newest listed row; Gemini 3.1 Pro and Gemini 3.8 Flash are default-visible, while Gemini 2.5 Flash, Gemini 3 Flash / Pro / Pro Image Preview, and Gemini 3.5 / 3.6 / 3.7 Flash are marked "Hidden by default" (see `gemini-antigravity.md`) |
