@@ -4,7 +4,7 @@ Official source: https://docs.x.ai/developers/models
 (moved from `docs.x.ai/docs/models`, which now 308-redirects here; model detail
 links live under `/developers/models/<id>`) plus the CLI reference at
 https://docs.x.ai/build/cli/reference
-Last reviewed: 2026-09-15 (verified live against the official xAI models page,
+Last reviewed: 2026-09-16 (verified live against the official xAI models page,
 the reasoning capability page, the may-15-retirement page, and the CLI reference)
 
 ## Current shipping models
@@ -29,7 +29,7 @@ Specialized APIs:
   `grok-imagine-image-quality` is scheduled to retire on **2026-11-02** in favor
   of `grok-imagine-image-2.0`; the may-15-retirement page now links a dedicated
   November 2 migration guide (`/developers/migration/imagine-image-quality-nov-2`)
-  for it. As of 2026-09-15 the id is still listed as current on the models page.
+  for it. As of 2026-09-16 the id is still listed as current on the models page.
 - **Grok Voice API** (real-time conversations, speech-to-text, text-to-speech) —
   the "Voice Pricing" section names only `grok-voice-think-fast-2.0` (Speech to
   Speech). `grok-voice-think-fast-1.0` no longer appears on the page, and its

@@ -1,7 +1,7 @@
 # Google Antigravity CLI (`agy`) / Gemini — model lineup
 
 Official source: https://ai.google.dev/gemini-api/docs/models (the official Google
-Gemini model page — page last-updated 2026-09-04; **a cookieless `curl` fails**:
+Gemini model page — page last-updated 2026-09-15; **a cookieless `curl` fails**:
 following redirects lands in a Google OAuth `auto_signin` loop and not following
 them returns a bodyless `302`. Two fetches do work: `curl --compressed -c
 <jar> -b <jar>` (the jar absorbs the consent cookie the redirect chain sets, and
@@ -13,7 +13,7 @@ English one by whole model generations (a `hl=ko` render on 2026-08-27 topped ou
 at Gemini 3.5 Flash and carried no 3.7/3.6 row at all), so a browser-locale render
 will read as a mass retirement that has not happened), plus
 https://antigravity.google (server-rendered docs site).
-Last reviewed: 2026-09-15 (verified live against the official Google Gemini model
+Last reviewed: 2026-09-16 (verified live against the official Google Gemini model
 page and the Antigravity docs pages)
 
 ## Current shipping models
@@ -21,6 +21,8 @@ page and the Antigravity docs pages)
 | Model | Status | Notes |
 |---|---|---|
 | `gemini-3.8-flash` | **New Stable** | "Our most intelligent Flash model" — "engineered for long-horizon software engineering, autonomous agents, and complex enterprise workflows." Leads the table, superseding `gemini-3.7-flash`. |
+| `gemini-3.8-live` | **New Stable** | Live API (audio-to-audio) model — "Default Live API model for most low-latency voice agent experiences without reasoning delays"; the Audio-models section calls it "the default option" for real-time dialogue. Supersedes `gemini-3.1-flash-live-preview` as the recommended Live model. |
+| `gemini-3.8-live-extended-thinking` | **New Stable** | "High-reasoning Live API model for voice interactions, recommended when higher background reasoning is required" during live interactions. |
 | `gemini-3.7-flash` | Stable | Previous-generation Flash model for complex coding, agentic workflows, and reliable multi-step execution. |
 | `gemini-3.6-flash` | Stable | Previous-generation Flash model balancing speed and multimodal capabilities. It remains the page's canonical naming example of a stable model id. |
 | `gemini-3.5-flash` | Stable | Legacy Flash model for baseline speed and routine, high-throughput workloads. |
@@ -43,7 +45,7 @@ page and the Antigravity docs pages)
   undecoded fetch renders as binary garbage. Do not record `unverified this run`
   on that symptom; re-request with decompression, or take the `.md` twin.
 - The Antigravity CLI's own `agy models` sample output (headless-mode page,
-  re-verified 2026-09-15) leads with `gemini-3.8-flash-high` and
+  re-verified 2026-09-16) leads with `gemini-3.8-flash-high` and
   `gemini-3.8-flash-medium`, followed by `gemini-3.7-flash-high`,
   `gemini-3.7-flash-medium`, `gemini-3.6-flash-high`, `gemini-3.6-flash-medium`,
   `gemini-3.1-pro-high`, and `claude-sonnet-4-6` ("Claude Sonnet 4.6 (Thinking)")
@@ -51,7 +53,8 @@ page and the Antigravity docs pages)
   this page. The base `gemini-3.8-flash`, `gemini-3.7-flash`, and
   `gemini-3.6-flash` ids are on the API page (Stable, above).
 - The API page also lists (beyond this table's scope): Preview — Gemini 3.5 Live
-  Translate, Gemini 3.1 Flash Live, Gemini 3.1 Flash TTS, Gemini Omni Flash,
+  Translate, Gemini 3.1 Flash Live (now described as a "Legacy Live API preview
+  model. We recommend updating to Gemini 3.8 Live."), Gemini 3.1 Flash TTS, Gemini Omni Flash,
   Lyria 3 Pro (previous generation)/Clip, Gemini Embedding 2
   (`gemini-embedding-2-preview`); GA — Nano Banana 2 / 2 Lite / Pro; plus Deep
   Research / Deep Research Max, Computer Use, Robotics-ER 2 / 1.6, Lyria 3.5 (`lyria-3.5`, the flagship music model), and Lyria RealTime.
