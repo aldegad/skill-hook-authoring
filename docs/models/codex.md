@@ -3,7 +3,7 @@
 Official source: https://learn.chatgpt.com/docs/models
 (moved 2026-07-16 — `developers.openai.com/codex/models` now 308-redirects here,
 along with the rest of the Codex doc set)
-Last reviewed: 2026-09-16 (verified live against the official Codex models page)
+Last reviewed: 2026-09-17 (verified live against the official Codex models page)
 
 ## Current shipping models
 
@@ -13,7 +13,7 @@ Last reviewed: 2026-09-16 (verified live against the official Codex models page)
 | `gpt-5.6-sol` | `codex -m gpt-5.6-sol` | "The most capable GPT-5.6 model for complex coding, computer use, research, and cybersecurity." |
 | `gpt-5.6-terra` | `codex -m gpt-5.6-terra` | Balanced GPT-5.6 model for everyday work; the page says it is a natural starting point for work previously given to GPT-5.5. |
 | `gpt-5.6-luna` | `codex -m gpt-5.6-luna` | Fast, affordable GPT-5.6 model for clear, repeatable tasks such as extraction, classification, transformation, and structured summaries. |
-| `gpt-5.5` | `codex -m gpt-5.5` | Other model: previous-generation flagship model for complex coding, computer use, knowledge work, and research workflows. Like `gpt-5.4` / `gpt-5.4-mini` it sits under **Other models**, behind the page's "View other models" toggle — not among the five Recommended models. |
+| `gpt-5.5` | `codex -m gpt-5.5` | Other model: "Previous-generation flagship model. Retires from ChatGPT, ChatGPT Work, and Codex on October 14, 2026; remains available on the OpenAI API." See Retired / superseded below. Like `gpt-5.4` / `gpt-5.4-mini` it sits under **Other models**, behind the page's "View other models" toggle — not among the five Recommended models. |
 | `gpt-5.3-codex-spark` | `codex -m gpt-5.3-codex-spark` | Text-only **research preview** optimized for near-instant, real-time coding iteration; available to ChatGPT Pro users. |
 | `gpt-5.4` | `codex -m gpt-5.4` | Other model: flagship model for professional work with strong coding, reasoning, tool use, and agentic workflow capabilities. The page's stated ChatGPT-sign-in retirement date (2026-08-31) has passed, but the id is still listed. |
 | `gpt-5.4-mini` | `codex -m gpt-5.4-mini` | Other model: fast, efficient mini model for responsive coding tasks and subagents. The page's stated ChatGPT-sign-in retirement date (2026-08-31) has passed, but the id is still listed. |
@@ -37,6 +37,10 @@ Last reviewed: 2026-09-16 (verified live against the official Codex models page)
   IDE extension, "Low" in the CLI. Max must be enabled in app settings; Ultra
   "uses subagents" behind a Settings > Configuration toggle.
 - Power settings: the page says to "Start with the default Power setting available to your account"; for eligible Pro, Business ($100), and Enterprise accounts the Astra rollout updates the Power options to Terra Light, Sol Light, Sol Medium, Astra Light, Astra Medium, and Astra Extra High ("Options can differ by plan and rollout stage").
+- Experimental context management (Astra keeps notes across context windows):
+  opt in with `features.context_management.experimental_mode = true` in
+  `config.toml`; off by default, ChatGPT Plus/Pro sign-in only, not available
+  with Business, Enterprise, or API-key sign-in at launch.
 - `model_reasoning_effort` and `service_tier` remain config knobs documented in
   the Codex config docs; service-tier tables are `not documented` on the models
   page.
@@ -45,9 +49,16 @@ Last reviewed: 2026-09-16 (verified live against the official Codex models page)
 
 ## Retired / superseded
 
+- **`gpt-5.5`** (retiring): "On October 14, 2026, GPT-5.5 will retire from ChatGPT,
+  ChatGPT Work, and Codex on all plans" (consumer, Business, Enterprise, and
+  Edu). Before that date, Codex with ChatGPT sign-in should switch to
+  `gpt-5.6-sol` — replace `gpt-5.5` in workspace defaults, saved model settings,
+  managed configurations, custom agents, scheduled tasks, and scripts that
+  select a model. The retirement does not apply to the OpenAI API. The id stays
+  listed under Other models until then.
 - **`gpt-5.4` and `gpt-5.4-mini`**: the page still states they "retire from Codex
   on August 31, 2026" with ChatGPT sign-in; that date has passed and both ids
-  remain listed under Other models (as of 2026-09-16). Replace `gpt-5.4` with `gpt-5.6-terra` and
+  remain listed under Other models (as of 2026-09-17). Replace `gpt-5.4` with `gpt-5.6-terra` and
   `gpt-5.4-mini` with `gpt-5.6-luna` in saved configurations, custom agents, and
   scheduled tasks. The OpenAI API and Codex authenticated with an API key are
   not affected by this Codex-with-ChatGPT retirement.
