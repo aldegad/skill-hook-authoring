@@ -1,6 +1,6 @@
 # Cloud Automation
 
-Last reviewed: 2026-09-16
+Last reviewed: 2026-09-17
 
 Keep this repo's compatibility docs current by running a daily agent that reads
 `docs/official-sources.json`, fetches the official vendor URLs, and opens a pull
@@ -26,7 +26,7 @@ against the subscription usage pool, and a present API key suppresses the
 `launchd`/`cron` job calling `claude -p` look tempting, but the primary
 drawback is **reliability**: a local job fires only when the machine is awake
 at the scheduled time, while a cloud Routine runs regardless of laptop state.
-Note: as of 2026-09-16 the billing difference described here previously (a
+Note: as of 2026-09-17 the billing difference described here previously (a
 separate monthly Agent SDK credit) remains **paused** — `claude -p` and
 Agent SDK usage on subscription plans draw from the same usage pool as
 interactive sessions (no separate per-run credit). For `ANTHROPIC_API_KEY` users billing remains
@@ -76,6 +76,11 @@ tasks (RRULE recurrence), combine them with skills, and run repo work in a
 dedicated worktree. Project-scoped scheduled tasks require the machine to be
 powered on with the ChatGPT desktop app running and the project on disk, so they
 do not match the laptop-off behavior of a cloud routine.
+On eligible plans a scheduled task can instead be triggered by a supported Gmail,
+Slack, or GitHub event, but only in ChatGPT on the web and mobile — not in the
+desktop app, Codex CLI, or IDE extension — and one task cannot combine event
+triggers with a time-based schedule. Tasks that select `gpt-5.5` must move to
+`gpt-5.6-sol` before its 2026-10-14 Codex retirement.
 
 Use the same prompt from `prompts/daily-official-doc-update.md`.
 

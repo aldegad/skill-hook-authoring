@@ -1,6 +1,6 @@
 # Native Completion & Verification Stacks (Claude Code · Codex)
 
-Last reviewed: 2026-09-16 (re-verified live against docs/en/goal,
+Last reviewed: 2026-09-17 (re-verified live against docs/en/goal,
 learn.chatgpt.com/use-cases/follow-goals, and the Codex goals cookbook —
 content unchanged this run; claims first verified against official docs and
 vendor source 2026-06-15; migrated into this skill from operator research
@@ -90,7 +90,7 @@ installed" — it is there.
   first, then every 2 hours); before v2.1.239 only idle check-ins backed off and
   turn-end check-ins recurred at the first interval.
   `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` replaces the 30-minute first interval and
-  scales the later ones with it, `0` turns check-ins off. Requires v2.1.234+
+  scales the later ones with it, `0` turns off check-ins and automatic retries. Requires v2.1.234+
   (idle check-ins, where an interactive session starts a turn on its own,
   v2.1.236+; a `-p` session only ever gets turn-end check-ins). **Idle check-ins
   are capped**: Claude Code starts at most **three** per goal between your
@@ -108,7 +108,12 @@ installed" — it is there.
   that manages them, like the desktop app or a cloud session, leaves the goal
   active), an exhausted credit balance, a context overflow auto-compaction could
   not clear, and an unavailable model. Every other failure, rate limits and
-  overloads included, leaves the goal active. Separately, if Claude answers the
+  overloads included, leaves the goal active — and in an interactive session
+  (v2.1.269+) Claude Code names the cause: a failure that tends to clear on its
+  own (overloaded server, dropped connection) auto-retries with a *"Goal still
+  active"* notice and **pauses after three automatic retries**, while a failure a
+  retry would only repeat (API rate limit, claude.ai usage limit, a hook that
+  ended the turn) pauses the goal with a *"Goal paused"* notice. Separately, if Claude answers the
   evaluator without using tools for several turns running, Claude Code **stops
   the loop, warns, and hands control back with the goal still set** — evaluation
   resumes on your next prompt. Neither path is a silent stall.
@@ -126,7 +131,12 @@ installed" — it is there.
   guard. A **prompt-type Stop hook** sends condition + transcript to a small
   model for an `{"ok":true|false}` verdict — this is exactly the primitive
   `/goal` wraps.
-- **SubagentStop hook**: same block/continue at subagent termination.
+- **SubagentStop hook**: same block/continue at subagent termination. On
+  v2.1.271+, a subagent that runs with the `SubagentHandback` tool (provided in
+  auto mode) delivers its report through that tool, so `last_assistant_message`
+  holds only its closing text, not the report — gate on the report by matching
+  a `PreToolUse`/`PostToolUse` hook on `SubagentHandback` and reading
+  `tool_input.message`.
 - Both Stop and SubagentStop also support
   `hookSpecificOutput.additionalContext` — non-error feedback injected for
   Claude while the conversation **continues** (as opposed to `decision:"block"`
