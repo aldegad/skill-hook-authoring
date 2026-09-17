@@ -1,6 +1,6 @@
 # CLI Spawn And Session Resume
 
-Last reviewed: 2026-09-17
+Last reviewed: 2026-09-18
 
 How to spawn each runtime **interactively** (a human-facing TUI session) versus
 **non-interactively** (headless / print / one-shot, for a script, hook, or
@@ -9,7 +9,7 @@ own official docs; where a runtime does not document a capability, the cell says
 `not documented`, never an inferred flag.
 
 One row — **gajae-code** (`gjc`) — is a community/MIT beta, not a vendor product;
-its rows cite the project's GitHub README (verified 2026-09-17), not vendor docs.
+its rows cite the project's GitHub README (verified 2026-09-18), not vendor docs.
 
 This doc owns the **command syntax** (launch / headless / resume invocation).
 For the deeper resume **semantics** — session stores, id form, capture-before-exit,
@@ -75,7 +75,7 @@ the same idea, but they are reached differently:
 
 > **Billing caveat (Claude Code).** On a subscription, `claude -p` and Agent SDK
 > runs draw from your plan's usage limits — the same pool as interactive use, with
-> no separate per-run credit. As of 2026-09-17, the Agent SDK billing
+> no separate per-run credit. As of 2026-09-18, the Agent SDK billing
 > change announced for 2026-06-15 remains **paused**. The official support page
 > opens with a dated banner: *"Update June 15: We're pausing the changes to Claude
 > Agent SDK usage described below. For now, nothing has changed: Claude Agent SDK,
@@ -88,7 +88,7 @@ the same idea, but they are reached differently:
 > `claude -p` cron; the reliability advantage (Routine runs regardless of laptop
 > state) still applies. See `docs/cloud-automation.md`. (Source:
 > https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan,
-> verified 2026-09-17; the `ANTHROPIC_API_KEY` caveat re-confirmed 2026-09-17 on
+> verified 2026-09-18; the `ANTHROPIC_API_KEY` caveat re-confirmed 2026-09-18 on
 > https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan.)
 
 ## C. Resume invocation (command syntax)
@@ -104,7 +104,7 @@ command to type.
 | Runtime | Continue most recent | Pin a specific session | Headless resume |
 |---|---|---|---|
 | Codex | `codex resume` (picker) | `codex resume <SESSION_ID>` — resume/archive/unarchive/delete accept a session ID (UUID) **or a session name** (`codex fork`'s `SESSION_ID` is typed `uuid` only), and "Session IDs take precedence over session names"; `--force` is documented as "Delete without prompting. The session argument must be a UUID; names still require interactive confirmation." | `codex exec resume --last` / `codex exec resume <SESSION_ID>` (`--all` widens past cwd) |
-| Claude Code | `claude -c` (latest in cwd) | `claude -r "<id-or-name>"` (set a name with `-n`) | add `-p`: `claude -c -p` / `claude -r "<s>" -p` |
+| Claude Code | `claude -c` (latest in cwd; interactive `-c` skips `-p`/Agent SDK sessions and sessions whose first prompt was `/loop`) | `claude -r "<id-or-name>"` (set a name with `-n`) | add `-p`: `claude -c -p` / `claude -r "<s>" -p` — unlike interactive `-c`, "`claude -p --continue` includes `-p`, SDK, and `/loop` sessions" |
 | Grok / xAI | `grok -c` | `grok -r [<ID>]` (reference: omitting the id resumes the most recent) / `grok -s <ID>` (named) — the reference documents this as `-s, --session-id <UUID>` ("Use a specific UUID for a new session"); the headless-scripting page still shows the looser `<ID>`, so the two pages differ | add `-p` to the same flags |
 | Hermes Agent | `hermes -c` / `hermes --resume latest` (`--in <dir>` scopes to that workspace) | `hermes -r <session_id>` (or by title; `hermes -c "<name>"` resumes the latest in that lineage) | not separately documented |
 | Antigravity CLI | `agy -c` / `agy --continue` (latest in workspace); "When you close the CLI, it automatically prints the exact command needed to resume that specific session" | `agy --conversation <conversation-id>`; in-TUI `/resume` (`/switch`, `/conversation`) picker, Tab imports Antigravity 2.0 desktop threads; `/fork` (`/branch`) | add `-p`: the Headless-mode page documents `-c`/`--continue` and `--conversation` working headless |
@@ -224,7 +224,7 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
   the transition blog does **not** state the OSS repo's licence, so no Apache-2.0
   claim is made for it. (The Codex *goal internals* in `completion-stack.md` are
   source-verified against `openai/codex` under the same rule.)
-- **Claude Code Agent SDK billing (status as of 2026-09-17):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token for CI and scripts; requires a Claude subscription — now documented on the CLI reference page, verified 2026-07-29) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-09-17.)
+- **Claude Code Agent SDK billing (status as of 2026-09-18):** The billing change planned for 2026-06-15 remains **paused** — `claude -p` and Agent SDK usage on subscription plans continues drawing from the same usage limits as interactive sessions. The separate monthly credit scheme is not active. For `ANTHROPIC_API_KEY` users billing remains pay-as-you-go. For scripted/CI runs against a subscription, authenticate with `claude setup-token` (a long-lived OAuth token for CI and scripts; requires a Claude subscription — now documented on the CLI reference page, verified 2026-07-29) rather than an API key, and pass `--output-format json` to capture `total_cost_usd` plus a per-model cost breakdown per invocation. Note that `--bare` skips OAuth/keychain, so it needs `ANTHROPIC_API_KEY` or an `apiKeyHelper` (via `--settings`) — i.e. bare mode implies API-key billing unless an `apiKeyHelper` is supplied. (Source: https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan, verified 2026-09-18.)
 - **Antigravity CLI billing (G1 credits, verified 2026-07-28):** `agy` model calls
   run against plan quota; the `useG1Credits` setting ("External builds only. Uses
   personal AI credits for model calls once plan quotas are exhausted.") is the
@@ -263,6 +263,6 @@ Official (Google Developers Blog, posted 2026-05-19; antigravity.google docs):
 - Cursor CLI parameters — <https://cursor.com/docs/cli/reference/parameters>
 - Cursor CLI overview — <https://cursor.com/docs/cli/overview>
 - Cursor CLI using (in-session `/resume`, `--continue`) — <https://cursor.com/docs/cli/using>
-- gajae-code (community project, README — not vendor docs; re-verified 2026-09-17) — <https://github.com/Yeachan-Heo/gajae-code>
+- gajae-code (community project, README — not vendor docs; re-verified 2026-09-18) — <https://github.com/Yeachan-Heo/gajae-code>
 - Claude Code with Pro/Max plan (billing) — <https://support.claude.com/en/articles/11145838-use-claude-code-with-your-pro-or-max-plan>
-- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-09-17) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>
+- Claude Agent SDK / headless plan usage (2026-06-15 change **paused**, still paused as of 2026-09-18) — <https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan>

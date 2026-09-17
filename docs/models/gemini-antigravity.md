@@ -13,7 +13,7 @@ English one by whole model generations (a `hl=ko` render on 2026-08-27 topped ou
 at Gemini 3.5 Flash and carried no 3.7/3.6 row at all), so a browser-locale render
 will read as a mass retirement that has not happened), plus
 https://antigravity.google (server-rendered docs site).
-Last reviewed: 2026-09-17 (verified live against the official Google Gemini model
+Last reviewed: 2026-09-18 (verified live against the official Google Gemini model
 page and the Antigravity docs pages)
 
 ## Current shipping models
@@ -45,7 +45,7 @@ page and the Antigravity docs pages)
   undecoded fetch renders as binary garbage. Do not record `unverified this run`
   on that symptom; re-request with decompression, or take the `.md` twin.
 - The Antigravity CLI's own `agy models` sample output (headless-mode page,
-  re-verified 2026-09-17) leads with `gemini-3.8-flash-high` and
+  re-verified 2026-09-18) leads with `gemini-3.8-flash-high` and
   `gemini-3.8-flash-medium`, followed by `gemini-3.7-flash-high`,
   `gemini-3.7-flash-medium`, `gemini-3.6-flash-high`, `gemini-3.6-flash-medium`,
   `gemini-3.1-pro-high`, and `claude-sonnet-4-6` ("Claude Sonnet 4.6 (Thinking)")
