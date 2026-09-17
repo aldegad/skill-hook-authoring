@@ -3,7 +3,7 @@
 Official source: https://learn.chatgpt.com/docs/models
 (moved 2026-07-16 — `developers.openai.com/codex/models` now 308-redirects here,
 along with the rest of the Codex doc set)
-Last reviewed: 2026-09-17 (verified live against the official Codex models page)
+Last reviewed: 2026-09-18 (verified live against the official Codex models page)
 
 ## Current shipping models
 
@@ -58,7 +58,7 @@ Last reviewed: 2026-09-17 (verified live against the official Codex models page)
   listed under Other models until then.
 - **`gpt-5.4` and `gpt-5.4-mini`**: the page still states they "retire from Codex
   on August 31, 2026" with ChatGPT sign-in; that date has passed and both ids
-  remain listed under Other models (as of 2026-09-17). Replace `gpt-5.4` with `gpt-5.6-terra` and
+  remain listed under Other models (as of 2026-09-18). Replace `gpt-5.4` with `gpt-5.6-terra` and
   `gpt-5.4-mini` with `gpt-5.6-luna` in saved configurations, custom agents, and
   scheduled tasks. The OpenAI API and Codex authenticated with an API key are
   not affected by this Codex-with-ChatGPT retirement.

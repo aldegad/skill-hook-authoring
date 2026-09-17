@@ -2,7 +2,7 @@
 
 Official source: https://docs.anthropic.com/en/docs/about-claude/models/overview
 (301-redirects to `platform.claude.com/docs/en/models/overview` — same official doc)
-Last reviewed: 2026-09-17 (verified live against the official models overview)
+Last reviewed: 2026-09-18 (verified live against the official models overview)
 
 ## Current shipping models
 
@@ -11,7 +11,7 @@ Last reviewed: 2026-09-17 (verified live against the official models overview)
 | Claude Fable 5.1 | `claude-fable-5-1` | adaptive thinking (always on); `effort` defaults to `high` on the Claude API | "For demanding reasoning and long-horizon agentic work, or when your evals on Claude Opus 5 at higher effort still fall short." $10/$50 per MTok; 1M context; knowledge cutoff Jun 2026. Supersedes Fable 5, which moved to the legacy row below (2026-09-11). |
 | Claude Opus 5 | `claude-opus-5` | adaptive thinking; `effort` defaults to `high` on the Claude API | The page's start-here recommendation "for most workloads" (updated wording — previously "for complex agentic coding and enterprise work", still the per-model description on the compare table). $5/$25 per MTok; knowledge cutoff May 2026. Supersedes Opus 4.8 (see the page's "Migrating to Claude Opus 5" guide). |
 | Claude Sonnet 5 | `claude-sonnet-5` | adaptive thinking; `effort` defaults to `high` on the Claude API | Balanced tier; supersedes Sonnet 4.6. 1M context. $2/$10 per MTok on the models overview (no promotional end date is stated there). |
-| Claude Haiku 4.5 | `claude-haiku-4-5-20251001` (alias `claude-haiku-4-5`) | extended thinking | Low-latency / low-cost tier. 200k context. |
+| Claude Haiku 4.5 | `claude-haiku-4-5-20251001` (alias `claude-haiku-4-5`) | extended thinking | Low-latency / low-cost tier. 200k context. Retirement: not sooner than 2026-10-15 (models overview). |
 
 - The current generation uses **adaptive thinking** (Fable 5.1: always on); Haiku
   4.5 is the one current model still on **extended thinking**. The

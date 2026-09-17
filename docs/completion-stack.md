@@ -1,6 +1,6 @@
 # Native Completion & Verification Stacks (Claude Code · Codex)
 
-Last reviewed: 2026-09-17 (re-verified live against docs/en/goal,
+Last reviewed: 2026-09-18 (re-verified live against docs/en/goal,
 learn.chatgpt.com/use-cases/follow-goals, and the Codex goals cookbook —
 content unchanged this run; claims first verified against official docs and
 vendor source 2026-06-15; migrated into this skill from operator research
@@ -143,8 +143,9 @@ installed" — it is there.
   / exit 2, which forces continuation).
 - Completion-relevant events: `Stop` · `SubagentStop` (blockable) /
   `PostToolUse` (e.g. lint-after-edit verification triggers) /
-  `UserPromptSubmit` · `PreToolUse` (policy enforcement) / `SessionStart` ·
-  `PreCompact` · `Notification` (non-blocking).
+  `UserPromptSubmit` · `PreToolUse` (policy enforcement) / `PreCompact`
+  (blockable: exit 2 or `"decision": "block"` blocks compaction) /
+  `SessionStart` · `Notification` (non-blocking).
 
 ### `/verify` · `/run` — render/execute verification (built-in skills)
 
@@ -300,7 +301,8 @@ commands, and tests — the decisive contrast with Claude's `/goal` evaluator
 - `codex exec` (non-interactive/CI, JSONL), `codex apply` (applies the most recent
   diff from a Codex cloud chat to the local repo; exits non-zero if `git apply`
   fails), `codex mcp`
-  (MCP client + server). [developer-commands](https://learn.chatgpt.com/docs/developer-commands?surface=cli)
+  (manages MCP server entries in `~/.codex/config.toml`: list/add/remove/authenticate;
+  the `codex mcp-server` server mode was removed in favor of the app server). [developer-commands](https://learn.chatgpt.com/docs/developer-commands?surface=cli)
 
 ### Enforcement grades (per official docs)
 
