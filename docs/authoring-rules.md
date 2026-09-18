@@ -42,3 +42,21 @@ That sentence is the reason this section exists. **This skill already said "cove
 
 Other runtimes should copy the *shape*, not the paths: derive the home set from whatever routes sessions, judge each home with the installer's own logic, and never let an unmeasured surface report green.
 
+
+## Packaging
+
+Per-runtime package formats (plugin manifests, marketplace files, trust review) are vendor facts —
+`kind: plugins` in `docs/official-sources.json`, looked up per `docs/lookup.md`. Two rules of ours
+apply to every one of them:
+
+- **Shared rule.** Treat each runtime's package format as a separate adapter over the same canonical
+  knowledge. The canonical instructions live in repo-owned source files; generated installs, plugin
+  bundles, and home-directory copies are derived artifacts. Do not create parallel full copies unless
+  the divergence is explicit and reviewed.
+- **Packaging decision gate.** Before adding a generated plugin or extension package: (1) name the
+  canonical source path; (2) name the generated install path; (3) decide whether the installed form is
+  a symlink, link-mode extension, or generated copy; (4) add a validation command that proves the
+  runtime discovers the package; (5) add a rollback path that removes generated config without editing
+  canonical files. Do not migrate this repo into a runtime plugin layout until there is an explicit
+  packaging plan — moving `SKILL.md` into `skills/<id>/SKILL.md` changes the root-level skill
+  entrypoint, so it must be done atomically with installer and docs updates.
