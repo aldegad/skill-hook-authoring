@@ -1,9 +1,11 @@
 # Native Completion & Verification Stacks (Claude Code · Codex)
 
-Last reviewed: 2026-07-20 (claims verified against official docs and vendor
-source 2026-06-15; migrated into this skill from operator research pages
-2026-07-10; Codex goal claims re-anchored 2026-07-17 after the follow-goals
-page was slimmed to a use-case walkthrough)
+Last reviewed: 2026-09-18 (re-verified live against docs/en/goal,
+learn.chatgpt.com/use-cases/follow-goals, and the Codex goals cookbook —
+content unchanged this run; claims first verified against official docs and
+vendor source 2026-06-15; migrated into this skill from operator research
+pages 2026-07-10; Codex goal claims re-anchored 2026-07-17 after the
+follow-goals page was slimmed to a use-case walkthrough)
 
 How Claude Code and Codex natively force work to finish **with evidence** —
 the built-in goal gates, Stop hooks, and verification skills — and where each
@@ -31,7 +33,7 @@ Sources: [Claude Code /goal](https://code.claude.com/docs/en/goal) ·
 
 ### `/goal` — session-scoped completion gate (HARD, built-in)
 
-[docs/en/goal](https://code.claude.com/docs/en/goal) · v2.1.139+
+[docs/en/goal](https://code.claude.com/docs/en/goal)
 
 **`/goal` is a Claude Code (Anthropic) built-in slash command.** It does not
 appear in skill/bin listings, which makes it easy to misjudge as "not
@@ -41,10 +43,14 @@ installed" — it is there.
   toward it autonomously. Official: *"After each turn, a small fast model
   checks whether the condition holds. If not, Claude starts another turn
   instead of returning control to you."*
-- **The evaluator is a separate fresh model** (default Haiku) returning yes/no
-  plus a short reason. Official: *"completion is decided by a fresh model
-  rather than the one doing the work."* — independent judgment, not the
-  agent's own completion claim.
+- **The evaluator is a separate fresh model** (default Haiku) returning one of
+  **three** verdicts, each with a short reason: *Not yet met* (Claude keeps
+  working and takes the reason as guidance), *Met* (goal cleared, achieved entry
+  recorded), *Impossible* (the condition can never be satisfied — goal cleared,
+  failed entry recorded, no manual clear needed). Official: *"completion is
+  decided by a fresh model rather than the one doing the work."* — independent
+  judgment, not the agent's own completion claim. `ANTHROPIC_DEFAULT_HAIKU_MODEL`
+  changes the evaluator model (and every other small-fast-model use).
 - Implementation: *"`/goal` is a wrapper around a session-scoped prompt-based
   Stop hook."* — the same primitive as the Hooks section below.
 - One goal per session. **Typing a new `/goal <condition>` over an active goal
@@ -53,7 +59,8 @@ installed" — it is there.
   favors Codex). `/goal` with no argument shows status/turns/tokens;
   `/goal clear` (aliases `stop`/`off`/`reset`/`none`/`cancel`) clears it.
   `--resume`/`--continue` restores an active goal (turn/timer/token baselines
-  reset). Works headless (`-p "/goal ..."`), in desktop, and via Remote
+  reset) — on **every** resume route including the `claude --resume` picker
+  since v2.1.239; an achieved or cleared goal is not restored. Works headless (`-p "/goal ..."`), in desktop, and via Remote
   Control. Conditions max 4,000 chars; turn/time bound clauses are allowed
   ("or stop after 20 turns").
 - **Decisive limitation (official, verbatim):** *"The evaluator judges your
@@ -72,6 +79,44 @@ installed" — it is there.
   turn). `/goal` + auto mode are complementary: the former removes the
   per-turn prompt, the latter the per-tool prompt. Outside a session:
   scheduled tasks / cloud routines.
+- **Background work defers evaluation, then gets a nudge — not a wait.** A turn
+  that ends with a subagent or background shell still running is **not
+  evaluated**; evaluation happens at the end of the next turn that finishes
+  clean. Once background work has kept the goal waiting 30 minutes, a check-in
+  comes due: Claude Code lists the running tasks and asks Claude to read their
+  output, keep waiting if they are progressing, and fix or stop any that are
+  stuck. Later check-ins **back off geometrically** — each waits twice as long as
+  the last, capped at 4x the first interval (with the default: 1 hour after the
+  first, then every 2 hours); before v2.1.239 only idle check-ins backed off and
+  turn-end check-ins recurred at the first interval.
+  `CLAUDE_CODE_GOAL_CHECKIN_MINUTES` replaces the 30-minute first interval and
+  scales the later ones with it, `0` turns off check-ins and automatic retries. Requires v2.1.234+
+  (idle check-ins, where an interactive session starts a turn on its own,
+  v2.1.236+; a `-p` session only ever gets turn-end check-ins). **Idle check-ins
+  are capped**: Claude Code starts at most **three** per goal between your
+  prompts, and the third one says idle check-ins are paused until you send
+  another prompt (v2.1.246+; before that they were uncapped). Turn-end check-ins
+  are not capped — so an unattended `-p` run is unaffected, while an idle
+  interactive session stops self-nudging after three tries and waits for you.
+  This is the
+  answer to the "goal parked forever on a hung background job" failure mode — it
+  is a prompt to Claude, not a runtime kill.
+- **Two ways a goal ends that are not "condition met".** A turn that fails on an
+  error you have to fix clears the goal outright (warning: *"Goal cleared after
+  an unrecoverable error"* … *"Run `/goal` again to continue"*) — exactly four
+  causes: an auth failure when Claude Code manages its own credentials (a host
+  that manages them, like the desktop app or a cloud session, leaves the goal
+  active), an exhausted credit balance, a context overflow auto-compaction could
+  not clear, and an unavailable model. Every other failure, rate limits and
+  overloads included, leaves the goal active — and in an interactive session
+  (v2.1.269+) Claude Code names the cause: a failure that tends to clear on its
+  own (overloaded server, dropped connection) auto-retries with a *"Goal still
+  active"* notice and **pauses after three automatic retries**, while a failure a
+  retry would only repeat (API rate limit, claude.ai usage limit, a hook that
+  ended the turn) pauses the goal with a *"Goal paused"* notice. Separately, if Claude answers the
+  evaluator without using tools for several turns running, Claude Code **stops
+  the loop, warns, and hands control back with the goal still set** — evaluation
+  resumes on your next prompt. Neither path is a silent stall.
 - Requirements: accepted workspace trust and hooks enabled — with
   `disableAllHooks` or `allowManagedHooksOnly` the goal is inactive and Claude
   Code says why (no silent failure).
@@ -86,15 +131,21 @@ installed" — it is there.
   guard. A **prompt-type Stop hook** sends condition + transcript to a small
   model for an `{"ok":true|false}` verdict — this is exactly the primitive
   `/goal` wraps.
-- **SubagentStop hook**: same block/continue at subagent termination.
+- **SubagentStop hook**: same block/continue at subagent termination. On
+  v2.1.271+, a subagent that runs with the `SubagentHandback` tool (provided in
+  auto mode) delivers its report through that tool, so `last_assistant_message`
+  holds only its closing text, not the report — gate on the report by matching
+  a `PreToolUse`/`PostToolUse` hook on `SubagentHandback` and reading
+  `tool_input.message`.
 - Both Stop and SubagentStop also support
   `hookSpecificOutput.additionalContext` — non-error feedback injected for
   Claude while the conversation **continues** (as opposed to `decision:"block"`
   / exit 2, which forces continuation).
 - Completion-relevant events: `Stop` · `SubagentStop` (blockable) /
   `PostToolUse` (e.g. lint-after-edit verification triggers) /
-  `UserPromptSubmit` · `PreToolUse` (policy enforcement) / `SessionStart` ·
-  `PreCompact` · `Notification` (non-blocking).
+  `UserPromptSubmit` · `PreToolUse` (policy enforcement) / `PreCompact`
+  (blockable: exit 2 or `"decision": "block"` blocks compaction) /
+  `SessionStart` · `Notification` (non-blocking).
 
 ### `/verify` · `/run` — render/execute verification (built-in skills)
 
@@ -172,8 +223,9 @@ commands, and tests — the decisive contrast with Claude's `/goal` evaluator
   buttons also expose edit/pause/resume/clear
   ([developer-commands](https://learn.chatgpt.com/docs/developer-commands?surface=cli),
   the registered source — it states *"`/goal` | Set, edit, pause, resume, view,
-  or clear a task goal."*; the narrower sentence *"Use `/goal edit` to revise the
-  objective."* is `unverified this run`).
+  or clear a task goal."*, and the page's own `/goal` walkthrough now carries the
+  narrower sentence *"Use `/goal edit` to revise the objective."* verbatim, so
+  that claim is doc-anchored rather than source-only).
   There is no `/goal set` subcommand — setting is the bare `/goal <objective>`.
 - **`/goal edit` — in-place edit of a running goal (source-verified in
   openai/codex):** loads the current objective into the editor
@@ -215,39 +267,42 @@ commands, and tests — the decisive contrast with Claude's `/goal` evaluator
 [codex hooks](https://learn.chatgpt.com/docs/hooks)
 
 - Codex has a **full lifecycle hooks system** (modeled on Claude Code's).
-  Events: `SessionStart` · `SubagentStart` · `PreToolUse` ·
-  `PermissionRequest` · `PostToolUse` · `PreCompact` · `PostCompact` ·
-  `UserPromptSubmit` · `SubagentStop` · `Stop`.
+  Events: `SessionStart` · `SessionEnd` · `Interrupt` · `SubagentStart` ·
+  `PreToolUse` · `PermissionRequest` · `PostToolUse` · `PreCompact` ·
+  `PostCompact` · `UserPromptSubmit` · `SubagentStop` · `Stop`.
 - **The Stop hook is a real hard gate**:
   `{"decision":"block","reason":"Run one more pass over the failing tests."}`
   or exit code 2 (+stderr) blocks turn termination and forces another pass.
   `stop_hook_active` is the loop guard; a matching Stop hook with
   `continue:false` takes precedence. Functionally identical to Claude Code's
   Stop hook.
-- Config: `[hooks]` in `config.toml` or `hooks.json`, gated by
-  `features.hooks`. Hook trust is enforced (hash-pinned; trust via `/hooks`;
+- Config: `[hooks]` in `config.toml` or `hooks.json`. Hooks are **enabled by
+  default** — disable with `[features] hooks = false`. Hook trust is enforced (hash-pinned; trust via `/hooks`;
   `--dangerously-bypass-hook-trust` to override). Managed restriction:
   `allow_managed_hooks_only`.
 
 ### `/review` and the soft surfaces
 
-- **`/review`** (in-session): *"a dedicated reviewer that reads the diff you
-  select and reports prioritized, actionable findings without touching your
-  working tree."* Report-shaped — **not a pass/fail gate**.
+- **`/review`** (in-session): *"Run a dedicated review against uncommitted
+  changes, a commit, or a base branch. Codex reports prioritized findings without
+  modifying your working tree"* Report-shaped — **not a pass/fail gate**.
   [codex/cli](https://learn.chatgpt.com/docs/codex/cli)
 - **`update_plan`** (plan tool) — display/tracking surface, not a gate.
 - **AGENTS.md** — soft instructions (e.g. "Always run `npm test` after
   modifying JS"); merged into the prompt, not an enforced checkpoint.
   [agent-configuration/agents-md](https://learn.chatgpt.com/docs/agent-configuration/agents-md)
 - **Approval/sandbox modes** (read-only / workspace-write /
-  danger-full-access; on-request/never/untrusted/granular) — **safety and
+  danger-full-access; on-request/never/granular — `untrusted` is no longer
+  supported) — **safety and
   permission** gates, not completion gates.
   [agent-approvals-security](https://learn.chatgpt.com/docs/agent-approvals-security)
 - **`notify`** — fire-and-forget JSON side channel to an external program
   (`agent-turn-complete`); not a gate.
-- `codex exec` (non-interactive/CI, JSONL), `codex apply` (`unverified this
-  run`), `codex mcp`
-  (MCP client + server). [developer-commands](https://learn.chatgpt.com/docs/developer-commands?surface=cli)
+- `codex exec` (non-interactive/CI, JSONL), `codex apply` (applies the most recent
+  diff from a Codex cloud chat to the local repo; exits non-zero if `git apply`
+  fails), `codex mcp`
+  (manages MCP server entries in `~/.codex/config.toml`: list/add/remove/authenticate;
+  the `codex mcp-server` server mode was removed in favor of the app server). [developer-commands](https://learn.chatgpt.com/docs/developer-commands?surface=cli)
 
 ### Enforcement grades (per official docs)
 
@@ -281,7 +336,11 @@ source. These are the claims most often gotten wrong from memory; several are
 **not stated in any single official page**, so they are preserved here
 explicitly.
 
-1. **`/goal` is a Claude Code built-in** (Anthropic, v2.1.139+). It does not
+1. **`/goal` is a Claude Code built-in** (Anthropic). The docs state no
+   introducing version for the command itself; the version stamps they do give
+   are for check-ins (`v2.1.234+`, idle check-ins `v2.1.236+`, the three-per-goal
+   idle check-in cap `v2.1.246+`) and for goal
+   restore on every resume route (`v2.1.239+`). It does not
    show up in skill/bin listings, which repeatedly causes a false "it doesn't
    exist" conclusion. Verified live in-session.
 2. **ZCode is not a Claude-Code-family runtime, and no "ZCode `/goal`" has

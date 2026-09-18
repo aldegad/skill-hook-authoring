@@ -1,28 +1,63 @@
 # Google Antigravity CLI (`agy`) / Gemini — model lineup
 
 Official source: https://ai.google.dev/gemini-api/docs/models (the official Google
-Gemini model page; render dynamically — page last-updated 2026-07-16), plus
-https://antigravity.google (JS-rendered SPA — a static fetch returns an empty
-shell; render dynamically before claiming a change).
-Last reviewed: 2026-07-20 (verified live against the official Google Gemini model
-page)
+Gemini model page — page last-updated 2026-09-15; **a cookieless `curl` fails**:
+following redirects lands in a Google OAuth `auto_signin` loop and not following
+them returns a bodyless `302`. Two fetches do work: `curl --compressed -c
+<jar> -b <jar>` (the jar absorbs the consent cookie the redirect chain sets, and
+the retry returns the full model tables), or a headless-browser render
+(`kuma agent-browser render --url … --settle-ms 6000 --scroll-passes 25`).
+**Always append `?hl=en`.** The
+locale-translated build of this page is not just a translation — it lags the
+English one by whole model generations (a `hl=ko` render on 2026-08-27 topped out
+at Gemini 3.5 Flash and carried no 3.7/3.6 row at all), so a browser-locale render
+will read as a mass retirement that has not happened), plus
+https://antigravity.google (server-rendered docs site).
+Last reviewed: 2026-09-18 (verified live against the official Google Gemini model
+page and the Antigravity docs pages)
 
 ## Current shipping models
 
 | Model | Status | Notes |
 |---|---|---|
-| `gemini-3.5-flash` | GA | Google's **most intelligent model** — "sustained frontier performance on agentic and coding tasks". The frontier tier, and the doc's own canonical example of a stable model id. |
-| `gemini-3.1-pro` | **Preview** | Advanced intelligence for complex problem-solving and agentic + vibe coding. |
-| `gemini-3.1-flash-lite` | GA | "frontier-class performance rivaling larger models at a fraction of the cost". |
-| Gemini 3 Flash | **Preview** | current Flash-generation preview. |
-| Antigravity Agent | **Preview** | managed general-purpose agent model that plans, reasons, and executes code in an isolated Linux sandbox. |
+| `gemini-3.8-flash` | **New Stable** | "Our most intelligent Flash model" — "engineered for long-horizon software engineering, autonomous agents, and complex enterprise workflows." Leads the table, superseding `gemini-3.7-flash`. |
+| `gemini-3.8-live` | **New Stable** | Live API (audio-to-audio) model — "Default Live API model for most low-latency voice agent experiences without reasoning delays"; the Audio-models section calls it "the default option" for real-time dialogue. Supersedes `gemini-3.1-flash-live-preview` as the recommended Live model. |
+| `gemini-3.8-live-extended-thinking` | **New Stable** | "High-reasoning Live API model for voice interactions, recommended when higher background reasoning is required" during live interactions. |
+| `gemini-3.7-flash` | Stable | Previous-generation Flash model for complex coding, agentic workflows, and reliable multi-step execution. |
+| `gemini-3.6-flash` | Stable | Previous-generation Flash model balancing speed and multimodal capabilities. It remains the page's canonical naming example of a stable model id. |
+| `gemini-3.5-flash` | Stable | Legacy Flash model for baseline speed and routine, high-throughput workloads. |
+| `gemini-3.5-flash-lite` | Stable | Fast, cost-effective 3.5 model for high-throughput execution. |
+| `gemini-3.1-flash-lite` | Stable | "frontier-class performance rivaling larger models at a fraction of the cost". |
+| `gemini-3.1-pro-preview` | **Preview** | Advanced intelligence for complex problem-solving and agentic + vibe coding. Preview ids carry an explicit `-preview` suffix. |
+| `gemini-3-flash-preview` | **Preview** | "Frontier-class performance rivaling larger models at a fraction of the cost." Preview ids carry an explicit `-preview` suffix. |
+| `gemini-3.5-transcribe` / `gemini-3.5-transcribe-live` | **Stable** (new) | Low-latency speech-to-text with utterance-based language detection, speaker diarization, word-level timestamps, and custom vocabulary biasing. Two endpoints under one model entry — batch and live. |
+| Antigravity Agent (`antigravity-preview-05-2026`) | **Preview** | managed general-purpose agent model that plans, reasons, and executes code in an isolated Linux sandbox. |
 
 - **Antigravity CLI** (`agy`) is the Gemini CLI successor; Gemini CLI itself
   stopped serving individual Pro/Ultra/free users as of **2026-06-18** (enterprise
   / Google Cloud keeps it). Keep legacy Gemini references in past tense.
-- The Antigravity site is a **JS-rendered SPA**: treat a 200 with an empty shell
-  as `unverified this run` and render it dynamically before recording a model
-  change.
+- **Fetching the Antigravity docs (verified 2026-08-22).** The docs site is
+  **server-rendered** (Astro/Starlight): a plain `curl --compressed` returns the
+  full page content, and every page also serves a plain-Markdown twin at
+  `<page>.md` (e.g. `/docs/cli/headless.md`), which is the most robust form to
+  diff. The failure that used to read as "empty shell" is a **missing
+  `--compressed`** — the server answers with a compressed body that an
+  undecoded fetch renders as binary garbage. Do not record `unverified this run`
+  on that symptom; re-request with decompression, or take the `.md` twin.
+- The Antigravity CLI's own `agy models` sample output (headless-mode page,
+  re-verified 2026-09-18) leads with `gemini-3.8-flash-high` and
+  `gemini-3.8-flash-medium`, followed by `gemini-3.7-flash-high`,
+  `gemini-3.7-flash-medium`, `gemini-3.6-flash-high`, `gemini-3.6-flash-medium`,
+  `gemini-3.1-pro-high`, and `claude-sonnet-4-6` ("Claude Sonnet 4.6 (Thinking)")
+  — effort-suffixed CLI slugs and a Claude model that are **not** API model ids on
+  this page. The base `gemini-3.8-flash`, `gemini-3.7-flash`, and
+  `gemini-3.6-flash` ids are on the API page (Stable, above).
+- The API page also lists (beyond this table's scope): Preview — Gemini 3.5 Live
+  Translate, Gemini 3.1 Flash Live (now described as a "Legacy Live API preview
+  model. We recommend updating to Gemini 3.8 Live."), Gemini 3.1 Flash TTS, Gemini Omni Flash,
+  Lyria 3 Pro (previous generation)/Clip, Gemini Embedding 2
+  (`gemini-embedding-2-preview`); GA — Nano Banana 2 / 2 Lite / Pro; plus Deep
+  Research / Deep Research Max, Computer Use, Robotics-ER 2 / 1.6, Lyria 3.5 (`lyria-3.5`, the flagship music model), and Lyria RealTime.
 
 ## Retired / superseded
 
