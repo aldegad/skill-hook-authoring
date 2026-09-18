@@ -5,6 +5,56 @@ package manifest, so the **git tag plus this file are the version record**
 (the official Claude SKILL.md frontmatter documents only `name` and
 `description`, so the version is intentionally not stamped there).
 
+## Unreleased — 2026-09-18 — the wiki becomes a lookup
+
+The compatibility wiki is retired. Vendor facts are no longer stored in this repository; they are
+looked up on the vendor's page when a question is asked and cited with URL and date
+(`docs/lookup.md`). What stays is ours: the authoring methodology, the umbrella conventions, the
+lifecycle table, and the cross-engine hook traps — each vendor-adjacent line now carries the
+`docs/official-sources.json` id it was verified against.
+
+### Why
+
+- The canonical checkout that every runtime's symlink points at had diverged from `origin/main`
+  since 2026-07-26: 31 daily-refresh merges on GitHub, 6 local commits (including the 08-20 body
+  diet), and the refresh's final "fast-forward the canonical checkout" step failing every night. The
+  agents read a wiki nine weeks old while the refresh rewrote another copy — a mirror is wrong
+  exactly when it is trusted.
+- The day it was needed (2026-09-18: "can an interrupted turn continue with no new prompt on
+  Claude Code, Codex, Grok?") the wiki held the resume *syntax*; the answer still came from the
+  official pages. A link costs one fetch; a mirror costs a daily rewrite.
+
+### Removed
+
+- `docs/compatibility-matrix.md`, `docs/cli-invocation.md`, `docs/completion-stack.md`,
+  `docs/plugin-packaging.md`, `docs/models/*` — vendor-fact mirrors. Their `kind` axes survive as
+  the manifest's search index (`docs/lookup.md` §1).
+- `prompts/daily-official-doc-update.md` — the daily rewrite prompt.
+- `SKILL.md` sections that restated vendor pages (Runtime Coverage, CLI Spawn, Model Lineup, the
+  Project Instruction Files loading table, the hook payload restatement).
+
+### Added
+
+- `docs/lookup.md` — pick sources by `agent` × `kind`, fetch (compressed / `.md` twin), judge
+  documented / not documented / unverified, cite, leave nothing behind here; manifest maintenance.
+- `prompts/weekly-source-check.md` — reachability check only; a moved URL is fixed in the manifest
+  and PR'd through the existing auto-merge guard; no prose is touched.
+- `docs/authoring-rules.md` → *Packaging*: the shared adapter rule and the five-step packaging
+  decision gate, moved from the deleted `plugin-packaging.md`.
+
+### Changed
+
+- `SKILL.md`: 24.0KB body → a methodology with one routing rule ("vendor facts: look them up"); the
+  frontmatter `description` drops "refreshed daily / compatibility wiki" and gains the lookup trigger.
+- `docs/hook-contract.md`: `continue: false` is a universal Claude hook field that stops the
+  session, not a Stop-only schema (`anthropic-claude-hooks`, verified 2026-09-18 by the last daily
+  refresh); header names the two source ids the file is verified against.
+- `docs/skill-lifecycle.md`: the Disable table takes the refresh's 2026-09-17 values (Claude
+  `skillOverrides` four states, Codex `[[skills.config]] enabled = false`) with a source id per row.
+- `docs/cloud-automation.md`, `README.md` (+ regenerated translations), `agents/openai.yaml`:
+  describe the lookup model and the weekly check.
+- `docs/official-sources.json` notes: "Mirror: docs/…" pointers retired; the manifest itself is
+  `origin/main`'s (68 sources, 2026-09-18) — the merge kept every URL fix the refresh made.
 ## Unreleased — 2026-09-18
 
 Daily refresh (all 68 sources fetched with `curl --compressed`, `.md` twins where served; none unverified this run — the Codex developer-commands HTML already carried the full option tables, so no `kuma agent-browser` render was needed). **No vendor drift in tracked scope:** every `.md` twin compared against the previous run matched except one untracked `--system-prompt-snapshot` paragraph on the Claude CLI reference. The edits below correct mirror claims that today's pages contradict, plus the time-sensitive stamp advances.
