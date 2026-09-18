@@ -1,7 +1,10 @@
 # Hook payload and decision contract (Claude Code / Codex)
 
-Reference material for hook authoring: the shared PreToolUse/PostToolUse input schema, the decision
-output schema and its per-engine gaps, and Codex hook registration. SKILL.md points here; it does not
+Last reviewed: 2026-09-18 — against `anthropic-claude-hooks` and `openai-codex-hooks` in
+`docs/official-sources.json` (the field-level corrections below came from the 2026-09-18 refresh of
+those two pages). Re-verify there before relying on any field named here; the schemas themselves are
+the vendor's, this file only records the places where the two engines read the same field
+differently — the traps our hook scripts are written against. SKILL.md points here; it does not
 restate any of it.
 
 ## Hook Payload Pattern
@@ -64,7 +67,7 @@ Legacy (still supported by both engines):
 
 `hookSpecificOutput` may also carry `updatedInput` (replace the tool input before it runs) and `additionalContext` (inject context for the model). For **allow**, exit 0 with no output is sufficient; or emit `permissionDecision: "allow"` explicitly.
 
-**Do not use `{"continue": false, "stopReason": "..."}` for PreToolUse** — that is the schema for the `Stop` hook (final-exit block), not for PreToolUse. Same applies to `{"continue": true}` as an allow signal. Mixing them up silently fails closed or open depending on the engine version.
+**Do not use `{"continue": false, "stopReason": "..."}` to block a single PreToolUse call.** On Claude Code `continue` is a *universal* hook field, not a Stop-only schema: `continue: false` stops Claude entirely and "takes precedence over any event-specific decision fields" (`anthropic-claude-hooks`, verified 2026-09-18), and Codex marks `continue: false` on PreToolUse as unsupported (hook run marked failed, tool call continues). Use `permissionDecision: "deny"` to block the call. The same applies to `{"continue": true}` as an allow signal — it is not one.
 
 For `PostToolUse` block (prevent normal post-processing), use `{"decision": "block", "reason": "..."}` on both engines.
 

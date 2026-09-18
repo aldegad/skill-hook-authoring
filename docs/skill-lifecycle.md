@@ -1,5 +1,8 @@
 # Skill Lifecycle — Disable / Scope / Retire
 
+Last reviewed: 2026-09-18. The per-engine mechanisms in the Disable table are vendor facts; each row
+names the `docs/official-sources.json` id it was verified against — re-check there before acting.
+
 Three operations that all make a skill stop appearing, with three different mechanisms.
 Picking the wrong one either drifts from the manifest or destroys something meant to be kept.
 Decide by asking **why** it should stop.
@@ -14,10 +17,10 @@ Decide by asking **why** it should stop.
 
 | Engine | Mechanism |
 |---|---|
-| Claude Code | `skillOverrides` has four states — `"on"`, `"name-only"` (collapses to name to save listing budget), `"user-invocable-only"` (hidden from Claude, still in the `/` menu), and `"off"` (hidden from both); the `/skills` menu cycles the states with Space and saves to `.claude/settings.local.json` (a hand-written override in `~/.claude/settings.json` also works). Plugin skills are **not** affected by `skillOverrides` — manage those through `/plugin`. To find candidates, run `/skill-doctor` (v2.1.252+), which shows each skill's context cost and how often it gets used. (source: https://code.claude.com/docs/en/skills, verified 2026-09-17) |
-| Grok | move `~/.grok/skills/<id>` → `~/.grok/skills-disabled/<id>` |
-| Codex | `[[skills.config]]` in `~/.codex/config.toml` with `path = "/path/to/skill/SKILL.md"` and `enabled = false` (restart Codex to apply) |
-| Hermes | no documented per-skill toggle — scope via `engines`, or retire |
+| Claude Code (`anthropic-claude-settings`, verified 2026-09-17) | `skillOverrides` has four states — `"on"`, `"name-only"` (collapses to name to save listing budget), `"user-invocable-only"` (hidden from Claude, still in the `/` menu), and `"off"` (hidden from both); the `/skills` menu cycles the states with Space and saves to `.claude/settings.local.json` (a hand-written override in `~/.claude/settings.json` also works). Plugin skills are **not** affected by `skillOverrides` — manage those through `/plugin`. To find candidates, run `/skill-doctor` (v2.1.252+), which shows each skill's context cost and how often it gets used. (source: https://code.claude.com/docs/en/skills) |
+| Grok (`xai-grok-skills-plugins`) | move `~/.grok/skills/<id>` → `~/.grok/skills-disabled/<id>` |
+| Codex (`openai-codex-skills`, verified 2026-09-17) | `[[skills.config]]` in `~/.codex/config.toml` with `path = "/path/to/skill/SKILL.md"` and `enabled = false` (restart Codex to apply) |
+| Hermes (`nous-hermes-plugins`) | no documented per-skill toggle — scope via `engines`, or retire |
 
 - **Disable is not `engines: {}`.** Emptying `engines` deregisters the skill from every
   engine, which asserts in the manifest that the skill has **no valid runtime** — a false
