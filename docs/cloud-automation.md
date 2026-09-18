@@ -1,124 +1,53 @@
-# Cloud Automation
+# Automation — the weekly source check
 
 Last reviewed: 2026-09-18
 
-Keep this repo's compatibility docs current by running a daily agent that reads
-`docs/official-sources.json`, fetches the official vendor URLs, and opens a pull
-request when the evidence changed. The agent must never push to `main`.
+This repo no longer mirrors vendor documentation, so there is nothing to refresh daily.
+What can still rot is the **map**: a URL in `docs/official-sources.json` moves or dies,
+and the next lookup fails at the door. One scheduled job keeps the map honest.
 
-## Recommended Path: Claude Routines
+## What runs
 
-Claude Routines run a Claude Code session in Anthropic's cloud on a schedule.
-They need only a Claude subscription — no API key, no GitHub Actions — and the
-run continues when your laptop is closed.
+Once a week, an agent session in a fresh checkout of this repository:
 
-1. In Claude Code, run `/schedule` (or open <https://claude.ai/code/routines>).
-2. Point the routine's git source at this repository.
-3. Use the daily prompt in `prompts/daily-official-doc-update.md`.
-4. Schedule it once per day. The routine opens a PR from an `aldegad/`-prefixed
-   branch (see **Branch prefix policy** below); you review and merge.
+1. runs `node scripts/check-official-sources.mjs --write-report` — manifest shape, allowed
+   hosts, https, the required category anchors, URL reachability (HTTP status only —
+   no page content is read or compared), and the `SKILL.md` 500-line budget;
+2. if every source answers, writes nothing and ends with a one-line "no change" report;
+3. if a URL fails, finds the page's current location on the **same vendor host**, fixes
+   the `url` in the manifest (never the `claims`, never a doc), runs the check again,
+   and opens a pull request from an `aldegad/`-prefixed branch;
+4. runs `scripts/auto-merge-guard.sh <PR_NUMBER>`, which squash-merges **only** a
+   docs/prose-only diff that passes the check — anything else stays open for a human.
 
-Do not set `ANTHROPIC_API_KEY` in the routine environment — Routines bill
-against the subscription usage pool, and a present API key suppresses the
-`/schedule` path.
+The prompt is `prompts/weekly-source-check.md`. It never edits `SKILL.md`, `docs/*.md`,
+or `README*.md`, never adds a source (a new source is a decision made where a question
+needed it — `docs/lookup.md` §6), and never pushes to `main`.
 
-**Why not a local `claude -p` cron?** A laptop that is on daily makes a local
-`launchd`/`cron` job calling `claude -p` look tempting, but the primary
-drawback is **reliability**: a local job fires only when the machine is awake
-at the scheduled time, while a cloud Routine runs regardless of laptop state.
-Note: as of 2026-09-18 the billing difference described here previously (a
-separate monthly Agent SDK credit) remains **paused** — `claude -p` and
-Agent SDK usage on subscription plans draw from the same usage pool as
-interactive sessions (no separate per-run credit). For `ANTHROPIC_API_KEY` users billing remains
-pay-as-you-go API usage. A cloud Routine avoids the reliability gap in either
-case; check the current billing status at the `kind: "billing"` entries in
-`docs/official-sources.json` before planning large automation budgets.
+## Where it runs
 
-## Recommended Daily Flow
+Kuma Studio's scheduler owns the job (`kuma cron list` → `daily-doc-refresh`, kept under
+its historical id; trigger `0 3 * * 1`, project `skill-hook-authoring`, a fresh routine
+worktree per fire). Any scheduler that can run an agent in a clean checkout with `gh`
+credentials works the same way — a Claude Routine (`/schedule`) or a Codex App
+Automation — with the same prompt and the same guard.
 
-```text
-daily schedule
--> read docs/official-sources.json
--> validate official source reachability
--> fetch only the official vendor URLs
--> re-verify project-instruction file claims (kind=project-instructions)
--> re-verify CLI spawn / headless claims (kind=cli-invocation)
--> re-verify session-resume claims (kind=session-resume)
--> update repo docs only when official evidence changed
--> reconcile Project Instruction Files baseline on drift
-   (SKILL.md, compatibility-matrix.md, plugin-packaging.md)
--> reconcile CLI Spawn And Headless Launch baseline on drift
-   (SKILL.md section, docs/cli-invocation.md)
--> reconcile Session Resume baseline on drift
-   (SKILL.md section, compatibility-matrix.md Session Resume table)
--> run node scripts/check-official-sources.mjs --write-report
--> open a PR from an aldegad/-prefixed branch (never push to main)
--> review and merge
-```
+## Auto-merge gate
 
-The Claude Routine never commits to `main`. It opens a pull request from a
-branch instead, so every change — including project-instruction baseline drift —
-is reviewed before merge.
+Merge authority sits on `scripts/auto-merge-guard.sh`, a deterministic shell gate, not on
+the agent's judgement: it squash-merges when the diff touches only
+`docs/`, `prompts/`, `reports/`, `SKILL.md`, `README*.md` or `CHANGELOG.md` **and**
+`check-official-sources.mjs` passes; otherwise it exits non-zero and leaves the PR open.
+A declined PR reaches the reviewer through the repository's pull-request notifications.
 
-**Branch prefix policy.** This repo's local `cc-guard` hook rejects branch names
-containing `claude` or `codex` and requires an `aldegad/`-prefixed branch (see the
-existing `aldegad/...` branches). Claude Routines, however, default to pushing
-`claude/`-prefixed branches, and a configurable custom prefix is not documented
-for them. To stay consistent with the local guard, enable **Allow unrestricted
-branch pushes** in that repository's routine Permissions and push an
-`aldegad/`-prefixed branch (for example `aldegad/daily-doc-refresh-YYYY-MM-DD`).
+For manual edits, run `node scripts/check-official-sources.mjs --write-report` locally
+before pushing.
 
-## Alternative: Codex scheduled tasks
+## Keeping local checkouts in sync
 
-Codex users can run the same daily flow with a Codex scheduled task instead (the
-docs no longer use the "Automations" product name). It can schedule recurring
-tasks (RRULE recurrence), combine them with skills, and run repo work in a
-dedicated worktree. Project-scoped scheduled tasks require the machine to be
-powered on with the ChatGPT desktop app running and the project on disk, so they
-do not match the laptop-off behavior of a cloud routine.
-On eligible plans a scheduled task can instead be triggered by a supported Gmail,
-Slack, or GitHub event, but only in ChatGPT on the web and mobile — not in the
-desktop app, Codex CLI, or IDE extension — and one task cannot combine event
-triggers with a time-based schedule. Tasks that select `gpt-5.5` must move to
-`gpt-5.6-sol` before its 2026-10-14 Codex retirement.
-
-Use the same prompt from `prompts/daily-official-doc-update.md`.
-
-## Auto-Merge Gate
-
-After the daily routine opens a PR it runs `scripts/auto-merge-guard.sh
-<PR_NUMBER>`, which squash-merges **only when** the diff is docs/prose-only and
-`check-official-sources.mjs` passes — otherwise it leaves the PR open. Merge
-authority sits on that deterministic shell gate, not on the agent's judgement: a
-change that touches code, installers, hooks, or config (or that fails the check)
-always waits for a human. This is the lightweight path — the agent triggers the
-gate, the gate's exit code decides — and it needs no GitHub Actions or
-branch-protection setup.
-
-When the gate declines and leaves a PR open, the reviewer learns about it by
-watching the repository with a custom notification setting for pull requests;
-GitHub delivers those notifications to the web inbox, GitHub Mobile, and
-verified email addresses.
-
-For manual edits, run `node scripts/check-official-sources.mjs --write-report`
-locally before pushing. Native GitHub auto-merge remains a valid alternative — the
-`github-auto-merge` source in `docs/official-sources.json` covers it — but it is
-not required for the gate above, and it has its own prerequisites: auto-merge
-must be **enabled for the repository** before it can be used on a pull request
-(a repo-level setting, not just branch protection), the option to enable it is
-**shown only on pull requests that cannot be merged immediately**, and write
-permission is required. GitHub disables auto-merge again if someone without write permission pushes to the head branch or switches the base branch.
-The `gh pr merge --auto` invocation is a GitHub CLI surface, not something the
-`github-auto-merge` docs page documents.
-
-## Keeping Local Checkouts In Sync
-
-Remote auto-update is handled by the daily refresh plus the auto-merge gate above
-— `origin/main` stays current on its own. Local checkouts sync with a plain
-`git pull`; since runtime installs are symlinks into the canonical repo, one pull
-refreshes every runtime at once. Pull when you start work.
-
-(An earlier opt-in stale-notifier hook — a per-session `git fetch` on Claude
-`SessionStart` and a per-tool-call `PreToolUse` on Codex — was removed: its cost
-outweighed the convenience for a repo that changes about once a day. Manual
-symlink install is documented in `SKILL.md` → Cross-Agent Install Pattern.)
+Runtime installs are symlinks into the canonical checkout, so one `git pull` refreshes
+every runtime at once. Pull when you start work. The weekly job fast-forwards the
+canonical checkout after a merge; if that checkout has diverged (local commits not on
+`origin/main`), the job reports it and stops — it never rewrites local history. The
+2026-09-18 revamp landed a nine-week divergence exactly that way; the fix was a merge,
+not a force.
