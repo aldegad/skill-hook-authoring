@@ -1,10 +1,10 @@
 <p align="center">
-  <img src="assets/icon.png" width="168" alt="One source of truth radiating to every agent runtime" />
+  <img src="assets/icon.png" width="168" alt="모든 에이전트 런타임으로 뻗어 나가는 단일 진실 공급원" />
 </p>
 
-<h1 align="center">크로스 런타임 에이전트-플랫폼 상호운용성</h1>
+<h1 align="center">크로스 런타임 스킬·훅·플러그인 작성</h1>
 
-<p align="center"><b>실행하는 모든 AI 코딩 에이전트에서 스킬, 훅, 플러그인의 단일 진실 소스를 유지하세요.</b></p>
+<p align="center"><b>쓰고 있는 모든 AI 코딩 에이전트에서 스킬·훅·플러그인을 단일 진실 공급원 하나로 관리한다. 벤더 사실은 그때그때 조회하고, 절대 미러링하지 않는다.</b></p>
 
 <p align="center">
 
@@ -14,61 +14,52 @@
 
 ---
 
-더 이상 하나의 AI 에이전트만 실행하지 않습니다. Codex, Claude Code, Grok, Hermes, Antigravity, Cursor—각자 “스킬”의 개념, 훅 등록 위치, 읽는 지침 파일, 세션 재개 방식, 실제 과금 방식이 모두 다릅니다. 같은 도구를 하나씩 수동으로 배포하면 일주일도 안 돼서 서로 어긋납니다. “런타임 Y에서 X를 할 수 있나?”라고 물으면 답이 일곱 개의 문서 사이트에 흩어져 있거나, 아예 문서화되어 있지 않을 때도 있습니다.
+이제 AI 에이전트를 하나만 쓰는 시대는 지났다. Codex, Claude Code, Grok, Hermes, Antigravity, Cursor는 "스킬"이 무엇인지, 훅을 어디에 등록하는지, 어떤 지침 파일을 읽는지, 세션을 어떻게 재개하는지에 대해 저마다 생각이 다르다. 같은 도구를 손으로 전부에 배포하면 일주일도 안 돼 서로 어긋난다.
 
-이 리포지토리는 지도이자 방법론입니다.
+이 레포는 그 방법론이자, 사실로 가는 지도다.
 
-1. **공식 공급사 문서로 매일 갱신되는 호환성 위키.** 일곱 개 런타임—Codex, Claude Code, Grok, Hermes, Antigravity CLI, Cursor, Kuma Studio—를 스킬, 훅, 플러그인/확장, 프로젝트 지침 및 메모리 파일, CLI 실행 방식(인터랙티브/헤드리스), 세션 재개, 과금 방식으로 비교합니다.
-2. **리포지토리 단일 진실 소스 기반 배포 방법론** — 스킬, 훅, 명령, 스크립트, 레퍼런스, 에셋, MCP/app 연결, 플러그인 메타데이터를 런타임 간에 드리프트 없이 설치합니다. 단일 정식 패키지 루트, 심볼릭 링크 설치, 명시적 중단/이름 변경 절차, 검증 체크리스트를 포함합니다.
+1. **레포가 소유한 단일 진실 공급원을 배포하는 방법론.** 스킬, 훅, 커맨드, 스크립트, 문서, 에셋, MCP/앱 연결, 플러그인 메타데이터를 드리프트 없이 모든 런타임에 설치한다. 구성 요소는 하나의 정본 패키지 루트, 심링크 설치, 단일 등록 매니페스트, 명시적인 폐기/이름 변경 절차, 기계가 검사하는 엔진 × 홈 동등성 규칙, 검증 체크리스트다. 이것이 `SKILL.md`다.
+2. **위키 대신 조회 가이드.** `docs/official-sources.json`은 68개의 공식 벤더 페이지를 런타임 × 질문(`skills`, `hooks`, `plugins`, `project-instructions`, `cli-invocation`, `session-resume`, `model-lineup`, `billing`, …)으로 매핑한다. `docs/lookup.md`는 그중 한 페이지를 가져와 판단하고 인용하는 방법을 알려준다. 여기에는 벤더 사실을 하나도 저장하지 않는다. 모든 답은 질문을 받은 시점에 벤더 페이지에서 읽어 오며, 해당 URL과 날짜를 함께 담는다.
 
-## 해결하는 질문들
+## 왜 위키가 없나
 
-원래는 반나절이 걸렸을 문제를 근거와 함께 즉시 확인합니다:
+이 레포는 석 달 동안 출처를 인용한 호환성 위키를 유지했고, 매일 벤더 문서로 갱신했다. 그 결과 두 가지 일이 생겼다. 첫째, 에이전트가 실제로 읽는 사본이 갱신 작업이 쓰던 사본보다 9주나 뒤처졌다. 미러는 신뢰받는 바로 그 순간에 틀린다. 둘째, 실제 크로스 런타임 질문("중단된 턴을 새 프롬프트 없이 이어갈 수 있나? Claude Code, Codex, Grok에서?")이 들어온 날, 위키에는 재개 *문법*이 있었지만 답은 결국 공식 페이지에서 가져와야 했다. 미러는 매일 다시 써야 하는 비용이 든다. 링크는 한 번 가져오는 비용이면 충분하고, 벤더 문서가 틀렸을 때만 틀린다.
 
-| You ask | The wiki answers |
+남는 것은 벤더가 알려줄 수 없는 것들이다. 하나는 그 모든 런타임에 걸쳐 *내* 도구를 한곳에서 관리하는 방법이고, 다른 하나는 두 엔진이 같은 필드를 다르게 읽는 몇 안 되는 지점이다. 이런 지점에는 다시 검증할 때 쓸 출처 id가 각각 달려 있다.
+
+## 무엇에 답하나
+
+| 이런 질문에 | 답이 나오는 곳 |
 |---|---|
-| "Can I toggle a skill off on Grok or Hermes?" | 공식적으로 Grok나 Hermes 둘 다 스킬 단위 비활성화 기능이 없습니다. 따라서 토글은 발견 루트(discovery root)에서 스킬을 제거하는 방식으로 처리해야 합니다. 이 차이가 “실제 동작하는 토글”과 “거짓 토글”의 경계를 만듭니다. |
-| "Which instruction file does each agent read?" | `AGENTS.md` vs `CLAUDE.md` vs `GEMINI.md` vs `.hermes.md`—각 런타임이 어떤 파일을 우선순위로 읽는지, 그리고 이 파일들을 어떻게 하나로 공유할지 설명합니다. |
-| "How do I resume a session from a script?" | 세션 재개 표를 통해 각 런타임의 재개 명령, 세션 저장 위치, 세션 ID 형식을 확인할 수 있습니다. |
-| "Will my nightly `claude -p` cron cost me money?" | 구독에서는 플랜 사용 한도에서 차감됩니다 — 인터랙티브 사용과 같은 풀이며, 별도의 호출당 크레딧은 없습니다 (2026-06-15에 발표된 별도 청구 크레딧 변경은 일시 중단되어 적용되지 않습니다. `ANTHROPIC_API_KEY` 계정은 기존처럼 pay-as-you-go). 과금 행에 현재 검증된 상태와 날짜가 있습니다. |
-| "Is `/<skill-name>` a thing on Codex?" | 아닙니다. Codex는 `$<skill-name>` 형식을 사용합니다. 스킬 호출 매트릭스는 각 런타임의 실제 호출 토큰을 기록해, 어디서든 하나의 토큰이 통한다는 가정을 없애줍니다. |
+| "스킬을 어디에 두어야 사본 세 개 없이 Codex, Claude, Grok이 모두 찾을 수 있을까?" | `SKILL.md` → Core Rules, Recommended Layout, Cross-Agent Install Pattern |
+| "훅을 바꿨다. 모든 엔진*과* 모든 계정 홈에 반영됐나?" | `SKILL.md` → Engine × Home Is A Product: 체크리스트가 아니라 기계가 표면을 열거한다 |
+| "이 스킬을 한 엔진에서만 끄기 / 모든 곳에서 폐기하기 / 이름 바꾸기." | `docs/skill-lifecycle.md`, `SKILL.md` → Retiring Or Renaming Artifacts |
+| "PreToolUse 가드가 왜 Codex에서는 fail-open되고 Claude에서는 차단했지?" | `docs/hook-contract.md`: 출처를 인용한 크로스 엔진 함정 |
+| "Hermes는 어떤 지침 파일을 읽지? Antigravity는 헤드리스로 돌릴 수 있나? Grok 세션은 무엇으로 재개하지?" | **조회**: `docs/official-sources.json`에서 `agent` × `kind`로 항목을 고르고, 벤더 페이지를 가져와 인용한다. 절차는 `docs/lookup.md` |
 
-**이것은 관리형 도구를 구축하는 기반입니다.** Kuma Studio의 스킬/훅 토글 시스템—하나의 GUI에서 Claude, Codex, Grok, Hermes의 스킬이나 훅을 모두 켜고 끌 수 있는 기능—는 바로 이 위키를 바탕으로 만들어졌습니다. 위키는 각 런타임의 실제 온/오프 스위치(`skillOverrides`, `[[skills.config]]`, 훅 상태 키)를 알려주고, 공식적으로 스위치가 없는 경우에도 그 사실을 명시해 툴링이 추측하지 않고 의도적으로 대응하도록 합니다. 어떤 크로스 에이전트 대시보드, 동기화 도구, 플릿 관리자를 만들더라도, 이 위키가 신뢰할 수 있는 기준점이 됩니다.
+**관리 도구는 이 레이어 위에 만든다.** Kuma Studio의 스킬/훅 토글 시스템은 GUI 하나에서 Claude, Codex, Grok, Hermes의 스킬이나 훅을 켜고 끄는 도구로, 이 방법론 위에 만들어졌다. 각 런타임의 실제 on/off 스위치는 벤더 페이지에서 조회했다. 공식 스위치가 없는 곳에서는 추측하지 않고, 도구가 의도적으로 그 빈자리를 메운다.
 
-## 왜 신뢰할 수 있나
+## 왜 믿을 수 있나
 
-- **모든 주장은 공급사 공식 문서에서 인용했습니다.** 감(感)에 기반하지 않고, 전설이나 “내 환경에서 잘 됐다” 같은 추측이 아닙니다.
-- **부재는 추론하지 않고 기록합니다.** 런타임이 특정 기능을 문서화하지 않았으면 동등성을 가정하지 않고 `not documented`로 표시합니다. 스위치가 없다는 사실을 아는 것도 어디에 있는지 아는 것만큼 중요합니다.
-- **매일 자체 재검증합니다.** 예약된 클라우드 에이전트가 `docs/official-sources.json`의 각 소스를 다시 가져와 증거가 바뀌면 PR을 열고, 근거 검증을 통과한 문서 전용 변경은 결정론적 게이트를 통해 자동 병합합니다. 오래된 호환성 테이블이 축적되면 크로스 런타임 도구는 부패합니다. 이 시스템은 그 상태를 방지합니다.
+- **모든 크로스 런타임 주장은 벤더의 공식 문서를 인용한다.** 주장하는 시점에 날짜와 함께 인용한다. 문서가 없으면 `not documented (checked <urls>, <date>)`로 기록하며, 다른 런타임을 근거로 유추하지 않는다.
+- **레포는 우리 것만 소유한다.** 규칙, 절차, 그리고 엔진 간 차이 때문에 우리 스크립트가 깨지는 지점이다. 그중 벤더 동작에 기대는 내용이 있으면 해당 줄에 매니페스트 출처 id를 적어 둔다. 그래서 한 번만 가져와 보면 그 전제를 다시 확인할 수 있다.
+- **지도에 계속 접근할 수 있는지는 기계가 확인한다.** 주간 작업이 `scripts/check-official-sources.mjs`를 실행해 옮겨진 URL을 고치고 PR을 연다. 결정론적 가드는 diff가 문서만 바꾸고 검사를 통과할 때만 그 PR을 머지한다(`docs/cloud-automation.md`).
 
-## 이 리포지토리가 담당하는 것
+## 이 레포가 소유하는 것
 
-- `SKILL.md` — 스킬 진입점 및 작성/상호운용 방법론.
-- `docs/compatibility-matrix.md` — 런타임 간 비교(스킬/훅/플러그인/지침, 세션 재개, 스킬 호출).
-- `docs/cli-invocation.md` — 런타임별 CLI 실행 방식(인터랙티브 vs 헤드리스)과 재개 구문.
-- `docs/plugin-packaging.md` — 플랫폼별 플러그인/확장 패키징 차이.
-- `docs/official-sources.json` — 일일 갱신이 재검증하는 출처 매니페스트.
-- `docs/cloud-automation.md` — 일일 업데이트 자동화 및 클라우드 실행 사유.
-- `docs/completion-stack.md` — 네이티브 완료/검증 스택(Claude Code `/goal`·Stop hook·`/verify`, Codex Goals·Stop hook·`/review`)과 검증된 정정.
-- `docs/kuma-studio-patterns.md` — 공개 Kuma Studio 운영 패턴.
-- `CHANGELOG.md`와 git tag — 버전 기록. 변경 이력은 문서 본문이 아니라 이곳에 남깁니다.
+- `SKILL.md`: 스킬 진입점. 작성/상호운용 방법론과 "벤더 사실은 조회한다"는 라우팅 규칙을 담는다.
+- `docs/lookup.md`: 런타임 질문에 공식 페이지로 답하는 방법과 매니페스트를 관리하는 방법.
+- `docs/official-sources.json`: 런타임 × 질문별 공식 URL 매니페스트. 각 페이지가 답하는 질문도 함께 담는다.
+- `docs/authoring-rules.md`: 각 규칙의 근거와 실제로 측정된 사고 사례, 그리고 패키징 결정 게이트.
+- `docs/hook-contract.md`: 우리 스크립트가 대비하도록 작성된 크로스 엔진 훅 함정.
+- `docs/skill-lifecycle.md`: 비활성화 / 범위 지정 / 폐기.
+- `docs/skill-boundary-rules.md`, `docs/research-forge.md`, `docs/agent-extensions-routing.md`, `docs/kuma-studio-patterns.md`: 진실이 어디에 있는지, 문서 기반 스킬을 어떻게 다듬는지, 상위(umbrella) 레포의 라우팅, 공개된 Kuma Studio 패턴.
+- `docs/cloud-automation.md`: 주간 출처 검사와 그 자동 머지 게이트.
+- `CHANGELOG.md`와 git 태그: 버전 기록. 이력은 문서 본문이 아니라 여기에 남긴다.
 
-## 일일 위키 갱신
-
-전담 에이전트가 위키를 최신 상태로 유지합니다. `docs/official-sources.json`을 읽고 공식 공급사 URL을 다시 가져온 뒤, 근거가 바뀐 경우 PR을 엽니다. `main`에는 직접 푸시하지 않습니다.
-
-권장 방식은 **Claude Routines**입니다. Anthropic 클라우드에서 Claude 구독 기반으로 동작하는 예약 Claude Code 세션을 사용하면, API 키 없이도 GitHub Actions 없이 운영할 수 있으며, 노트북이 꺼져 있어도 계속 실행됩니다. 반면 `claude -p`로 로컬에서 갱신을 실행하는 방식은 주로 **신뢰성** 때문에 권장되지 않습니다. 로컬 cron은 기기가 깨어 있을 때만 동작하는 반면, 클라우드 Routine은 노트북 상태와 무관하게 실행됩니다. (과금 관련: 구독에서 `claude -p` 및 Agent SDK 사용은 플랜 사용 풀에서 차감됩니다 — 2026-06-15로 발표된 월별 별도 크레딧 변경은 일시 중단되어 적용되지 않습니다. `ANTHROPIC_API_KEY` 사용자는 기존처럼 pay-as-you-go입니다. 현재 검증된 상태와 날짜는 `docs/cli-invocation.md`에 있습니다.) 자세한 내용은 `docs/cloud-automation.md`를 참고하세요.
-
-1. Claude Code에서 `/schedule`을 실행하거나 <https://claude.ai/code/routines>를 엽니다.
-2. 이 리포지토리를 대상으로 설정하고 `prompts/daily-official-doc-update.md`의 프롬프트를 사용합니다.
-3. 하루에 한 번 예약합니다. 예약 작업은 PR을 열고, 소스 검증을 통과한 문서 전용 변경은 자동 병합 게이트를 통해 squash-merge됩니다. 그 외 변경은 검토 대기열로 갑니다(자세한 내용: `docs/cloud-automation.md`).
-
-Codex 사용자는 Codex App Automation으로 같은 흐름을 실행할 수 있습니다. 두 경로 모두 `docs/cloud-automation.md`를 참조하세요.
-
-## 로컬 점검
+## 로컬 검사
 
 ```bash
-node scripts/check-official-sources.mjs --write-report
+node scripts/check-official-sources.mjs --write-report   # 매니페스트 형태, 호스트, 도달 가능성, SKILL.md 분량 예산
+node --test scripts/check-official-sources.test.mjs
 ```
-
-이 스크립트는 출처 ID, 허용된 공식 호스트, URL 도달 가능성, 필수 출처 카테고리, 그리고 `SKILL.md` 라인 예산을 검증합니다.

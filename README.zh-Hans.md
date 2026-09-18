@@ -1,10 +1,10 @@
 <p align="center">
-  <img src="assets/icon.png" width="168" alt="一个真相源向每个代理运行时辐射" />
+  <img src="assets/icon.png" width="168" alt="单一事实来源辐射至每个智能体运行时" />
 </p>
 
-<h1 align="center">跨运行时代理平台互操作性</h1>
+<h1 align="center">跨运行时的技能、钩子与插件编写</h1>
 
-<p align="center"><b>在你使用的每个 AI 编码代理中，为技能、钩子与插件提供单一可信来源。</b></p>
+<p align="center"><b>在你运行的每一个 AI 编程智能体上，为技能、钩子和插件提供唯一的事实来源。厂商事实随用随查，从不镜像。</b></p>
 
 <p align="center">
 
@@ -14,61 +14,52 @@
 
 ---
 
-你不再只运行一个 AI 代理。Codex、Claude Code、Grok、Hermes、Antigravity、Cursor 每个都有自己对“技能”含义的理解、钩子注册方式、读取哪份指令文件、会话如何恢复，以及计费到底如何计算。你若手动把同一套工具发到每个平台，它们往往一周内就分歧。你甚至会问“我能在运行时 Y 上做 X 吗？”，答案埋在七个不同文档站点里，或者根本没被文档化。
+你已经不再只运行一个 AI 智能体了。Codex、Claude Code、Grok、Hermes、Antigravity、Cursor 各有自己的一套规则：什么算“技能”、钩子在哪里注册、读取哪个指令文件、会话如何恢复。如果手动把同一套工具分发给它们，不出一周各处就会互相漂移。
 
-本仓库就是地图与方法：
+本仓库提供的是方法，以及通往事实的地图：
 
-1. **一份兼容性维基，按官方供应商文档每日刷新。** 比较七种运行时——Codex、Claude Code、Grok、Hermes、Antigravity CLI、Cursor 与 Kuma Studio——在技能、钩子、插件/扩展、项目指令与记忆文件、CLI 启动（交互式与无头）、会话恢复和计费等方面的差异。
-2. **一种发布单一仓库真相源的方法**——技能、钩子、命令、脚本、参考资料、资源、MCP/app 接线、插件元数据——可在各运行时一致安装：统一的规范包根目录、符号链接安装、明确的退役/重命名流程，以及验证清单。
+1. **一套方法论，用于交付由仓库自己持有的唯一事实来源。** 技能、钩子、命令、脚本、文档、资源、MCP/应用接线、插件元数据，都能无漂移地安装到每个运行时。具体做法包括：一个规范的包根目录、符号链接安装、单一注册清单、明确的退役/重命名流程、由机器校验的 engine × home 一致性规则，以及一份验证清单。这就是 `SKILL.md`。
+2. **一份查询指南，而不是 wiki。** `docs/official-sources.json` 按运行时 × 问题（`skills`、`hooks`、`plugins`、`project-instructions`、`cli-invocation`、`session-resume`、`model-lineup`、`billing` 等）映射了 68 个官方厂商页面，`docs/lookup.md` 则说明如何抓取、判断并引用这些页面。这里不存储任何厂商事实。每个答案都在被问到时从厂商页面读取，并附上其 URL 和日期。
 
-## It answers
+## 为什么不用 wiki
 
-你本来可能要花一个下午才能弄明白的问题，现在都能有出处地快速确认：
+本仓库曾维护过一份附来源引用的兼容性 wiki，持续三个月，每天根据厂商文档刷新。结果出了两个问题。第一，智能体实际读取的副本比刷新任务正在写入的副本落后了九周，镜像偏偏在被信任的时候出错。第二，当一个真正的跨运行时问题出现时（“在 Claude Code、Codex 和 Grok 上，被中断的轮次能否在没有新提示的情况下继续？”），wiki 里只有恢复的*语法*，答案仍然得去官方页面找。镜像的代价是每天重写一次；链接的代价只是一次抓取，而且只有厂商自己出错时它才会出错。
 
-| 你会问什么 | 维基会回答 |
+留下来的，是厂商无法告诉你的内容：如何让*你自己的*工具在所有运行时之间只维护一处，以及少数几个两个引擎对同一字段解读不同的地方。每一处都附有来源 id，供重新核验。
+
+## 它能回答什么
+
+| 你的问题 | 答案来源 |
 |---|---|
-| “我可以在 Grok 或 Hermes 上关闭某个技能吗？” | 两者都没有官方的单个技能禁用能力，因此开关只能通过将技能移出发现根目录来实现。这个事实决定了是发布真实可行的开关，还是发布错误信息。 |
-| “每个代理读取哪个指令文件？” | `AGENTS.md` vs `CLAUDE.md` vs `GEMINI.md` vs `.hermes.md`——谁读哪个、优先级如何，以及如何让同一份文件在它们之间共享。 |
-| “如何从脚本恢复会话？” | 会话恢复表：每个运行时的恢复命令、会话存储位置与会话 ID 格式。 |
-| “我每天晚间的 `claude -p` 定时任务会让我付费吗？” | 在订阅下，它从你的套餐使用额度中扣减 —— 与交互式使用同一额度池，没有单独的按次调用信用额（2026-06-15 公布的单独计费信用额变更已暂停且未生效；`ANTHROPIC_API_KEY` 账户仍按量计费）。计费行记录了当前已核实的状态与日期。 |
-| “在 Codex 上有 `/<skill-name>` 这种用法吗？” | 不能——Codex 使用的是 `$<skill-name>`。技能调用矩阵记录了各运行时真实可用的调用令牌，因此你不必假设某个令牌在所有运行时都通用。 |
+| “技能应该放在哪里，才能让 Codex、Claude 和 Grok 都找到它，又不用复制三份？” | `SKILL.md` → Core Rules, Recommended Layout, Cross-Agent Install Pattern |
+| “我改了一个钩子。它是否已经落到每个引擎*以及*每个账号 home 上？” | `SKILL.md` → Engine × Home Is A Product：由机器枚举整个覆盖面，而不是靠检查清单 |
+| “在某个引擎上关闭这个技能 / 在所有地方退役它 / 给它改名。” | `docs/skill-lifecycle.md`、`SKILL.md` → Retiring Or Renaming Artifacts |
+| “为什么我的 PreToolUse 守卫在 Codex 上失效放行（fail open），在 Claude 上却会拦截？” | `docs/hook-contract.md`：跨引擎陷阱，附来源引用 |
+| “Hermes 读取哪个指令文件？Antigravity 能否无头运行？什么能恢复 Grok 会话？” | 做一次**查询**：在 `docs/official-sources.json` 中按 `agent` × `kind` 选出条目，抓取厂商页面并引用，参见 `docs/lookup.md` |
 
-**这就是你构建管理工具的基础层。** Kuma Studio 的技能/钩子开关系统——从一个 GUI 同时在 Claude、Codex、Grok 与 Hermes 上打开或关闭任意技能与钩子——正是基于这些事实直接构建的：该维基说明了每个运行时真实的开关位置（`skillOverrides`、`[[skills.config]]`、钩子状态键），并在官方不存在开关的场景下也明确说明，因此工具会有意识地进行补偿，而不是猜测。无论你在构建跨代理仪表盘、同步工具还是fleet管理器，这份维基都是它需要的事实依据。
+**这是构建管理工具的基础层。** Kuma Studio 的技能/钩子开关系统就是基于这套方法构建的，它能在一个 GUI 中跨 Claude、Codex、Grok 和 Hermes 开启或关闭任意技能和钩子。每个运行时真正的开关都是从厂商页面上查到的；官方没有提供开关的地方，工具会有意识地加以补偿，而不是靠猜。
 
-## 为什么可信
+## 为什么值得信任
 
-- **每一条主张都引用供应商官方文档。** 没有拍脑袋、没有口口相传，也没有“我机器上能跑”。
-- **缺失会被记录，而非推断。** 当某运行时未文档化某能力时，维基会写明 `not documented` 而不是假设其对等；知道“某开关不存在”与知道它在哪儿一样有价值。
-- **它会每日自我复核。** 一个计划任务中的云代理会重新抓取 `docs/official-sources.json` 中的每个来源，并在证据变更时创建 PR；一个确定性门禁会自动合并通过来源校验的仅文档变更。过时的兼容表会让跨运行时工具腐化——这个不会静止不变。
+- **每一条跨运行时的论断都引用厂商自己的文档**，在提出论断时引用，并注明日期。缺失的信息记录为 `not documented (checked <urls>, <date>)`，绝不从其他运行时推断。
+- **仓库只负责属于我们自己的内容。** 包括规则、流程，以及引擎之间会让我们的脚本出错的差异。其中凡是依赖某个厂商行为的，都会在该行注明清单中的来源 id，只需一次抓取即可重新核验其前提。
+- **地图的可达性由机器维护。** 每周任务会运行 `scripts/check-official-sources.mjs`，修复已迁移的 URL，并打开一个 PR。只有当 diff 仅涉及文档且检查通过时，确定性守卫才会合并它（`docs/cloud-automation.md`）。
 
-## 本仓库的职责范围
+## 本仓库负责的内容
 
-- `SKILL.md` —— 技能入口点及创作/互操作方法论。
-- `docs/compatibility-matrix.md` —— 跨运行时对照表（技能/钩子/插件/指令、会话恢复、技能调用）。
-- `docs/cli-invocation.md` —— 按运行时区分的 CLI 启动方式（交互式 vs 无头）与恢复语法。
-- `docs/plugin-packaging.md` —— 不同平台下插件/扩展打包方式的差异。
-- `docs/official-sources.json` —— 每日刷新复核的来源清单。
-- `docs/cloud-automation.md` —— 每日更新自动化，以及为何在云端运行。
-- `docs/completion-stack.md` —— 原生完成/验证栈（Claude Code `/goal`·Stop hook·`/verify`，Codex Goals·Stop hook·`/review`）及经验证的勘误。
-- `docs/kuma-studio-patterns.md` —— Kuma Studio 的公开运行模式。
-- `CHANGELOG.md` 及 git tag —— 版本记录。历史保存在这里，而不是散落在文档正文中。
-
-## 每日维基刷新
-
-一个每日代理会保持维基最新：它读取 `docs/official-sources.json`，抓取官方供应商链接，在证据变化时打开 PR。它从不直接推送到 `main`。
-
-推荐路径是 **Claude Routines**——一个在 Anthropic 云端运行、基于 Claude 订阅、无需 API key 且无需 GitHub Actions 的定时 Claude Code 会话；即使笔记本关闭也能持续运行。通过 `claude -p` **本地**执行刷新主要不推荐，核心原因是**可靠性**：本地 cron 只有在机器唤醒时触发，而云端 Routine 则不受笔记本状态影响。关于计费：在订阅下，`claude -p` 与 Agent SDK 用量从你的套餐使用池扣减 —— 2026-06-15 公布的“按月独立信用额”变更已暂停且未生效；`ANTHROPIC_API_KEY` 用户则继续按量计费。`docs/cli-invocation.md` 记录了当前已核实的状态与日期。详见 `docs/cloud-automation.md`。
-
-1. 在 Claude Code 中运行 `/schedule`（或打开 <https://claude.ai/code/routines>）。
-2. 将例程指向本仓库，并使用 `prompts/daily-official-doc-update.md` 中的提示词。
-3. 每天调度一次。它会打开一个 PR，然后运行一个自动合并门禁，对通过来源校验的仅文档变更执行 squash-merge；其余内容需你复核（见 `docs/cloud-automation.md`）。
-
-Codex 用户也可以通过 Codex App Automation 跑同样流程。两种方式见 `docs/cloud-automation.md`。
+- `SKILL.md`：技能入口，包含编写/互操作方法论，以及“厂商事实靠查询”的路由规则。
+- `docs/lookup.md`：如何依据官方页面回答运行时问题，以及如何维护清单。
+- `docs/official-sources.json`：按运行时 × 问题整理的官方 URL 清单，并列出每个页面能回答的问题。
+- `docs/authoring-rules.md`：每条规则背后的理由与实测事故，以及打包决策关卡。
+- `docs/hook-contract.md`：我们的脚本所针对的跨引擎钩子陷阱。
+- `docs/skill-lifecycle.md`：禁用 / 限定范围 / 退役。
+- `docs/skill-boundary-rules.md`、`docs/research-forge.md`、`docs/agent-extensions-routing.md`、`docs/kuma-studio-patterns.md`：分别说明事实存放在哪里、基于文档的技能如何打磨成形、伞形仓库的路由方式，以及公开的 Kuma Studio 模式。
+- `docs/cloud-automation.md`：每周来源检查及其自动合并关卡。
+- `CHANGELOG.md` 加上 git 标签：版本记录。历史记录保留在这里，不写进文档正文。
 
 ## 本地检查
 
 ```bash
-node scripts/check-official-sources.mjs --write-report
+node scripts/check-official-sources.mjs --write-report   # 清单结构、主机、可达性、SKILL.md 预算
+node --test scripts/check-official-sources.test.mjs
 ```
-
-该脚本会校验来源 ID、允许的官方主机、URL 可达性、必需的来源分类，以及 `SKILL.md` 的行数预算。

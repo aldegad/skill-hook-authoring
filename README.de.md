@@ -1,74 +1,65 @@
 <p align="center">
-  <img src="assets/icon.png" width="168" alt="Eine einzige wahre Quelle, die auf jede Agent-Laufzeit ausstrahlt" />
+  <img src="assets/icon.png" width="168" alt="Eine einzige Quelle der Wahrheit, die in jede Agenten-Runtime ausstrahlt" />
 </p>
 
-<h1 align="center">Plattform-Interoperabilität zwischen Agent-Laufzeiten</h1>
+<h1 align="center">Runtime-übergreifendes Authoring von Skills, Hooks und Plugins</h1>
 
-<p align="center"><b>Eine einzige Wahrheitquelle für deine Skills, Hooks und Plugins — auf jedem KI-Coding-Agenten, den du nutzt.</b></p>
+<p align="center"><b>Eine einzige Quelle der Wahrheit für deine Skills, Hooks und Plugins — auf jedem KI-Coding-Agenten, den du einsetzt. Herstellerfakten werden nachgeschlagen, nie gespiegelt.</b></p>
 
 <p align="center">
 
-[Englisch](README.md) | [Koreanisch](README.ko.md) | [Japanisch](README.ja.md) | [Vereinfachtes Chinesisch](README.zh-Hans.md) | [Spanisch](README.es.md) | [Französisch](README.fr.md) | [Deutsch](README.de.md)
+[English](README.md) | [한국어](README.ko.md) | [日本語](README.ja.md) | [简体中文](README.zh-Hans.md) | [Español](README.es.md) | [Français](README.fr.md) | [Deutsch](README.de.md)
 
 </p>
 
 ---
 
-Du betreibst nicht mehr nur einen AI-Agenten. Codex, Claude Code, Grok, Hermes, Antigravity, Cursor — jeder hat seine eigene Vorstellung davon, was ein „Skill“ ist, wo Hooks registriert werden, welche Anleitungsdatei gelesen wird, wie Sitzungen fortgesetzt werden und wie das Billing tatsächlich funktioniert. Schickt man dasselbe Tooling manuell an alle, entfernen sie sich innerhalb einer Woche voneinander. Auf die Frage „Kann ich bei Laufzeit Y überhaupt X tun?“ bekommt man die Antwort oft auf sieben verschiedenen Dokumentationsseiten — oder gar nicht dokumentiert.
+Du betreibst längst nicht mehr nur einen KI-Agenten. Codex, Claude Code, Grok, Hermes, Antigravity, Cursor — jeder hat seine eigene Vorstellung davon, was ein „Skill“ ist, wo Hooks registriert werden, welche Anweisungsdatei gelesen wird und wie Sitzungen fortgesetzt werden. Verteilst du dasselbe Tooling von Hand an alle, driften sie innerhalb einer Woche auseinander.
 
-Dieses Repo ist die Karte und die Methode:
+Dieses Repo ist die Methode – und die Landkarte zu den Fakten:
 
-1. **Ein Kompatibilitäts-Wiki, täglich aus den offiziellen Herstellerdokumenten aktualisiert.** Sieben Laufzeiten — Codex, Claude Code, Grok, Hermes, Antigravity CLI, Cursor und Kuma Studio — werden anhand von Skills, Hooks, Plugins/Erweiterungen, Projektanweisungs- und Speicherdateien, CLI-Start (interaktiv vs. headless), Sitzungswiederaufnahme und Abrechnung verglichen.
-2. **Eine Methodik zum Ausrollen einer repository-eigenen einzigen Wahrheit** — Skills, Hooks, Befehle, Skripte, Referenzen, Assets, MCP/App-Verknüpfungen, Plugin-Metadaten — ohne Drift auf jede Laufzeit installiert: ein kanonischer Paket-Root, Symlink-Installationen, eindeutige Verfahren zum Stilllegen/Umbenennen und eine Validierungsliste.
+1. **Eine Methodik, um eine einzige, dem Repo gehörende Quelle der Wahrheit auszuliefern** — Skills, Hooks, Commands, Skripte, Doku, Assets, MCP-/App-Anbindung, Plugin-Metadaten —, installiert über alle Runtimes hinweg ohne Drift: ein kanonisches Paket-Root, Symlink-Installationen, ein einziges Registrierungsmanifest, explizite Verfahren zum Stilllegen/Umbenennen, eine maschinell geprüfte Paritätsregel Engine × Home und eine Validierungs-Checkliste. Das ist `SKILL.md`.
+2. **Ein Nachschlage-Leitfaden statt eines Wikis.** `docs/official-sources.json` ordnet 68 offizielle Herstellerseiten nach Runtime × Frage zu (`skills`, `hooks`, `plugins`, `project-instructions`, `cli-invocation`, `session-resume`, `model-lineup`, `billing`, …), und `docs/lookup.md` beschreibt, wie man eine davon abruft, bewertet und zitiert. Hier wird kein Herstellerfakt gespeichert; jede Antwort wird bei Bedarf von der Seite des Herstellers gelesen und trägt deren URL und Datum.
 
-## Was beantwortet wird
+## Warum kein Wiki
 
-Fragen, für die man sonst leicht einen Nachmittag verbrät, mit Zitaten beantwortet:
+Dieses Repo hat drei Monate lang ein Kompatibilitäts-Wiki mit Quellenangaben gepflegt und es täglich aus der Herstellerdoku aktualisiert. Daraus ergaben sich zwei Dinge. Die Kopie, die die Agenten tatsächlich lasen, lag neun Wochen hinter der Kopie zurück, die die Aktualisierung schrieb — ein Spiegel ist genau dann falsch, wenn man ihm vertraut. Und an dem Tag, an dem eine echte runtime-übergreifende Frage kam („Kann ein unterbrochener Turn ohne neuen Prompt weiterlaufen – auf Claude Code, Codex und Grok?“), hatte das Wiki zwar die Resume-*Syntax*, die Antwort musste aber trotzdem von den offiziellen Seiten kommen. Ein Spiegel kostet ein tägliches Neuschreiben; ein Link kostet einen Abruf und ist nur dann falsch, wenn der Hersteller es ist.
 
-| Du fragst | Die Wiki antwortet |
+Was bleibt, ist das, was dir die Hersteller nicht sagen können: wie du *dein* Tooling über alle hinweg an einem Ort hältst, und die Handvoll Stellen, an denen zwei Engines dasselbe Feld unterschiedlich lesen — jede mit der Quellen-ID, anhand derer sie erneut zu verifizieren ist.
+
+## Was es beantwortet
+
+| Du fragst | Woher die Antwort kommt |
 |---|---|
-| „Kann ich einen Skill in Grok oder Hermes ausschalten?“ | Nein, es gibt für keinen von beiden einen offiziellen Schalter pro Skill — eine Umschaltung muss daher den Skill aus der Entdeckungswurzel entfernen. Genau dieser Umstand macht den Unterschied zwischen einem echten Toggle und einer Lüge. |
-| „Welche Anleitungsdatei liest jeder Agent ein?“ | `AGENTS.md` vs `CLAUDE.md` vs `GEMINI.md` vs `.hermes.md` — wer was liest, in welcher Priorität und wie man eine Datei für alle gemeinsam nutzt. |
-| „Wie setze ich eine Sitzung aus einem Skript fort?“ | Die Tabelle zur Sitzungswiederaufnahme: Fortsetzungsbefehl, Speicherort des Session Stores und Session-ID-Format für jede Laufzeit. |
-| „Verursacht mein nächtlicher `claude -p`-Cron Kosten?“ | Mit einem Abo wird es aus dem Nutzungs-Kontingent deines Plans abgezogen — derselbe Pool wie bei interaktiver Nutzung, ohne separates Guthaben pro Ausführung (die für 2026-06-15 angekündigte separat abgerechnete Guthaben-Änderung wurde ausgesetzt und ist nicht in Kraft; `ANTHROPIC_API_KEY`-Konten bleiben Pay-as-you-go). Die Billing-Zeilen enthalten den aktuell verifizierten Status samt Datum. |
-| „Gibt es auf Codex `/<skill-name>`?“ | Nein — Codex nutzt `$<skill-name>`. Die Matrix zur Skill-Aufruf-Syntax enthält jedes reale Invocations-Token jeder Laufzeit, damit du nicht mehr annimmst, dass ein Token überall gleich funktioniert. |
+| „Wo lege ich einen Skill ab, damit Codex, Claude und Grok ihn alle finden – ohne drei Kopien?“ | `SKILL.md` → Core Rules, Recommended Layout, Cross-Agent Install Pattern |
+| „Ich habe einen Hook geändert. Ist er auf jeder Engine *und* in jedem Account-Home angekommen?“ | `SKILL.md` → Engine × Home Is A Product — eine Maschine zählt die Oberfläche auf, keine Checkliste |
+| „Diesen Skill auf einer Engine abschalten / überall stilllegen / umbenennen.“ | `docs/skill-lifecycle.md`, `SKILL.md` → Retiring Or Renaming Artifacts |
+| „Warum ist mein PreToolUse-Guard auf Codex fail-open, blockiert aber auf Claude?“ | `docs/hook-contract.md` — die engine-übergreifenden Fallen, mit Quellenangaben |
+| „Welche Anweisungsdatei liest Hermes? Kann Antigravity headless laufen? Womit wird eine Grok-Sitzung fortgesetzt?“ | ein **Lookup**: den Eintrag in `docs/official-sources.json` nach `agent` × `kind` auswählen, die Herstellerseite abrufen, sie zitieren — `docs/lookup.md` |
 
-**Das ist die Ebene, auf der du Management-Tools aufbaust.** Kuma Studios Skill-/Hook-Umschaltsystem — das jede Skill- oder Hook-Funktion in Claude, Codex, Grok und Hermes über eine einzige GUI an- oder ausschaltet — wurde direkt auf diesen Fakten aufgebaut: Die Wiki nennt den tatsächlichen Schalter für jede Laufzeit (`skillOverrides`, `[[skills.config]]`, Hook-State-Keys), und wo es offiziell keinen Schalter gibt, sagt sie das ebenfalls, sodass das Tooling bewusst kompensiert statt zu raten. Egal, ob du ein cross-agent Dashboard, ein Sync-Tool oder einen Flottenmanager baust, dieses Wiki ist die nötige Grundlage der Wahrheit.
+**Das ist die Schicht, auf der du Management-Tooling aufbaust.** Das Skill-/Hook-Umschaltsystem von Kuma Studio — jeden Skill oder Hook über Claude, Codex, Grok und Hermes hinweg aus einer einzigen GUI ein- oder ausschalten — wurde nach dieser Methode gebaut: Der tatsächliche Ein-/Aus-Schalter jeder Runtime wurde auf der Herstellerseite nachgeschlagen, und wo offiziell kein Schalter existiert, gleicht das Tooling dies bewusst aus, statt zu raten.
 
-## Warum man es vertrauen kann
+## Warum man ihm vertrauen kann
 
-- **Jede Aussage basiert auf der Dokumentation des Anbieters.** Kein Bauchgefühl, kein Stammtisch-Wissen, kein „bei mir lief es so“.
-- **Fehlende Funktionen werden erfasst, nicht ermittelt.** Wo eine Laufzeit eine Fähigkeit nicht dokumentiert, steht dort `not documented` statt einer angenommenen Gleichwertigkeit — zu wissen, dass ein Schalter *nicht existiert*, ist genauso wertvoll wie zu wissen, wo er ist.
-- **Es überprüft sich selbst täglich neu.** Ein geplanter Cloud-Agent liest jede Quelle in `docs/official-sources.json` erneut ein und öffnet ein PR, wenn sich Belege geändert haben; eine deterministische Gate prüft und mergt automatisch Dokumentationsänderungen, die den Quellencheck bestehen. Veraltete Kompatibilitätstabellen lassen Cross-Runtime-Tooling verfallen — dieses hier bleibt nicht statisch.
+- **Jede runtime-übergreifende Aussage zitiert die eigene Dokumentation des Herstellers** — zu dem Zeitpunkt, an dem sie getroffen wird, mit Datum. Fehlendes wird als `not documented (checked <urls>, <date>)` festgehalten, nie aus einer anderen Runtime abgeleitet.
+- **Das Repo besitzt nur, was uns gehört.** Regeln, Verfahren und die Stellen, an denen sich Engines so unterscheiden, dass unsere Skripte brechen. Wo eine davon auf einem Herstellerverhalten beruht, nennt die Zeile die Quellen-ID im Manifest, sodass die Prämisse mit einem einzigen Abruf erneut geprüft werden kann.
+- **Die Landkarte wird maschinell erreichbar gehalten.** Ein wöchentlicher Job führt `scripts/check-official-sources.mjs` aus, korrigiert eine verschobene URL und öffnet einen PR, den ein deterministischer Guard nur dann mergt, wenn der Diff ausschließlich Doku betrifft und der Check besteht (`docs/cloud-automation.md`).
 
 ## Was dieses Repo besitzt
 
-- `SKILL.md` — der Skill-Entrypoint sowie die Methodik für Authoring und Interoperabilität.
-- `docs/compatibility-matrix.md` — der plattformübergreifende Vergleich (Skills/Hooks/Plugins/Instruktionen, Sitzungswiederaufnahme, Skill-Aufruf).
-- `docs/cli-invocation.md` — CLI-Start pro Laufzeit (interaktiv vs. headless) und Wiederaufnahmesyntax.
-- `docs/plugin-packaging.md` — wie sich Plugin-/Erweiterungs-Paketierung plattformabhängig unterscheidet.
-- `docs/official-sources.json` — das Quellen-Manifest, das die tägliche Aktualisierung erneut verifiziert.
-- `docs/cloud-automation.md` — die tägliche Aktualisierungsautomatisierung und warum sie in der Cloud läuft.
-- `docs/completion-stack.md` — native Abschluss-/Verifikations-Stacks (Claude Code `/goal`·Stop-Hook·`/verify`; Codex Goals·Stop-Hook·`/review`) samt verifizierter Korrekturen.
-- `docs/kuma-studio-patterns.md` — öffentliche Betriebs-Patterns von Kuma Studio.
-- `CHANGELOG.md` plus das Git-Tag — die Versionshistorie. Die Historie bleibt hier und nicht in den Dokumenten selbst.
-
-## Tägliche Wiki-Aktualisierung
-
-Ein täglicher Agent hält das Wiki aktuell: Er liest `docs/official-sources.json`, ruft die offiziellen Anbieter-URLs ab und öffnet eine Pull Request, wenn sich die Belege ändern. Auf `main` wird nicht direkt gepusht.
-
-Der empfohlene Weg ist **Claude Routines** — eine geplante Claude Code-Sitzung, die in Anthropic Cloud auf einem Claude-Abo läuft, ohne API-Key und ohne GitHub Actions, und die auch läuft, wenn dein Laptop zugeklappt ist. Die Ausführung **lokal** über `claude -p` wird vor allem aus **Zuverlässigkeitsgründen** abgeraten: Ein lokaler Cron läuft nur, solange der Rechner aktiv ist, während eine Cloud-Routine unabhängig vom Laptop-Zustand läuft. (Zum Billing: Mit einem Abo entnehmen `claude -p` und die Agent-SDK-Nutzung den Nutzungs-Pool deines Abos — die für den 2026-06-15 angekündigte getrennte monatliche Gutschriften-Änderung wurde ausgesetzt und ist nicht in Kraft; bei `ANTHROPIC_API_KEY` gilt weiterhin Pay-as-you-go. `docs/cli-invocation.md` enthält den aktuell verifizierten Status samt Datum.) Siehe `docs/cloud-automation.md`.
-
-1. Starte in Claude Code `/schedule` (oder öffne <https://claude.ai/code/routines>).
-2. Richte die Routine auf dieses Repository und nutze den Prompt in `prompts/daily-official-doc-update.md`.
-3. Plane sie auf einmal täglich. Sie öffnet ein PR und führt dann ein Auto-Merge-Gate aus, das Docs-only-Änderungen, die den Quellcheck bestehen, squash-merged; alles andere wartet auf deine Freigabe (siehe `docs/cloud-automation.md`).
-
-Codex-Nutzer können denselben Ablauf mit einer Codex App Automation ausführen. Siehe `docs/cloud-automation.md` für beide Wege.
+- `SKILL.md` — der Skill-Einstiegspunkt: die Authoring-/Interoperabilitäts-Methodik und die Routing-Regel „Herstellerfakten sind ein Lookup“.
+- `docs/lookup.md` — wie man eine Runtime-Frage anhand der offiziellen Seite beantwortet und wie man das Manifest pflegt.
+- `docs/official-sources.json` — das Manifest offizieller URLs nach Runtime × Frage, mit den Fragen, die jede Seite beantwortet.
+- `docs/authoring-rules.md` — die Begründung und die gemessenen Vorfälle hinter jeder Regel sowie das Entscheidungs-Gate für das Packaging.
+- `docs/hook-contract.md` — die engine-übergreifenden Hook-Fallen, gegen die unsere Skripte geschrieben sind.
+- `docs/skill-lifecycle.md` — deaktivieren / eingrenzen / stilllegen.
+- `docs/skill-boundary-rules.md`, `docs/research-forge.md`, `docs/agent-extensions-routing.md`, `docs/kuma-studio-patterns.md` — wo die Wahrheit liegt, wie dokumentbasierte Skills geschmiedet werden, das Routing des Umbrella-Repos, öffentliche Kuma-Studio-Muster.
+- `docs/cloud-automation.md` — der wöchentliche Quellen-Check und sein Auto-Merge-Gate.
+- `CHANGELOG.md` plus das Git-Tag — der Versionsnachweis. Die Historie bleibt hier, nicht in den Dokumenttexten.
 
 ## Lokale Checks
 
 ```bash
-node scripts/check-official-sources.mjs --write-report
+node scripts/check-official-sources.mjs --write-report   # Manifest-Struktur, Hosts, Erreichbarkeit, SKILL.md-Budget
+node --test scripts/check-official-sources.test.mjs
 ```
-
-Das Skript validiert Quell-IDs, erlaubte offizielle Hosts, URL-Erreichbarkeit, die erforderlichen Quellkategorien und das `SKILL.md`-Zeilenbudget.
